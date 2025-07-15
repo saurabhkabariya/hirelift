@@ -46,15 +46,15 @@ export default function ResumeAuditPage() {
   // Block further audits for non-premium users after 1
   const canAudit = isPremium || auditCount < 1;
 
-  // Download PDF logic (fix)
+  // Download PDF logic (robust, print-friendly)
   const handleDownloadAudit = async () => {
-    if (typeof window === 'undefined' || !window.html2canvas || !window.jspdf) {
-      // fallback to imported libs
-    }
+    if (!result) return;
+    // Render print-friendly audit result in hidden div
+    const pdfDiv = document.getElementById("audit-pdf-section");
+    if (!pdfDiv) return alert("PDF section not found");
+    pdfDiv.style.display = "block";
     try {
-      const auditNode = document.getElementById("audit-result-section");
-      if (!auditNode) return;
-      const canvas = await html2canvas(auditNode, { scale: 2 });
+      const canvas = await html2canvas(pdfDiv, { scale: 2, useCORS: true, backgroundColor: '#f8fafc' });
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
       const pageWidth = pdf.internal.pageSize.getWidth();
@@ -64,6 +64,8 @@ export default function ResumeAuditPage() {
       pdf.save("resume-audit.pdf");
     } catch (err) {
       alert("Failed to generate PDF. Please try again.");
+    } finally {
+      pdfDiv.style.display = "none";
     }
   };
 
@@ -346,102 +348,174 @@ export default function ResumeAuditPage() {
         </form>
         <AnimatePresence>
           {result && (
-            <motion.div
-              id="audit-result-section"
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 30 }}
-              transition={{ duration: 0.5, ease: "easeOut" }}
-              className="mt-10 bg-white/95 rounded-2xl shadow-2xl p-8 animate-fade-in border border-blue-100"
-            >
-              <h2 className="text-2xl font-extrabold text-center mb-6 bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent">
-                Audit Result
-              </h2>
+            <>
               <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                className="flex flex-col items-center mb-6"
+                id="audit-result-section"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 30 }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+                className="mt-10 bg-white/95 rounded-2xl shadow-2xl p-8 animate-fade-in border border-blue-100"
               >
-                <div className="relative w-32 h-32 flex items-center justify-center mb-2">
-                  <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 120 120">
-                    <circle
-                      cx="60"
-                      cy="60"
-                      r="54"
-                      fill="none"
-                      stroke="#e0e7ef"
-                      strokeWidth="12"
-                    />
-                    <motion.circle
-                      cx="60"
-                      cy="60"
-                      r="54"
-                      fill="none"
-                      stroke="#2563eb"
-                      strokeWidth="12"
-                      strokeDasharray={339.292}
-                      strokeDashoffset={339.292 - (result.totalScore / 100) * 339.292}
-                      strokeLinecap="round"
-                      initial={{ strokeDashoffset: 339.292 }}
-                      animate={{ strokeDashoffset: 339.292 - (result.totalScore / 100) * 339.292 }}
-                      transition={{ duration: 1.2, ease: "easeInOut" }}
-                    />
-                  </svg>
-                  <span className="text-4xl font-extrabold text-blue-700 z-10">
-                    {result.totalScore}
-                  </span>
-                  <span className="absolute bottom-5 left-1/2 -translate-x-1/2 text-base text-gray-500 font-medium">/ 100</span>
-                </div>
-                <span className="text-sm text-gray-500">Overall Score</span>
-              </motion.div>
-              <div className="grid grid-cols-2 gap-4 text-base mb-6">
-                <ScoreBar label="Section Score" value={result.sectionScore} color="from-green-400 to-green-600" />
-                <ScoreBar label="Keyword Score" value={result.keywordScore} color="from-blue-400 to-blue-600" />
-                <ScoreBar label="Length Score" value={result.lengthScore} color="from-purple-400 to-purple-600" />
-                <ScoreBar label="Contact Score" value={result.contactScore} color="from-yellow-400 to-yellow-600" />
-              </div>
-              <div className="mt-4">
-                <div className="font-semibold my-2 text-blue-700">Found Keywords:</div>
-                <div className="flex flex-wrap gap-2">
-                  {result.foundKeywords.length ? result.foundKeywords.map((kw) => (
-                    <span key={kw} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 animate-pop-in">
-                      <FaCheckCircle className="text-green-500" /> {kw}
-                    </span>
-                  )) : <span className="text-gray-400">None</span>}
-                </div>
-              </div>
-              <div className="mt-2">
-                <div className="font-semibold my-4 text-blue-700">Missing Keywords:</div>
-                <div className="flex flex-wrap gap-2">
-                  {result.missingKeywords.length ? result.missingKeywords.map((kw) => (
-                    <span key={kw} className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 animate-pop-in">
-                      <FaExclamationCircle className="text-red-500" /> {kw}
-                    </span>
-                  )) : <span className="text-gray-400">None</span>}
-                </div>
-              </div>
-              <div className="mt-2">
-                <div className="font-semibold my-4 text-blue-700">Missing Sections:</div>
-                <div className="flex flex-wrap gap-2">
-                  {result.missingSections.length ? result.missingSections.map((sec) => (
-                    <span key={sec} className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold animate-pop-in">
-                      {sec}
-                    </span>
-                  )) : <span className="text-gray-400">None</span>}
-                </div>
-              </div>
-              <SuggestedImprovements result={result} />
-              {/* Download Audit Button */}
-              <div className="flex justify-center mt-8">
-                <button
-                  onClick={handleDownloadAudit}
-                  className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:scale-105 hover:from-green-600 hover:to-blue-600 transition-all duration-200 flex items-center gap-2 text-lg animate-pop-in"
+                <h2 className="text-2xl font-extrabold text-center mb-6 bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent">
+                  Audit Result
+                </h2>
+                <motion.div
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+                  className="flex flex-col items-center mb-6"
                 >
-                  <FaFilePdf className="text-white text-2xl" /> Download Audit
-                </button>
+                  <div className="relative w-32 h-32 flex items-center justify-center mb-2">
+                    <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 120 120">
+                      <circle
+                        cx="60"
+                        cy="60"
+                        r="54"
+                        fill="none"
+                        stroke="#e0e7ef"
+                        strokeWidth="12"
+                      />
+                      <motion.circle
+                        cx="60"
+                        cy="60"
+                        r="54"
+                        fill="none"
+                        stroke="#2563eb"
+                        strokeWidth="12"
+                        strokeDasharray={339.292}
+                        strokeDashoffset={339.292 - (result.totalScore / 100) * 339.292}
+                        strokeLinecap="round"
+                        initial={{ strokeDashoffset: 339.292 }}
+                        animate={{ strokeDashoffset: 339.292 - (result.totalScore / 100) * 339.292 }}
+                        transition={{ duration: 1.2, ease: "easeInOut" }}
+                      />
+                    </svg>
+                    <span className="text-4xl font-extrabold text-blue-700 z-10">
+                      {result.totalScore}
+                    </span>
+                    <span className="absolute bottom-5 left-1/2 -translate-x-1/2 text-base text-gray-500 font-medium">/ 100</span>
+                  </div>
+                  <span className="text-sm text-gray-500">Overall Score</span>
+                </motion.div>
+                <div className="grid grid-cols-2 gap-4 text-base mb-6">
+                  <ScoreBar label="Section Score" value={result.sectionScore} color="from-green-400 to-green-600" />
+                  <ScoreBar label="Keyword Score" value={result.keywordScore} color="from-blue-400 to-blue-600" />
+                  <ScoreBar label="Length Score" value={result.lengthScore} color="from-purple-400 to-purple-600" />
+                  <ScoreBar label="Contact Score" value={result.contactScore} color="from-yellow-400 to-yellow-600" />
+                </div>
+                <div className="mt-4">
+                  <div className="font-semibold my-2 text-blue-700">Found Keywords:</div>
+                  <div className="flex flex-wrap gap-2">
+                    {result.foundKeywords.length ? result.foundKeywords.map((kw) => (
+                      <span key={kw} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 animate-pop-in">
+                        <FaCheckCircle className="text-green-500" /> {kw}
+                      </span>
+                    )) : <span className="text-gray-400">None</span>}
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <div className="font-semibold my-4 text-blue-700">Missing Keywords:</div>
+                  <div className="flex flex-wrap gap-2">
+                    {result.missingKeywords.length ? result.missingKeywords.map((kw) => (
+                      <span key={kw} className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 animate-pop-in">
+                        <FaExclamationCircle className="text-red-500" /> {kw}
+                      </span>
+                    )) : <span className="text-gray-400">None</span>}
+                  </div>
+                </div>
+                <div className="mt-2">
+                  <div className="font-semibold my-4 text-blue-700">Missing Sections:</div>
+                  <div className="flex flex-wrap gap-2">
+                    {result.missingSections.length ? result.missingSections.map((sec) => (
+                      <span key={sec} className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold animate-pop-in">
+                        {sec}
+                      </span>
+                    )) : <span className="text-gray-400">None</span>}
+                  </div>
+                </div>
+                <SuggestedImprovements result={result} />
+                {/* Download Audit Button */}
+                <div className="flex justify-center mt-8">
+                  <button
+                    onClick={handleDownloadAudit}
+                    className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:scale-105 hover:from-green-600 hover:to-blue-600 transition-all duration-200 flex items-center gap-2 text-lg animate-pop-in"
+                  >
+                    <FaFilePdf className="text-white text-2xl" /> Download Audit
+                  </button>
+                  
+                </div>
+              </motion.div>
+              {/* Hidden print-friendly PDF section */}
+              
+              <div id="audit-pdf-section" style={{ display: 'none', padding: 0, margin: 0, background: '#f8fafc', width: 600, minHeight: 800 }}>
+                <div style={{ padding: 32, fontFamily: 'sans-serif', color: '#222' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+                    <div style={{ width: 48, height: 48, borderRadius: 12, background: 'linear-gradient(90deg,#2563eb,#60a5fa)', display: 'flex', alignItems: 'center', justifyContent: 'center', alignContent:'center', marginTop:'auto', marginBottom:'auto', color: '#fff', fontWeight: 700, fontSize: 28 }}>H</div>
+                    <span style={{ fontSize: 28, fontWeight: 800, color: '#2563eb', letterSpacing: -1 }}>HireLift</span>
+                  </div>
+                  <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8, color: '#2563eb' }}>Resume ATS Audit Result</h2>
+                  <div style={{ fontSize: 16, color: '#555', marginBottom: 24 }}>Your personalized resume audit powered by HireLift</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 24 }}>
+                    <div style={{ fontSize: 48, fontWeight: 900, color: '#2563eb', lineHeight: 1 }}>{result.totalScore} <span style={{ fontSize: 20, fontWeight: 500, color: '#888' }}>/ 100</span></div>
+                    <div style={{ fontSize: 16, color: '#666' }}>Overall Score</div>
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
+                    <div><b>Section Score:</b> {result.sectionScore}</div>
+                    <div><b>Keyword Score:</b> {result.keywordScore}</div>
+                    <div><b>Length Score:</b> {result.lengthScore}</div>
+                    <div><b>Contact Score:</b> {result.contactScore}</div>
+                  </div>
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 4 }}>Found Keywords:</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {result.foundKeywords.length ? result.foundKeywords.map((kw) => (
+                        <span key={kw} style={{ background: '#bbf7d0', color: '#166534', padding: '4px 10px', borderRadius: 12, fontSize: 13, fontWeight: 600, alignContent:'center' }}>{kw}</span>
+                      )) : <span style={{ color: '#888' }}>None</span>}
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 4 }}>Missing Keywords:</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {result.missingKeywords.length ? result.missingKeywords.map((kw) => (
+                        <span key={kw} style={{ background: '#fecaca', color: '#991b1b', padding: '4px 10px', borderRadius: 12, fontSize: 13, fontWeight: 600, alignContent:'center' }}>{kw}</span>
+                      )) : <span style={{ color: '#888' }}>None</span>}
+                    </div>
+                  </div>
+                  <div style={{ marginBottom: 16 }}>
+                    <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 4 }}>Missing Sections:</div>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      {result.missingSections.length ? result.missingSections.map((sec) => (
+                        <span key={sec} style={{ background: '#fef08a', color: '#92400e', padding: '4px 10px', borderRadius: 12, fontSize: 13, fontWeight: 600 }}>{sec}</span>
+                      )) : <span style={{ color: '#888' }}>None</span>}
+                    </div>
+                  </div>
+                  <div style={{ marginTop: 24, padding: 16, background: '#f1f5f9', borderRadius: 12 }}>
+                    <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 6 }}>Suggested Improvements</div>
+                    <ul style={{ paddingLeft: 18, margin: 0 }}>
+                      {(() => {
+                        const suggestions = [];
+                        if (result.sectionScore < 80) suggestions.push("Add or improve missing resume sections for a more complete profile.");
+                        if (result.keywordScore < 80) suggestions.push("Include more relevant keywords from the job description to boost your match.");
+                        if (result.lengthScore < 80) suggestions.push("Adjust your resume length for optimal readability (1-2 pages recommended).");
+                        if (result.contactScore < 100) suggestions.push("Ensure your contact information is complete and up to date.");
+                        if (result.missingKeywords.length)
+                          suggestions.push(`Add these missing keywords: ${result.missingKeywords.join(", ")}`);
+                        if (result.missingSections.length)
+                          suggestions.push(`Include these missing sections: ${result.missingSections.join(", ")}`);
+                        if (!suggestions.length) suggestions.push("Great job! Your resume is well-optimized for ATS.");
+                        return suggestions.map((s, i) => (
+                          <li key={i} style={{ color: '#2563eb', fontSize: 15, marginBottom: 4 }}>{s}</li>
+                        ));
+                      })()}
+                    </ul>
+                  </div>
+                  <div style={{ marginTop: 32, textAlign: 'center', color: '#aaa', fontSize: 13 }}>
+                    Powered by HireLift | https://hirelift.ai
+                  </div>
+                </div>
               </div>
-            </motion.div>
+            </>
           )}
         </AnimatePresence>
       </motion.div>
@@ -495,6 +569,7 @@ function SuggestedImprovements({ result }) {
           </li>
         ))}
       </ul>
+      
     </div>
   );
 } 
