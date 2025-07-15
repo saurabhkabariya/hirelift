@@ -1,0 +1,123 @@
+{
+  "frontend_developer": {
+    "0-1_yrs": [
+      "HTML5", "CSS3", "JavaScript", "React", "Vue.js", "Angular", "TypeScript", "Bootstrap", "Tailwind CSS", "Responsive Design", "Git", "GitHub", "npm", "Webpack", "Babel", "ES6", "DOM Manipulation", "AJAX", "REST API", "JSON"
+    ],
+    "2-4_yrs": [
+      "React", "Vue.js", "Angular", "TypeScript", "Redux", "Vuex", "Next.js", "Nuxt.js", "GraphQL", "Webpack", "Vite", "Jest", "Testing Library", "Cypress", "Storybook", "Styled Components", "Sass", "Less", "Web Components", "Progressive Web Apps"
+    ],
+    "5+_yrs": [
+      "React", "Vue.js", "Angular", "TypeScript", "Redux", "Vuex", "Next.js", "Nuxt.js", "GraphQL", "Webpack", "Vite", "Jest", "Testing Library", "Cypress", "Storybook", "Styled Components", "Sass", "Less", "Web Components", "Progressive Web Apps", "Micro Frontends", "Performance Optimization", "Accessibility", "SEO", "CI/CD", "Docker", "AWS", "Azure", "Google Cloud"
+    ]
+  },
+  "backend_developer": {
+    "0-1_yrs": [
+      "Node.js", "Express.js", "Python", "Django", "Flask", "Java", "Spring Boot", "PHP", "Laravel", "MySQL", "PostgreSQL", "MongoDB", "REST API", "GraphQL", "Git", "GitHub", "npm", "pip", "Maven", "Docker"
+    ],
+    "2-4_yrs": [
+      "Node.js", "Express.js", "Python", "Django", "Flask", "Java", "Spring Boot", "PHP", "Laravel", "MySQL", "PostgreSQL", "MongoDB", "Redis", "Elasticsearch", "REST API", "GraphQL", "Microservices", "Docker", "Kubernetes", "AWS", "Azure", "Google Cloud"
+    ],
+    "5+_yrs": [
+      "Node.js", "Express.js", "Python", "Django", "Flask", "Java", "Spring Boot", "PHP", "Laravel", "MySQL", "PostgreSQL", "MongoDB", "Redis", "Elasticsearch", "REST API", "GraphQL", "Microservices", "Docker", "Kubernetes", "AWS", "Azure", "Google Cloud", "System Design", "Architecture", "Performance Optimization", "Security", "CI/CD", "DevOps", "Monitoring", "Logging"
+    ]
+  },
+  "fullstack_developer": {
+    "0-1_yrs": [
+      "HTML5", "CSS3", "JavaScript", "React", "Node.js", "Express.js", "MongoDB", "MySQL", "PostgreSQL", "REST API", "Git", "GitHub", "npm", "Webpack", "Babel", "ES6", "DOM Manipulation", "AJAX", "JSON", "Docker"
+    ],
+    "2-4_yrs": [
+      "React", "Vue.js", "Angular", "Node.js", "Express.js", "TypeScript", "Redux", "Vuex", "MongoDB", "MySQL", "PostgreSQL", "Redis", "GraphQL", "REST API", "Docker", "AWS", "Azure", "Google Cloud", "Jest", "Testing Library", "Cypress"
+    ],
+    "5+_yrs": [
+      "React", "Vue.js", "Angular", "Node.js", "Express.js", "TypeScript", "Redux", "Vuex", "MongoDB", "MySQL", "PostgreSQL", "Redis", "GraphQL", "REST API", "Microservices", "Docker", "Kubernetes", "AWS", "Azure", "Google Cloud", "System Design", "Architecture", "Performance Optimization", "Security", "CI/CD", "DevOps", "Monitoring", "Logging"
+    ]
+  },
+  "data_analyst": {
+    "0-1_yrs": [
+      "Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "SQL", "Excel", "Power BI", "Tableau", "Jupyter Notebook", "Git", "GitHub", "Data Cleaning", "Data Visualization", "Statistical Analysis", "Descriptive Statistics", "Hypothesis Testing", "A/B Testing", "Excel VBA", "Pivot Tables"
+    ],
+    "2-4_yrs": [
+      "Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "SQL", "Power BI", "Tableau", "Jupyter Notebook", "Scikit-learn", "TensorFlow", "PyTorch", "Apache Spark", "Hadoop", "Data Cleaning", "Data Visualization", "Statistical Analysis", "Machine Learning", "Predictive Modeling", "ETL", "Data Warehousing"
+    ],
+    "5+_yrs": [
+      "Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "SQL", "Power BI", "Tableau", "Jupyter Notebook", "Scikit-learn", "TensorFlow", "PyTorch", "Apache Spark", "Hadoop", "Data Cleaning", "Data Visualization", "Statistical Analysis", "Machine Learning", "Predictive Modeling", "ETL", "Data Warehousing", "Big Data", "Data Engineering", "Data Architecture", "Business Intelligence", "Data Strategy", "Leadership", "Project Management"
+    ]
+  },
+  "data_scientist": {
+    "0-1_yrs": [
+      "Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn", "Jupyter Notebook", "SQL", "Git", "GitHub", "Statistical Analysis", "Machine Learning", "Data Cleaning", "Data Visualization", "Linear Regression", "Logistic Regression", "Random Forest", "Decision Trees", "K-means Clustering", "Cross-validation"
+    ],
+    "2-4_yrs": [
+      "Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn", "TensorFlow", "PyTorch", "Jupyter Notebook", "SQL", "Apache Spark", "Hadoop", "Machine Learning", "Deep Learning", "Neural Networks", "Natural Language Processing", "Computer Vision", "Time Series Analysis", "A/B Testing", "Feature Engineering", "Model Deployment"
+    ],
+    "5+_yrs": [
+      "Python", "Pandas", "NumPy", "Matplotlib", "Seaborn", "Scikit-learn", "TensorFlow", "PyTorch", "Jupyter Notebook", "SQL", "Apache Spark", "Hadoop", "Machine Learning", "Deep Learning", "Neural Networks", "Natural Language Processing", "Computer Vision", "Time Series Analysis", "A/B Testing", "Feature Engineering", "Model Deployment", "MLOps", "Big Data", "Data Engineering", "Research", "Leadership", "Mentoring"
+    ]
+  },
+  "devops_engineer": {
+    "0-1_yrs": [
+      "Linux", "Bash", "Git", "GitHub", "Docker", "Jenkins", "CI/CD", "AWS", "Azure", "Google Cloud", "Kubernetes", "Terraform", "Ansible", "Python", "Shell Scripting", "Monitoring", "Logging", "ELK Stack", "Prometheus", "Grafana"
+    ],
+    "2-4_yrs": [
+      "Linux", "Bash", "Git", "GitHub", "Docker", "Jenkins", "CI/CD", "AWS", "Azure", "Google Cloud", "Kubernetes", "Terraform", "Ansible", "Python", "Shell Scripting", "Monitoring", "Logging", "ELK Stack", "Prometheus", "Grafana", "Microservices", "Service Mesh", "Istio", "Helm", "ArgoCD", "GitOps"
+    ],
+    "5+_yrs": [
+      "Linux", "Bash", "Git", "GitHub", "Docker", "Jenkins", "CI/CD", "AWS", "Azure", "Google Cloud", "Kubernetes", "Terraform", "Ansible", "Python", "Shell Scripting", "Monitoring", "Logging", "ELK Stack", "Prometheus", "Grafana", "Microservices", "Service Mesh", "Istio", "Helm", "ArgoCD", "GitOps", "Site Reliability Engineering", "Infrastructure as Code", "Security", "Compliance", "Leadership", "Architecture"
+    ]
+  },
+  "mobile_developer": {
+    "0-1_yrs": [
+      "React Native", "Flutter", "Swift", "Kotlin", "Java", "JavaScript", "TypeScript", "Git", "GitHub", "npm", "CocoaPods", "Gradle", "Android Studio", "Xcode", "REST API", "JSON", "Firebase", "App Store", "Google Play", "Mobile UI/UX"
+    ],
+    "2-4_yrs": [
+      "React Native", "Flutter", "Swift", "Kotlin", "Java", "JavaScript", "TypeScript", "Redux", "MobX", "Firebase", "AWS", "Azure", "Google Cloud", "GraphQL", "REST API", "Push Notifications", "In-App Purchases", "Analytics", "Crashlytics", "Performance Optimization", "App Security"
+    ],
+    "5+_yrs": [
+      "React Native", "Flutter", "Swift", "Kotlin", "Java", "JavaScript", "TypeScript", "Redux", "MobX", "Firebase", "AWS", "Azure", "Google Cloud", "GraphQL", "REST API", "Push Notifications", "In-App Purchases", "Analytics", "Crashlytics", "Performance Optimization", "App Security", "Architecture", "Design Patterns", "Leadership", "Mentoring", "Team Management"
+    ]
+  },
+  "ui_ux_designer": {
+    "0-1_yrs": [
+      "Figma", "Adobe XD", "Sketch", "Photoshop", "Illustrator", "InVision", "Prototyping", "Wireframing", "User Research", "Usability Testing", "Design Systems", "Typography", "Color Theory", "Layout Design", "Responsive Design", "Accessibility", "User Experience", "User Interface", "Visual Design", "Information Architecture"
+    ],
+    "2-4_yrs": [
+      "Figma", "Adobe XD", "Sketch", "Photoshop", "Illustrator", "InVision", "Prototyping", "Wireframing", "User Research", "Usability Testing", "Design Systems", "Typography", "Color Theory", "Layout Design", "Responsive Design", "Accessibility", "User Experience", "User Interface", "Visual Design", "Information Architecture", "Design Thinking", "Service Design", "Interaction Design", "Motion Design", "Design Leadership"
+    ],
+    "5+_yrs": [
+      "Figma", "Adobe XD", "Sketch", "Photoshop", "Illustrator", "InVision", "Prototyping", "Wireframing", "User Research", "Usability Testing", "Design Systems", "Typography", "Color Theory", "Layout Design", "Responsive Design", "Accessibility", "User Experience", "User Interface", "Visual Design", "Information Architecture", "Design Thinking", "Service Design", "Interaction Design", "Motion Design", "Design Leadership", "Strategy", "Team Management", "Mentoring", "Design Operations"
+    ]
+  },
+  "product_manager": {
+    "0-1_yrs": [
+      "Product Strategy", "Market Research", "User Research", "Competitive Analysis", "Product Roadmap", "Agile", "Scrum", "Jira", "Confluence", "A/B Testing", "Analytics", "Google Analytics", "Mixpanel", "Amplitude", "User Stories", "Requirements Gathering", "Stakeholder Management", "Cross-functional Collaboration", "Data Analysis", "Customer Feedback"
+    ],
+    "2-4_yrs": [
+      "Product Strategy", "Market Research", "User Research", "Competitive Analysis", "Product Roadmap", "Agile", "Scrum", "Jira", "Confluence", "A/B Testing", "Analytics", "Google Analytics", "Mixpanel", "Amplitude", "User Stories", "Requirements Gathering", "Stakeholder Management", "Cross-functional Collaboration", "Data Analysis", "Customer Feedback", "Product Metrics", "Growth Hacking", "Go-to-Market Strategy", "Product Launch", "Team Leadership"
+    ],
+    "5+_yrs": [
+      "Product Strategy", "Market Research", "User Research", "Competitive Analysis", "Product Roadmap", "Agile", "Scrum", "Jira", "Confluence", "A/B Testing", "Analytics", "Google Analytics", "Mixpanel", "Amplitude", "User Stories", "Requirements Gathering", "Stakeholder Management", "Cross-functional Collaboration", "Data Analysis", "Customer Feedback", "Product Metrics", "Growth Hacking", "Go-to-Market Strategy", "Product Launch", "Team Leadership", "Executive Communication", "Strategic Planning", "Mentoring", "Product Vision", "Innovation"
+    ]
+  },
+  "software_engineer": {
+    "0-1_yrs": [
+      "Java", "Python", "C++", "C#", "JavaScript", "TypeScript", "Git", "GitHub", "SQL", "MySQL", "PostgreSQL", "MongoDB", "REST API", "GraphQL", "Docker", "AWS", "Azure", "Google Cloud", "Agile", "Scrum", "Jira", "Confluence", "Unit Testing", "Integration Testing", "Debugging", "Problem Solving", "Data Structures", "Algorithms", "Object-Oriented Programming", "Design Patterns", "Version Control"
+    ],
+    "2-4_yrs": [
+      "Java", "Python", "C++", "C#", "JavaScript", "TypeScript", "Git", "GitHub", "SQL", "MySQL", "PostgreSQL", "MongoDB", "Redis", "Elasticsearch", "REST API", "GraphQL", "Microservices", "Docker", "Kubernetes", "AWS", "Azure", "Google Cloud", "CI/CD", "Jenkins", "GitLab CI", "GitHub Actions", "Unit Testing", "Integration Testing", "TDD", "BDD", "System Design", "Architecture", "Performance Optimization", "Security", "Monitoring", "Logging"
+    ],
+    "5+_yrs": [
+      "Java", "Python", "C++", "C#", "JavaScript", "TypeScript", "Git", "GitHub", "SQL", "MySQL", "PostgreSQL", "MongoDB", "Redis", "Elasticsearch", "REST API", "GraphQL", "Microservices", "Docker", "Kubernetes", "AWS", "Azure", "Google Cloud", "CI/CD", "Jenkins", "GitLab CI", "GitHub Actions", "Unit Testing", "Integration Testing", "TDD", "BDD", "System Design", "Architecture", "Performance Optimization", "Security", "Monitoring", "Logging", "Leadership", "Mentoring", "Technical Architecture", "Strategic Planning", "Innovation"
+    ]
+  },
+  "qa_engineer": {
+    "0-1_yrs": [
+      "Manual Testing", "Automated Testing", "Selenium", "JUnit", "TestNG", "Cucumber", "Postman", "REST API Testing", "SQL", "Git", "GitHub", "Jira", "Bug Tracking", "Test Cases", "Test Plans", "Regression Testing", "Smoke Testing", "Sanity Testing", "User Acceptance Testing", "Performance Testing"
+    ],
+    "2-4_yrs": [
+      "Manual Testing", "Automated Testing", "Selenium", "JUnit", "TestNG", "Cucumber", "Postman", "REST API Testing", "SQL", "Git", "GitHub", "Jira", "Bug Tracking", "Test Cases", "Test Plans", "Regression Testing", "Smoke Testing", "Sanity Testing", "User Acceptance Testing", "Performance Testing", "Load Testing", "Stress Testing", "Security Testing", "Mobile Testing", "Cross-browser Testing", "Test Automation Framework", "CI/CD Integration", "Test Reporting", "Test Metrics", "Quality Assurance"
+    ],
+    "5+_yrs": [
+      "Manual Testing", "Automated Testing", "Selenium", "JUnit", "TestNG", "Cucumber", "Postman", "REST API Testing", "SQL", "Git", "GitHub", "Jira", "Bug Tracking", "Test Cases", "Test Plans", "Regression Testing", "Smoke Testing", "Sanity Testing", "User Acceptance Testing", "Performance Testing", "Load Testing", "Stress Testing", "Security Testing", "Mobile Testing", "Cross-browser Testing", "Test Automation Framework", "CI/CD Integration", "Test Reporting", "Test Metrics", "Quality Assurance", "Test Strategy", "Leadership", "Team Management", "Process Improvement", "Quality Management"
+    ]
+  }
+} 
