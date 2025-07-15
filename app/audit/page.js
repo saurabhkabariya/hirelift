@@ -36,26 +36,35 @@ export default function ResumeAuditPage() {
   }, [user, localAuditCount]);
   // --- End fix ---
 
+  
   // Helper: isPremium and auditCount
   const isPremium = user?.isPremium;
   const auditCount = displayAuditCount;
-
+  
+  // Show loading for audit count if user is loading
+  const auditCountDisplay = userLoading ? '...' : auditCount;
   // Block further audits for non-premium users after 1
   const canAudit = isPremium || auditCount < 1;
 
-  // Download PDF logic
+  // Download PDF logic (fix)
   const handleDownloadAudit = async () => {
-    const auditNode = document.getElementById("audit-result-section");
-    if (!auditNode) return;
-    const canvas = await html2canvas(auditNode, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
-    const pageWidth = pdf.internal.pageSize.getWidth();
-    const pageHeight = pdf.internal.pageSize.getHeight();
-    const imgWidth = pageWidth - 40;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    pdf.addImage(imgData, "PNG", 20, 20, imgWidth, imgHeight, undefined, "FAST");
-    pdf.save("resume-audit.pdf");
+    if (typeof window === 'undefined' || !window.html2canvas || !window.jspdf) {
+      // fallback to imported libs
+    }
+    try {
+      const auditNode = document.getElementById("audit-result-section");
+      if (!auditNode) return;
+      const canvas = await html2canvas(auditNode, { scale: 2 });
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const imgWidth = pageWidth - 40;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 20, 20, imgWidth, imgHeight, undefined, "FAST");
+      pdf.save("resume-audit.pdf");
+    } catch (err) {
+      alert("Failed to generate PDF. Please try again.");
+    }
   };
 
   // Update local audit count after audit
@@ -214,7 +223,7 @@ export default function ResumeAuditPage() {
           {/* Show audit count and premium status */}
           <div className="mt-4 flex flex-col items-center gap-1 animate-fade-in">
             <span className="text-blue-700 font-semibold text-base">{isPremium ? "Premium User" : "Free User"}</span>
-            <span className="text-gray-600 text-sm">Audits used: {auditCount} {isPremium ? "(Unlimited)" : "/ 1 free"}</span>
+            <span className="text-gray-600 text-sm">Audits used: {auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}</span>
           </div>
         </div>
         <form
@@ -423,6 +432,15 @@ export default function ResumeAuditPage() {
                 </div>
               </div>
               <SuggestedImprovements result={result} />
+              {/* Download Audit Button */}
+              <div className="flex justify-center mt-8">
+                <button
+                  onClick={handleDownloadAudit}
+                  className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:scale-105 hover:from-green-600 hover:to-blue-600 transition-all duration-200 flex items-center gap-2 text-lg animate-pop-in"
+                >
+                  <FaFilePdf className="text-white text-2xl" /> Download Audit
+                </button>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
