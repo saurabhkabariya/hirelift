@@ -1,9 +1,15 @@
 "use client";
 import AuditResultCard from "@/components/AuditResultCard";
 import JOB_ROLES from "@/data/jobRoles";
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { FaFilePdf, FaUserTie, FaSearch, FaCheckCircle, FaExclamationCircle, FaUserEdit, FaChevronDown, FaTimesCircle } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 
 
 export default function ResumeAuditPage() {
@@ -15,6 +21,51 @@ export default function ResumeAuditPage() {
   const [error, setError] = useState("");
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef();
+  const { user, loading: userLoading, refetchUser } = useAuth();
+  const router = useRouter();
+  const [localAuditCount, setLocalAuditCount] = useState(() => {
+    if (typeof window !== "undefined") {
+      return parseInt(localStorage.getItem("auditCount") || "0", 10);
+    }
+    return 0;
+  });
+  // --- Fix audit count display ---
+  const [displayAuditCount, setDisplayAuditCount] = useState(user?.auditCount ?? localAuditCount);
+  useEffect(() => {
+    setDisplayAuditCount(user?.auditCount ?? localAuditCount);
+  }, [user, localAuditCount]);
+  // --- End fix ---
+
+  // Helper: isPremium and auditCount
+  const isPremium = user?.isPremium;
+  const auditCount = displayAuditCount;
+
+  // Block further audits for non-premium users after 1
+  const canAudit = isPremium || auditCount < 1;
+
+  // Download PDF logic
+  const handleDownloadAudit = async () => {
+    const auditNode = document.getElementById("audit-result-section");
+    if (!auditNode) return;
+    const canvas = await html2canvas(auditNode, { scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const imgWidth = pageWidth - 40;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    pdf.addImage(imgData, "PNG", 20, 20, imgWidth, imgHeight, undefined, "FAST");
+    pdf.save("resume-audit.pdf");
+  };
+
+  // Update local audit count after audit
+  const incrementLocalAuditCount = () => {
+    if (typeof window !== "undefined") {
+      const newCount = localAuditCount + 1;
+      setLocalAuditCount(newCount);
+      localStorage.setItem("auditCount", newCount.toString());
+    }
+  };
 
   // Drag and drop handlers
   const handleDrag = useCallback((e) => {
@@ -67,6 +118,7 @@ export default function ResumeAuditPage() {
     return JOB_ROLES.find((r) => r.label === role)?.keywords || [];
   };
 
+  // Handle audit submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setResult(null);
@@ -80,18 +132,45 @@ export default function ResumeAuditPage() {
       setError("Please enter at least one keyword.");
       return;
     }
+    if (!canAudit) {
+      setError("Your 1 free audit is exhausted. Upgrade to premium to continue.");
+      setTimeout(() => router.push("/pricing"), 2000);
+      return;
+    }
     setLoading(true);
     try {
       const formData = new FormData();
       formData.append("resume", file);
       formData.append("keywords", JSON.stringify(keywords));
+      const headers = {};
+      if (user && typeof window !== "undefined") {
+        const token = localStorage.getItem("token");
+        if (token) headers["Authorization"] = `Bearer ${token}`;
+      }
       const res = await fetch("/api/ats-score", {
         method: "POST",
         body: formData,
+        headers,
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Audit failed");
+      if (!res.ok) {
+        if (res.status === 403) {
+          setError("Your 1 free audit is exhausted. Upgrade to premium to continue.");
+          setTimeout(() => router.push("/pricing"), 2000);
+          return;
+        }
+        throw new Error(data.error || "Audit failed");
+      }
       setResult(data);
+      // Increment audit count if not premium
+      if (!isPremium) {
+        if (user) {
+          // Refetch user to update auditCount in context and UI
+          await refetchUser();
+        } else {
+          incrementLocalAuditCount();
+        }
+      }
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -100,7 +179,25 @@ export default function ResumeAuditPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center px-2 py-10">
+    <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-start px-2 pb-4 pt-1">
+      {/* Navigation Bar */}
+      <nav className="w-full flex items-center justify-between px-6 py-4 mb-6 bg-white/80 rounded-2xl shadow border border-blue-100 backdrop-blur-md sticky top-0 z-40">
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2 group">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-xl shadow-md">
+              <span className="z-10">H</span>
+            </div>
+            <span className="text-2xl font-extrabold tracking-tight gradient-text group-hover:text-blue-700 transition">HireLift</span>
+          </Link>
+        </div>
+        <button
+          onClick={() => router.push(user ? "/dashboard" : "/")}
+          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold shadow-sm border border-blue-200 transition"
+        >
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+          Back
+        </button>
+      </nav>
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -114,6 +211,11 @@ export default function ResumeAuditPage() {
           <p className="text-lg text-gray-600 animate-fade-in delay-100">
             Instantly analyze your resume for ATS compatibility and job fit.
           </p>
+          {/* Show audit count and premium status */}
+          <div className="mt-4 flex flex-col items-center gap-1 animate-fade-in">
+            <span className="text-blue-700 font-semibold text-base">{isPremium ? "Premium User" : "Free User"}</span>
+            <span className="text-gray-600 text-sm">Audits used: {auditCount} {isPremium ? "(Unlimited)" : "/ 1 free"}</span>
+          </div>
         </div>
         <form
           className="bg-white/90 rounded-2xl shadow-2xl p-8 space-y-7 border border-blue-100 backdrop-blur-md animate-fade-in delay-200"
@@ -236,6 +338,7 @@ export default function ResumeAuditPage() {
         <AnimatePresence>
           {result && (
             <motion.div
+              id="audit-result-section"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 30 }}

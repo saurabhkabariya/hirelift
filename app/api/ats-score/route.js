@@ -2,11 +2,47 @@ import { NextResponse } from 'next/server';
 import { extractTextFromPDF } from '@/services/extractTextFromPDF';
 import { cleanText } from '@/services/cleanText';
 import { scoreResume } from '@/services/scoreResume';
+import connectDB from '@/lib/mongodb';
+import User from '@/models/User';
+import jwt from 'jsonwebtoken';
 
 export const dynamic = 'force-dynamic';
 
-export async function POST(req) {
+export async function POST(req) { 
   try {
+    // Parse JWT from Authorization header or cookies
+    let token = null;
+    const authHeader = req.headers.get('authorization');
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      token = authHeader.substring(7);
+    } else if (req.cookies && req.cookies.token) {
+      token = req.cookies.token;
+    }
+    let user = null;
+    let isPremium = false;
+    let auditCount = 0;
+    let userId = null;
+    if (token) {
+      try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        userId = decoded.userId;
+        await connectDB();
+        user = await User.findById(userId);
+        if (user) {
+          isPremium = user.isPremium;
+          auditCount = user.auditCount || 0;
+        }
+      } catch (err) {
+        // Invalid token, treat as unauthenticated
+        user = null;
+      }
+    }
+
+    // If not premium and auditCount >= 1, block
+    if (user && !isPremium && auditCount >= 1) {
+      return NextResponse.json({ error: 'Free audit exhausted. Please upgrade to premium.' }, { status: 403 });
+    }
+
     const formData = await req.formData();
     const file = formData.get('resume');
     const keywordsRaw = formData.get('keywords');
@@ -41,6 +77,12 @@ export async function POST(req) {
 
     // Score resume
     const result = scoreResume({ text, pageCount, keywords });
+
+    // If user is authenticated and not premium, increment auditCount
+    if (user && !isPremium) {
+      user.auditCount = (user.auditCount || 0) + 1;
+      await user.save();
+    }
 
     return NextResponse.json(result);
   } catch (error) {

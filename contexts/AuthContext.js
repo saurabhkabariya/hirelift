@@ -116,6 +116,25 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // Refetch user from backend
+  const refetchUser = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) return;
+      const res = await fetch('/api/auth/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.user) {
+        setUser(data.user);
+        localStorage.setItem('user', JSON.stringify(data.user));
+      }
+    } catch (err) {
+      // ignore
+    }
+  };
+
   // Check auth state on mount
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -151,6 +170,7 @@ export function AuthProvider({ children }) {
     signUpWithEmail,
     signOutUser,
     setError,
+    refetchUser, // <-- add this
   };
 
   return (
