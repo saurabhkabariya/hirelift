@@ -1,8 +1,10 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import CompanyCard from "@/components/CompanyCard";
 import sampleCompanies from "@/data/sampleCompanies.json";
 import HIRING_ROLES from "@/data/hiringRoles";
+import Link from "next/link";
 
 const jobModes = ["Remote", "Hybrid", "On-site", "WFH"];
 const experiences = ["Fresher", "0-1", "1-3", "3-5"];
@@ -31,6 +33,32 @@ export default function CompanySearchPage() {
   const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [roleSearchTerm, setRoleSearchTerm] = useState("");
   const dropdownRef = useRef(null);
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const cardVariants = {
+    hidden: { scale: 0.8, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: { duration: 0.4 }
+    },
+    hover: {
+      scale: 1.02,
+      y: -5,
+      transition: { duration: 0.2 }
+    }
+  };
 
   // Filter roles based on search term
   const filteredRoles = HIRING_ROLES.filter(r =>
@@ -90,204 +118,463 @@ export default function CompanySearchPage() {
       })
       .catch(() => setLoading(false));
   }, []);
-
   return (
-    <div className="min-h-screen bg-blue-50 py-8 px-2 sm:px-6">
-      <div className="max-w-4xl mx-auto mb-8">        <h1 className="text-3xl sm:text-4xl font-bold text-blue-800 mb-2 text-center">Company & HR Directory</h1>
-        <p className="text-gray-600 text-center mb-6">Find companies by role, job mode, and experience. Connect with HRs directly.</p>
-        
-        {/* Selected Role Display */}
-        {role && (
-          <div className="mb-4 text-center">
-            <span className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 text-blue-800 text-sm rounded-full">
-              <span>Searching for: <strong>{role}</strong></span>
-              <button
-                onClick={() => { setRole(""); setTouched(true); }}
-                className="text-blue-600 hover:text-blue-800 text-lg leading-none"
-              >
-                ×
-              </button>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+      {/* Navigation Bar */}
+      <motion.nav 
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="w-full flex items-center justify-between px-6 py-4 mb-6 bg-white/80 rounded-2xl shadow border border-blue-100 backdrop-blur-md sticky top-0 z-40 mx-2 sm:mx-6 mt-2"
+      >
+        <div className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-2 group">
+            <motion.div 
+              whileHover={{ scale: 1.05, rotate: 5 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-xl shadow-md"
+            >
+              <span className="z-10">H</span>
+            </motion.div>
+            <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+              HireLift
             </span>
-          </div>
-        )}<div className="bg-white rounded-lg shadow p-4 flex flex-col sm:flex-row gap-4 items-center justify-center">
-          <div className="flex-1 w-full">
-            <label className="block text-sm font-medium text-blue-700 mb-1">Role</label>
-            <div className="relative" ref={dropdownRef}>              <button
-                type="button"
-                onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-                onKeyDown={handleKeyDown}
-                className="w-full border border-blue-200 rounded px-3 py-2 text-left focus:outline-none focus:ring-2 focus:ring-blue-400 bg-white flex items-center justify-between"
-                aria-expanded={showRoleDropdown}
-                aria-haspopup="listbox"
-              >
-                <span className={role ? "text-gray-900" : "text-gray-500"}>
-                  {role || "Select a role..."}
-                </span>
-                <svg 
-                  className={`w-4 h-4 transition-transform ${showRoleDropdown ? 'rotate-180' : ''}`}
-                  fill="none" 
-                  stroke="currentColor" 
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-
-              {showRoleDropdown && (
-                <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-                  {/* Clear Selection Option */}
-                  <div className="p-2 border-b border-gray-200">
-                    <button
-                      onClick={() => handleRoleSelect("")}
-                      className="w-full text-left px-3 py-2 text-sm text-gray-500 hover:bg-gray-50 rounded"
-                    >
-                      Clear selection
-                    </button>
-                  </div>
-
-                  {/* Popular Roles */}
-                  <div className="p-2 border-b border-gray-200">
-                    <div className="text-xs font-medium text-gray-500 mb-2">Popular Roles</div>
-                    <div className="flex flex-wrap gap-1">
-                      {POPULAR_ROLES.slice(0, 6).map((popularRole) => (
-                        <button
-                          key={popularRole}
-                          onClick={() => handleRoleSelect(popularRole)}
-                          className="px-2 py-1 text-xs bg-blue-50 text-blue-700 rounded hover:bg-blue-100"
-                        >
-                          {popularRole}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Search Input */}
-                  <div className="p-2 border-b border-gray-200">
-                    <input
-                      type="text"
-                      placeholder="Search roles..."
-                      value={roleSearchTerm}
-                      onChange={(e) => setRoleSearchTerm(e.target.value)}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-                      onClick={(e) => e.stopPropagation()}
-                    />
-                  </div>
-                  
-                  {/* Roles List */}
-                  <div className="p-2 max-h-48 overflow-y-auto">
-                    {filteredRoles.length > 0 ? (
-                      filteredRoles.map((r) => (
-                        <button
-                          key={r}
-                          onClick={() => handleRoleSelect(r)}
-                          className="w-full text-left px-3 py-2 hover:bg-blue-50 text-sm text-gray-700 rounded block"
-                        >
-                          {r}
-                        </button>
-                      ))
-                    ) : (
-                      <div className="px-3 py-2 text-sm text-gray-500">No roles found</div>
-                    )}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="flex-1 w-full">
-            <label className="block text-sm font-medium text-blue-700 mb-1">Job Mode</label>
-            <select
-              className="w-full border border-blue-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              value={mode}
-              onChange={e => { setMode(e.target.value); setTouched(true); }}
-            >
-              <option value="">Any</option>
-              {jobModes.map((m) => (
-                <option key={m} value={m}>{m}</option>
-              ))}
-            </select>
-          </div>
-          <div className="flex-1 w-full">
-            <label className="block text-sm font-medium text-blue-700 mb-1">Experience</label>
-            <select
-              className="w-full border border-blue-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              value={exp}
-              onChange={e => { setExp(e.target.value); setTouched(true); }}
-            >
-              <option value="">Any</option>
-              {experiences.map((e) => (
-                <option key={e} value={e}>{e}</option>
-              ))}
-            </select>
-          </div>
+          </Link>
         </div>
-      </div>      <div className="max-w-4xl mx-auto">
-        {/* Results Counter */}
-        {!loading && (
-          <div className="mb-4 text-center text-gray-600">
-            {companies.length > 0 ? (
-              <span>{companies.length} compan{companies.length === 1 ? 'y' : 'ies'} found</span>
-            ) : touched ? (
-              <span>No companies found for your search criteria</span>
-            ) : null}
-          </div>
-        )}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <Link 
+            href="/dashboard"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold shadow-sm border border-blue-200 transition-all duration-200"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+            Back to Dashboard
+          </Link>
+        </motion.div>
+      </motion.nav>
 
-        {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="text-center">
-              <svg className="animate-spin h-10 w-10 text-blue-600 mx-auto mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
-              </svg>
-              <p className="text-gray-500">Searching companies...</p>
-            </div>
-          </div>
-        ) : companies.length ? (
-          <div className="space-y-4">
-            {companies.map((company) => (
-              <CompanyCard
-                key={company._id}
-                companyName={company.companyName}
-                industry={company.industry}
-                location={company.location}
-                hiringRoles={company.hiringRoles}
-                jobMode={company.jobMode}
-                experience={company.experience}
-                hrContacts={company.hrContacts}
-                lastUpdated={company.lastUpdated}
-              />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-20">
-            <div className="max-w-md mx-auto">
-              <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
-              </svg>
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No companies found</h3>
-              <p className="text-gray-500 mb-4">
-                {touched 
-                  ? "Try adjusting your search criteria to find more companies." 
-                  : "Use the filters above to search for companies by role, job mode, and experience level."
-                }
-              </p>
-              {touched && (
-                <button
-                  onClick={() => {
-                    setRole("");
-                    setMode("");
-                    setExp("");
-                    setTouched(false);
-                  }}
-                  className="inline-flex items-center px-4 py-2 border border-blue-300 rounded-md text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      <div className="max-w-6xl mx-auto px-2 sm:px-6">
+        {/* Header Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="text-center mb-8"
+        >
+          <motion.h1 
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent drop-shadow-lg mb-4"
+          >
+            Company & HR Directory
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="text-lg text-gray-600 max-w-2xl mx-auto"
+          >
+            Discover your dream companies and connect directly with HR professionals. 
+            Find opportunities that match your skills and career goals.
+          </motion.p>
+        </motion.div>
+
+        {/* Selected Role Display */}
+        <AnimatePresence>
+          {role && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8, y: -20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.8, y: -20 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="mb-6 text-center"
+            >
+              <motion.span 
+                whileHover={{ scale: 1.05 }}
+                className="inline-flex items-center gap-3 px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-sm rounded-full shadow-lg"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <span>Searching for: <strong>{role}</strong></span>
+                <motion.button
+                  whileHover={{ scale: 1.1, rotate: 90 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => { setRole(""); setTouched(true); }}
+                  className="text-blue-100 hover:text-white transition-colors"
                 >
-                  Clear all filters
-                </button>
-              )}
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </motion.button>
+              </motion.span>
+            </motion.div>
+          )}
+        </AnimatePresence>        {/* Search Filters */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3, duration: 0.6 }}
+          className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 mb-8 border border-blue-100"
+        >
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Role Dropdown */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="space-y-2"
+            >
+              <label className="flex items-center gap-2 text-sm font-semibold text-blue-700">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8" />
+                </svg>
+                Role
+              </label>
+              <div className="relative" ref={dropdownRef}>
+                <motion.button
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  type="button"
+                  onClick={() => setShowRoleDropdown(!showRoleDropdown)}
+                  onKeyDown={handleKeyDown}
+                  className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white flex items-center justify-between transition-all duration-200 hover:border-blue-300"
+                  aria-expanded={showRoleDropdown}
+                  aria-haspopup="listbox"
+                >
+                  <span className={`${role ? "text-gray-900 font-medium" : "text-gray-500"}`}>
+                    {role || "Select a role..."}
+                  </span>
+                  <motion.svg 
+                    animate={{ rotate: showRoleDropdown ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-5 h-5 text-blue-400"
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </motion.svg>
+                </motion.button>
+
+                <AnimatePresence>
+                  {showRoleDropdown && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute z-20 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-72 overflow-hidden"
+                    >
+                      {/* Clear Selection Option */}
+                      <div className="p-3 border-b border-gray-100">
+                        <motion.button
+                          whileHover={{ backgroundColor: "#f1f5f9" }}
+                          onClick={() => handleRoleSelect("")}
+                          className="w-full text-left px-3 py-2 text-sm text-gray-500 rounded-lg transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Clear selection
+                          </div>
+                        </motion.button>
+                      </div>
+
+                      {/* Popular Roles */}
+                      <div className="p-3 border-b border-gray-100">
+                        <div className="text-xs font-semibold text-gray-500 mb-3 flex items-center gap-2">
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                          Popular Roles
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {POPULAR_ROLES.slice(0, 6).map((popularRole) => (
+                            <motion.button
+                              key={popularRole}
+                              whileHover={{ scale: 1.05, backgroundColor: "#dbeafe" }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleRoleSelect(popularRole)}
+                              className="px-3 py-1 text-xs bg-blue-50 text-blue-700 rounded-full border border-blue-200 hover:border-blue-300 transition-all duration-200"
+                            >
+                              {popularRole}
+                            </motion.button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Search Input */}
+                      <div className="p-3 border-b border-gray-100">
+                        <div className="relative">
+                          <svg className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                          <input
+                            type="text"
+                            placeholder="Search roles..."
+                            value={roleSearchTerm}
+                            onChange={(e) => setRoleSearchTerm(e.target.value)}
+                            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400"
+                            onClick={(e) => e.stopPropagation()}
+                          />
+                        </div>
+                      </div>
+                      
+                      {/* Roles List */}
+                      <div className="max-h-48 overflow-y-auto">
+                        {filteredRoles.length > 0 ? (
+                          filteredRoles.map((r, index) => (
+                            <motion.button
+                              key={r}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.02 }}
+                              whileHover={{ backgroundColor: "#f0f9ff", x: 4 }}
+                              onClick={() => handleRoleSelect(r)}
+                              className="w-full text-left px-4 py-3 text-sm text-gray-700 border-b border-gray-50 hover:border-blue-100 transition-all duration-200"
+                            >
+                              <div className="flex items-center gap-3">
+                                <div className="w-2 h-2 bg-blue-400 rounded-full"></div>
+                                {r}
+                              </div>
+                            </motion.button>
+                          ))
+                        ) : (
+                          <div className="px-4 py-8 text-center">
+                            <svg className="w-12 h-12 text-gray-300 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.34 0-4.529.901-6.172 2.379l1.586 1.586a5.967 5.967 0 014.586-2.172z" />
+                            </svg>
+                            <p className="text-sm text-gray-500">No roles found</p>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>
+
+            {/* Job Mode Dropdown */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="space-y-2"
+            >
+              <label className="flex items-center gap-2 text-sm font-semibold text-blue-700">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2-2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                </svg>
+                Job Mode
+              </label>
+              <motion.select
+                whileHover={{ scale: 1.01 }}
+                whileFocus={{ scale: 1.01 }}
+                className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white transition-all duration-200 hover:border-blue-300"
+                value={mode}
+                onChange={e => { setMode(e.target.value); setTouched(true); }}
+              >
+                <option value="">Any Mode</option>
+                {jobModes.map((m) => (
+                  <option key={m} value={m}>{m}</option>
+                ))}
+              </motion.select>
+            </motion.div>
+
+            {/* Experience Dropdown */}
+            <motion.div 
+              whileHover={{ scale: 1.02 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              className="space-y-2"
+            >
+              <label className="flex items-center gap-2 text-sm font-semibold text-blue-700">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+                Experience
+              </label>
+              <motion.select
+                whileHover={{ scale: 1.01 }}
+                whileFocus={{ scale: 1.01 }}
+                className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white transition-all duration-200 hover:border-blue-300"
+                value={exp}
+                onChange={e => { setExp(e.target.value); setTouched(true); }}
+              >
+                <option value="">Any Experience</option>
+                {experiences.map((e) => (
+                  <option key={e} value={e}>{e} years</option>
+                ))}
+              </motion.select>
+            </motion.div>
+          </div>        </motion.div>
+
+        {/* Results Section */}
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
+          className="max-w-6xl mx-auto"
+        >
+          {/* Results Counter */}
+          <AnimatePresence>
+            {!loading && (
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="mb-6 text-center"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  className="inline-flex items-center gap-3 px-6 py-3 bg-white/80 backdrop-blur-md rounded-full shadow-lg border border-blue-100"
+                >
+                  <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                  </svg>
+                  {companies.length > 0 ? (
+                    <span className="text-gray-700 font-medium">
+                      <span className="text-blue-600 font-bold">{companies.length}</span> compan{companies.length === 1 ? 'y' : 'ies'} found
+                    </span>
+                  ) : touched ? (
+                    <span className="text-orange-600 font-medium">No companies match your criteria</span>
+                  ) : (
+                    <span className="text-gray-600 font-medium">Use filters above to discover companies</span>
+                  )}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>          {/* Company Results */}
+          {loading ? (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-20"
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="w-16 h-16 border-4 border-blue-200 border-t-blue-600 rounded-full mb-6"
+              />
+              <motion.h3 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-xl font-semibold text-gray-700 mb-2"
+              >
+                Discovering Companies
+              </motion.h3>
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.4 }}
+                className="text-gray-500"
+              >
+                Finding the perfect matches for you...
+              </motion.p>
+            </motion.div>          ) : companies.length ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {companies.map((company, index) => (
+                <motion.div
+                  key={company._id}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.1, duration: 0.4 }}
+                  whileHover={{ scale: 1.02, y: -5 }}
+                  className="group"
+                >
+                  <CompanyCard
+                    companyName={company.companyName}
+                    industry={company.industry}
+                    location={company.location}
+                    hiringRoles={company.hiringRoles}
+                    jobMode={company.jobMode}
+                    experience={company.experience}
+                    hrContacts={company.hrContacts}
+                    lastUpdated={company.lastUpdated}
+                  />
+                </motion.div>
+              ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="text-center py-20"
+            >
+              <motion.div 
+                initial={{ y: 20 }}
+                animate={{ y: 0 }}
+                className="max-w-md mx-auto"
+              >
+                <motion.div
+                  animate={{ 
+                    y: [0, -10, 0],
+                    scale: [1, 1.05, 1]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity, 
+                    ease: "easeInOut" 
+                  }}
+                  className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-50 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+                >
+                  <svg className="w-12 h-12 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </motion.div>
+                <motion.h3 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 }}
+                  className="text-2xl font-bold text-gray-800 mb-3"
+                >
+                  {touched ? "No Companies Found" : "Ready to Explore?"}
+                </motion.h3>
+                <motion.p 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  className="text-gray-600 mb-6 leading-relaxed"
+                >
+                  {touched 
+                    ? "We couldn't find any companies matching your criteria. Try adjusting your filters or explore different roles." 
+                    : "Use the advanced filters above to discover amazing companies and connect with HR professionals. Your dream job awaits!"
+                  }
+                </motion.p>
+                <AnimatePresence>
+                  {touched && (
+                    <motion.button
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(59, 130, 246, 0.3)" }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        setRole("");
+                        setMode("");
+                        setExp("");
+                        setTouched(false);
+                        setRoleSearchTerm("");
+                      }}
+                      className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                      Reset All Filters
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            </motion.div>
+          )}
+        </motion.div>
       </div>
     </div>
   );
-} 
+}
