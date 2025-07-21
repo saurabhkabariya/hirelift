@@ -29,10 +29,15 @@ export default function CompanySearchPage() {
   const [exp, setExp] = useState("");
   const [companies, setCompanies] = useState(sampleCompanies);
   const [loading, setLoading] = useState(false);
-  const [touched, setTouched] = useState(false);
-  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [touched, setTouched] = useState(false);  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [showModeDropdown, setShowModeDropdown] = useState(false);
+  const [showExpDropdown, setShowExpDropdown] = useState(false);
   const [roleSearchTerm, setRoleSearchTerm] = useState("");
+  const [modeSearchTerm, setModeSearchTerm] = useState("");
+  const [expSearchTerm, setExpSearchTerm] = useState("");
   const dropdownRef = useRef(null);
+  const modeDropdownRef = useRef(null);
+  const expDropdownRef = useRef(null);
 
   // Animation variants
   const containerVariants = {
@@ -64,12 +69,17 @@ export default function CompanySearchPage() {
   const filteredRoles = HIRING_ROLES.filter(r =>
     r.toLowerCase().includes(roleSearchTerm.toLowerCase())
   );
-
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
         setShowRoleDropdown(false);
+      }
+      if (modeDropdownRef.current && !modeDropdownRef.current.contains(event.target)) {
+        setShowModeDropdown(false);
+      }
+      if (expDropdownRef.current && !expDropdownRef.current.contains(event.target)) {
+        setShowExpDropdown(false);
       }
     };
 
@@ -84,11 +94,26 @@ export default function CompanySearchPage() {
     setShowRoleDropdown(false);
     setRoleSearchTerm("");
   };
-
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
       setShowRoleDropdown(false);
+      setShowModeDropdown(false);
+      setShowExpDropdown(false);
     }
+  };
+
+  const handleModeSelect = (selectedMode) => {
+    setMode(selectedMode);
+    setTouched(true);
+    setShowModeDropdown(false);
+    setModeSearchTerm("");
+  };
+
+  const handleExpSelect = (selectedExp) => {
+    setExp(selectedExp);
+    setTouched(true);
+    setShowExpDropdown(false);
+    setExpSearchTerm("");
   };
 
   useEffect(() => {
@@ -267,7 +292,7 @@ export default function CompanySearchPage() {
                       animate={{ opacity: 1, y: 0, scale: 1 }}
                       exit={{ opacity: 0, y: -10, scale: 0.95 }}
                       transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="absolute z-20 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-72 overflow-hidden"
+                      className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-72 overflow-hidden"
                     >
                       {/* Clear Selection Option */}
                       <div className="p-3 border-b border-gray-100">
@@ -357,9 +382,7 @@ export default function CompanySearchPage() {
                   )}
                 </AnimatePresence>
               </div>
-            </motion.div>
-
-            {/* Job Mode Dropdown */}
+            </motion.div>            {/* Job Mode Dropdown */}
             <motion.div 
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -367,25 +390,88 @@ export default function CompanySearchPage() {
             >
               <label className="flex items-center gap-2 text-sm font-semibold text-blue-700">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2-2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                 </svg>
                 Job Mode
               </label>
-              <motion.select
-                whileHover={{ scale: 1.01 }}
-                whileFocus={{ scale: 1.01 }}
-                className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white transition-all duration-200 hover:border-blue-300"
-                value={mode}
-                onChange={e => { setMode(e.target.value); setTouched(true); }}
-              >
-                <option value="">Any Mode</option>
-                {jobModes.map((m) => (
-                  <option key={m} value={m}>{m}</option>
-                ))}
-              </motion.select>
-            </motion.div>
+              <div className="relative" ref={modeDropdownRef}>
+                <motion.button
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  type="button"
+                  onClick={() => setShowModeDropdown(!showModeDropdown)}
+                  onKeyDown={handleKeyDown}
+                  className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white flex items-center justify-between transition-all duration-200 hover:border-blue-300"
+                  aria-expanded={showModeDropdown}
+                  aria-haspopup="listbox"
+                >
+                  <span className={`${mode ? "text-gray-900 font-medium" : "text-gray-500"}`}>
+                    {mode || "Select job mode..."}
+                  </span>
+                  <motion.svg 
+                    animate={{ rotate: showModeDropdown ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-5 h-5 text-blue-400"
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </motion.svg>
+                </motion.button>
 
-            {/* Experience Dropdown */}
+                <AnimatePresence>
+                  {showModeDropdown && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-72 overflow-hidden"
+                    >
+                      {/* Clear Selection Option */}
+                      <div className="p-3 border-b border-gray-100">
+                        <motion.button
+                          whileHover={{ backgroundColor: "#f1f5f9" }}
+                          onClick={() => handleModeSelect("")}
+                          className="w-full text-left px-3 py-2 text-sm text-gray-500 rounded-lg transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Any mode
+                          </div>
+                        </motion.button>
+                      </div>
+
+                      {/* Popular Modes */}
+                      <div className="p-3 border-b border-gray-100">
+                        <div className="text-xs font-semibold text-gray-500 mb-3 flex items-center gap-2">
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                          Available Modes
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {jobModes.map((jobMode) => (
+                            <motion.button
+                              key={jobMode}
+                              whileHover={{ scale: 1.05, backgroundColor: "#dbeafe" }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleModeSelect(jobMode)}
+                              className="px-3 py-1 text-xs bg-blue-50 text-blue-700 rounded-full border border-blue-200 hover:border-blue-300 transition-all duration-200"
+                            >
+                              {jobMode}
+                            </motion.button>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            </motion.div>            {/* Experience Dropdown */}
             <motion.div 
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -397,18 +483,83 @@ export default function CompanySearchPage() {
                 </svg>
                 Experience
               </label>
-              <motion.select
-                whileHover={{ scale: 1.01 }}
-                whileFocus={{ scale: 1.01 }}
-                className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white transition-all duration-200 hover:border-blue-300"
-                value={exp}
-                onChange={e => { setExp(e.target.value); setTouched(true); }}
-              >
-                <option value="">Any Experience</option>
-                {experiences.map((e) => (
-                  <option key={e} value={e}>{e} years</option>
-                ))}
-              </motion.select>
+              <div className="relative" ref={expDropdownRef}>
+                <motion.button
+                  whileHover={{ scale: 1.01 }}
+                  whileTap={{ scale: 0.99 }}
+                  type="button"
+                  onClick={() => setShowExpDropdown(!showExpDropdown)}
+                  onKeyDown={handleKeyDown}
+                  className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white flex items-center justify-between transition-all duration-200 hover:border-blue-300"
+                  aria-expanded={showExpDropdown}
+                  aria-haspopup="listbox"
+                >
+                  <span className={`${exp ? "text-gray-900 font-medium" : "text-gray-500"}`}>
+                    {exp ? `${exp} years` : "Select experience..."}
+                  </span>
+                  <motion.svg 
+                    animate={{ rotate: showExpDropdown ? 180 : 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="w-5 h-5 text-blue-400"
+                    fill="none" 
+                    stroke="currentColor" 
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                  </motion.svg>
+                </motion.button>
+
+                <AnimatePresence>
+                  {showExpDropdown && (
+                    <motion.div 
+                      initial={{ opacity: 0, y: -10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: -10, scale: 0.95 }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-72 overflow-hidden"
+                    >
+                      {/* Clear Selection Option */}
+                      <div className="p-3 border-b border-gray-100">
+                        <motion.button
+                          whileHover={{ backgroundColor: "#f1f5f9" }}
+                          onClick={() => handleExpSelect("")}
+                          className="w-full text-left px-3 py-2 text-sm text-gray-500 rounded-lg transition-colors"
+                        >
+                          <div className="flex items-center gap-2">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Any experience
+                          </div>
+                        </motion.button>
+                      </div>
+
+                      {/* Experience Levels */}
+                      <div className="p-3 border-b border-gray-100">
+                        <div className="text-xs font-semibold text-gray-500 mb-3 flex items-center gap-2">
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                          </svg>
+                          Experience Levels
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {experiences.map((experience) => (
+                            <motion.button
+                              key={experience}
+                              whileHover={{ scale: 1.05, backgroundColor: "#dbeafe" }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleExpSelect(experience)}
+                              className="px-3 py-1 text-xs bg-blue-50 text-blue-700 rounded-full border border-blue-200 hover:border-blue-300 transition-all duration-200"
+                            >
+                              {experience} years
+                            </motion.button>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             </motion.div>
           </div>        </motion.div>
 
