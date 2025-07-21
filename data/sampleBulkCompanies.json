@@ -1,0 +1,54 @@
+[
+  {
+    "companyName": "TechCorp Ltd",
+    "industry": "Technology",
+    "location": "San Francisco, CA",
+    "jobMode": "Remote",
+    "experience": "1-3",
+    "hiringRoles": ["React Developer", "Backend Developer", "Full Stack Developer"],
+    "hrContacts": [
+      {
+        "name": "John Doe",
+        "position": "HR Manager",
+        "email": "john@techcorp.com",
+        "linkedIn": "https://linkedin.com/in/johndoe"
+      },
+      {
+        "name": "Jane Smith",
+        "position": "Tech Recruiter",
+        "email": "jane@techcorp.com",
+        "linkedIn": "https://linkedin.com/in/janesmith"
+      }
+    ]
+  },  {
+    "companyName": "DataSolutions Inc",
+    "industry": "Data Analytics",
+    "location": "New York, NY",
+    "jobMode": "Hybrid",
+    "experience": "3-5",
+    "hiringRoles": ["Data Scientist", "Machine Learning Engineer", "Data Analyst"],
+    "hrContacts": [
+      {
+        "name": "Mike Johnson",
+        "position": "Talent Acquisition Specialist",
+        "email": "mike@datasolutions.com",
+        "linkedIn": "https://linkedin.com/in/mikejohnson"
+      }
+    ]
+  },
+  {
+    "companyName": "StartupHub",
+    "industry": "Software Development",
+    "location": "Austin, TX",
+    "jobMode": "On-site",
+    "experience": "0-1",
+    "hiringRoles": ["Frontend Developer", "UI/UX Designer", "Junior Developer"],
+    "hrContacts": [
+      {
+        "name": "Sarah Wilson",
+        "position": "People Operations",
+        "email": "sarah@startuphub.com"
+      }
+    ]
+  }
+]
