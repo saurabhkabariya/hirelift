@@ -238,3 +238,45 @@ body {
     background-position: 0% 50%;
   }
 }
+
+/* FAB Menu Animations */
+.fab-menu-enter {
+  animation: fabMenuEnter 0.3s ease-out forwards;
+}
+
+.fab-menu-exit {
+  animation: fabMenuExit 0.3s ease-in forwards;
+}
+
+@keyframes fabMenuEnter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fabMenuExit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+  }
+}
+
+/* Smooth navigation transitions */
+.nav-transition {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Backdrop blur enhancement */
+.backdrop-blur-enhanced {
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);
+}

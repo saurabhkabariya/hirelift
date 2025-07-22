@@ -2,7 +2,7 @@ import React from "react";
 
 export default function CompanyRow({ company, onEdit, onDelete }) {
   return (
-    <tr className="border-b hover:bg-blue-50 transition">
+    <>
       <td className="p-2 font-semibold">{company.companyName}</td>
       <td className="p-2">{company.hiringRoles?.join(", ")}</td>
       <td className="p-2">{company.jobMode}</td>
@@ -17,6 +17,6 @@ export default function CompanyRow({ company, onEdit, onDelete }) {
           onClick={() => onDelete(company._id)}
         >Delete</button>
       </td>
-    </tr>
+    </>
   );
 } 

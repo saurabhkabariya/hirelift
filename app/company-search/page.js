@@ -139,41 +139,70 @@ export default function CompanySearchPage() {
   }, [role, mode, exp, page]);
   
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
-      {/* Navigation Bar */}
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">      {/* Enhanced Navigation Bar */}
       <motion.nav 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full flex items-center justify-between px-10 py-4 mb-6 bg-white/80 rounded-2xl shadow border border-blue-100 backdrop-blur-md sticky top-0 z-50 mx-2 sm:mx-6 mt-2"
+        className="w-full bg-white/90 backdrop-blur-enhanced shadow-sm border-b border-blue-100 sticky top-0 z-50"
       >
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 group">
-            <motion.div 
-              whileHover={{ scale: 1.05, rotate: 5 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-xl shadow-md"
-            >
-              <span className="z-10">H</span>
-            </motion.div>
-            <span className="text-2xl font-extrabold tracking-tight bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
-              HireLift
-            </span>
-          </Link>
+        <div className="max-w-6xl mx-auto px-4 sm:px-6">
+          <div className="flex items-center justify-between py-3">
+            {/* Logo Section */}
+            <div className="flex items-center gap-4">
+              <Link href="/" className="flex items-center gap-2 group">
+                <motion.div 
+                  whileHover={{ scale: 1.05, rotate: 5 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-xl shadow-md"
+                >
+                  <span className="z-10">H</span>
+                </motion.div>
+                <span className="text-xl font-extrabold tracking-tight bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent group-hover:scale-105 transition-transform">
+                  HireLift
+                </span>
+              </Link>
+
+              {/* Breadcrumb */}
+              <nav className="hidden sm:flex items-center gap-2 text-sm">
+                <span className="text-gray-400">•</span>
+                <motion.a
+                  href="/dashboard"
+                  whileHover={{ scale: 1.05 }}
+                  className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                >
+                  Dashboard
+                </motion.a>
+                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                </svg>
+                <span className="text-blue-700 font-semibold">Company Search</span>
+              </nav>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="flex items-center gap-3">
+              <motion.a
+                href="/dashboard"
+                whileHover={{ scale: 1.05, x: -5 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-xl hover:from-blue-200 hover:to-indigo-200 transition-all duration-200 border border-blue-200 font-medium"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                </svg>
+                <span className="hidden sm:inline">Dashboard</span>
+              </motion.a>
+
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center gap-2 px-3 py-2 bg-purple-100 text-purple-700 rounded-lg border border-purple-200"
+              >
+                <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                <span className="text-xs font-medium hidden sm:inline">Search</span>
+              </motion.div>
+            </div>
+          </div>
         </div>
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Link 
-            href="/dashboard"
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold shadow-sm border border-blue-200 transition-all duration-200"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-            </svg>
-            Back to Dashboard
-          </Link>
-        </motion.div>
       </motion.nav>
 
       <div className="max-w-6xl mx-auto px-2 py-4 sm:px-6">
@@ -805,10 +834,85 @@ export default function CompanySearchPage() {
                   )}
                 </AnimatePresence>
               </motion.div>
-            </motion.div>
-          )}
+            </motion.div>          )}
         </motion.div>
       </div>
+
+      {/* Floating Navigation Menu */}
+      <motion.div
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 1, type: "spring", stiffness: 200 }}
+        className="fixed bottom-6 right-6 z-40"
+      >
+        <div className="relative group">
+          {/* Main FAB */}
+          <motion.button
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            className="w-14 h-14 bg-gradient-to-r from-purple-600 to-purple-500 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center"
+            onClick={() => {
+              const menu = document.getElementById('fab-menu');
+              menu.classList.toggle('hidden');
+            }}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
+            </svg>
+          </motion.button>
+
+          {/* Menu Items */}
+          <div id="fab-menu" className="hidden absolute bottom-16 right-0 space-y-3">
+            <motion.a
+              href="/dashboard"
+              whileHover={{ scale: 1.1, x: -5 }}
+              whileTap={{ scale: 0.9 }}
+              className="flex items-center gap-3 px-4 py-3 bg-white text-blue-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-blue-200 min-w-[160px]"
+            >
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z" />
+                </svg>
+              </div>
+              <span className="font-medium">Dashboard</span>
+            </motion.a>
+
+            <motion.button
+              whileHover={{ scale: 1.1, x: -5 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => {
+                setRole("");
+                setMode("");
+                setExp("");
+                setPage(1);
+                window.scrollTo({ top: 200, behavior: 'smooth' });
+              }}
+              className="flex items-center gap-3 px-4 py-3 bg-white text-orange-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-orange-200 min-w-[160px]"
+            >
+              <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+              </div>
+              <span className="font-medium">Reset</span>
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.1, x: -5 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="flex items-center gap-3 px-4 py-3 bg-white text-green-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-green-200 min-w-[160px]"
+            >
+              <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+                </svg>
+              </div>
+              <span className="font-medium">Top</span>
+            </motion.button>
+          </div>
+        </div>
+      </motion.div>
     </div>
   );
 }

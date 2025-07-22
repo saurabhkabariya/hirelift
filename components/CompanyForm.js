@@ -76,35 +76,66 @@ export default function CompanyForm({ initialValues = {}, onSubmit }) {  const [
     await onSubmit(data);
     setSubmitting(false);
   };
-  return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+  return (    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div>
-          <label className="block text-sm font-medium text-[#2563eb] mb-1">Company Name</label>
-          <input name="companyName" value={form.companyName} onChange={handleChange} required className="w-full border border-blue-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <label className="block text-sm font-semibold text-blue-700 mb-2">Company Name *</label>
+          <input 
+            name="companyName" 
+            value={form.companyName} 
+            onChange={handleChange} 
+            required 
+            placeholder="e.g., TechCorp Solutions"
+            className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 bg-white" 
+          />
         </div>
         <div>
-          <label className="block text-sm font-medium text-[#2563eb] mb-1">Industry</label>
-          <input name="industry" value={form.industry} onChange={handleChange} required className="w-full border border-blue-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <label className="block text-sm font-semibold text-blue-700 mb-2">Industry *</label>
+          <input 
+            name="industry" 
+            value={form.industry} 
+            onChange={handleChange} 
+            required 
+            placeholder="e.g., Technology, Healthcare"
+            className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 bg-white" 
+          />
         </div>
         <div>
-          <label className="block text-sm font-medium text-[#2563eb] mb-1">Location</label>
-          <input name="location" value={form.location} onChange={handleChange} required className="w-full border border-blue-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" />
+          <label className="block text-sm font-semibold text-blue-700 mb-2">Location *</label>
+          <input 
+            name="location" 
+            value={form.location} 
+            onChange={handleChange} 
+            required 
+            placeholder="e.g., San Francisco, CA"
+            className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 bg-white" 
+          />
         </div>
         <div>
-          <label className="block text-sm font-medium text-[#2563eb] mb-1">Job Mode</label>
-          <select name="jobMode" value={form.jobMode} onChange={handleChange} required className="w-full border border-blue-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            <option value="">Select</option>
+          <label className="block text-sm font-semibold text-blue-700 mb-2">Job Mode *</label>
+          <select 
+            name="jobMode" 
+            value={form.jobMode} 
+            onChange={handleChange} 
+            required 
+            className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 bg-white"
+          >
+            <option value="">Select job mode...</option>
             {jobModes.map((m) => <option key={m} value={m}>{m}</option>)}
           </select>
-        </div>
-        <div>
-          <label className="block text-sm font-medium text-[#2563eb] mb-1">Experience</label>
-          <select name="experience" value={form.experience} onChange={handleChange} required className="w-full border border-blue-200 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400">
-            <option value="">Select</option>
+        </div>        <div className="lg:col-span-2">
+          <label className="block text-sm font-semibold text-blue-700 mb-2">Experience Level *</label>
+          <select 
+            name="experience" 
+            value={form.experience} 
+            onChange={handleChange} 
+            required 
+            className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200 bg-white"
+          >
+            <option value="">Select experience level...</option>
             {experiences.map((e) => <option key={e} value={e}>{e}</option>)}
           </select>
-        </div>        <div className="col-span-1 sm:col-span-2">
+        </div><div className="col-span-1 sm:col-span-2">
           <label className="block text-sm font-medium text-[#2563eb] mb-1">Hiring Roles *</label>
           
           {/* Selected Roles Display */}
@@ -192,26 +223,118 @@ export default function CompanyForm({ initialValues = {}, onSubmit }) {  const [
             <p className="text-red-500 text-xs mt-1">Please select at least one hiring role</p>
           )}
         </div>
-      </div>
-      <div>
-        <label className="block text-sm font-medium text-[#2563eb] mb-1">HR Contacts</label>
-        <div className="space-y-2">
+      </div>      <div>
+        <label className="block text-sm font-medium text-[#2563eb] mb-2">HR Contacts</label>
+        <div className="space-y-3">
           {form.hrContacts.map((hr, idx) => (
-            <div key={idx} className="flex flex-col sm:flex-row gap-2 items-center bg-blue-50 rounded p-3 mb-1">
-              <input name="name" value={hr.name} onChange={e => handleHRChange(idx, e)} placeholder="Name" required className="flex-1 border border-blue-200 rounded px-2 py-1" />
-              <input name="position" value={hr.position} onChange={e => handleHRChange(idx, e)} placeholder="Position" required className="flex-1 border border-blue-200 rounded px-2 py-1" />
-              <input name="email" value={hr.email} onChange={e => handleHRChange(idx, e)} placeholder="Email" required className="flex-1 border border-blue-200 rounded px-2 py-1" />
-              <input name="linkedIn" value={hr.linkedIn} onChange={e => handleHRChange(idx, e)} placeholder="LinkedIn" className="flex-1 border border-blue-200 rounded px-2 py-1" />
-              {form.hrContacts.length > 1 && (
-                <button type="button" className="text-red-500 ml-2" onClick={() => removeHR(idx)}>✕</button>
-              )}
+            <div key={idx} className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-200 shadow-sm">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center">
+                    <svg className="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-semibold text-blue-700">HR Contact {idx + 1}</span>
+                </div>
+                {form.hrContacts.length > 1 && (
+                  <button 
+                    type="button" 
+                    className="w-6 h-6 rounded-full bg-red-100 hover:bg-red-200 text-red-600 flex items-center justify-center transition-colors" 
+                    onClick={() => removeHR(idx)}
+                    title="Remove HR Contact"
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+              
+              {/* Single row layout for HR fields */}
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
+                <div className="lg:col-span-1">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Full Name *</label>
+                  <input 
+                    name="name" 
+                    value={hr.name} 
+                    onChange={e => handleHRChange(idx, e)} 
+                    placeholder="e.g., Sarah Johnson" 
+                    required 
+                    className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white transition-all duration-200" 
+                  />
+                </div>
+                
+                <div className="lg:col-span-1">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Position *</label>
+                  <input 
+                    name="position" 
+                    value={hr.position} 
+                    onChange={e => handleHRChange(idx, e)} 
+                    placeholder="e.g., HR Manager" 
+                    required 
+                    className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white transition-all duration-200" 
+                  />
+                </div>
+                
+                <div className="lg:col-span-1">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">Email Address *</label>
+                  <input 
+                    name="email" 
+                    type="email"
+                    value={hr.email} 
+                    onChange={e => handleHRChange(idx, e)} 
+                    placeholder="e.g., sarah@company.com" 
+                    required 
+                    className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white transition-all duration-200" 
+                  />
+                </div>
+                
+                <div className="lg:col-span-1">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">LinkedIn Profile</label>
+                  <input 
+                    name="linkedIn" 
+                    value={hr.linkedIn} 
+                    onChange={e => handleHRChange(idx, e)} 
+                    placeholder="https://linkedin.com/in/..." 
+                    className="w-full border border-blue-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white transition-all duration-200" 
+                  />
+                </div>
+              </div>
             </div>
           ))}
         </div>
-        <button type="button" className="mt-2 px-3 py-1 bg-blue-100 text-[#2563eb] rounded hover:bg-blue-200" onClick={addHR}>+ Add HR</button>
-      </div>
-      <button type="submit" disabled={submitting} className="mt-4 px-6 py-2 bg-[#2563eb] text-white rounded hover:bg-blue-700 transition">
-        {submitting ? "Submitting..." : "Submit"}
+        
+        <button 
+          type="button" 
+          className="mt-4 px-4 py-2 bg-gradient-to-r from-blue-100 to-indigo-100 text-blue-700 rounded-lg hover:from-blue-200 hover:to-indigo-200 transition-all duration-200 font-medium text-sm flex items-center gap-2 border border-blue-200" 
+          onClick={addHR}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+          Add Another HR Contact
+        </button>
+      </div>      <button 
+        type="submit" 
+        disabled={submitting} 
+        className="w-full mt-6 px-6 py-3 bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 text-white rounded-xl hover:shadow-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed font-semibold flex items-center justify-center gap-2"
+      >
+        {submitting ? (
+          <>
+            <svg className="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Processing...
+          </>
+        ) : (
+          <>
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+            </svg>
+            Submit Company
+          </>
+        )}
       </button>
     </form>
   );
