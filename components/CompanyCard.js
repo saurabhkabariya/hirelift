@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import TemplateModal from "./TemplateModal";
+import { POPULAR_ROLES } from "@/data/emailTemplates";
 
 export default function CompanyCard({
   companyName,
@@ -12,12 +14,24 @@ export default function CompanyCard({
   lastUpdated,
 }) {
   const [expanded, setExpanded] = useState(false);
-  const [copiedIdx, setCopiedIdx] = useState(null);
+  const [templateModal, setTemplateModal] = useState({ isOpen: false, selectedRole: null });
+  const openTemplateModal = (role) => {
+    setTemplateModal({ isOpen: true, selectedRole: role });
+  };
 
-  const handleCopy = (email, idx) => {
-    navigator.clipboard.writeText(email);
-    setCopiedIdx(idx);
-    setTimeout(() => setCopiedIdx(null), 1200);
+  const closeTemplateModal = () => {
+    setTemplateModal({ isOpen: false, selectedRole: null });
+  };
+
+  // Company data for templates
+  const companyData = {
+    companyName,
+    industry,
+    location,
+    hiringRoles,
+    jobMode,
+    experience,
+    hrContacts
   };
 
   return (
@@ -92,30 +106,98 @@ export default function CompanyCard({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
           </svg>
           Open Positions
-        </div>
-        <div className="flex flex-wrap gap-2">
+        </div>        <div className="space-y-2">
           {hiringRoles.length ? hiringRoles.slice(0, 3).map((role, index) => (
-            <motion.span 
+            <motion.div 
               key={role}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ scale: 1.05, backgroundColor: "#dbeafe" }}
-              className="bg-blue-50 text-blue-700 px-3 py-1 rounded-lg text-xs font-medium border border-blue-100 cursor-default"
+              className="flex items-center justify-between gap-2 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100"
             >
-              {role}
-            </motion.span>
+              <div className="flex items-center gap-2 flex-1">
+                <div className={`w-2 h-2 rounded-full ${
+                  POPULAR_ROLES.includes(role) ? 'bg-orange-400' : 'bg-blue-400'
+                }`}></div>
+                <span className="text-sm font-medium text-gray-800">{role}</span>
+                {POPULAR_ROLES.includes(role) && (
+                  <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">
+                    🔥 Popular
+                  </span>
+                )}
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => openTemplateModal(role)}
+                className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs rounded-lg hover:shadow-md transition-all font-medium"
+              >
+                <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Templates
+              </motion.button>
+            </motion.div>
           )) : (
-            <span className="text-gray-400 text-xs italic">No active positions</span>
+            <div className="text-center py-3 text-gray-500 text-sm">
+              No open positions listed
+            </div>
           )}
-          {hiringRoles.length > 3 && (
-            <motion.span 
-              whileHover={{ scale: 1.05 }}
-              className="bg-gray-100 text-gray-600 px-3 py-1 rounded-lg text-xs font-medium border border-gray-200 cursor-default"
+            {hiringRoles.length > 3 && (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setExpanded(!expanded)}
+              className="w-full text-center text-blue-600 hover:text-blue-700 font-medium text-sm py-2 rounded-lg hover:bg-blue-50 transition-colors"
             >
-              +{hiringRoles.length - 3} more
-            </motion.span>
+              {expanded ? 'Show Less' : `+${hiringRoles.length - 3} More Roles`}
+            </motion.button>
           )}
+
+          {/* Expanded Roles View */}
+          <AnimatePresence>
+            {expanded && hiringRoles.length > 3 && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="space-y-2 mt-2"
+              >
+                {hiringRoles.slice(3).map((role, index) => (
+                  <motion.div 
+                    key={role}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="flex items-center justify-between gap-2 p-3 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100"
+                  >
+                    <div className="flex items-center gap-2 flex-1">
+                      <div className={`w-2 h-2 rounded-full ${
+                        POPULAR_ROLES.includes(role) ? 'bg-orange-400' : 'bg-blue-400'
+                      }`}></div>
+                      <span className="text-sm font-medium text-gray-800">{role}</span>
+                      {POPULAR_ROLES.includes(role) && (
+                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full font-medium">
+                          🔥 Popular
+                        </span>
+                      )}
+                    </div>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => openTemplateModal(role)}
+                      className="flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-purple-500 to-purple-600 text-white text-xs rounded-lg hover:shadow-md transition-all font-medium"
+                    >
+                      <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      Templates
+                    </motion.button>
+                  </motion.div>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
 
@@ -163,14 +245,13 @@ export default function CompanyCard({
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: idx * 0.1 }}
                     className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border border-blue-100"
-                  >
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                  >                    <div className="flex flex-col gap-3">
                       <div className="flex-1">
                         <div className="font-semibold text-blue-800 mb-1">{hr.name}</div>
-                        <div className="text-sm text-gray-600 mb-2">{hr.position}</div>
-                        <div className="text-xs text-gray-500">{hr.email}</div>
+                        <div className="text-sm text-gray-600 mb-1">{hr.position}</div>
+                        <div className="text-xs text-gray-500 font-mono">{hr.email}</div>
                       </div>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center justify-start gap-2 pt-2 border-t border-blue-100">
                         {hr.linkedIn && (
                           <motion.a
                             whileHover={{ scale: 1.05 }}
@@ -178,36 +259,26 @@ export default function CompanyCard({
                             href={hr.linkedIn}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors"
+                            className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors font-medium"
                           >
                             <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                               <path fillRule="evenodd" d="M16.338 16.338H13.67V12.16c0-.995-.017-2.277-1.387-2.277-1.39 0-1.601 1.086-1.601 2.207v4.248H8.014v-8.59h2.559v1.174h.037c.356-.675 1.227-1.387 2.526-1.387 2.703 0 3.203 1.778 3.203 4.092v4.711zM5.005 6.575a1.548 1.548 0 11-.003-3.096 1.548 1.548 0 01.003 3.096zm-1.337 9.763H6.34v-8.59H3.667v8.59zM17.668 1H2.328C1.595 1 1 1.581 1 2.298v15.403C1 18.418 1.595 19 2.328 19h15.34c.734 0 1.332-.582 1.332-1.299V2.298C19 1.581 18.402 1 17.668 1z" clipRule="evenodd" />
                             </svg>
                             LinkedIn
                           </motion.a>
-                        )}
-                        <motion.button
+                        )}                        <motion.a
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => handleCopy(hr.email, idx)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-100 text-green-700 text-xs rounded-lg hover:bg-green-200 transition-colors border border-green-200"
+                          href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(hr.email)}&su=${encodeURIComponent(`Inquiry about opportunities at ${companyName}`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-red-500 to-red-600 text-white text-xs rounded-lg hover:shadow-md transition-all font-medium"
                         >
-                          {copiedIdx === idx ? (
-                            <>
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-                              </svg>
-                              Copied!
-                            </>
-                          ) : (
-                            <>
-                              <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-                              </svg>
-                              Copy Email
-                            </>
-                          )}
-                        </motion.button>
+                          <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-.904.732-1.636 1.636-1.636h3.819v9.273L12 8.183l6.545 4.91V3.82h3.819c.904 0 1.636.733 1.636 1.637z"/>
+                          </svg>
+                          Quick Mail
+                        </motion.a>
                       </div>
                     </div>
                   </motion.div>
@@ -224,10 +295,17 @@ export default function CompanyCard({
                   </motion.div>
                 )}
               </div>
-            </motion.div>
-          )}
+            </motion.div>          )}
         </AnimatePresence>
       </div>
+
+      {/* Template Modal */}
+      <TemplateModal
+        isOpen={templateModal.isOpen}
+        onClose={closeTemplateModal}
+        company={companyData}
+        selectedRole={templateModal.selectedRole}
+      />
     </motion.div>
   );
 }
