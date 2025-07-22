@@ -189,7 +189,7 @@ export default function HomePage() {
             transition={{ duration: 0.5, delay: 1 }}
             className="text-lg md:text-xl text-[var(--gray-600)] max-w-xl mb-4"
           >
-            AI-powered resume and LinkedIn audits, curated HR contacts, and personalized outreach templates. Everything you need to stand out and get hired—faster.
+            AI-powered resume audits, curated HR contacts, and personalized outreach templates. Everything you need to stand out and get hired—faster.
           </motion.p>
           
           <motion.div
@@ -243,11 +243,11 @@ export default function HomePage() {
             <div className="absolute -inset-0.5 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] rounded-2xl blur opacity-30 group-hover:opacity-50 transition duration-1000 group-hover:duration-300"></div>
             <div className="relative bg-white rounded-2xl p-5 shadow-2xl">
               <Image 
-                src="/file.svg" 
+                src="/hirelift_home.webp" 
                 alt="Resume Audit" 
-                width={300} 
-                height={300} 
-                className="drop-shadow-xl"
+                width={500} 
+                height={400} 
+                className="drop-shadow-xl rotate-y-180"
               />
             </div>
           </motion.div>

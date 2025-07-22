@@ -8,6 +8,7 @@ import Link from "next/link";
 
 const jobModes = ["Remote", "Hybrid", "On-site", "WFH"];
 const experiences = ["Fresher", "0-1", "1-3", "3-5"];
+const PAGE_SIZE = 12;
 
 // Popular roles for quick selection
 const POPULAR_ROLES = [
@@ -27,9 +28,11 @@ export default function CompanySearchPage() {
   const [role, setRole] = useState("");
   const [mode, setMode] = useState("");
   const [exp, setExp] = useState("");
-  const [companies, setCompanies] = useState(sampleCompanies);
+  const [companies, setCompanies] = useState([]);
+  const [total, setTotal] = useState(0);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [touched, setTouched] = useState(false);  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [touched, setTouched] = useState(false);const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [showModeDropdown, setShowModeDropdown] = useState(false);
   const [showExpDropdown, setShowExpDropdown] = useState(false);
   const [roleSearchTerm, setRoleSearchTerm] = useState("");
@@ -87,12 +90,12 @@ export default function CompanySearchPage() {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
-  const handleRoleSelect = (selectedRole) => {
+  }, []);  const handleRoleSelect = (selectedRole) => {
     setRole(selectedRole);
     setTouched(true);
     setShowRoleDropdown(false);
     setRoleSearchTerm("");
+    setPage(1); // Reset to first page when filter changes
   };
   const handleKeyDown = (e) => {
     if (e.key === 'Escape') {
@@ -107,6 +110,7 @@ export default function CompanySearchPage() {
     setTouched(true);
     setShowModeDropdown(false);
     setModeSearchTerm("");
+    setPage(1); // Reset to first page when filter changes
   };
 
   const handleExpSelect = (selectedExp) => {
@@ -114,42 +118,33 @@ export default function CompanySearchPage() {
     setTouched(true);
     setShowExpDropdown(false);
     setExpSearchTerm("");
+    setPage(1); // Reset to first page when filter changes
   };
-
-  useEffect(() => {
-    if (!touched) return;
+  // Calculate total pages
+  const totalPages = Math.ceil(total / PAGE_SIZE);
+    useEffect(() => {
     setLoading(true);
     const params = new URLSearchParams();
     if (role) params.append("role", role);
     if (mode) params.append("mode", mode);
     if (exp) params.append("exp", exp);
+    params.append("page", page.toString());
+    params.append("limit", PAGE_SIZE.toString());
     fetch(`/api/companies?${params.toString()}`)
-      .then((res) => res.json())
-      .then((data) => {
+      .then((res) => res.json())      .then((data) => {
         setCompanies(data.data || []);
-        setLoading(false);
-      })
+        setTotal(data.total || 0);
+        setLoading(false);      })
       .catch(() => setLoading(false));
-  }, [role, mode, exp, touched]);
-
-  // Initial fetch (all companies)
-  useEffect(() => {
-    setLoading(true);
-    fetch(`/api/companies`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCompanies(data.data || []);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
+  }, [role, mode, exp, page]);
+  
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
       {/* Navigation Bar */}
       <motion.nav 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full flex items-center justify-between px-6 py-4 mb-6 bg-white/80 rounded-2xl shadow border border-blue-100 backdrop-blur-md sticky top-0 z-40 mx-2 sm:mx-6 mt-2"
+        className="w-full flex items-center justify-between px-10 py-4 mb-6 bg-white/80 rounded-2xl shadow border border-blue-100 backdrop-blur-md sticky top-0 z-50 mx-2 sm:mx-6 mt-2"
       >
         <div className="flex items-center gap-3">
           <Link href="/" className="flex items-center gap-2 group">
@@ -181,7 +176,7 @@ export default function CompanySearchPage() {
         </motion.div>
       </motion.nav>
 
-      <div className="max-w-6xl mx-auto px-2 sm:px-6">
+      <div className="max-w-6xl mx-auto px-2 py-4 sm:px-6">
         {/* Header Section */}
         <motion.div 
           initial={{ opacity: 0, y: 30 }}
@@ -193,7 +188,7 @@ export default function CompanySearchPage() {
             initial={{ scale: 0.9 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent drop-shadow-lg mb-4"
+            className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent drop-shadow-lg mb-4 py-2"
           >
             Company & HR Directory
           </motion.h1>
@@ -244,7 +239,7 @@ export default function CompanySearchPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 mb-8 border border-blue-100"
+          className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 mb-8 border border-blue-100 relative z-40"
         >
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Role Dropdown */}
@@ -585,10 +580,9 @@ export default function CompanySearchPage() {
                 >
                   <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                  {companies.length > 0 ? (
+                  </svg>                  {companies.length > 0 ? (
                     <span className="text-gray-700 font-medium">
-                      <span className="text-blue-600 font-bold">{companies.length}</span> compan{companies.length === 1 ? 'y' : 'ies'} found
+                      Showing {((page - 1) * PAGE_SIZE) + 1} to {Math.min(page * PAGE_SIZE, total)} of <span className="text-blue-600 font-bold">{total}</span> companies (Page {page} of {totalPages})
                     </span>
                   ) : touched ? (
                     <span className="text-orange-600 font-medium">No companies match your criteria</span>
@@ -624,32 +618,121 @@ export default function CompanySearchPage() {
                 transition={{ delay: 0.4 }}
                 className="text-gray-500"
               >
-                Finding the perfect matches for you...
-              </motion.p>
+                Finding the perfect matches for you...              </motion.p>
             </motion.div>          ) : companies.length ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {companies.map((company, index) => (
-                <motion.div
-                  key={company._id}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: index * 0.1, duration: 0.4 }}
-                  whileHover={{ scale: 1.02, y: -5 }}
-                  className="group"
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {companies.map((company, index) => (
+                  <motion.div
+                    key={company._id}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ delay: index * 0.1, duration: 0.4 }}
+                    whileHover={{ scale: 1.02, y: -5 }}
+                    className="group"
+                  >
+                    <CompanyCard
+                      companyName={company.companyName}
+                      industry={company.industry}
+                      location={company.location}
+                      hiringRoles={company.hiringRoles}
+                      jobMode={company.jobMode}
+                      experience={company.experience}
+                      hrContacts={company.hrContacts}
+                      lastUpdated={company.lastUpdated}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.5 }}
+                  className="flex flex-col sm:flex-row items-center justify-between gap-4 py-6 border-t border-gray-100"
                 >
-                  <CompanyCard
-                    companyName={company.companyName}
-                    industry={company.industry}
-                    location={company.location}
-                    hiringRoles={company.hiringRoles}
-                    jobMode={company.jobMode}
-                    experience={company.experience}
-                    hrContacts={company.hrContacts}
-                    lastUpdated={company.lastUpdated}
-                  />
+                  <motion.div 
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.4 }}
+                    className="text-sm text-gray-600 font-medium"
+                  >
+                    Showing {((page - 1) * PAGE_SIZE) + 1} to {Math.min(page * PAGE_SIZE, total)} of {total} companies
+                  </motion.div>
+                  
+                  <div className="flex items-center gap-2">
+                    {/* Previous Button */}
+                    <motion.button
+                      whileHover={{ scale: 1.05, backgroundColor: "rgb(59, 130, 246)" }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setPage(page - 1)}
+                      disabled={page === 1}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-blue-50 text-blue-600 hover:text-white border border-blue-200"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                      </svg>
+                      <span className="hidden sm:inline">Previous</span>
+                    </motion.button>
+
+                    {/* Page Numbers */}
+                    <div className="flex items-center gap-1">
+                      {Array.from({ length: totalPages }, (_, i) => {
+                        const pageNum = i + 1;
+                        const isCurrentPage = page === pageNum;
+                        const shouldShow = 
+                          pageNum === 1 ||
+                          pageNum === totalPages ||
+                          (pageNum >= page - 2 && pageNum <= page + 2);
+
+                        if (!shouldShow) {
+                          if (pageNum === page - 3 || pageNum === page + 3) {
+                            return (
+                              <span key={pageNum} className="px-2 py-1 text-gray-400">
+                                ...
+                              </span>
+                            );
+                          }
+                          return null;
+                        }
+
+                        return (
+                          <motion.button
+                            key={pageNum}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            onClick={() => setPage(pageNum)}
+                            className={`w-10 h-10 rounded-lg font-semibold transition-all duration-200 ${
+                              isCurrentPage
+                                ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg"
+                                : "bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200"
+                            }`}
+                          >
+                            {pageNum}
+                          </motion.button>
+                        );
+                      })}
+                    </div>
+
+                    {/* Next Button */}
+                    <motion.button
+                      whileHover={{ scale: 1.05, backgroundColor: "rgb(59, 130, 246)" }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setPage(page + 1)}
+                      disabled={page === totalPages}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-blue-50 text-blue-600 hover:text-white border border-blue-200"
+                    >
+                      <span className="hidden sm:inline">Next</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </motion.button>
+                  </div>
                 </motion.div>
-              ))}
-            </div>
+              )}
+            </>
           ) : (
             <motion.div 
               initial={{ opacity: 0, scale: 0.9 }}
@@ -704,13 +787,13 @@ export default function CompanySearchPage() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       whileHover={{ scale: 1.05, boxShadow: "0 10px 25px rgba(59, 130, 246, 0.3)" }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => {
+                      whileTap={{ scale: 0.95 }}                      onClick={() => {
                         setRole("");
                         setMode("");
                         setExp("");
                         setTouched(false);
                         setRoleSearchTerm("");
+                        setPage(1);
                       }}
                       className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-500 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >

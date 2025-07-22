@@ -5,12 +5,22 @@ import { LogOut, User, Mail, Crown, Zap, BarChart, FileText, UserCheck } from 'l
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+
+const ADMIN_EMAIL = "websiteads074@gmail.com";
 
 export default function DashboardPage() {
   const { user, signOutUser } = useAuth();
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('overview');
+  const [isAdmin, setisAdmin] = useState(false);
+
+  useEffect(() => {
+    if(user.email === ADMIN_EMAIL){
+      setisAdmin(true);
+    }
+  }, [])
+  
 
   // User will always be available because of the ProtectedRoute component
 
@@ -116,7 +126,7 @@ export default function DashboardPage() {
             Your personal dashboard
           </motion.div> */}
           
-          <h2 className="text-4xl font-extrabold mb-2 gradient-text">
+          <h2 className="text-4xl font-extrabold mb-2 gradient-text py-2">
             Welcome, {user.email.split('@')[0]}!
           </h2>
           <p className="text-[var(--gray-600)] text-lg">
@@ -148,9 +158,7 @@ export default function DashboardPage() {
             >
               <Mail className="w-5 h-5 text-[var(--primary)] mr-3" />
               <span className="text-[var(--foreground-light)]">{user.email}</span>
-            </motion.div>
-
-            <motion.div 
+            </motion.div>            <motion.div 
               className="flex items-center bg-[var(--background-light)] p-3 rounded-xl shadow-sm"
               whileHover={{ x: 5 }}
             >
@@ -160,6 +168,7 @@ export default function DashboardPage() {
                 {!user.isPremium && (
                   <motion.span 
                     whileHover={{ scale: 1.1 }}
+                    onClick={()=>router.push('/pricing')}
                     className="ml-2 text-xs px-2 py-1 bg-[var(--secondary-light)] text-white rounded-full cursor-pointer"
                   >
                     Upgrade
@@ -168,26 +177,47 @@ export default function DashboardPage() {
               </span>
             </motion.div>
 
+            {/* Admin Status */}
+            <AnimatePresence>
+              {isAdmin && (
+                <motion.div 
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex items-center bg-gradient-to-r from-red-50 to-orange-50 p-3 rounded-xl shadow-sm border border-red-200"
+                  whileHover={{ x: 5 }}
+                >
+                  <svg className="w-5 h-5 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5-6a2 2 0 012 2v1a8.967 8.967 0 01-4.728 7.975A8.967 8.967 0 0118 20H6a8.967 8.967 0 01-4.728-7.975A2 2 0 013 10V9a2 2 0 012-2h.5c.276 0 .5.224.5.5s.224.5.5.5h8c.276 0 .5-.224.5-.5s.224-.5.5-.5H15a2 2 0 012 2v1z" />
+                  </svg>
+                  <span className="text-red-700 font-semibold">Administrator</span>
+                  <motion.span 
+                    onClick={()=>router.push('/admin/company-manager')}
+                    className="ml-2 text-xs px-2 py-1 bg-red-100 text-red-800 rounded-full hover:cursor-pointer"
+                  >
+                    Admin Panel Access
+                  </motion.span>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <div className="pt-4 border-t border-[var(--gray-300)] border-opacity-20">
               <p className="text-[var(--gray-600)]">
                 Audit Count: <span className="font-semibold text-[var(--primary)]">{user.auditCount || 0}</span>
               </p>
             </div>
           </div>
-        </motion.div>
-
-        {/* Feature Cards */}
+        </motion.div>        {/* Feature Cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
-          className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6"
+          className={`mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 ${user.isAdmin ? 'lg:grid-cols-4' : ''}`}
         >
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => router.push('/company-search')}
-            className="bg-white rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 text-left"
+            className="bg-white rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer"
           >
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
               <svg className="w-6 h-6 text-[#2563eb]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,7 +232,7 @@ export default function DashboardPage() {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => router.push('/audit')}
-            className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 text-left"
+            className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer"
           >
             <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4">
               <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -213,25 +243,54 @@ export default function DashboardPage() {
             <p className="text-gray-600">AI-powered ATS analysis and optimization</p>
           </motion.button>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
-            <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Fast Processing</h3>
-            <p className="text-gray-600">Lightning-fast candidate evaluation and feedback</p>
-          </div>
+          {/* Admin-only Company Manager Button */}
+          <AnimatePresence>
+            {isAdmin && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => router.push('/admin/company-manager')}
+                className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-6 shadow-lg border border-orange-200 hover:shadow-xl transition-all duration-200 text-left relative overflow-hidden cursor-pointer"
+              >
+                <div className="absolute top-2 right-2">
+                  <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                    Admin
+                  </span>
+                </div>
+                <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mb-4">
+                  <svg className="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                  </svg>
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Company Manager</h3>
+                <p className="text-gray-600">Manage companies, bulk upload and admin controls</p>
+              </motion.button>
+            )}
+          </AnimatePresence>
 
-          <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer"
+          >
             <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4">
               <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Analytics</h3>
-            <p className="text-gray-600">Comprehensive hiring analytics and insights</p>
-          </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">AI Analytics
+              <motion.span 
+                    className="ml-2 text-xs px-2 py-1 bg-[var(--secondary-light)] text-white rounded-full cursor-pointer"
+                  >
+                    Coming Soon
+             </motion.span>
+             </h3>
+            <p className="text-gray-600">Comprehensive hiring analytics and insights providing AI Assistance</p>
+            
+          </motion.button>
         </motion.div>
       </div>
     </div>
