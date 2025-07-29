@@ -335,7 +335,7 @@ export default function PricingPage() {
             <div>
               <h4 className="font-semibold text-gray-900 mb-2">Can I cancel anytime?</h4>
               <p className="text-sm text-gray-600">
-                Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your billing period.
+                Yes, you can cancel your subscription at any time. You&apos;ll continue to have access until the end of your billing period.
               </p>
             </div>
             

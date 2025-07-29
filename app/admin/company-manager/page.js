@@ -41,6 +41,47 @@ export default function CompanyManagerPage() {
       .then((data) => setPending(data.data || []));
   }, [companies]);
 
+    // JSON validation effect
+  useEffect(() => {
+    if (!bulkJson.trim()) {
+      setJsonValidation({ isValid: null, message: "" });
+      return;
+    }
+
+    try {
+      const parsed = JSON.parse(bulkJson);
+      if (!Array.isArray(parsed)) {
+        setJsonValidation({ isValid: false, message: "JSON must be an array of company objects" });
+        return;
+      }
+      if (parsed.length === 0) {
+        setJsonValidation({ isValid: false, message: "Array cannot be empty" });
+        return;
+      }
+      if (parsed.length > 50) {
+        setJsonValidation({ isValid: false, message: "Maximum 50 companies allowed per bulk upload" });
+        return;
+      }
+      
+      // Basic field validation
+      const missingFields = [];
+      parsed.forEach((company, index) => {
+        if (!company.companyName || !company.industry || !company.location || !company.jobMode || !company.experience) {
+          missingFields.push(`Company ${index + 1} missing required fields`);
+        }
+      });
+      
+      if (missingFields.length > 0) {
+        setJsonValidation({ isValid: false, message: `${missingFields.length} companies have missing required fields` });
+        return;
+      }
+
+      setJsonValidation({ isValid: true, message: `✓ Valid JSON with ${parsed.length} companies ready for upload` });
+    } catch (error) {
+      setJsonValidation({ isValid: false, message: "Invalid JSON format" });
+    }
+  }, [bulkJson]);
+
   // Access control - render early returns after hooks
   if (loading) return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
   if (!user || user.email !== ADMIN_EMAIL) {
@@ -197,46 +238,7 @@ export default function CompanyManagerPage() {
     }
   };
 
-  // JSON validation effect
-  useEffect(() => {
-    if (!bulkJson.trim()) {
-      setJsonValidation({ isValid: null, message: "" });
-      return;
-    }
 
-    try {
-      const parsed = JSON.parse(bulkJson);
-      if (!Array.isArray(parsed)) {
-        setJsonValidation({ isValid: false, message: "JSON must be an array of company objects" });
-        return;
-      }
-      if (parsed.length === 0) {
-        setJsonValidation({ isValid: false, message: "Array cannot be empty" });
-        return;
-      }
-      if (parsed.length > 50) {
-        setJsonValidation({ isValid: false, message: "Maximum 50 companies allowed per bulk upload" });
-        return;
-      }
-      
-      // Basic field validation
-      const missingFields = [];
-      parsed.forEach((company, index) => {
-        if (!company.companyName || !company.industry || !company.location || !company.jobMode || !company.experience) {
-          missingFields.push(`Company ${index + 1} missing required fields`);
-        }
-      });
-      
-      if (missingFields.length > 0) {
-        setJsonValidation({ isValid: false, message: `${missingFields.length} companies have missing required fields` });
-        return;
-      }
-
-      setJsonValidation({ isValid: true, message: `✓ Valid JSON with ${parsed.length} companies ready for upload` });
-    } catch (error) {
-      setJsonValidation({ isValid: false, message: "Invalid JSON format" });
-    }
-  }, [bulkJson]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">

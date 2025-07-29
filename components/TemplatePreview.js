@@ -18,9 +18,7 @@ const TemplatePreview = ({ template }) => {
 
   const [isEditingData, setIsEditingData] = useState(false);
 
-  if (!template) return null;
-
-  // Process template with preview data
+    // Process template with preview data
   const processedContent = useMemo(() => {
     let content = template.template;
     Object.entries(previewData).forEach(([key, value]) => {
@@ -39,6 +37,10 @@ const TemplatePreview = ({ template }) => {
     });
     return subject;
   }, [template.subject, previewData]);
+
+  if (!template) return null;
+
+
 
   const copyPreviewToClipboard = () => {
     const content = template.templateType === 'email' 
