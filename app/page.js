@@ -335,20 +335,72 @@ export default function HomePage() {
             <button className="px-6 py-2 rounded-full bg-[var(--secondary)] text-white font-semibold cursor-not-allowed" disabled>Notify Me</button>
           </div>
         </div>
-      </section>
+      </section>      {/* Footer */}
+      <footer className="w-full py-12 px-6 bg-[var(--background-dark)] text-[var(--background-light)] mt-auto smooth">
+        <div className="max-w-6xl mx-auto">
+          {/* Main Footer Content */}
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Brand Section */}
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-8 h-8 rounded-full bg-[var(--primary)] flex items-center justify-center text-white font-bold text-xl">H</span>
+                <span className="text-xl font-extrabold tracking-tight text-[var(--primary)]">HireLift</span>
+              </div>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Your career acceleration partner. Get noticed by recruiters with optimized resumes and LinkedIn profiles.
+              </p>
+            </div>
 
-      {/* Footer */}
-      <footer className="w-full py-8 px-6 bg-[var(--background-dark)] text-[var(--background-light)] flex flex-col md:flex-row items-center justify-between gap-4 mt-auto smooth">
-        <div className="flex items-center gap-2">
-          <span className="w-8 h-8 rounded-full bg-[var(--primary)] flex items-center justify-center text-white font-bold text-xl">H</span>
-          <span className="text-xl font-extrabold tracking-tight text-[var(--primary)]">HireLift</span>
+            {/* Quick Links */}
+            <div className="md:col-span-1">
+              <h4 className="font-semibold text-white mb-4">Quick Links</h4>
+              <div className="space-y-2">
+                <a href="#features" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Features</a>
+                <a href="#how-it-helps" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">How it Helps</a>
+                <a href="#pricing" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Pricing</a>
+                <Link href="/auth" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Get Started</Link>
+              </div>
+            </div>
+
+            {/* Services */}
+            <div className="md:col-span-1">
+              <h4 className="font-semibold text-white mb-4">Services</h4>
+              <div className="space-y-2">
+                <Link href="/audit" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Resume Audit</Link>
+                <Link href="/company-search" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Company Search</Link>
+                <Link href="/playground" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Template Playground</Link>
+                <Link href="/pricing" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Pricing Plans</Link>
+              </div>
+            </div>
+
+            {/* Legal & Support */}
+            <div className="md:col-span-1">
+              <h4 className="font-semibold text-white mb-4">Legal & Support</h4>
+              <div className="space-y-2">
+                <Link href="/privacy" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Privacy Policy</Link>
+                <Link href="/terms" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Terms & Conditions</Link>
+                <Link href="/refund" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Refund Policy</Link>
+                <a href="mailto:support@hirelift.com" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Contact Support</a>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="border-t border-gray-700 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-sm text-gray-400">
+              &copy; {new Date().getFullYear()} HireLift. All rights reserved.
+            </div>
+            
+            <div className="flex items-center gap-6 text-sm text-gray-400">
+              <span>Made with ❤️ in India</span>
+              <div className="flex gap-4">
+                <Link href="/privacy" className="hover:text-[var(--accent)] smooth">Privacy</Link>
+                <Link href="/terms" className="hover:text-[var(--accent)] smooth">Terms</Link>
+                <Link href="/refund" className="hover:text-[var(--accent)] smooth">Refunds</Link>
+              </div>
+            </div>
+          </div>
         </div>
-        <div className="flex gap-6">
-          <a href="#features" className="hover:underline hover:text-[var(--accent)] smooth">Features</a>
-          <a href="#how-it-helps" className="hover:underline hover:text-[var(--accent)] smooth">How it Helps</a>
-          <a href="#pricing" className="hover:underline hover:text-[var(--accent)] smooth">Pricing</a>
-        </div>
-        <div className="text-sm">&copy; {new Date().getFullYear()} HireLift. All rights reserved.</div>
       </footer>
     </div>
   );

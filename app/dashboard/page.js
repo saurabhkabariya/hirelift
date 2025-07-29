@@ -348,10 +348,100 @@ export default function DashboardPage() {
                     Coming Soon
              </motion.span>
              </h3>
-            <p className="text-gray-600">Comprehensive hiring analytics and insights providing AI Assistance</p>
-            
+            <p className="text-gray-600">Comprehensive hiring analytics and insights providing AI Assistance</p>            
           </motion.button>        </motion.div>
       </div>
+
+      {/* Footer Section */}
+      <motion.footer
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        className="mt-20 border-t border-gray-200 pt-12 pb-8"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid md:grid-cols-4 gap-8 mb-8">
+            {/* Brand Section */}
+            <div className="md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-white font-bold text-xl shadow-md">
+                  <span className="z-10">H</span>
+                </div>
+                <span className="text-xl font-bold gradient-text">HireLift</span>
+              </div>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                Accelerate your career with AI-powered resume optimization and professional outreach tools.
+              </p>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="md:col-span-1">
+              <h4 className="font-semibold text-gray-800 mb-4">Quick Actions</h4>
+              <div className="space-y-2">
+                <Link href="/audit" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Resume Audit</Link>
+                <Link href="/company-search" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Company Search</Link>
+                <Link href="/playground" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Template Playground</Link>
+                <Link href="/pricing" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Upgrade Plan</Link>
+              </div>
+            </div>
+
+            {/* Account */}
+            <div className="md:col-span-1">
+              <h4 className="font-semibold text-gray-800 mb-4">Account</h4>
+              <div className="space-y-2">
+                <button 
+                  onClick={() => setActiveTab('overview')}
+                  className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors text-left"
+                >
+                  Dashboard Overview
+                </button>
+                <button 
+                  onClick={() => setActiveTab('profile')}
+                  className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors text-left"
+                >
+                  Profile Settings
+                </button>
+                <button 
+                  onClick={handleLogout}
+                  className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors text-left"
+                >
+                  Sign Out
+                </button>
+                <a href="mailto:support@hirelift.com" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Support</a>
+              </div>
+            </div>
+
+            {/* Legal */}
+            <div className="md:col-span-1">
+              <h4 className="font-semibold text-gray-800 mb-4">Legal & Policies</h4>
+              <div className="space-y-2">
+                <Link href="/privacy" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Privacy Policy</Link>
+                <Link href="/terms" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Terms & Conditions</Link>
+                <Link href="/refund" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Refund Policy</Link>
+                <a href="mailto:legal@hirelift.com" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Legal Inquiries</a>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="border-t border-gray-200 pt-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-sm text-gray-500">
+              &copy; {new Date().getFullYear()} HireLift. All rights reserved.
+            </div>
+            
+            <div className="flex items-center gap-6 text-sm text-gray-500">
+              <span className="flex items-center gap-1">
+                Made with <span className="text-red-500">❤️</span> for job seekers
+              </span>
+              <div className="flex gap-4">
+                <Link href="/privacy" className="hover:text-[var(--primary)] transition-colors">Privacy</Link>
+                <Link href="/terms" className="hover:text-[var(--primary)] transition-colors">Terms</Link>
+                <Link href="/refund" className="hover:text-[var(--primary)] transition-colors">Refunds</Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </motion.footer>
 
       {/* Floating Navigation Menu */}
       <motion.div
