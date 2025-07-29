@@ -306,16 +306,15 @@ export default function HomePage() {
             <h3 className="text-xl font-bold text-[var(--primary)] mb-2">Free</h3>
             <p className="text-3xl font-extrabold text-[var(--foreground)] mb-4">₹0</p>
             <ul className="mb-6 text-[var(--foreground)]">
+              <li>Access To Playground</li>
               <li>1 Basic Resume Audit</li>
-              <li>1 Basic LinkedIn Audit</li>
-              <li>Email/DM Templates</li>
             </ul>
             <Link href="/auth" className="px-6 py-2 cursor-pointer rounded-full bg-[var(--primary)] text-white font-semibold hover:bg-[var(--secondary)] smooth">Get Started</Link>
           </div>
           {/* Pro Plan */}
           <div className="bg-[var(--primary)] rounded-2xl shadow-xl p-8 flex flex-col items-center scale-105 border-4 border-[var(--accent)] smooth">
             <h3 className="text-xl font-bold text-white mb-2">Pro</h3>
-            <p className="text-3xl font-extrabold text-white mb-4">₹49</p>
+            <p className="text-3xl font-extrabold text-white mb-4">₹99/m</p>
             <ul className="mb-6 text-white">
               <li>Unlimited Advanced Resume & LinkedIn Audit</li>
               <li>Curated HR & Company Lists</li>
@@ -326,7 +325,7 @@ export default function HomePage() {
           {/* Coming Soon Plan */}
           <div className="bg-[var(--background-light)] rounded-2xl shadow-lg p-8 flex flex-col items-center opacity-70 smooth">
             <h3 className="text-xl font-bold text-[var(--secondary)] mb-2">AI Assistant <div className="text-xs text-center bg-[var(--secondary)] text-white px-2 py-0.5 rounded-full">Coming Soon</div></h3>
-            <p className="text-3xl font-extrabold text-[var(--foreground)] mb-4">₹499</p>
+            <p className="text-3xl font-extrabold text-[var(--foreground)] mb-4">₹499/m</p>
             <ul className="mb-6 text-[var(--foreground)]">
               <li>AI Job Assistance</li>
               <li>Future Skills & Projects Guidance</li>

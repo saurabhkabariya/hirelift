@@ -27,8 +27,7 @@ export default function PricingPage() {
       description: 'Perfect for trying out our service',
       features: [
         '1 Basic Resume Audit',
-        '1 Basic LinkedIn Audit',
-        'Email/DM Templates',
+        'Email/DM Templates With Playground',
         'Basic ATS Score',
         'Standard Support'
       ],
@@ -40,17 +39,15 @@ export default function PricingPage() {
     },
     {
       name: 'Pro',
-      price: '₹49',
+      price: '₹99/m',
       description: 'Most popular for job seekers',
       features: [
         'Unlimited Resume Audits',
-        'Unlimited LinkedIn Audits',
         'Curated HR & Company Lists',
         'Personalized Outreach Templates',
         'Advanced ATS Analysis',
         'Keyword Optimization',
-        'Priority Support',
-        'Audit History'
+        'Priority Support'
       ],
       buttonText: 'Upgrade to Pro',
       buttonAction: () => {
@@ -63,7 +60,7 @@ export default function PricingPage() {
     },
     {
       name: 'AI Assistant',
-      price: '₹499',
+      price: '₹499/m',
       description: 'Coming soon - AI-powered career guidance',
       features: [
         'Everything in Pro',
