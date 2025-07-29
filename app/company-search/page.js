@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import CompanyCard from "@/components/CompanyCard";
 import sampleCompanies from "@/data/sampleCompanies.json";
 import HIRING_ROLES from "@/data/hiringRoles";
+import FeedbackButton from "@/components/feedback/FeedbackButton";
 import Link from "next/link";
 
 const jobModes = ["Remote", "Hybrid", "On-site", "WFH"];
@@ -919,10 +920,12 @@ export default function CompanySearchPage() {
                 </svg>
               </div>
               <span className="font-medium">Top</span>
-            </motion.button>
-          </div>
+            </motion.button>          </div>
         </div>
       </motion.div>
+      
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
 }

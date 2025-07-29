@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
 import AuthForm from '@/components/auth/AuthForm';
+import FeedbackButton from '@/components/feedback/FeedbackButton';
 import Link from 'next/link';
 
 export default function AuthPage() {
@@ -87,6 +88,16 @@ export default function AuthPage() {
           </p>
         </motion.div>
 
+        {/* Feedback Button */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2 }}
+          className="mt-4"
+        >
+          <FeedbackButton />
+        </motion.div>
+
         {/* Background Decorations */}
         <div className="fixed inset-0 -z-10 overflow-hidden">
           <motion.div
@@ -99,10 +110,12 @@ export default function AuthPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 0.1 }}
             transition={{ delay: 1.2 }}
-            className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-400 rounded-full blur-3xl"
-          />
+            className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-purple-400 rounded-full blur-3xl"          />
         </div>
       </div>
+      
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
-} 
+}

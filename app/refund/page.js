@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useInView } from 'framer-motion';
 import { useRef, useEffect, useState } from 'react';
+import FeedbackButton from '../../components/feedback/FeedbackButton';
 import { 
   RefreshCw, 
   CreditCard, 
@@ -509,9 +510,11 @@ export default function RefundCancellationPage() {
           <div className="flex items-center justify-center gap-2 mt-6">
             <Heart className="w-4 h-4 text-red-500" />
             <span className="text-sm text-gray-600">Built with honesty and care by the HireLift team</span>
-          </div>
-        </motion.div>
+          </div>        </motion.div>
       </div>
+
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
 }

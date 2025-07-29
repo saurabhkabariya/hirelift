@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import FeedbackButton from '../../components/feedback/FeedbackButton';
 import { 
   Shield, 
   Lock, 
@@ -127,7 +128,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
             <Shield className="w-10 h-10 text-white" />
           </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-blue-700 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
+          <h1 className="text-4xl py-2 md:text-6xl font-bold bg-gradient-to-r from-blue-700 via-purple-600 to-indigo-600 bg-clip-text text-transparent mb-6">
             Privacy Policy
           </h1>
           
@@ -364,13 +365,15 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
             This privacy policy may be updated from time to time. We&apos;ll notify you of any significant changes via email or through our platform. 
             Your continued use of HireLift after such modifications constitutes acceptance of the updated policy.
           </p>
-          
-          <div className="flex items-center justify-center gap-2 mt-6">
+            <div className="flex items-center justify-center gap-2 mt-6">
             <Heart className="w-4 h-4 text-red-500" />
             <span className="text-sm text-gray-600">Made with care by the HireLift team</span>
           </div>
         </div>
       </div>
+
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
 }

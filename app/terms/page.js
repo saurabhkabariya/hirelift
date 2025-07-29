@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import FeedbackButton from '../../components/feedback/FeedbackButton';
 import { 
   FileText, 
   Shield, 
@@ -539,9 +540,11 @@ export default function TermsConditionsPage() {
             <Link href="/support" className="hover:text-gray-700 transition-colors">Support</Link>
             <span>•</span>
             <Link href="/contact" className="hover:text-gray-700 transition-colors">Contact</Link>
-          </div>
-        </motion.div>
+          </div>        </motion.div>
       </div>
+
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
 }

@@ -22,6 +22,7 @@ import { getAllTemplates, POPULAR_ROLES } from '@/data/emailTemplates';
 import TemplateEditor from '@/components/TemplateEditor';
 import TemplatePreview from '@/components/TemplatePreview';
 import TemplateDragCard from '@/components/TemplateDragCard';
+import FeedbackButton from '@/components/feedback/FeedbackButton';
 
 export default function PlaygroundPage() {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -531,10 +532,12 @@ export default function PlaygroundPage() {
                   template={editableTemplate}
                 />
               </div>
-            )}
-          </div>
+            )}          </div>
         </div>
       </div>
+      
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
 }

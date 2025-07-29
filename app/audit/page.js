@@ -1,6 +1,7 @@
 "use client";
 import AuditResultCard from "@/components/AuditResultCard";
 import JOB_ROLES from "@/data/jobRoles";
+import FeedbackButton from "../../components/feedback/FeedbackButton";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { FaFilePdf, FaUserTie, FaSearch, FaCheckCircle, FaExclamationCircle, FaUserEdit, FaChevronDown, FaTimesCircle } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
@@ -516,9 +517,11 @@ export default function ResumeAuditPage() {
                 </div>
               </div>
             </>
-          )}
-        </AnimatePresence>
+          )}        </AnimatePresence>
       </motion.div>
+      
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
 }

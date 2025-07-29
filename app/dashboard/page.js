@@ -6,6 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import FeedbackButton from '../../components/feedback/FeedbackButton';
 
 const ADMIN_EMAIL = "websiteads074@gmail.com";
 
@@ -495,8 +496,7 @@ export default function DashboardPage() {
                   </svg>
                 </div>
                 <span className="font-medium">Admin</span>
-              </motion.a>
-            )}
+              </motion.a>            )}
 
             <motion.button
               whileHover={{ scale: 1.1, x: -5 }}
@@ -514,6 +514,9 @@ export default function DashboardPage() {
           </div>
         </div>
       </motion.div>
+
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
 }

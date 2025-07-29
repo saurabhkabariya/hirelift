@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Image from "next/image";
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import FeedbackButton from '../components/feedback/FeedbackButton';
 
 const navLinks = [
   { name: "Home", href: "#home" },
@@ -397,10 +398,12 @@ export default function HomePage() {
                 <Link href="/terms" className="hover:text-[var(--accent)] smooth">Terms</Link>
                 <Link href="/refund" className="hover:text-[var(--accent)] smooth">Refunds</Link>
               </div>
-            </div>
-          </div>
+            </div>          </div>
         </div>
       </footer>
+
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
 } 

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import FeedbackButton from '../../components/feedback/FeedbackButton';
 import { 
   Check, 
   Star, 
@@ -342,9 +343,11 @@ export default function PricingPage() {
                 Currently, we support PDF files only. This ensures the best compatibility with ATS systems and accurate text extraction.
               </p>
             </div>
-          </div>
-        </motion.div>
+          </div>        </motion.div>
       </div>
+
+      {/* Floating Feedback Button */}
+      <FeedbackButton variant="floating" />
     </div>
   );
 } 
