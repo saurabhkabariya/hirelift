@@ -132,7 +132,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
           </h1>
           
           <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-8">
-            Your privacy matters to us. Here's how we protect your personal information and what we do with the data you trust us with.
+            Your privacy matters to us. Here&apos;s how we protect your personal information and what we do with the data you trust us with.
           </p>
           
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
@@ -146,7 +146,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
         <Section id="data-collection" icon={Database} title="What Data We Collect" accent="blue">
           <div className="mb-8">
             <p className="text-gray-600 leading-relaxed mb-6">
-              We believe in transparency. Here's exactly what information we collect and what we don't touch:
+              We believe in transparency. Here&apos;s exactly what information we collect and what we don&apos;t touch:
             </p>
           </div>
             <motion.div
@@ -187,7 +187,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
             <DataPoint
               icon={Lock}
               title="Sensitive Personal Data"
-              description="We don't collect sensitive information like social security numbers, financial data, or detailed personal history."
+              description="We don&apos;t collect sensitive information like social security numbers, financial data, or detailed personal history."
               collected={false}
             />
           </motion.div>
@@ -197,7 +197,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
         <Section id="data-usage" icon={Zap} title="How We Use Your Data" accent="purple">
           <div className="space-y-6">
             <p className="text-gray-600 leading-relaxed">
-              We use your information solely to provide and improve our service. Here's how:
+              We use your information solely to provide and improve our service. Here&apos;s how:
             </p>
               <div className="grid md:grid-cols-2 gap-6">
               <Card>
@@ -294,7 +294,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
         <Section id="your-rights" icon={UserCheck} title="Your Rights & Control" accent="indigo">
           <div className="space-y-6">
             <p className="text-gray-600 leading-relaxed">
-              You have full control over your personal information. Here's what you can do:
+              You have full control over your personal information. Here&apos;s what you can do:
             </p>
             
             <div className="grid md:grid-cols-2 gap-6">              <div className="space-y-4">
@@ -335,7 +335,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
         <Section id="contact" icon={Mail} title="Privacy Questions?" accent="pink">
           <div className="text-center">
             <p className="text-gray-600 leading-relaxed mb-8">
-              Have questions about this privacy policy or how we handle your data? We're here to help and believe in complete transparency.
+              Have questions about this privacy policy or how we handle your data? We&apos;re here to help and believe in complete transparency.
             </p>            <div
               className="bg-gradient-to-r from-pink-50 to-purple-50 p-8 rounded-3xl border border-pink-100 max-w-md mx-auto"
             >
@@ -361,7 +361,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
         </Section>        {/* Footer */}
         <div className="text-center py-12 border-t border-gray-200 mt-16">
           <p className="text-gray-500 text-sm leading-relaxed max-w-2xl mx-auto">
-            This privacy policy may be updated from time to time. We'll notify you of any significant changes via email or through our platform. 
+            This privacy policy may be updated from time to time. We&apos;ll notify you of any significant changes via email or through our platform. 
             Your continued use of HireLift after such modifications constitutes acceptance of the updated policy.
           </p>
           

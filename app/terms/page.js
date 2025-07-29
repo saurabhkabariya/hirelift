@@ -203,7 +203,7 @@ export default function TermsConditionsPage() {
         <Section id="introduction" icon={FileText} title="Introduction & Acceptance" accent="blue">
           <div className="space-y-6">
             <p className="text-gray-600 leading-relaxed">
-              Welcome to HireLift! These Terms and Conditions ("Terms") govern your use of our job support platform and services. 
+              Welcome to HireLift! These Terms and Conditions (&quot;Terms&quot;) govern your use of our job support platform and services. 
               By accessing or using HireLift, you agree to comply with and be bound by these terms.
             </p>
             
@@ -408,7 +408,7 @@ export default function TermsConditionsPage() {
         <Section id="termination" icon={XCircle} title="Account Termination" accent="red">
           <div className="space-y-6">
             <p className="text-gray-600 leading-relaxed">
-              Either party may terminate the service relationship under certain conditions. Here's how termination works:
+              Either party may terminate the service relationship under certain conditions. Here&apos;s how termination works:
             </p>
             
             <motion.div
@@ -440,7 +440,7 @@ export default function TermsConditionsPage() {
               </div>
               
               <InfoBox type="warning" icon={UserX} title="Termination Process">
-                <p>We reserve the right to suspend or terminate accounts that violate these terms, but we'll provide notice when possible and work with users to resolve issues.</p>
+                <p>We reserve the right to suspend or terminate accounts that violate these terms, but we&apos;ll provide notice when possible and work with users to resolve issues.</p>
                 <p>Upon termination, your access to paid features will end immediately, though you may retain access to free features unless your account is completely banned.</p>
               </InfoBox>
             </motion.div>
@@ -487,7 +487,7 @@ export default function TermsConditionsPage() {
         <Section id="contact" icon={Info} title="Questions About These Terms?" accent="pink">
           <div className="text-center">
             <p className="text-gray-600 leading-relaxed mb-8">
-              If you have any questions about these Terms and Conditions or need clarification on any point, please don't hesitate to reach out to our team.
+              If you have any questions about these Terms and Conditions or need clarification on any point, please don&apos;t hesitate to reach out to our team.
             </p>
             
             <motion.div
@@ -514,7 +514,7 @@ export default function TermsConditionsPage() {
               </motion.a>
               
               <p className="text-sm text-gray-500 mt-4">
-                We're here to help clarify any terms
+                We&apos;re here to help clarify any terms
               </p>
             </motion.div>
           </div>
@@ -530,7 +530,7 @@ export default function TermsConditionsPage() {
         >
           <p className="text-gray-500 text-sm leading-relaxed max-w-2xl mx-auto mb-6">
             These Terms and Conditions may be updated from time to time to reflect changes in our services or legal requirements. 
-            We'll notify you of any significant changes via email or through our platform. Continued use of HireLift after such changes constitutes acceptance of the updated terms.
+            We&apos;ll notify you of any significant changes via email or through our platform. Continued use of HireLift after such changes constitutes acceptance of the updated terms.
           </p>
           
           <div className="flex items-center justify-center gap-4 text-sm text-gray-500">

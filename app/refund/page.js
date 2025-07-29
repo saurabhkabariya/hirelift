@@ -197,7 +197,7 @@ export default function RefundCancellationPage() {
             transition={{ duration: 0.6, delay: 0.6 }}
             className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-8"
           >
-            We believe in transparency and fairness. Here's our honest policy on refunds and cancellations - no confusing terms, just clear information.
+            We believe in transparency and fairness. Here&apos;s our honest policy on refunds and cancellations - no confusing terms, just clear information.
           </motion.p>
           
           <motion.div
@@ -218,7 +218,7 @@ export default function RefundCancellationPage() {
         <Section id="summary" icon={FileText} title="Quick Summary" accent="blue">
           <div className="space-y-6">
             <p className="text-gray-600 leading-relaxed text-lg">
-              Here's what you need to know about refunds and cancellations at HireLift:
+              Here&apos;s what you need to know about refunds and cancellations at HireLift:
             </p>
             
             <motion.div
@@ -271,14 +271,14 @@ export default function RefundCancellationPage() {
               <PolicyCard
                 icon={AlertTriangle}
                 title="Our Honest Policy"
-                description="Once you've received and used our digital services, we generally cannot offer refunds. This is because the value has been delivered to you immediately. However, we do have exceptions..."
+                description="Once you&apos;ve received and used our digital services, we generally cannot offer refunds. This is because the value has been delivered to you immediately. However, we do have exceptions..."
                 type="warning"
               />
               
               <PolicyCard
                 icon={Heart}
                 title="We Care About Your Experience"
-                description="If you're not satisfied with our service quality or encounter technical issues that prevent you from using our features, we'll work with you to find a solution that's fair for everyone."
+                description="If you&apos;re not satisfied with our service quality or encounter technical issues that prevent you from using our features, we&apos;ll work with you to find a solution that&apos;s fair for everyone."
                 type="info"
               />
             </motion.div>
@@ -307,7 +307,7 @@ export default function RefundCancellationPage() {
               <TimelineStep
                 step="2"
                 title="Find Subscription Settings"
-                description="Look for 'Subscription' or 'Billing' in your account settings menu."
+                description="Look for &apos;Subscription&apos; or &apos;Billing&apos; in your account settings menu."
               />
               
               <TimelineStep
@@ -319,7 +319,7 @@ export default function RefundCancellationPage() {
               <TimelineStep
                 step="4"
                 title="Confirmation Email"
-                description="You'll receive an email confirming your cancellation and the date when your subscription will end."
+                description="You&apos;ll receive an email confirming your cancellation and the date when your subscription will end."
                 isLast={true}
               />
             </motion.div>
@@ -345,7 +345,7 @@ export default function RefundCancellationPage() {
         <Section id="refund-scenarios" icon={DollarSign} title="When Refunds Are Possible" accent="indigo">
           <div className="space-y-6">
             <p className="text-gray-600 leading-relaxed">
-              While we don't typically refund digital services once delivered, there are specific situations where we'll gladly process a refund:
+              While we don&apos;t typically refund digital services once delivered, there are specific situations where we&apos;ll gladly process a refund:
             </p>
             
             <motion.div
@@ -364,7 +364,7 @@ export default function RefundCancellationPage() {
               <PolicyCard
                 icon={AlertTriangle}
                 title="Technical Issues"
-                description="If technical problems prevent you from accessing or using our services for an extended period, we'll issue appropriate refunds or service credits."
+                description="If technical problems prevent you from accessing or using our services for an extended period, we&apos;ll issue appropriate refunds or service credits."
                 type="warning"
               />
               
@@ -378,7 +378,7 @@ export default function RefundCancellationPage() {
               <PolicyCard
                 icon={Shield}
                 title="Service Unavailability"
-                description="If our service is down for extended periods or we fail to deliver promised features, we'll provide proportional refunds or credits."
+                description="If our service is down for extended periods or we fail to deliver promised features, we&apos;ll provide proportional refunds or credits."
                 type="neutral"
               />
             </motion.div>
@@ -390,7 +390,7 @@ export default function RefundCancellationPage() {
                   <h4 className="font-semibold text-gray-800 mb-2">Special Circumstances?</h4>
                   <p className="text-gray-600 text-sm leading-relaxed">
                     Every situation is unique. If you have special circumstances not covered here, please reach out to us. 
-                    We're reasonable people and will work with you to find a fair solution.
+                    We&apos;re reasonable people and will work with you to find a fair solution.
                   </p>
                 </div>
               </div>
@@ -402,7 +402,7 @@ export default function RefundCancellationPage() {
         <Section id="refund-process" icon={CreditCard} title="How Refunds Work" accent="orange">
           <div className="space-y-6">
             <p className="text-gray-600 leading-relaxed">
-              If you qualify for a refund, here's what you can expect from our process:
+              If you qualify for a refund, here&apos;s what you can expect from our process:
             </p>
             
             <motion.div
@@ -454,7 +454,7 @@ export default function RefundCancellationPage() {
         <Section id="contact" icon={Mail} title="Need Help or Have Questions?" accent="pink">
           <div className="text-center">
             <p className="text-gray-600 leading-relaxed mb-8">
-              We're here to help! If you have questions about cancellations, refunds, or need assistance with your account, don't hesitate to reach out.
+              We&apos;re here to help! If you have questions about cancellations, refunds, or need assistance with your account, don&apos;t hesitate to reach out.
             </p>
             
             <motion.div
@@ -494,7 +494,7 @@ export default function RefundCancellationPage() {
           className="text-center py-12 border-t border-gray-200 mt-16"
         >
           <p className="text-gray-500 text-sm leading-relaxed max-w-2xl mx-auto mb-6">
-            This refund and cancellation policy may be updated from time to time. We'll notify you of any significant changes. 
+            This refund and cancellation policy may be updated from time to time. We&apos;ll notify you of any significant changes. 
             We believe in treating our users fairly and building long-term relationships based on trust and mutual respect.
           </p>
           
