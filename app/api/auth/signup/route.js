@@ -5,7 +5,7 @@ import User from '@/models/User';
 
 export async function POST(request) {
   try {
-    const { email, password } = await request.json();
+    const { email, password, skipEmailVerification = false } = await request.json();
 
     // Validate input
     if (!email || !password) {
@@ -35,9 +35,17 @@ export async function POST(request) {
     // Connect to database
     await connectDB();
 
-    // Check if user already exists
+    // If we're not skipping email verification, user must verify email first
+    if (!skipEmailVerification) {
+      return NextResponse.json(
+        { error: 'Please verify your email address first' },
+        { status: 400 }
+      );
+    }
+
+    // Check if user already exists (for skipEmailVerification=true case)
     const existingUser = await User.findOne({ email: email.toLowerCase() });
-    if (existingUser) {
+    if (existingUser && existingUser.emailVerified) {
       return NextResponse.json(
         { error: 'User with this email already exists' },
         { status: 409 }
@@ -47,16 +55,28 @@ export async function POST(request) {
     // Hash password
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(password, saltRounds);
+    
+    let user;
+    if (existingUser && !existingUser.emailVerified) {
+      // Update existing unverified user (from OTP process)
+      existingUser.password = hashedPassword;
+      existingUser.emailVerified = true;
+      existingUser.verifiedAt = new Date();
+      await existingUser.save();
+      user = existingUser;
+    } else {
+      // Create new user (skipEmailVerification=true)
+      user = new User({
+        email: email.toLowerCase(),
+        password: hashedPassword,
+        auditCount: 0,
+        isPremium: false,
+        emailVerified: true, // Always true when skipEmailVerification=true
+        verifiedAt: new Date(),
+      });
 
-    // Create new user
-    const user = new User({
-      email: email.toLowerCase(),
-      password: hashedPassword,
-      auditCount: 0,
-      isPremium: false,
-    });
-
-    await user.save();
+      await user.save();
+    }
 
     // Return success response (without password)
     const userResponse = {
@@ -64,6 +84,8 @@ export async function POST(request) {
       email: user.email,
       auditCount: user.auditCount,
       isPremium: user.isPremium,
+      emailVerified: user.emailVerified,
+      verifiedAt: user.verifiedAt,
       createdAt: user.createdAt,
     };
 

@@ -77,9 +77,8 @@ export function AuthProvider({ children }) {
       return { success: false, error: typeof error === 'string' ? error : (error.message || 'Login failed') };
     }
   };
-
   // Sign up with email/password
-  const signUpWithEmail = async (email, password) => {
+  const signUpWithEmail = async (email, password, skipEmailVerification = false) => {
     try {
       setError(null);
       const response = await fetch('/api/auth/signup', {
@@ -87,17 +86,21 @@ export function AuthProvider({ children }) {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ 
+          email, 
+          password, 
+          skipEmailVerification 
+        }),
       });
 
       const data = await response.json();
 
       if (!response.ok) {
         throw new Error(data.error || 'Signup failed');
-      }
-
-      // Auto-login after successful signup
-      return await signInWithEmail(email, password);    } catch (error) {
+      }      // Auto-login after successful signup
+      return await signInWithEmail(email, password);
+      
+    } catch (error) {
       console.error('Email signup error:', error);
       setError(typeof error === 'string' ? error : (error.message || 'Signup failed'));
       return { success: false, error: typeof error === 'string' ? error : (error.message || 'Signup failed') };

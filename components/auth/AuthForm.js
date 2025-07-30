@@ -7,7 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { generateCaptcha, generateCaptchaImage, validateCaptcha } from '@/lib/captcha/captchaGenerator';
 import Link from 'next/link';
 
-export default function AuthForm({ mode = 'login' }) {  const [formData, setFormData] = useState({
+export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
@@ -98,20 +98,31 @@ export default function AuthForm({ mode = 'login' }) {  const [formData, setForm
     
     if (!validateForm()) return;
 
-    setIsLoading(true);
-
-    try {
+    setIsLoading(true);    try {
       let result;
       if (mode === 'login') {
         result = await signInWithEmail(formData.email, formData.password);
+        if (result.success) {
+          // Form will be handled by the parent component
+          setFormData({ email: '', password: '', confirmPassword: '' });
+          setCaptchaInput('');
+          setAcceptTerms(false);
+          generateNewCaptcha();
+        }
       } else {
-        result = await signUpWithEmail(formData.email, formData.password);
-      }      if (result.success) {
-        // Form will be handled by the parent component
-        setFormData({ email: '', password: '', confirmPassword: '' });
-        setCaptchaInput('');
-        setAcceptTerms(false);
-        generateNewCaptcha();
+        // For signup, use the callback to handle OTP flow
+        if (onAuthSubmit) {
+          await onAuthSubmit(formData, true);
+        } else {
+          // Fallback to direct signup (without OTP)
+          result = await signUpWithEmail(formData.email, formData.password);
+          if (result.success) {
+            setFormData({ email: '', password: '', confirmPassword: '' });
+            setCaptchaInput('');
+            setAcceptTerms(false);
+            generateNewCaptcha();
+          }
+        }
       }
     } catch (error) {
       console.error('Auth error:', error);

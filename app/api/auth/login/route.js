@@ -34,6 +34,12 @@ export async function POST(request) {
         { error: 'This account was created with Google. Please use Google Sign-In.' },
         { status: 401 }
       );
+    }    // Check if email is verified (for email/password accounts)
+    if (!user.emailVerified) {
+      return NextResponse.json(
+        { error: 'Please verify your email address before logging in' },
+        { status: 401 }
+      );
     }
 
     // Verify password
@@ -55,14 +61,14 @@ export async function POST(request) {
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
-    );
-
-    // Return success response
+    );    // Return success response
     const userResponse = {
       id: user._id,
       email: user.email,
       auditCount: user.auditCount,
       isPremium: user.isPremium,
+      emailVerified: user.emailVerified,
+      verifiedAt: user.verifiedAt,
       createdAt: user.createdAt,
     };
 

@@ -19,11 +19,27 @@ const userSchema = new mongoose.Schema({
   isPremium: {
     type: Boolean,
     default: false,
-  },
-  firebaseUid: {
+  },  firebaseUid: {
     type: String,
     unique: true,
     sparse: true, // Allows multiple null values
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false,
+  },
+  verifiedAt: {
+    type: Date,
+  },
+  otp: {
+    type: String, // 6-digit OTP for email verification
+  },
+  otpExpiry: {
+    type: Date, // OTP expiration time
+  },
+  otpAttempts: {
+    type: Number,
+    default: 0, // Track failed OTP attempts
   },
   createdAt: {
     type: Date,

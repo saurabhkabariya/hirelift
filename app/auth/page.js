@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import AuthForm from '@/components/auth/AuthForm';
+import AuthFlowManager from '@/components/auth/AuthFlowManager';
 import FeedbackButton from '@/components/feedback/FeedbackButton';
 import Link from 'next/link';
 
@@ -55,9 +55,7 @@ export default function AuthPage() {
             HireLift
           </Link>
           <p className="text-gray-600 mt-2">Elevate your hiring process</p>
-        </motion.div>
-
-        {/* Auth Form Container */}
+        </motion.div>        {/* Auth Flow Container */}
         <AnimatePresence mode="wait">
           <motion.div
             key={mode}
@@ -66,7 +64,7 @@ export default function AuthPage() {
             exit={{ opacity: 0, x: mode === 'login' ? 20 : -20 }}
             transition={{ duration: 0.3 }}
           >
-            <AuthForm mode={mode} />
+            <AuthFlowManager mode={mode} />
           </motion.div>
         </AnimatePresence>
 
