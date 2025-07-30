@@ -505,13 +505,13 @@ export default function TermsConditionsPage() {
               <h3 className="text-xl font-bold text-gray-800 mb-4">Need Help?</h3>
               
               <motion.a
-                href="mailto:legal@hirelift.com"
+                href="mailto:hirelift01@gmail.com"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <Info className="w-4 h-4" />
-                legal@hirelift.com
+                hirelift01@gmail.com
               </motion.a>
               
               <p className="text-sm text-gray-500 mt-4">

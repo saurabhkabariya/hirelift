@@ -347,11 +347,11 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
               <h3 className="text-xl font-bold text-gray-800 mb-4">Get in Touch</h3>
               
               <a
-                href="mailto:privacy@hirelift.com"
+                href="mailto:hirelift01@gmail.com"
                 className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-pink-500 to-purple-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
               >
                 <Mail className="w-4 h-4" />
-                privacy@hirelift.com
+                hirelift01@gmail.com
               </a>
               
               <p className="text-sm text-gray-500 mt-4">

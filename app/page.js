@@ -11,6 +11,7 @@ const navLinks = [
   { name: "Features", href: "#features" },
   { name: "How it Helps", href: "#how-it-helps" },
   { name: "Pricing", href: "#pricing" },
+  { name: "Contact", href: "/contact", isExternal: true },
 ];
 
 export default function HomePage() {
@@ -92,18 +93,33 @@ export default function HomePage() {
           initial="hidden"
           animate="visible"
           className="hidden md:flex gap-8"
-        >
-          {navLinks.map(link => (
-            <motion.a
-              key={link.name}
-              href={link.href}
-              variants={popUp}
-              whileHover={{ scale: 1.05 }}
-              className="text-[var(--foreground)] hover:text-[var(--primary)] font-medium smooth relative overflow-hidden group"
-            >
-              {link.name}
-              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[var(--primary)] group-hover:w-full transition-all duration-300"></span>
-            </motion.a>
+        >          {navLinks.map(link => (
+            link.isExternal ? (
+              <motion.div
+                key={link.name}
+                variants={popUp}
+                whileHover={{ scale: 1.05 }}
+              >
+                <Link
+                  href={link.href}
+                  className="text-[var(--foreground)] hover:text-[var(--primary)] font-medium smooth relative overflow-hidden group"
+                >
+                  {link.name}
+                  <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[var(--primary)] group-hover:w-full transition-all duration-300"></span>
+                </Link>
+              </motion.div>
+            ) : (
+              <motion.a
+                key={link.name}
+                href={link.href}
+                variants={popUp}
+                whileHover={{ scale: 1.05 }}
+                className="text-[var(--foreground)] hover:text-[var(--primary)] font-medium smooth relative overflow-hidden group"
+              >
+                {link.name}
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-[var(--primary)] group-hover:w-full transition-all duration-300"></span>
+              </motion.a>
+            )
           ))}
         </motion.nav>
         
@@ -371,16 +387,15 @@ export default function HomePage() {
                 <Link href="/playground" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Template Playground</Link>
                 <Link href="/pricing" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Pricing Plans</Link>
               </div>
-            </div>
-
-            {/* Legal & Support */}
+            </div>            {/* Legal & Support */}
             <div className="md:col-span-1">
               <h4 className="font-semibold text-white mb-4">Legal & Support</h4>
               <div className="space-y-2">
+                <Link href="/contact" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Contact Us</Link>
                 <Link href="/privacy" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Privacy Policy</Link>
                 <Link href="/terms" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Terms & Conditions</Link>
                 <Link href="/refund" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Refund Policy</Link>
-                <a href="mailto:support@hirelift.com" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Contact Support</a>
+                <a href="mailto:hirelift01@gmail.com" className="block text-sm hover:underline hover:text-[var(--accent)] smooth">Direct Email</a>
               </div>
             </div>
           </div>
