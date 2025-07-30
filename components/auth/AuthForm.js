@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle, RefreshCw } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { generateCaptcha, generateCaptchaImage, validateCaptcha } from '@/lib/captcha/captchaGenerator';
+import Link from 'next/link';
 
-export default function AuthForm({ mode = 'login' }) {
-  const [formData, setFormData] = useState({
+export default function AuthForm({ mode = 'login' }) {  const [formData, setFormData] = useState({
     email: '',
     password: '',
     confirmPassword: '',
@@ -15,9 +16,39 @@ export default function AuthForm({ mode = 'login' }) {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  
+  // Captcha state
+  const [captchaText, setCaptchaText] = useState('');
+  const [captchaImage, setCaptchaImage] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
+  
+  // Terms acceptance state (for signup)
+  const [acceptTerms, setAcceptTerms] = useState(false);
 
   const { signInWithEmail, signUpWithEmail, signInWithGoogle, error, setError } = useAuth();
 
+  // Generate captcha on component mount and when regenerated
+  useEffect(() => {
+    generateNewCaptcha();
+  }, []);
+  const generateNewCaptcha = () => {
+    const newCaptcha = generateCaptcha();
+    setCaptchaText(newCaptcha);
+    setCaptchaImage(''); // Clear previous image while generating
+    
+    // Generate image on next tick to ensure DOM is ready
+    setTimeout(() => {
+      const imageDataUrl = generateCaptchaImage(newCaptcha);
+      setCaptchaImage(imageDataUrl);
+    }, 100);
+    
+    setCaptchaInput('');
+    
+    // Clear captcha error if exists
+    if (errors.captcha) {
+      setErrors(prev => ({ ...prev, captcha: '' }));
+    }
+  };
   const validateForm = () => {
     const newErrors = {};
 
@@ -42,6 +73,19 @@ export default function AuthForm({ mode = 'login' }) {
       } else if (formData.password !== formData.confirmPassword) {
         newErrors.confirmPassword = 'Passwords do not match';
       }
+      
+      // Terms acceptance validation for signup
+      if (!acceptTerms) {
+        newErrors.terms = 'You must agree to the Terms & Conditions to create an account';
+      }
+    }
+
+    // Captcha validation
+    if (!captchaInput) {
+      newErrors.captcha = 'Please enter the captcha code';
+    } else if (!validateCaptcha(captchaInput, captchaText)) {
+      newErrors.captcha = 'Captcha code is incorrect';
+      generateNewCaptcha(); // Generate new captcha on incorrect input
     }
 
     setErrors(newErrors);
@@ -62,11 +106,12 @@ export default function AuthForm({ mode = 'login' }) {
         result = await signInWithEmail(formData.email, formData.password);
       } else {
         result = await signUpWithEmail(formData.email, formData.password);
-      }
-
-      if (result.success) {
+      }      if (result.success) {
         // Form will be handled by the parent component
         setFormData({ email: '', password: '', confirmPassword: '' });
+        setCaptchaInput('');
+        setAcceptTerms(false);
+        generateNewCaptcha();
       }
     } catch (error) {
       console.error('Auth error:', error);
@@ -85,7 +130,6 @@ export default function AuthForm({ mode = 'login' }) {
       setIsLoading(false);
     }
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -93,6 +137,24 @@ export default function AuthForm({ mode = 'login' }) {
     // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
+    }
+  };
+
+  const handleCaptchaChange = (e) => {
+    setCaptchaInput(e.target.value);
+    
+    // Clear captcha error when user starts typing
+    if (errors.captcha) {
+      setErrors(prev => ({ ...prev, captcha: '' }));
+    }
+  };
+
+  const handleTermsChange = (e) => {
+    setAcceptTerms(e.target.checked);
+    
+    // Clear terms error when checkbox is checked
+    if (errors.terms && e.target.checked) {
+      setErrors(prev => ({ ...prev, terms: '' }));
     }
   };
 
@@ -244,8 +306,7 @@ export default function AuthForm({ mode = 'login' }) {
                 >
                   {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
-              </div>
-              {errors.confirmPassword && (
+              </div>              {errors.confirmPassword && (
                 <motion.p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
@@ -257,31 +318,153 @@ export default function AuthForm({ mode = 'login' }) {
             </motion.div>
           )}
 
-          {/* Submit Button */}
+          {/* Captcha Field */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: mode === 'signup' ? 0.6 : 0.5 }}
+          >
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Security Verification
+            </label>
+            <div className="flex items-center space-x-3">
+              <div className="flex-1">
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={captchaInput}
+                    onChange={handleCaptchaChange}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                      errors.captcha ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder="Enter captcha code"
+                    maxLength={6}
+                  />
+                </div>
+              </div>
+              <div className="flex items-center space-x-2">
+                <div className="relative">
+                  {captchaImage ? (
+                    <img
+                      src={captchaImage}
+                      alt="Captcha"
+                      className="border border-gray-300 rounded-lg"
+                      style={{ width: '120px', height: '50px' }}
+                    />
+                  ) : (
+                    <div className="w-[120px] h-[50px] border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                    </div>
+                  )}
+                </div>
+                <motion.button
+                  type="button"
+                  onClick={generateNewCaptcha}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-2 text-gray-400 hover:text-gray-600 transition-colors rounded-lg hover:bg-gray-100"
+                  title="Generate new captcha"
+                >
+                  <RefreshCw className="w-5 h-5" />
+                </motion.button>
+              </div>
+            </div>
+            {errors.captcha && (
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mt-1 text-sm text-red-600"
+              >
+                {errors.captcha}
+              </motion.p>
+            )}
+          </motion.div>
+
+          {/* Terms & Conditions Checkbox (Signup only) */}
+          {mode === 'signup' && (
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.7 }}
+              className="space-y-2"
+            >
+              <div className="flex items-start">
+                <div className="flex items-center h-5">
+                  <input
+                    id="acceptTerms"
+                    name="acceptTerms"
+                    type="checkbox"
+                    checked={acceptTerms}
+                    onChange={handleTermsChange}
+                    className={`w-4 h-4 text-blue-600 bg-gray-100 border rounded focus:ring-blue-500 focus:ring-2 transition-all duration-200 ${
+                      errors.terms ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                  />
+                </div>
+                <div className="ml-3 text-sm">
+                  <label htmlFor="acceptTerms" className="text-gray-700">
+                    I agree to the{' '}
+                    <Link 
+                      href="/terms" 
+                      target="_blank"
+                      className="text-blue-600 hover:text-blue-800 underline transition-colors"
+                    >
+                      Terms & Conditions
+                    </Link>
+                    {' '}and{' '}
+                    <Link 
+                      href="/privacy" 
+                      target="_blank"
+                      className="text-blue-600 hover:text-blue-800 underline transition-colors"
+                    >
+                      Privacy Policy
+                    </Link>
+                  </label>
+                </div>
+              </div>
+              {errors.terms && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="mt-1 text-sm text-red-600"
+                >
+                  {errors.terms}
+                </motion.p>
+              )}
+            </motion.div>
+          )}          {/* Submit Button */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: mode === 'signup' ? 0.8 : 0.6 }}
             type="submit"
-            disabled={isLoading}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isLoading ? (
+            disabled={isLoading || (mode === 'signup' && !acceptTerms)}
+            className={`w-full py-3 px-4 rounded-lg font-medium focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 ${
+              isLoading || (mode === 'signup' && !acceptTerms)
+                ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                : 'bg-blue-600 text-white hover:bg-blue-700'
+            }`}
+          >            {isLoading ? (
               <div className="flex items-center justify-center">
                 <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
                 {mode === 'login' ? 'Signing In...' : 'Creating Account...'}
               </div>
             ) : (
-              mode === 'login' ? 'Sign In' : 'Create Account'
+              <div className="flex items-center justify-center">
+                {mode === 'signup' && !acceptTerms && (
+                  <AlertCircle className="w-4 h-4 mr-2 text-gray-500" />
+                )}
+                {mode === 'login' ? 'Sign In' : 
+                  (!acceptTerms ? 'Accept Terms to Continue' : 'Create Account')
+                }
+              </div>
             )}
           </motion.button>
-        </form>
-
-        {/* Divider */}
+        </form>        {/* Divider */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.7 }}
+          transition={{ delay: mode === 'signup' ? 0.9 : 0.7 }}
           className="relative my-6"
         >
           <div className="absolute inset-0 flex items-center">
@@ -290,13 +473,11 @@ export default function AuthForm({ mode = 'login' }) {
           <div className="relative flex justify-center text-sm">
             <span className="px-2 bg-white text-gray-500">Or continue with</span>
           </div>
-        </motion.div>
-
-        {/* Google Sign In Button */}
+        </motion.div>        {/* Google Sign In Button */}
         <motion.button
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.8 }}
+          transition={{ delay: mode === 'signup' ? 1.0 : 0.8 }}
           onClick={handleGoogleSignIn}
           disabled={isLoading}
           className="w-full bg-white border border-gray-300 text-gray-700 py-3 px-4 rounded-lg font-medium hover:bg-gray-50 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
