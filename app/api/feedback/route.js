@@ -71,8 +71,32 @@ export async function POST(request) {
 
 export async function GET(request) {
   try {
-    // This endpoint could be used by admins to view feedback
-    // For now, we'll return a simple status
+    // Connect to database
+    await connectDB();
+
+    const { searchParams } = new URL(request.url);
+    const isAdmin = searchParams.get('admin') === 'true';
+
+    // For security, you might want to add proper admin authentication here
+    // For now, we'll assume this is handled by frontend authentication
+    
+    if (isAdmin) {
+      // Fetch all feedback for admin view
+      const feedbacks = await Feedback.find({})
+        .sort({ createdAt: -1 })
+        .limit(100); // Limit to recent 100 feedbacks
+
+      return NextResponse.json(
+        { 
+          message: 'Feedback retrieved successfully',
+          feedbacks,
+          total: feedbacks.length
+        },
+        { status: 200 }
+      );
+    }
+
+    // Regular status endpoint
     return NextResponse.json(
       { message: 'Feedback API is running' },
       { status: 200 }

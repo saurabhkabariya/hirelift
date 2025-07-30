@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import CompanyCard from "@/components/CompanyCard";
 import sampleCompanies from "@/data/sampleCompanies.json";
 import HIRING_ROLES from "@/data/hiringRoles";
-import FeedbackButton from "@/components/feedback/FeedbackButton";
+import FeedbackModal from "@/components/feedback/FeedbackModal";
 import Link from "next/link";
 
 const jobModes = ["Remote", "Hybrid", "On-site", "WFH"];
@@ -39,6 +39,7 @@ export default function CompanySearchPage() {
   const [roleSearchTerm, setRoleSearchTerm] = useState("");
   const [modeSearchTerm, setModeSearchTerm] = useState("");
   const [expSearchTerm, setExpSearchTerm] = useState("");
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const dropdownRef = useRef(null);
   const modeDropdownRef = useRef(null);
   const expDropdownRef = useRef(null);
@@ -886,9 +887,7 @@ export default function CompanySearchPage() {
                 </svg>
               </div>
               <span className="font-medium">Dashboard</span>
-            </motion.a>
-
-            <motion.button
+            </motion.a>            <motion.button
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.9 }}
               onClick={() => {
@@ -908,6 +907,21 @@ export default function CompanySearchPage() {
               <span className="font-medium">Reset</span>
             </motion.button>
 
+            {/* Feedback Option */}
+            <motion.button
+              whileHover={{ scale: 1.1, x: -5 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setShowFeedbackModal(true)}
+              className="flex items-center gap-3 px-4 py-3 bg-white text-purple-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-purple-200 min-w-[160px]"
+            >
+              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <span className="font-medium">Feedback</span>
+            </motion.button>
+
             <motion.button
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.9 }}
@@ -920,12 +934,14 @@ export default function CompanySearchPage() {
                 </svg>
               </div>
               <span className="font-medium">Top</span>
-            </motion.button>          </div>
-        </div>
+            </motion.button></div>        </div>
       </motion.div>
       
-      {/* Floating Feedback Button */}
-      <FeedbackButton variant="floating" />
+      {/* Feedback Modal */}
+      <FeedbackModal 
+        isOpen={showFeedbackModal} 
+        onClose={() => setShowFeedbackModal(false)} 
+      />
     </div>
   );
 }

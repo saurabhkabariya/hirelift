@@ -6,15 +6,16 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import FeedbackButton from '../../components/feedback/FeedbackButton';
+import FeedbackModal from '../../components/feedback/FeedbackModal';
+import FeedbackDisplay from '../../components/admin/FeedbackDisplay';
 
 const ADMIN_EMAIL = "websiteads074@gmail.com";
 
 export default function DashboardPage() {
   const { user, signOutUser } = useAuth();
-  const router = useRouter();
-  const [activeTab, setActiveTab] = useState('overview');
+  const router = useRouter();  const [activeTab, setActiveTab] = useState('overview');
   const [isAdmin, setisAdmin] = useState(false);
+  const [showFeedbackModal, setShowFeedbackModal] = useState(false);
 
   useEffect(() => {
     if(user.email === ADMIN_EMAIL){
@@ -349,8 +350,22 @@ export default function DashboardPage() {
                     Coming Soon
              </motion.span>
              </h3>
-            <p className="text-gray-600">Comprehensive hiring analytics and insights providing AI Assistance</p>            
-          </motion.button>        </motion.div>
+            <p className="text-gray-600">Comprehensive hiring analytics and insights providing AI Assistance</p>              </motion.button>        </motion.div>
+
+        {/* Admin-only Feedback Display */}
+        <AnimatePresence>
+          {isAdmin && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ delay: 0.8 }}
+              className="mt-12"
+            >
+              <FeedbackDisplay />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
       {/* Footer Section */}
@@ -465,9 +480,7 @@ export default function DashboardPage() {
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
             </svg>
-          </motion.button>
-
-          {/* Menu Items */}
+          </motion.button>          {/* Menu Items */}
           <div id="fab-menu" className="hidden absolute bottom-16 right-0 space-y-3">
             <motion.a
               href="/company-search"
@@ -482,6 +495,21 @@ export default function DashboardPage() {
               </div>
               <span className="font-medium">Search</span>
             </motion.a>
+
+            {/* Feedback Option */}
+            <motion.button
+              whileHover={{ scale: 1.1, x: -5 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setShowFeedbackModal(true)}
+              className="flex items-center gap-3 px-4 py-3 bg-white text-blue-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-blue-200 min-w-[160px]"
+            >
+              <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                </svg>
+              </div>
+              <span className="font-medium">Feedback</span>
+            </motion.button>
 
             {isAdmin && (
               <motion.a
@@ -511,12 +539,14 @@ export default function DashboardPage() {
               </div>
               <span className="font-medium">Top</span>
             </motion.button>
-          </div>
-        </div>
+          </div>        </div>
       </motion.div>
 
-      {/* Floating Feedback Button */}
-      <FeedbackButton variant="floating" />
+      {/* Feedback Modal */}
+      <FeedbackModal 
+        isOpen={showFeedbackModal} 
+        onClose={() => setShowFeedbackModal(false)} 
+      />
     </div>
   );
 }
