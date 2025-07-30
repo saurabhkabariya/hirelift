@@ -6,6 +6,7 @@ import { Eye, EyeOff, Mail, Lock, AlertCircle, CheckCircle, RefreshCw } from 'lu
 import { useAuth } from '@/contexts/AuthContext';
 import { generateCaptcha, generateCaptchaImage, validateCaptcha } from '@/lib/captcha/captchaGenerator';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [formData, setFormData] = useState({
     email: '',
@@ -356,7 +357,7 @@ export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [for
               <div className="flex items-center space-x-2">
                 <div className="relative">
                   {captchaImage ? (
-                    <img
+                    <Image
                       src={captchaImage}
                       alt="Captcha"
                       className="border border-gray-300 rounded-lg"

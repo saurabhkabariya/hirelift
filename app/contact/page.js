@@ -279,7 +279,7 @@ export default function ContactPage() {
           </h1>
           
           <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-8">
-            Have questions about HireLift? Need support? We're here to help you elevate your hiring process and career journey.
+            Have questions about HireLift? Need support? We&apos;re here to help you elevate your hiring process and career journey.
           </p>
           
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
@@ -298,7 +298,7 @@ export default function ContactPage() {
             <div>
               <div className="mb-6">
                 <p className="text-gray-600 leading-relaxed">
-                  Fill out the form below and we'll get back to you within 24 hours.
+                  Fill out the form below and we&apos;ll get back to you within 24 hours.
                 </p>
               </div>
 
@@ -468,7 +468,7 @@ export default function ContactPage() {
                           <span className="font-semibold">Message sent successfully!</span>
                         </div>
                         <p className="text-sm">
-                          We'll get back to you within 24 hours. Please check your email for a confirmation message.
+                          We&apos;ll get back to you within 24 hours. Please check your email for a confirmation message.
                         </p>
                         {referenceId && (
                           <p className="text-xs opacity-75">
@@ -583,7 +583,7 @@ export default function ContactPage() {
         {/* Footer */}
         <div className="text-center py-12 border-t border-gray-200 mt-16">
           <p className="text-gray-500 text-sm leading-relaxed max-w-2xl mx-auto">
-            Thank you for your interest in HireLift. We're committed to helping you succeed in your career journey. 
+            Thank you for your interest in HireLift. We&apos;re committed to helping you succeed in your career journey. 
             Your questions and feedback help us improve our platform and serve you better.
           </p>
           

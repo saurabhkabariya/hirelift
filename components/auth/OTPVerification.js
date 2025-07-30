@@ -183,7 +183,7 @@ export default function OTPVerification({
             Verify Your Email
           </h2>
           <p className="text-gray-600">
-            We've sent a 6-digit verification code to
+            We&apos;ve sent a 6-digit verification code to
           </p>
           <p className="text-blue-600 font-semibold">
             {email}
@@ -278,7 +278,7 @@ export default function OTPVerification({
           className="text-center mt-6"
         >
           <p className="text-gray-600 text-sm mb-2">
-            Didn't receive the code?
+            Didn&apos;t receive the code?
           </p>
           
           {resendCooldown > 0 ? (
