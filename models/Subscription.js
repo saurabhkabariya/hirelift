@@ -6,12 +6,10 @@ const subscriptionSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
     index: true
-  },
-  razorpaySubscriptionId: {
+  },  razorpaySubscriptionId: {
     type: String,
     required: true,
-    unique: true,
-    index: true
+    unique: true
   },
   razorpayCustomerId: {
     type: String,

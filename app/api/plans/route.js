@@ -7,10 +7,11 @@ import razorpayService from '@/lib/razorpay';
  */
 export async function GET(request) {
   try {
-    const planId = process.env.PLAN_ID;
+    const url = new URL(request.url);
+    const planId = url.searchParams.get('id') || process.env.PLAN_ID;
 
-    // If specific plan ID is requested
-    if (planId) {
+    // If specific plan ID is requested and we're in runtime (not build time)
+    if (planId && process.env.RAZORPAY_KEY_ID) {
       try {
         const plan = await razorpayService.getPlan(planId);
         
@@ -28,10 +29,8 @@ export async function GET(request) {
           }
         });
       } catch (error) {
-        return NextResponse.json(
-          { error: 'Plan not found' },
-          { status: 404 }
-        );
+        console.error('Error fetching plan from Razorpay:', error);
+        // Fall back to predefined plans if Razorpay call fails
       }
     }
 
@@ -78,6 +77,30 @@ export async function GET(request) {
  */
 export async function validatePlan(planId) {
   try {
+    // Check if we have Razorpay credentials
+    if (!process.env.RAZORPAY_KEY_ID || !process.env.RAZORPAY_KEY_SECRET) {
+      // Fallback to predefined plan validation
+      const validPlanIds = ['plan_QzYt9RLYww9UcP'];
+      if (validPlanIds.includes(planId)) {
+        return {
+          valid: true,
+          plan: {
+            id: planId,
+            name: 'HireLift Pro',
+            amount: 9900,
+            currency: 'INR',
+            period: 'monthly',
+            interval: 1
+          }
+        };
+      } else {
+        return {
+          valid: false,
+          error: 'Invalid plan ID'
+        };
+      }
+    }
+
     const plan = await razorpayService.getPlan(planId);
     return {
       valid: true,

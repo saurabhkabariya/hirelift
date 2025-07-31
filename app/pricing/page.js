@@ -74,11 +74,9 @@ export default function PricingPage() {
       }
 
       setLoadingStage('preparing');
-      setPaymentLoading(true);
-
-      // Create subscription using payment service
+      setPaymentLoading(true);      // Create subscription using payment service
       await paymentService.createSubscription({
-        planId: process.env.PLAN_ID, // Razorpay plan ID from the plans API
+        planId: 'plan_QzYt9RLYww9UcP', // Razorpay plan ID from the plans API
         totalCount: 12, // 12 months
         quantity: 1,
         user,
