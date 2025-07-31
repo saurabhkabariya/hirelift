@@ -9,6 +9,17 @@
  * Run with: node scripts/test-razorpay-subscription.js
  */
 
+// Load environment variables
+import { config } from 'dotenv';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Load .env.local from the project root
+config({ path: join(__dirname, '..', '.env.local') });
+
 import fetch from 'node-fetch';
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
@@ -21,7 +32,7 @@ const TEST_USER = {
 };
 
 // Test Plan ID (you need to create this in Razorpay Dashboard)
-const TEST_PLAN_ID = 'plan_XXXXXXXXXXXXXXXX'; // Replace with actual plan ID
+const TEST_PLAN_ID = 'plan_QzYt9RLYww9UcP'; // Actual plan ID from environment
 
 class RazorpaySubscriptionTester {
   constructor() {

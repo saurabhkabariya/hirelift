@@ -19,10 +19,9 @@ const subscriptionSchema = new mongoose.Schema({
   razorpayPlanId: {
     type: String,
     required: true
-  },
-  status: {
+  },  status: {
     type: String,
-    enum: ['active', 'pending', 'canceled', 'paused', 'completed', 'expired'],
+    enum: ['active', 'pending', 'canceled', 'paused', 'completed', 'expired', 'created'],
     default: 'pending',
     index: true
   },

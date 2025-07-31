@@ -58,19 +58,17 @@ async function subscribeHandler(request) {
     const customer = await razorpayService.getOrCreateCustomer(user.email, {
       name: customerName || user.name || 'HireLift User',
       contact: customerContact || ''
-    });
-
-    // Step 3: Calculate subscription timing
+    });    // Step 3: Calculate subscription timing (for our database record)
     const subscriptionStartAt = startAt ? new Date(startAt) : new Date();
     const subscriptionEndAt = calculateEndDate(subscriptionStartAt, plan);
 
-    // Step 4: Create subscription in Razorpay
+    // Step 4: Create subscription in Razorpay (start immediately)
     const razorpaySubscription = await razorpayService.createSubscription({
       planId: planId,
       customerId: customer.id,
       totalCount: totalCount,
       quantity: quantity,
-      startAt: subscriptionStartAt,
+      // Don't set startAt - let it start immediately
       notes: {
         userId: user._id.toString(),
         email: user.email,
