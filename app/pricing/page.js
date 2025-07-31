@@ -2,8 +2,13 @@
 
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import FeedbackButton from '../../components/feedback/FeedbackButton';
+import PaymentLoadingModal, { PaymentButton } from '@/components/payment/PaymentLoadingModal';
+import PaymentErrorModal from '@/components/payment/PaymentErrorModal';
+import paymentService from '@/lib/payment';
+import toast from 'react-hot-toast';
 import { 
   Check, 
   Star, 
@@ -18,8 +23,103 @@ import {
 } from 'lucide-react';
 
 export default function PricingPage() {
-  const { user } = useAuth();
-  const router = useRouter();
+  const { user, refetchUser } = useAuth();
+  const router = useRouter();  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [loadingStage, setLoadingStage] = useState('preparing');
+  const [subscription, setSubscription] = useState(null);
+  const [loadingSubscription, setLoadingSubscription] = useState(false);
+  const [paymentError, setPaymentError] = useState(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+
+  // Fetch current subscription status
+  useEffect(() => {
+    const fetchSubscription = async () => {
+      if (!user) return;
+      
+      try {
+        setLoadingSubscription(true);
+        const subData = await paymentService.getCurrentSubscription();
+        setSubscription(subData.subscription);
+      } catch (error) {
+        // User might not have a subscription, which is fine
+        console.log('No active subscription found');
+      } finally {
+        setLoadingSubscription(false);
+      }
+    };
+
+    fetchSubscription();
+  }, [user]);
+
+  // Handle Pro plan subscription
+  const handleProUpgrade = async () => {
+    try {
+      // Check if user is logged in
+      if (!user) {
+        toast.error('Please sign in to upgrade to Pro');
+        router.push('/auth');
+        return;
+      }
+
+      // Check if user is already premium
+      if (user.isPremium) {
+        toast.success('You are already a Pro user!');
+        return;
+      }
+
+      // Check for existing active subscription
+      if (subscription && subscription.status === 'active') {
+        toast.info('You already have an active subscription');
+        return;
+      }
+
+      setLoadingStage('preparing');
+      setPaymentLoading(true);
+
+      // Create subscription using payment service
+      await paymentService.createSubscription({
+        planId: process.env.PLAN_ID, // Razorpay plan ID from the plans API
+        totalCount: 12, // 12 months
+        quantity: 1,
+        user,
+        onPaymentStart: () => {
+          setLoadingStage('processing');
+        },
+        onSuccess: async (paymentResponse, subscription) => {
+          setLoadingStage('completing');
+          
+          // Wait a bit for webhook to process
+          setTimeout(async () => {
+            try {
+              // Refetch user data to get updated premium status
+              await refetchUser();
+              
+              toast.success('🎉 Welcome to HireLift Pro! Your account has been upgraded.');
+              router.push('/dashboard');
+            } catch (error) {
+              console.error('Error refreshing user data:', error);
+              toast.success('Payment successful! Please refresh the page to see your Pro features.');
+              router.push('/dashboard');
+            } finally {
+              setPaymentLoading(false);
+            }
+          }, 2000);
+        },        onError: (error) => {
+          console.error('Payment error:', error);
+          setPaymentError(error);
+          setShowErrorModal(true);
+          setPaymentLoading(false);
+        },
+        onPaymentEnd: () => {
+          setPaymentLoading(false);
+        }
+      });    } catch (error) {
+      console.error('Upgrade error:', error);
+      setPaymentError(error);
+      setShowErrorModal(true);
+      setPaymentLoading(false);
+    }
+  };
 
   const plans = [
     {
@@ -37,8 +137,7 @@ export default function PricingPage() {
       popular: false,
       icon: Users,
       color: 'var(--accent)'
-    },
-    {
+    },    {
       name: 'Pro',
       price: '₹99/m',
       description: 'Most popular for job seekers',
@@ -50,14 +149,12 @@ export default function PricingPage() {
         'Keyword Optimization',
         'Priority Support'
       ],
-      buttonText: 'Upgrade to Pro',
-      buttonAction: () => {
-        // Handle payment logic here
-        alert('Payment integration coming soon!');
-      },
+      buttonText: user?.isPremium ? 'Current Plan' : 'Upgrade to Pro',
+      buttonAction: user?.isPremium ? null : handleProUpgrade,
       popular: true,
       icon: Crown,
-      color: 'var(--primary)'
+      color: 'var(--primary)',
+      disabled: user?.isPremium
     },
     {
       name: 'AI Assistant',
@@ -149,8 +246,7 @@ export default function PricingPage() {
               <h1 className="text-2xl font-bold gradient-text">
                 Pricing Plans
               </h1>
-            </div>
-            {user && (
+            </div>            {user && (
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-[var(--foreground)]">
                   Current: <span className="font-bold">{user.isPremium ? 'Pro' : 'Free'}</span>
@@ -158,11 +254,16 @@ export default function PricingPage() {
                 {user.isPremium && (
                   <motion.span
                     whileHover={{ scale: 1.05 }}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-[var(--primary)] text-white"
+                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
                   >
                     <Crown className="w-3 h-3 mr-1" />
                     Premium
                   </motion.span>
+                )}
+                {loadingSubscription && (
+                  <div className="animate-pulse text-xs text-gray-500">
+                    Loading subscription...
+                  </div>
                 )}
               </div>
             )}
@@ -184,6 +285,35 @@ export default function PricingPage() {
             Get unlimited resume audits, advanced ATS analysis, and personalized recommendations to land your dream job.
           </p>
         </motion.div>
+
+        {/* Subscription Management for Premium Users */}
+        {user?.isPremium && subscription && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8 bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-2xl p-6"
+          >
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full flex items-center justify-center">
+                  <Crown className="w-5 h-5 text-white" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-gray-900">Active Subscription</h3>
+                  <p className="text-sm text-gray-600">
+                    Status: <span className="capitalize font-medium text-green-600">{subscription.status}</span>
+                  </p>
+                </div>
+              </div>
+              <div className="text-right">
+                <p className="text-sm text-gray-600">Next billing</p>
+                <p className="font-semibold text-gray-900">
+                  {subscription.endAt ? new Date(subscription.endAt).toLocaleDateString() : 'N/A'}
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* Plans Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -238,21 +368,22 @@ export default function PricingPage() {
                       <span className="text-gray-700">{feature}</span>
                     </motion.li>
                   ))}
-                </ul>
-
-                <button
+                </ul>                <PaymentButton
                   onClick={plan.buttonAction}
-                  disabled={plan.comingSoon}
+                  disabled={plan.comingSoon || plan.disabled}
+                  isLoading={paymentLoading && plan.name === 'Pro'}
                   className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 ${
-                    plan.popular
+                    plan.popular && !plan.disabled
                       ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700'
                       : plan.comingSoon
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                      : plan.disabled
+                      ? 'bg-green-100 text-green-700 cursor-default border-2 border-green-200'
                       : 'bg-blue-600 text-white hover:bg-blue-700'
                   } focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
                 >
                   {plan.buttonText}
-                </button>
+                </PaymentButton>
               </div>
             </motion.div>
           ))}
@@ -344,10 +475,33 @@ export default function PricingPage() {
               </p>
             </div>
           </div>        </motion.div>
-      </div>
+      </div>      {/* Payment Loading Modal */}
+      <PaymentLoadingModal 
+        isOpen={paymentLoading} 
+        stage={loadingStage} 
+      />
+
+      {/* Payment Error Modal */}
+      <PaymentErrorModal
+        isOpen={showErrorModal}
+        error={paymentError}
+        onClose={() => {
+          setShowErrorModal(false);
+          setPaymentError(null);
+        }}
+        onRetry={() => {
+          setShowErrorModal(false);
+          setPaymentError(null);
+          handleProUpgrade();
+        }}
+        onContactSupport={() => {
+          // You can implement contact support functionality here
+          window.open('mailto:support@hirelift.com?subject=Payment Issue', '_blank');
+        }}
+      />
 
       {/* Floating Feedback Button */}
       <FeedbackButton variant="floating" />
     </div>
   );
-} 
+}

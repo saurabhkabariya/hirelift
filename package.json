@@ -7,13 +7,16 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:payment": "node scripts/test-razorpay-subscription.js",
+    "test:frontend": "echo 'Open http://localhost:3000/pricing and run test script in console'"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "bcryptjs": "^3.0.2",
+    "crypto": "^1.0.1",
     "dotenv": "^17.2.1",
     "firebase": "^11.10.0",
     "framer-motion": "^12.23.5",
@@ -28,6 +31,7 @@
     "pdf-parse": "^1.1.1",
     "pdf-parser": "^1.0.5",
     "pdfjs-dist": "^3.11.174",
+    "razorpay": "^2.9.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hot-toast": "^2.5.2",
