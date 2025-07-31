@@ -110,9 +110,7 @@ async function subscribeHandler(request) {
       plan
     );
 
-    console.log('✅ Subscription created successfully:', subscription.razorpaySubscriptionId);
-
-    // Step 7: Return response with payment options
+    console.log('✅ Subscription created successfully:', subscription.razorpaySubscriptionId);    // Step 7: Return response with payment options
     return NextResponse.json({
       success: true,
       message: 'Subscription created successfully',
@@ -123,6 +121,15 @@ async function subscribeHandler(request) {
         startAt: subscription.startAt,
         endAt: subscription.endAt,
         planDetails: subscription.planDetails
+      },
+      razorpaySubscription: {
+        id: razorpaySubscription.id,
+        status: razorpaySubscription.status,
+        plan_id: razorpaySubscription.plan_id,
+        customer_id: razorpaySubscription.customer_id,
+        total_count: razorpaySubscription.total_count,
+        paid_count: razorpaySubscription.paid_count,
+        remain_count: razorpaySubscription.remain_count
       },
       paymentOptions,
       customer: {

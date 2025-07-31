@@ -118,23 +118,44 @@ export function AuthProvider({ children }) {
       setError(typeof error === 'string' ? error : (error.message || 'Sign out failed'));
     }
   };
-
-  // Refetch user from backend
+  // Refetch user from backend with better error handling
   const refetchUser = async () => {
     try {
       const token = localStorage.getItem('token');
-      if (!token) return;
+      if (!token) {
+        console.log('🔍 No token found, skipping user refetch');
+        return;
+      }
+
+      console.log('🔄 Refetching user data...');
+      
       const res = await fetch('/api/auth/me', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (!res.ok) return;
+      
+      if (!res.ok) {
+        console.error('❌ Failed to refetch user:', res.status, res.statusText);
+        return;
+      }
+      
       const data = await res.json();
+      
       if (data.user) {
+        console.log('✅ User data refreshed:', {
+          email: data.user.email,
+          isPremium: data.user.isPremium,
+          previousIsPremium: user?.isPremium
+        });
+        
         setUser(data.user);
         localStorage.setItem('user', JSON.stringify(data.user));
+        
+        return data.user;
+      } else {
+        console.warn('⚠️ No user data in response');
       }
     } catch (err) {
-      // ignore
+      console.error('❌ Error refetching user:', err);
     }
   };
 

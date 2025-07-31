@@ -8,6 +8,7 @@ import FeedbackButton from '../../components/feedback/FeedbackButton';
 import PaymentLoadingModal, { PaymentButton } from '@/components/payment/PaymentLoadingModal';
 import PaymentErrorModal from '@/components/payment/PaymentErrorModal';
 import paymentService from '@/lib/payment';
+import oneTimePaymentService from '@/lib/oneTimePayment';
 import toast from 'react-hot-toast';
 import { 
   Check, 
@@ -25,11 +26,13 @@ import {
 export default function PricingPage() {
   const { user, refetchUser } = useAuth();
   const router = useRouter();  const [paymentLoading, setPaymentLoading] = useState(false);
+  const [oneTimePaymentLoading, setOneTimePaymentLoading] = useState(false);
   const [loadingStage, setLoadingStage] = useState('preparing');
   const [subscription, setSubscription] = useState(null);
   const [loadingSubscription, setLoadingSubscription] = useState(false);
   const [paymentError, setPaymentError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  const [paymentType, setPaymentType] = useState('subscription'); // 'subscription' or 'onetime'
 
   // Fetch current subscription status
   useEffect(() => {
@@ -82,27 +85,36 @@ export default function PricingPage() {
         user,
         onPaymentStart: () => {
           setLoadingStage('processing');
-        },
-        onSuccess: async (paymentResponse, subscription) => {
+        },        onSuccess: async (paymentResponse, subscription) => {
           setLoadingStage('completing');
           
-          // Wait a bit for webhook to process
-          setTimeout(async () => {
-            try {
-              // Refetch user data to get updated premium status
-              await refetchUser();
-              
-              toast.success('🎉 Welcome to HireLift Pro! Your account has been upgraded.');
+          console.log('🎉 Payment success, immediately refreshing user data...');
+          
+          try {
+            // Immediately refetch user data to get updated premium status
+            await refetchUser();
+            
+            toast.success('🎉 Welcome to HireLift Pro! Your account has been upgraded.');
+            
+            // Small delay to let the user see the success message
+            setTimeout(() => {
               router.push('/dashboard');
-            } catch (error) {
-              console.error('Error refreshing user data:', error);
-              toast.success('Payment successful! Please refresh the page to see your Pro features.');
-              router.push('/dashboard');
-            } finally {
-              setPaymentLoading(false);
-            }
-          }, 2000);
-        },        onError: (error) => {
+            }, 1500);
+            
+          } catch (error) {
+            console.error('Error refreshing user data:', error);
+            
+            // Even if refetch fails, the payment was successful
+            toast.success('Payment successful! Please refresh the page to see your Pro features.');
+            
+            setTimeout(() => {
+              // Force a page refresh to get updated user data
+              window.location.href = '/dashboard';
+            }, 2000);
+          } finally {
+            setPaymentLoading(false);
+          }
+        },onError: (error) => {
           console.error('Payment error:', error);
           setPaymentError(error);
           setShowErrorModal(true);
@@ -116,6 +128,85 @@ export default function PricingPage() {
       setPaymentError(error);
       setShowErrorModal(true);
       setPaymentLoading(false);
+    }
+  };
+
+  // Handle one-time payment
+  const handleOneTimePayment = async () => {
+    try {
+      // Check if user is logged in
+      if (!user) {
+        toast.error('Please sign in to get Pro access');
+        router.push('/auth');
+        return;
+      }
+
+      // Check if user already has active one-time access
+      if (oneTimePaymentService.hasActiveOneTimeAccess(user)) {
+        const remainingDays = oneTimePaymentService.getRemainingDays(user);
+        toast.info(`You already have Pro access for ${remainingDays} more days`);
+        return;
+      }
+
+      // Check if user is already premium via subscription
+      if (user.isPremium && user.proPlanType === 'subscription') {
+        toast.success('You already have a Pro subscription!');
+        return;
+      }
+
+      setLoadingStage('preparing');
+      setOneTimePaymentLoading(true);
+
+      // Create one-time payment
+      await oneTimePaymentService.createOneTimePayment({
+        amount: 99, // ₹99 for one-time access
+        description: 'HireLift Pro One-Time Access (30 days)',
+        user,
+        onPaymentStart: () => {
+          setLoadingStage('processing');
+        },
+        onSuccess: async (paymentResponse, order) => {
+          setLoadingStage('completing');
+          
+          console.log('🎉 One-time payment success, refreshing user data...');
+          
+          try {
+            // Immediately refetch user data
+            await refetchUser();
+            
+            toast.success('🎉 Welcome to HireLift Pro! You have 30 days of Pro access.');
+            
+            setTimeout(() => {
+              router.push('/dashboard');
+            }, 1500);
+            
+          } catch (error) {
+            console.error('Error refreshing user data:', error);
+            toast.success('Payment successful! Please refresh the page to see your Pro features.');
+            
+            setTimeout(() => {
+              window.location.href = '/dashboard';
+            }, 2000);
+          } finally {
+            setOneTimePaymentLoading(false);
+          }
+        },
+        onError: (error) => {
+          console.error('One-time payment error:', error);
+          setPaymentError(error);
+          setShowErrorModal(true);
+          setOneTimePaymentLoading(false);
+        },
+        onPaymentEnd: () => {
+          setOneTimePaymentLoading(false);
+        }
+      });
+
+    } catch (error) {
+      console.error('One-time payment error:', error);
+      setPaymentError(error);
+      setShowErrorModal(true);
+      setOneTimePaymentLoading(false);
     }
   };
 
@@ -138,6 +229,7 @@ export default function PricingPage() {
     },    {
       name: 'Pro',
       price: '₹99/m',
+      oneTimePrice: '₹99',
       description: 'Most popular for job seekers',
       features: [
         'Unlimited Resume Audits',
@@ -147,12 +239,17 @@ export default function PricingPage() {
         'Keyword Optimization',
         'Priority Support'
       ],
-      buttonText: user?.isPremium ? 'Current Plan' : 'Upgrade to Pro',
-      buttonAction: user?.isPremium ? null : handleProUpgrade,
+      buttonText: user?.isPremium 
+        ? (user.proPlanType === 'subscription' ? 'Current Plan' : `Pro Active (${oneTimePaymentService.getRemainingDays(user)} days)`)
+        : (paymentType === 'subscription' ? 'Subscribe Monthly' : 'Pay for 30 days'),
+      buttonAction: user?.isPremium 
+        ? null 
+        : (paymentType === 'subscription' ? handleProUpgrade : handleOneTimePayment),
       popular: true,
       icon: Crown,
       color: 'var(--primary)',
-      disabled: user?.isPremium
+      disabled: user?.isPremium,
+      showPaymentToggle: !user?.isPremium
     },
     {
       name: 'AI Assistant',
@@ -341,14 +438,64 @@ export default function PricingPage() {
                 </div>
               )}
 
-              <div className={`p-8 ${plan.popular || plan.comingSoon ? 'pt-12' : ''}`}>
-                <div className="text-center mb-6">
+              <div className={`p-8 ${plan.popular || plan.comingSoon ? 'pt-12' : ''}`}>                <div className="text-center mb-6">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                   <p className="text-gray-600 mb-4">{plan.description}</p>
                   <div className="mb-4">
-                    <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                    {plan.price !== '₹0' && (
-                      <span className="text-gray-600 ml-1">/month</span>
+                    {plan.showPaymentToggle ? (
+                      <div className="space-y-3">
+                        {/* Payment Type Toggle */}
+                        <div className="flex justify-center">
+                          <div className="bg-gray-100 p-1 rounded-lg flex">
+                            <button
+                              onClick={() => setPaymentType('subscription')}
+                              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                                paymentType === 'subscription'
+                                  ? 'bg-white text-purple-600 shadow-sm'
+                                  : 'text-gray-600 hover:text-gray-800'
+                              }`}
+                            >
+                              Monthly
+                            </button>
+                            <button
+                              onClick={() => setPaymentType('onetime')}
+                              className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                                paymentType === 'onetime'
+                                  ? 'bg-white text-purple-600 shadow-sm'
+                                  : 'text-gray-600 hover:text-gray-800'
+                              }`}
+                            >
+                              One-time
+                            </button>
+                          </div>
+                        </div>
+                        
+                        {/* Price Display */}
+                        <div className="transition-all duration-300">
+                          <span className="text-4xl font-bold text-gray-900">
+                            {paymentType === 'subscription' ? plan.price : plan.oneTimePrice}
+                          </span>
+                          <span className="text-gray-600 ml-1">
+                            {paymentType === 'subscription' ? '/month' : '/30 days'}
+                          </span>
+                        </div>
+                        
+                        {/* Payment Type Benefits */}
+                        <div className="text-sm text-gray-500">
+                          {paymentType === 'subscription' ? (
+                            <span>✨ Recurring access + cancel anytime</span>
+                          ) : (
+                            <span>🚀 One-time payment + 30 days access</span>
+                          )}
+                        </div>
+                      </div>
+                    ) : (
+                      <div>
+                        <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                        {plan.price !== '₹0' && (
+                          <span className="text-gray-600 ml-1">/month</span>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -369,7 +516,8 @@ export default function PricingPage() {
                 </ul>                <PaymentButton
                   onClick={plan.buttonAction}
                   disabled={plan.comingSoon || plan.disabled}
-                  isLoading={paymentLoading && plan.name === 'Pro'}
+                  isLoading={(paymentLoading && plan.name === 'Pro' && paymentType === 'subscription') || 
+                           (oneTimePaymentLoading && plan.name === 'Pro' && paymentType === 'onetime')}
                   className={`w-full py-3 px-6 rounded-lg font-medium transition-all duration-200 ${
                     plan.popular && !plan.disabled
                       ? 'bg-gradient-to-r from-purple-600 to-blue-600 text-white hover:from-purple-700 hover:to-blue-700'
@@ -475,8 +623,9 @@ export default function PricingPage() {
           </div>        </motion.div>
       </div>      {/* Payment Loading Modal */}
       <PaymentLoadingModal 
-        isOpen={paymentLoading} 
+        isOpen={paymentLoading || oneTimePaymentLoading} 
         stage={loadingStage} 
+        paymentType={paymentType}
       />
 
       {/* Payment Error Modal */}

@@ -1,14 +1,16 @@
 import { motion } from 'framer-motion';
 import { Loader2, CreditCard, Shield, Check } from 'lucide-react';
 
-export default function PaymentLoadingModal({ isOpen, stage = 'preparing' }) {
+export default function PaymentLoadingModal({ isOpen, stage = 'preparing', paymentType = 'subscription' }) {
   if (!isOpen) return null;
 
   const stages = {
     preparing: {
       icon: CreditCard,
       title: 'Preparing Payment',
-      description: 'Setting up your subscription...',
+      description: paymentType === 'onetime' 
+        ? 'Setting up your one-time payment...' 
+        : 'Setting up your subscription...',
       color: 'text-blue-500'
     },
     processing: {
@@ -20,7 +22,9 @@ export default function PaymentLoadingModal({ isOpen, stage = 'preparing' }) {
     completing: {
       icon: Check,
       title: 'Almost Done',
-      description: 'Activating your premium account...',
+      description: paymentType === 'onetime'
+        ? 'Activating your 30-day premium access...'
+        : 'Activating your premium account...',
       color: 'text-green-500'
     }
   };

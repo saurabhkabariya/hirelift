@@ -19,7 +19,30 @@ const userSchema = new mongoose.Schema({
   isPremium: {
     type: Boolean,
     default: false,
-  },  firebaseUid: {
+  },
+  proPlanType: {
+    type: String,
+    enum: ['subscription', 'onetime'],
+    default: null,
+  },
+  purchaseDate: {
+    type: Date,
+    default: null,
+  },
+  expiryDate: {
+    type: Date,
+    default: null,
+  },
+  paymentDetails: {
+    razorpay_payment_id: String,
+    razorpay_order_id: String,
+    amount: Number,
+    currency: String,
+    method: String,
+    status: String,
+    created_at: Date,
+  },
+  firebaseUid: {
     type: String,
     unique: true,
     sparse: true, // Allows multiple null values
@@ -61,4 +84,4 @@ userSchema.pre('save', function(next) {
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);
 
-export default User; 
+export default User;

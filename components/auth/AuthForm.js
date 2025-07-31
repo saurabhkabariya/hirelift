@@ -361,7 +361,8 @@ export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [for
                       src={captchaImage}
                       alt="Captcha"
                       className="border border-gray-300 rounded-lg"
-                      style={{ width: '120px', height: '50px' }}
+                      width={120}
+                      height={50}
                     />
                   ) : (
                     <div className="w-[120px] h-[50px] border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
