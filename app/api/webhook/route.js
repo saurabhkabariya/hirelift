@@ -125,7 +125,6 @@ async function handleSubscriptionActivated(payload) {
   if (!dbSubscription) {
     throw new Error(`Subscription not found: ${subscription.id}`);
   }
-
   // Update subscription status
   await dbSubscription.updateFromWebhook({
     event_id: payload.event_id || 'webhook_activated',
@@ -134,13 +133,45 @@ async function handleSubscriptionActivated(payload) {
     subscription: subscription
   });
 
-  // Update user premium status
+  // Calculate subscription dates
+  const purchaseDate = new Date();
+  let expiryDate = new Date(purchaseDate);
+  
+  // Use subscription end date if available, otherwise calculate from total count
+  if (subscription.end_at) {
+    expiryDate = new Date(subscription.end_at * 1000); // Razorpay timestamps are in seconds
+  } else if (dbSubscription.endAt) {
+    expiryDate = new Date(dbSubscription.endAt);
+  } else {
+    // Fallback: calculate based on total count (assuming monthly)
+    const monthsToAdd = subscription.total_count || 12;
+    expiryDate.setMonth(expiryDate.getMonth() + monthsToAdd);
+  }
+
+  // Update user premium status with subscription details
   await User.findByIdAndUpdate(dbSubscription.userId, {
     isPremium: true,
+    proPlanType: 'subscription',
+    purchaseDate: purchaseDate,
+    expiryDate: expiryDate,
+    paymentDetails: {
+      razorpay_subscription_id: subscription.id,
+      amount: 'subscription_amount',
+      currency: 'INR',
+      method: 'subscription',
+      status: subscription.status,
+      created_at: new Date()
+    },
     updatedAt: new Date()
   });
 
-  console.log('✅ Subscription activated and user upgraded to premium:', subscription.id);
+  console.log('✅ Subscription activated and user upgraded to premium with details:', subscription.id);
+  console.log('📅 Webhook subscription details:', {
+    proPlanType: 'subscription',
+    purchaseDate: purchaseDate.toISOString(),
+    expiryDate: expiryDate.toISOString(),
+    subscriptionStatus: subscription.status
+  });
 
   return {
     message: 'Subscription activated successfully',
@@ -166,11 +197,45 @@ async function handleSubscriptionCharged(payload) {
     created_at: Date.now() / 1000,
     subscription: subscription
   });
+  // Calculate subscription dates for charged subscription
+  const purchaseDate = new Date();
+  let expiryDate = new Date(purchaseDate);
+  
+  // Use subscription end date if available, otherwise calculate from total count
+  if (subscription.end_at) {
+    expiryDate = new Date(subscription.end_at * 1000); // Razorpay timestamps are in seconds
+  } else if (dbSubscription.endAt) {
+    expiryDate = new Date(dbSubscription.endAt);
+  } else {
+    // Fallback: calculate based on total count (assuming monthly)
+    const monthsToAdd = subscription.total_count || 12;
+    expiryDate.setMonth(expiryDate.getMonth() + monthsToAdd);
+  }
 
-  // Ensure user remains premium
+  // Ensure user remains premium with full subscription details
   await User.findByIdAndUpdate(dbSubscription.userId, {
     isPremium: true,
+    proPlanType: 'subscription',
+    purchaseDate: purchaseDate,
+    expiryDate: expiryDate,
+    paymentDetails: {
+      razorpay_subscription_id: subscription.id,
+      razorpay_payment_id: payment?.id,
+      amount: 'subscription_amount',
+      currency: 'INR',
+      method: 'subscription',
+      status: subscription.status,
+      created_at: new Date()
+    },
     updatedAt: new Date()
+  });
+
+  console.log('✅ Subscription charged and user premium details updated:', subscription.id);
+  console.log('📅 Charged subscription details:', {
+    proPlanType: 'subscription',
+    purchaseDate: purchaseDate.toISOString(),
+    expiryDate: expiryDate.toISOString(),
+    paymentId: payment?.id
   });
 
   console.log('✅ Subscription charged successfully:', subscription.id, 'Payment:', payment?.id);
@@ -297,12 +362,45 @@ async function handleSubscriptionResumed(payload) {
     created_at: Date.now() / 1000,
     subscription: subscription
   });
-
   // Restore premium status if subscription is active
   if (subscription.status === 'active') {
+    // Calculate subscription dates for resumed subscription
+    const purchaseDate = new Date();
+    let expiryDate = new Date(purchaseDate);
+    
+    // Use subscription end date if available, otherwise calculate from total count
+    if (subscription.end_at) {
+      expiryDate = new Date(subscription.end_at * 1000); // Razorpay timestamps are in seconds
+    } else if (dbSubscription.endAt) {
+      expiryDate = new Date(dbSubscription.endAt);
+    } else {
+      // Fallback: calculate based on total count (assuming monthly)
+      const monthsToAdd = subscription.total_count || 12;
+      expiryDate.setMonth(expiryDate.getMonth() + monthsToAdd);
+    }
+
     await User.findByIdAndUpdate(dbSubscription.userId, {
       isPremium: true,
+      proPlanType: 'subscription',
+      purchaseDate: purchaseDate,
+      expiryDate: expiryDate,
+      paymentDetails: {
+        razorpay_subscription_id: subscription.id,
+        amount: 'subscription_amount',
+        currency: 'INR',
+        method: 'subscription',
+        status: subscription.status,
+        created_at: new Date()
+      },
       updatedAt: new Date()
+    });
+
+    console.log('✅ Subscription resumed and user premium details updated:', subscription.id);
+    console.log('📅 Resumed subscription details:', {
+      proPlanType: 'subscription',
+      purchaseDate: purchaseDate.toISOString(),
+      expiryDate: expiryDate.toISOString(),
+      subscriptionStatus: subscription.status
     });
   }
 

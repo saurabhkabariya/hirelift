@@ -77,8 +77,7 @@ async function verifyPaymentHandler(request) {
       acceptedStatuses: successfulStatuses
     });
 
-    if (isPaymentSuccessful) {
-      // Update subscription status in database
+    if (isPaymentSuccessful) {      // Update subscription status in database
       await Subscription.findByIdAndUpdate(subscription._id, {
         status: razorpaySubscription.status,
         paidCount: razorpaySubscription.paid_count || 0,
@@ -86,33 +85,69 @@ async function verifyPaymentHandler(request) {
         updatedAt: new Date()
       });
 
-      // Update user premium status immediately
+      // Calculate subscription dates for user record
+      const purchaseDate = new Date();
+      
+      // Get subscription end date from our database subscription record or calculate it
+      let expiryDate;
+      if (subscription.endAt) {
+        expiryDate = new Date(subscription.endAt);
+      } else {
+        // Fallback: calculate based on subscription total count (assuming monthly)
+        expiryDate = new Date(purchaseDate);
+        const monthsToAdd = razorpaySubscription.total_count || 12; // Default to 12 months
+        expiryDate.setMonth(expiryDate.getMonth() + monthsToAdd);
+      }
+
+      // Update user premium status with subscription details
       const updatedUser = await User.findByIdAndUpdate(
         user._id,
         {
           isPremium: true,
+          proPlanType: 'subscription',
+          purchaseDate: purchaseDate,
+          expiryDate: expiryDate,
+          paymentDetails: {
+            razorpay_payment_id: razorpay_payment_id,
+            razorpay_subscription_id: razorpay_subscription_id,
+            amount: razorpaySubscription.plan_id ? 'subscription_amount' : 'unknown', // We can get this from plan details if needed
+            currency: 'INR',
+            method: 'subscription',
+            status: razorpaySubscription.status,
+            created_at: new Date()
+          },
           updatedAt: new Date()
         },
         { new: true }
       );
 
-      console.log('✅ Payment verified and user upgraded to premium:', user.email);
-
-      return NextResponse.json({
+      console.log('✅ Payment verified and user upgraded to premium with subscription details:', user.email);
+      console.log('📅 Subscription details:', {
+        proPlanType: 'subscription',
+        purchaseDate: purchaseDate.toISOString(),
+        expiryDate: expiryDate.toISOString(),
+        totalCount: razorpaySubscription.total_count
+      });      return NextResponse.json({
         success: true,
         message: 'Payment verified successfully',
         user: {
           id: updatedUser._id,
           email: updatedUser.email,
           name: updatedUser.name,
-          isPremium: updatedUser.isPremium
+          isPremium: updatedUser.isPremium,
+          proPlanType: updatedUser.proPlanType,
+          purchaseDate: updatedUser.purchaseDate,
+          expiryDate: updatedUser.expiryDate
         },
         subscription: {
           id: subscription._id,
           status: razorpaySubscription.status,
-          razorpaySubscriptionId: razorpay_subscription_id
+          razorpaySubscriptionId: razorpay_subscription_id,
+          totalCount: razorpaySubscription.total_count,
+          paidCount: razorpaySubscription.paid_count,
+          remainingCount: razorpaySubscription.remain_count
         }
-      });    } else {
+      });} else {
       console.log('⚠️ Payment verification failed - subscription status not recognized');
       console.log('📊 Status details:', {
         currentStatus: razorpaySubscription.status,
