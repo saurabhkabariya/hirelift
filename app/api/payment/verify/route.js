@@ -28,12 +28,12 @@ async function verifyPaymentHandler(request) {
         { error: 'Missing payment details' },
         { status: 400 }
       );
-    }
-
-    console.log('🔍 Verifying payment for user:', user.email);
+    }    console.log('🔍 Verifying payment for user:', user.email);
     console.log('📋 Payment details:', {
       payment_id: razorpay_payment_id,
-      subscription_id: razorpay_subscription_id
+      subscription_id: razorpay_subscription_id,
+      user_id: user._id,
+      user_email: user.email
     });
 
     // Find the subscription in our database
@@ -97,7 +97,14 @@ async function verifyPaymentHandler(request) {
         expiryDate = new Date(purchaseDate);
         const monthsToAdd = razorpaySubscription.total_count || 12; // Default to 12 months
         expiryDate.setMonth(expiryDate.getMonth() + monthsToAdd);
-      }
+      }      console.log('📝 Updating user with subscription details...');
+      console.log('📊 Update data:', {
+        userId: user._id,
+        isPremium: true,
+        proPlanType: 'subscription',
+        purchaseDate: purchaseDate.toISOString(),
+        expiryDate: expiryDate.toISOString()
+      });
 
       // Update user premium status with subscription details
       const updatedUser = await User.findByIdAndUpdate(
@@ -121,13 +128,23 @@ async function verifyPaymentHandler(request) {
         { new: true }
       );
 
-      console.log('✅ Payment verified and user upgraded to premium with subscription details:', user.email);
+      console.log('✅ User update completed successfully');
+      console.log('👤 Updated user data:', {
+        id: updatedUser._id,
+        email: updatedUser.email,
+        isPremium: updatedUser.isPremium,
+        proPlanType: updatedUser.proPlanType,
+        purchaseDate: updatedUser.purchaseDate,
+        expiryDate: updatedUser.expiryDate
+      });console.log('✅ Payment verified and user upgraded to premium with subscription details:', user.email);
       console.log('📅 Subscription details:', {
         proPlanType: 'subscription',
         purchaseDate: purchaseDate.toISOString(),
         expiryDate: expiryDate.toISOString(),
         totalCount: razorpaySubscription.total_count
-      });      return NextResponse.json({
+      });
+
+      return NextResponse.json({
         success: true,
         message: 'Payment verified successfully',
         user: {
@@ -144,10 +161,11 @@ async function verifyPaymentHandler(request) {
           status: razorpaySubscription.status,
           razorpaySubscriptionId: razorpay_subscription_id,
           totalCount: razorpaySubscription.total_count,
-          paidCount: razorpaySubscription.paid_count,
-          remainingCount: razorpaySubscription.remain_count
+          paidCount: razorpaySubscription.paid_count,          remainingCount: razorpaySubscription.remain_count
         }
-      });} else {
+      });
+
+    } else {
       console.log('⚠️ Payment verification failed - subscription status not recognized');
       console.log('📊 Status details:', {
         currentStatus: razorpaySubscription.status,
@@ -198,13 +216,23 @@ async function verifyPaymentHandler(request) {
         }
       }, { status: 400 });
     }
-
   } catch (error) {
     console.error('❌ Payment verification error:', error);
+    console.error('❌ Error details:', {
+      message: error.message,
+      stack: error.stack,
+      name: error.name
+    });
+    
+    // Check if it's a database error
+    if (error.name === 'MongoError' || error.name === 'MongooseError') {
+      console.error('❌ Database error occurred during payment verification');
+    }
     
     return NextResponse.json(
       { 
         error: 'Payment verification failed',
+        message: 'An error occurred while processing your payment. Please contact support.',
         details: process.env.NODE_ENV === 'development' ? error.message : undefined
       },
       { status: 500 }
