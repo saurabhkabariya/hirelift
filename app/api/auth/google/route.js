@@ -24,14 +24,19 @@ export async function POST(request) {
         { email: email.toLowerCase() },
         { firebaseUid: firebaseUid }
       ]
-    });
-
-    if (user) {
+    });    if (user) {
       // Update existing user with Firebase UID if not present
       if (!user.firebaseUid) {
         user.firebaseUid = firebaseUid;
-        await user.save();
       }
+      
+      // Ensure Google users are marked as email verified
+      if (!user.emailVerified) {
+        user.emailVerified = true;
+        user.verifiedAt = new Date();
+      }
+      
+      await user.save();
     } else {
       // Create new user
       user = new User({
@@ -40,6 +45,8 @@ export async function POST(request) {
         firebaseUid: firebaseUid,
         auditCount: 0,
         isPremium: false,
+        emailVerified: true, // Google handles email verification
+        verifiedAt: new Date(),
       });
       await user.save();
     }
@@ -55,14 +62,13 @@ export async function POST(request) {
       },
       process.env.JWT_SECRET,
       { expiresIn: '7d' }
-    );
-
-    // Return success response
+    );    // Return success response
     const userResponse = {
       id: user._id,
       email: user.email,
       auditCount: user.auditCount,
       isPremium: user.isPremium,
+      emailVerified: user.emailVerified,
       firebaseUid: user.firebaseUid,
       createdAt: user.createdAt,
     };

@@ -20,12 +20,12 @@ export async function GET(req) {
     const user = await User.findById(decoded.userId);
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
-    }
-    const userResponse = {
+    }    const userResponse = {
       id: user._id,
       email: user.email,
       auditCount: user.auditCount,
       isPremium: user.isPremium,
+      emailVerified: user.emailVerified,
       firebaseUid: user.firebaseUid,
       createdAt: user.createdAt,
     };
