@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { 
   CheckCircle, 
@@ -13,7 +13,8 @@ import {
   Gift
 } from 'lucide-react';
 
-export default function PaymentSuccessPage() {
+// Separate component for search params logic
+function PaymentSuccessContent() {
   const { user, refetchUser } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -188,9 +189,40 @@ export default function PaymentSuccessPage() {
             className="w-full bg-white border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-50 transition-all duration-200"
           >
             Start Resume Audit
-          </button>
-        </motion.div>
+          </button>        </motion.div>
       </motion.div>
     </div>
+  );
+}
+
+// Loading component for Suspense fallback
+function PaymentSuccessLoading() {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-purple-50 flex items-center justify-center p-4">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl p-8 max-w-lg w-full text-center border border-white/20"
+      >
+        <div className="w-20 h-20 mx-auto mb-6">
+          <div className="animate-spin rounded-full h-20 w-20 border-b-4 border-green-500"></div>
+        </div>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          Loading Payment Details...
+        </h1>
+        <p className="text-gray-600">
+          Please wait while we process your payment information.
+        </p>
+      </motion.div>
+    </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense fallback={<PaymentSuccessLoading />}>
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }
