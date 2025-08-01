@@ -47,16 +47,35 @@ async function verifyPaymentHandler(request) {
         { error: 'Subscription not found' },
         { status: 404 }
       );
-    }
-
-    // Get subscription details from Razorpay to verify status
+    }    // Get subscription details from Razorpay to verify status
     const razorpaySubscription = await razorpayService.getSubscription(razorpay_subscription_id);
     
     console.log('📊 Razorpay subscription status:', razorpaySubscription.status);
+    console.log('📊 Full subscription details:', {
+      id: razorpaySubscription.id,
+      status: razorpaySubscription.status,
+      current_start: razorpaySubscription.current_start,
+      current_end: razorpaySubscription.current_end,
+      paid_count: razorpaySubscription.paid_count,
+      total_count: razorpaySubscription.total_count,
+      customer_id: razorpaySubscription.customer_id
+    });
 
-    // Check if payment is successful (subscription should be active or authenticated)
-    const successfulStatuses = ['active', 'authenticated'];
+    // Check if payment is successful - expanded statuses for better coverage
+    const successfulStatuses = [
+      'active',        // Subscription is active and running
+      'authenticated', // Payment authenticated, subscription ready
+      'created',       // Subscription created and payment processed
+      'pending'        // Payment pending but subscription valid
+    ];
     const isPaymentSuccessful = successfulStatuses.includes(razorpaySubscription.status);
+
+    // For debugging - log the decision
+    console.log('🔍 Payment status check:', {
+      status: razorpaySubscription.status,
+      isSuccessful: isPaymentSuccessful,
+      acceptedStatuses: successfulStatuses
+    });
 
     if (isPaymentSuccessful) {
       // Update subscription status in database
@@ -93,15 +112,55 @@ async function verifyPaymentHandler(request) {
           status: razorpaySubscription.status,
           razorpaySubscriptionId: razorpay_subscription_id
         }
+      });    } else {
+      console.log('⚠️ Payment verification failed - subscription status not recognized');
+      console.log('📊 Status details:', {
+        currentStatus: razorpaySubscription.status,
+        acceptedStatuses: successfulStatuses,
+        subscriptionId: razorpay_subscription_id,
+        customerId: razorpaySubscription.customer_id
       });
-
-    } else {
-      console.log('⚠️ Payment not successful, subscription status:', razorpaySubscription.status);
+      
+      // Provide more specific error messages based on status
+      let errorMessage = 'Payment verification failed';
+      let shouldRetry = false;
+      
+      switch (razorpaySubscription.status) {
+        case 'created':
+          errorMessage = 'Payment is being processed. Please wait a moment and try again.';
+          shouldRetry = true;
+          break;
+        case 'pending':
+          errorMessage = 'Payment is pending. This may take a few minutes to complete.';
+          shouldRetry = true;
+          break;
+        case 'halted':
+          errorMessage = 'Subscription is temporarily halted. Please contact support.';
+          break;
+        case 'cancelled':
+          errorMessage = 'Subscription was cancelled. Please create a new subscription.';
+          break;
+        case 'completed':
+          errorMessage = 'Subscription has completed its term. Please renew your subscription.';
+          break;
+        case 'expired':
+          errorMessage = 'Subscription has expired. Please create a new subscription.';
+          break;
+        default:
+          errorMessage = `Payment verification failed. Status: ${razorpaySubscription.status}. Please contact support.`;
+      }
       
       return NextResponse.json({
         success: false,
-        message: 'Payment verification failed',
-        status: razorpaySubscription.status
+        message: errorMessage,
+        status: razorpaySubscription.status,
+        shouldRetry: shouldRetry,
+        subscriptionDetails: {
+          id: razorpay_subscription_id,
+          status: razorpaySubscription.status,
+          paidCount: razorpaySubscription.paid_count || 0,
+          totalCount: razorpaySubscription.total_count || 0
+        }
       }, { status: 400 });
     }
 
