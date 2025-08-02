@@ -265,7 +265,13 @@ export default function DashboardPage() {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => router.push('/company-search')}            className="bg-white rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
+            onClick={() => {
+              if (user?.isPremium) {
+                router.push('/company-search');
+              } else {
+                router.push('/pricing');
+              }
+            }}            className="bg-white rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
           >
             {/* Premium Badge */}
             <motion.div
@@ -329,10 +335,9 @@ export default function DashboardPage() {
               animate={{ opacity: 1, scale: 1, x: 0 }}
               transition={{ delay: 0.4, type: "spring", stiffness: 300 }}
               className="absolute top-3 right-3"
-            >
-              <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-blue-400 to-cyan-500 text-white rounded-full text-xs font-bold shadow-lg">
+            >              <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-orange-400 to-red-500 text-white rounded-full text-xs font-bold shadow-lg">
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                  <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clipRule="evenodd" />
                 </svg>
                 Free
               </div>
@@ -386,7 +391,7 @@ export default function DashboardPage() {
               transition={{ delay: 0.4, type: "spring", stiffness: 300 }}
               className="absolute top-3 right-3"
             >
-              <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-red-400 to-orange-500 text-white rounded-full text-xs font-bold shadow-lg">
+              <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-purple-400 to-blue-500 text-white rounded-full text-xs font-bold shadow-lg">
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
                 </svg>
@@ -484,7 +489,60 @@ export default function DashboardPage() {
                 </div>
               </motion.button>
             )}
-          </AnimatePresence>        </motion.div>
+          </AnimatePresence>          {/* Premium Users - Manage Subscription Card */}
+          <AnimatePresence>
+            {user.isPremium && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => router.push('/pricing')}
+                className="bg-white rounded-xl p-6 shadow-lg border border-emerald-200 hover:shadow-xl hover:border-emerald-300 transition-all duration-200 text-left relative overflow-hidden cursor-pointer group"
+              >
+                {/* Premium Glow Effect */}
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-teal-50/50 to-cyan-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
+                
+                {/* Crown (Static on hover to avoid conflicts) */}
+                <div className="absolute top-3 right-24 w-6 h-6 text-yellow-500 group-hover:scale-110 transition-transform duration-200">
+                  👑
+                </div>
+
+                {/* Premium Badge */}
+                <div className="absolute top-3 right-3">
+                  <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-full text-xs font-bold shadow-lg group-hover:shadow-emerald-200 transition-shadow duration-200">
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                    </svg>
+                    Active
+                  </div>
+                </div>
+
+                <div className="relative z-10">
+                  <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4 border border-emerald-200 group-hover:bg-emerald-200 group-hover:border-emerald-300 transition-colors duration-200">
+                    <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5-6a2 2 0 012 2v6M5 12a2 2 0 002-2V4a2 2 0 012-2h6m3 7h4l1 1-1 1h-4V8z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-lg font-bold text-gray-800 mb-2 flex items-center group-hover:text-emerald-800 transition-colors duration-200">
+                    Manage Subscription
+                    <span className="ml-2 group-hover:rotate-12 transition-transform duration-200">
+                      ⚙️
+                    </span>
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-4 group-hover:text-gray-700 transition-colors duration-200">View plans, billing details, and subscription settings</p>
+                  
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg font-semibold text-sm transition-colors duration-200">
+                    <span>Manage Plan</span>
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </div>
+                </div>
+              </motion.button>
+            )}
+          </AnimatePresence></motion.div>
 
         {/* Admin-only Feedback Display */}
         <AnimatePresence>
@@ -529,7 +587,9 @@ export default function DashboardPage() {
               <h4 className="font-semibold text-gray-800 mb-4">Quick Actions</h4>
               <div className="space-y-2">
                 <Link href="/audit" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Resume Audit</Link>
-                <Link href="/company-search" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Company Search</Link>
+                <Link href={user?.isPremium ? "/company-search" : "/pricing"} className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">
+                  Company Search {!user?.isPremium && "👑"}
+                </Link>
                 <Link href="/playground" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Template Playground</Link>
                 <Link href="/pricing" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Upgrade Plan</Link>
               </div>
@@ -557,7 +617,7 @@ export default function DashboardPage() {
                 >
                   Sign Out
                 </button>
-                <a href="mailto:support@hirelift.com" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Support</a>
+                <a href="mailto:hirelift01@gmail.com" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Support</a>
               </div>
             </div>
 
@@ -615,19 +675,31 @@ export default function DashboardPage() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 100 4m0-4v2m0-6V4" />
             </svg>
           </motion.button>          {/* Menu Items */}
-          <div id="fab-menu" className="hidden absolute bottom-16 right-0 space-y-3">
-            <motion.a
-              href="/company-search"
+          <div id="fab-menu" className="hidden absolute bottom-16 right-0 space-y-3">            <motion.a
+              href={user?.isPremium ? "/company-search" : "/pricing"}
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.9 }}
-              className="flex items-center gap-3 px-4 py-3 bg-white text-purple-700 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border border-purple-200 min-w-[160px]"
+              className={`flex items-center gap-3 px-4 py-3 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 border min-w-[160px] relative ${
+                user?.isPremium 
+                  ? 'bg-purple-600 border-purple-200' 
+                  : 'bg-gradient-to-r from-purple-600 to-blue-600 border-purple-200'
+              }`}
             >
-              <div className="w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                user?.isPremium ? 'bg-purple-100' : 'bg-white/20'
+              }`}>
+                <svg className={`w-4 h-4 ${user?.isPremium ? 'text-purple-600' : 'text-white'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
               <span className="font-medium">Search</span>
+              {!user?.isPremium && (
+                <div className="absolute -top-1 -right-1 w-4 h-4 bg-yellow-400 rounded-full flex items-center justify-center">
+                  <svg className="w-2 h-2 text-yellow-800" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                  </svg>
+                </div>
+              )}
             </motion.a>
 
             {/* Feedback Option */}

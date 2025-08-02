@@ -87,23 +87,22 @@ const TemplatePreview = ({ template }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="bg-white/80 backdrop-blur-lg rounded-3xl border border-white/20 shadow-xl overflow-hidden"
-    >
-      {/* Header */}
-      <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-6 text-white">
-        <div className="flex items-center justify-between">
+    >      {/* Header */}
+      <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-4 sm:p-6 text-white">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             {getTemplateTypeIcon(template.templateType)}
             <div>
-              <h3 className="text-xl font-bold">Live Preview</h3>
-              <p className="text-green-100 mt-1">See how your template will look</p>
+              <h3 className="text-lg sm:text-xl font-bold">Live Preview</h3>
+              <p className="text-green-100 mt-1 text-sm">See how your template will look</p>
             </div>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setIsEditingData(!isEditingData)}
-              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
+              className="w-full sm:w-auto px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -114,18 +113,18 @@ const TemplatePreview = ({ template }) => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={copyPreviewToClipboard}
-              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
+              className="w-full sm:w-auto px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
-              Copy Preview
+              <span className="hidden sm:inline">Copy Preview</span>
+              <span className="sm:hidden">Copy</span>
             </motion.button>
-          </div>
-        </div>
+          </div>        </div>
       </div>
 
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         {/* Preview Data Editor */}
         {isEditingData && (
           <motion.div
@@ -144,7 +143,7 @@ const TemplatePreview = ({ template }) => {
               </button>
             </div>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {Object.entries(previewData).map(([key, value]) => (
                 <div key={key}>
                   <label className="block text-xs font-medium text-gray-600 mb-1 capitalize">
@@ -164,9 +163,8 @@ const TemplatePreview = ({ template }) => {
         )}
 
         {/* Template Preview */}
-        <div className="space-y-6">
-          {/* Template Info */}
-          <div className="flex items-center justify-between p-4 bg-gray-50 rounded-2xl border border-gray-200">
+        <div className="space-y-6">          {/* Template Info */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 bg-gray-50 rounded-2xl border border-gray-200">
             <div className="flex items-center gap-3">
               <div className={`p-2 rounded-xl ${
                 template.templateType === 'email' 
@@ -193,29 +191,27 @@ const TemplatePreview = ({ template }) => {
 
           {/* Email Preview */}
           {template.templateType === 'email' && (
-            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
-              {/* Email Header */}
-              <div className="bg-gray-50 p-4 border-b border-gray-200">
+            <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">              {/* Email Header */}
+              <div className="bg-gray-50 p-3 sm:p-4 border-b border-gray-200">
                 <div className="space-y-2 text-sm">
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                     <span className="font-medium text-gray-600">Subject:</span>
-                    <span className="text-gray-800">{processedSubject}</span>
+                    <span className="text-gray-800 break-words">{processedSubject}</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                     <span className="font-medium text-gray-600">From:</span>
-                    <span className="text-gray-800">your.email@company.com</span>
+                    <span className="text-gray-800 break-words">your.email@company.com</span>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-2">
                     <span className="font-medium text-gray-600">To:</span>
-                    <span className="text-gray-800">{previewData.email}</span>
+                    <span className="text-gray-800 break-words">{previewData.email}</span>
                   </div>
                 </div>
               </div>
-              
-              {/* Email Body */}
-              <div className="p-6">
+                {/* Email Body */}
+              <div className="p-4 sm:p-6">
                 <div className="prose prose-sm max-w-none">
-                  <pre className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed">
+                  <pre className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-sm sm:text-base">
                     {processedContent}
                   </pre>
                 </div>
@@ -238,19 +234,17 @@ const TemplatePreview = ({ template }) => {
                   </div>
                 </div>
               </div>
-              
-              {/* LinkedIn Message */}
-              <div className="p-6">
+                {/* LinkedIn Message */}
+              <div className="p-4 sm:p-6">
                 <div className="prose prose-sm max-w-none">
-                  <pre className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed">
+                  <pre className="whitespace-pre-wrap font-sans text-gray-800 leading-relaxed text-sm sm:text-base">
                     {processedContent}
                   </pre>
                 </div>
               </div>
-              
-              {/* LinkedIn Footer */}
-              <div className="bg-gray-50 p-4 border-t border-gray-200">
-                <div className="flex items-center justify-between text-sm text-gray-600">
+                {/* LinkedIn Footer */}
+              <div className="bg-gray-50 p-3 sm:p-4 border-t border-gray-200">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-sm text-gray-600">
                   <span>Message sent via LinkedIn</span>
                   <div className="flex items-center gap-4">
                     <button className="text-blue-600 hover:text-blue-800">Reply</button>
@@ -259,10 +253,8 @@ const TemplatePreview = ({ template }) => {
                 </div>
               </div>
             </div>
-          )}
-
-          {/* Statistics */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          )}          {/* Statistics */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-2xl">
               <div className="text-2xl font-bold text-blue-600">
                 {processedContent.length}

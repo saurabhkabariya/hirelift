@@ -32,27 +32,60 @@ export default function PricingPage() {
   const [loadingSubscription, setLoadingSubscription] = useState(false);
   const [paymentError, setPaymentError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [paymentType, setPaymentType] = useState('onetime'); // 'subscription' or 'onetime'
-
-  // Fetch current subscription status
+  const [paymentType, setPaymentType] = useState('onetime'); // 'subscription' or 'onetime'  // Fetch current subscription status
   useEffect(() => {
     const fetchSubscription = async () => {
-      if (!user) return;
+      // Only fetch if user is properly authenticated
+      if (!user || !user.email) {
+        console.log('User not properly authenticated, skipping subscription fetch');
+        setLoadingSubscription(false);
+        return;
+      }
+      
+      // Check if we have a valid token
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('No authentication token found');
+        setLoadingSubscription(false);
+        return;
+      }
       
       try {
         setLoadingSubscription(true);
         const subData = await paymentService.getCurrentSubscription();
         setSubscription(subData.subscription);
       } catch (error) {
-        // User might not have a subscription, which is fine
-        console.log('No active subscription found');
+        console.log('Subscription fetch error:', error.message);
+        
+        // Handle authentication errors
+        if (error.message.includes('Authentication failed') || 
+            error.message.includes('User account not found') ||
+            error.message.includes('Please login again')) {
+          // Show user-friendly message and redirect
+          toast.error('Please login again to continue', {
+            duration: 3000,
+            position: 'top-center',
+          });
+          
+          // Clear auth data and redirect
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          
+          setTimeout(() => {
+            router.push('/auth');
+          }, 1500);
+          return;
+        }
+        
+        // For other errors (like no subscription), continue normally
+        console.log('No active subscription found or other non-critical error');
       } finally {
         setLoadingSubscription(false);
       }
     };
 
     fetchSubscription();
-  }, [user]);
+  }, [user, router]);
 
   // Handle Pro plan subscription
   const handleProUpgrade = async () => {
@@ -228,8 +261,10 @@ export default function PricingPage() {
       color: 'var(--accent)'
     },    {
       name: 'Pro',
-      price: '₹99/m',
+      price: '₹99',
+      originalPrice: '₹199',
       oneTimePrice: '₹99',
+      originalOneTimePrice: '₹199',
       description: 'Most popular for job seekers',
       features: [
         'Unlimited Resume Audits',
@@ -246,6 +281,9 @@ export default function PricingPage() {
         ? null 
         : (paymentType === 'subscription' ? handleProUpgrade : handleOneTimePayment),
       popular: true,
+      onSale: true,
+      salePercentage: 50,
+      saleEndDate: 'August 31, 2025',
       icon: Crown,
       color: 'var(--primary)',
       disabled: user?.isPremium,
@@ -253,7 +291,7 @@ export default function PricingPage() {
     },
     {
       name: 'AI Assistant',
-      price: '₹499/m',
+      price: '₹499',
       description: 'Coming soon - AI-powered career guidance',
       features: [
         'Everything in Pro',
@@ -423,11 +461,22 @@ export default function PricingPage() {
                   ? 'border-purple-500 scale-105' 
                   : 'border-gray-100'
               } overflow-hidden`}
-            >
-              {plan.popular && (
+            >              {plan.popular && !plan.onSale && (
                 <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-purple-600 to-blue-600 text-white text-center py-2 text-sm font-medium">
                   <Star className="w-4 h-4 inline mr-1" />
                   Most Popular
+                </div>
+              )}
+                {plan.onSale && (
+                <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-red-500 via-pink-500 to-orange-500 text-white text-center py-3 text-sm font-bold sale-glow">
+                  <div className="flex items-center justify-center space-x-2 sale-bounce">
+                    <span className="text-lg animate-bounce">🔥</span>
+                    <span className="text-base font-extrabold tracking-wide">{plan.salePercentage}% OFF</span>
+                    <span className="text-lg animate-bounce">🔥</span>
+                  </div>
+                  <div className="text-xs opacity-90 mt-1 font-medium">
+                    Limited Time - Ends {plan.saleEndDate}
+                  </div>
                 </div>
               )}
               
@@ -438,7 +487,7 @@ export default function PricingPage() {
                 </div>
               )}
 
-              <div className={`p-8 ${plan.popular || plan.comingSoon ? 'pt-12' : ''}`}>                <div className="text-center mb-6">
+              <div className={`p-8 ${plan.popular || plan.comingSoon ? 'pt-16' : ''} ${plan.onSale ? 'pt-22' : '' }`}>                <div className="text-center mb-6">
                   <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
                   <p className="text-gray-600 mb-4">{plan.description}</p>
                   <div className="mb-4">
@@ -469,15 +518,44 @@ export default function PricingPage() {
                             </button>
                           </div>
                         </div>
-                        
-                        {/* Price Display */}
+                          {/* Price Display */}
                         <div className="transition-all duration-300">
-                          <span className="text-4xl font-bold text-gray-900">
-                            {paymentType === 'subscription' ? plan.price : plan.oneTimePrice}
-                          </span>
-                          <span className="text-gray-600 ml-1">
-                            {paymentType === 'subscription' ? '/month' : '/30 days'}
-                          </span>
+                          {plan.onSale ? (
+                            <div className="space-y-2">
+                              {/* Original Price (Strikethrough) */}
+                              <div className="text-center">
+                                <span className="text-2xl font-bold text-red-500 line-through opacity-75">
+                                  {paymentType === 'subscription' ? plan.originalPrice : plan.originalOneTimePrice}
+                                </span>
+                                <span className="text-red-500 ml-1 text-sm line-through opacity-75">
+                                  {paymentType === 'subscription' ? '/month' : '/30 days'}
+                                </span>
+                              </div>
+                              {/* Discounted Price */}
+                              <div className="text-center">
+                                <span className="text-4xl font-bold text-green-600">
+                                  {paymentType === 'subscription' ? plan.price : plan.oneTimePrice}
+                                </span>
+                                <span className="text-green-600 ml-1 font-semibold">
+                                  {paymentType === 'subscription' ? '/month' : '/30 days'}
+                                </span>
+                              </div>                              {/* Savings Badge */}
+                              <div className="inline-flex items-center justify-center w-full">
+                                <span className="savings-shine text-green-700 px-4 py-2 rounded-full text-sm font-bold border-2 border-green-300 shadow-lg">
+                                  💰 Save ₹{parseInt(plan.originalPrice.replace('₹', '')) - parseInt(plan.price.replace('₹', ''))} this month!
+                                </span>
+                              </div>
+                            </div>
+                          ) : (
+                            <div>
+                              <span className="text-4xl font-bold text-gray-900">
+                                {paymentType === 'subscription' ? plan.price : plan.oneTimePrice}
+                              </span>
+                              <span className="text-gray-600 ml-1">
+                                {paymentType === 'subscription' ? '/month' : '/30 days'}
+                              </span>
+                            </div>
+                          )}
                         </div>
                         
                         {/* Payment Type Benefits */}
@@ -488,12 +566,39 @@ export default function PricingPage() {
                             <span>🚀 One-time payment + 30 days access</span>
                           )}
                         </div>
-                      </div>
-                    ) : (
+                      </div>                    ) : (
                       <div>
-                        <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
-                        {plan.price !== '₹0' && (
-                          <span className="text-gray-600 ml-1">/month</span>
+                        {plan.onSale ? (
+                          <div className="space-y-2">
+                            {/* Original Price (Strikethrough) */}
+                            <div className="text-center">
+                              <span className="text-2xl font-bold text-red-500 line-through opacity-75">
+                                {plan.originalPrice}
+                              </span>
+                              {plan.originalPrice !== '₹0' && (
+                                <span className="text-red-500 ml-1 text-sm line-through opacity-75">/month</span>
+                              )}
+                            </div>
+                            {/* Discounted Price */}
+                            <div className="text-center">
+                              <span className="text-4xl font-bold text-green-600">{plan.price}</span>
+                              {plan.price !== '₹0' && (
+                                <span className="text-green-600 ml-1 font-semibold">/month</span>
+                              )}
+                            </div>                            {/* Savings Badge */}
+                            <div className="inline-flex items-center justify-center w-full">
+                              <span className="savings-shine text-green-700 px-4 py-2 rounded-full text-sm font-bold border-2 border-green-300 shadow-lg">
+                                💰 Save ₹{parseInt(plan.originalPrice.replace('₹', '')) - parseInt(plan.price.replace('₹', ''))} this month!
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div>
+                            <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                            {plan.price !== '₹0' && (
+                              <span className="text-gray-600 ml-1">/month</span>
+                            )}
+                          </div>
                         )}
                       </div>
                     )}
@@ -643,7 +748,7 @@ export default function PricingPage() {
         }}
         onContactSupport={() => {
           // You can implement contact support functionality here
-          window.open('mailto:support@hirelift.com?subject=Payment Issue', '_blank');
+          window.open('mailto:hirelift01@gmail.com?subject=Payment Issue', '_blank');
         }}
       />
 

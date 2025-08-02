@@ -118,6 +118,53 @@ export function AuthProvider({ children }) {
       setError(typeof error === 'string' ? error : (error.message || 'Sign out failed'));
     }
   };
+  // Validate stored token and user data
+  const validateAndRefreshUser = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('🔍 No token found, clearing user data');
+        setUser(null);
+        return false;
+      }
+
+      console.log('🔄 Validating stored token...');
+      
+      const res = await fetch('/api/auth/me', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      
+      if (!res.ok) {
+        console.error('❌ Token validation failed:', res.status, res.statusText);
+        // Clear invalid token and user data
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        setUser(null);
+        return false;
+      }
+      
+      const data = await res.json();
+      
+      if (data.user) {
+        console.log('✅ Token validated, user data refreshed');
+        setUser(data.user);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        return true;
+      } else {
+        console.warn('⚠️ No user data in response');
+        setUser(null);
+        return false;
+      }
+    } catch (err) {
+      console.error('❌ Error validating token:', err);
+      // Clear potentially corrupted data
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      setUser(null);
+      return false;
+    }
+  };
+
   // Refetch user from backend with better error handling
   const refetchUser = async () => {
     try {
@@ -158,7 +205,6 @@ export function AuthProvider({ children }) {
       console.error('❌ Error refetching user:', err);
     }
   };
-
   // Check auth state on mount
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -166,25 +212,23 @@ export function AuthProvider({ children }) {
         // User is signed in with Firebase
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-          setUser(JSON.parse(storedUser));
+          try {
+            setUser(JSON.parse(storedUser));
+          } catch (error) {
+            console.error('Error parsing stored user data:', error);
+            localStorage.removeItem('user');
+            setUser(null);
+          }
         }
       } else {
-        // Check for stored JWT token
-        const token = localStorage.getItem('token');
-        const storedUser = localStorage.getItem('user');
-        
-        if (token && storedUser) {
-          setUser(JSON.parse(storedUser));
-        } else {
-          setUser(null);
-        }
+        // Check for stored JWT token and validate it
+        await validateAndRefreshUser();
       }
       setLoading(false);
     });
 
     return () => unsubscribe();
   }, []);
-
   const value = {
     user,
     loading,
@@ -194,7 +238,8 @@ export function AuthProvider({ children }) {
     signUpWithEmail,
     signOutUser,
     setError,
-    refetchUser, // <-- add this
+    refetchUser,
+    validateAndRefreshUser,
   };
 
   return (

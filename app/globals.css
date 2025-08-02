@@ -305,3 +305,83 @@ body {
   -webkit-line-clamp: 3;
   line-clamp: 3;
 }
+
+/* Extra Small (xs) breakpoint utilities for mobile responsiveness */
+@media (min-width: 475px) {
+  .xs\:flex-row {
+    flex-direction: row;
+  }
+  
+  .xs\:flex-none {
+    flex: none;
+  }
+  
+  .xs\:w-auto {
+    width: auto;
+  }
+  
+  .xs\:text-left {
+    text-align: left;
+  }
+  
+  .xs\:items-center {
+    align-items: center;
+  }
+  
+  .xs\:justify-start {
+    justify-content: flex-start;
+  }
+  
+  .xs\:inline {
+    display: inline;
+  }
+}
+
+/* Sale Badge Animations */
+@keyframes sale-glow {
+  0% {
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.8), 0 0 30px rgba(236, 72, 153, 0.6);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
+  }
+}
+
+@keyframes sale-bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-3px);
+  }
+  60% {
+    transform: translateY(-2px);
+  }
+}
+
+.sale-glow {
+  animation: sale-glow 2s ease-in-out infinite;
+}
+
+.sale-bounce {
+  animation: sale-bounce 2s ease-in-out infinite;
+}
+
+/* Savings badge shine effect */
+@keyframes shine {
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+.savings-shine {
+  background: linear-gradient(90deg, #dcfce7, #bbf7d0, #86efac, #bbf7d0, #dcfce7);
+  background-size: 200% 100%;
+  animation: shine 3s ease-in-out infinite;
+}

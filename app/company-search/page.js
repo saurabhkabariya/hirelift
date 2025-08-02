@@ -1,6 +1,9 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/contexts/AuthContext";
+import toast, { Toaster } from 'react-hot-toast';
 import CompanyCard from "@/components/CompanyCard";
 import sampleCompanies from "@/data/sampleCompanies.json";
 import HIRING_ROLES from "@/data/hiringRoles";
@@ -26,13 +29,16 @@ const POPULAR_ROLES = [
 ];
 
 export default function CompanySearchPage() {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  
   const [role, setRole] = useState("");
   const [mode, setMode] = useState("");
   const [exp, setExp] = useState("");
   const [companies, setCompanies] = useState([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [loading2, setLoading2] = useState(false);
   const [touched, setTouched] = useState(false);const [showRoleDropdown, setShowRoleDropdown] = useState(false);
   const [showModeDropdown, setShowModeDropdown] = useState(false);
   const [showExpDropdown, setShowExpDropdown] = useState(false);
@@ -43,6 +49,119 @@ export default function CompanySearchPage() {
   const dropdownRef = useRef(null);
   const modeDropdownRef = useRef(null);
   const expDropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowRoleDropdown(false);
+      }
+      if (modeDropdownRef.current && !modeDropdownRef.current.contains(event.target)) {
+        setShowModeDropdown(false);
+      }
+      if (expDropdownRef.current && !expDropdownRef.current.contains(event.target)) {
+        setShowExpDropdown(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);  
+
+      useEffect(() => {
+    setLoading2(true);
+    const params = new URLSearchParams();
+    if (role) params.append("role", role);
+    if (mode) params.append("mode", mode);
+    if (exp) params.append("exp", exp);
+    params.append("page", page.toString());
+    params.append("limit", PAGE_SIZE.toString());
+    fetch(`/api/companies?${params.toString()}`)
+      .then((res) => res.json())      .then((data) => {
+        setCompanies(data.data || []);
+        setTotal(data.total || 0);
+        setLoading2(false);      })
+      .catch(() => setLoading2(false));
+  }, [role, mode, exp, page]);
+
+  // Check for premium access
+  useEffect(() => {
+    if (!loading && user) {
+      if (!user.isPremium) {
+        toast.error('🚀 Company Search is a Pro feature!', {
+          duration: 4000,
+          position: 'top-center',
+          style: {
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white',
+            fontWeight: 'bold',
+            padding: '16px 24px',
+            borderRadius: '12px',
+            boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
+          },
+          icon: '👑',
+        });
+        
+        // Redirect to pricing page after a short delay
+        setTimeout(() => {
+          router.push('/pricing');
+        }, 2000);
+        
+        return; // Don't initialize the rest of the component
+      }
+    }
+  }, [user, loading, router]);
+
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <Toaster />
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show access denied for non-premium users
+  if (user && !user.isPremium) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <Toaster />
+        <div className="text-center max-w-md mx-auto p-8">
+          <div className="w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m0 0v2m0-2h2m-2 0H10m4-2a9 9 0 10-8 0"/>
+            </svg>
+          </div>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Company Search - Pro Feature</h1>
+          <p className="text-gray-600 mb-6">Access thousands of companies hiring for your role with our Pro plan!</p>
+          <Link href="/pricing">
+            <button className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:shadow-lg transition-all">
+              Upgrade to Pro
+            </button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // If user is not logged in, redirect to auth
+  if (!user) {
+    router.push('/auth');
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <Toaster />
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Redirecting to login...</p>
+        </div>
+      </div>
+    );
+  }
 
   // Animation variants
   const containerVariants = {
@@ -75,24 +194,7 @@ export default function CompanySearchPage() {
     r.toLowerCase().includes(roleSearchTerm.toLowerCase())
   );
   // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setShowRoleDropdown(false);
-      }
-      if (modeDropdownRef.current && !modeDropdownRef.current.contains(event.target)) {
-        setShowModeDropdown(false);
-      }
-      if (expDropdownRef.current && !expDropdownRef.current.contains(event.target)) {
-        setShowExpDropdown(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);  const handleRoleSelect = (selectedRole) => {
+  const handleRoleSelect = (selectedRole) => {
     setRole(selectedRole);
     setTouched(true);
     setShowRoleDropdown(false);
@@ -124,24 +226,11 @@ export default function CompanySearchPage() {
   };
   // Calculate total pages
   const totalPages = Math.ceil(total / PAGE_SIZE);
-    useEffect(() => {
-    setLoading(true);
-    const params = new URLSearchParams();
-    if (role) params.append("role", role);
-    if (mode) params.append("mode", mode);
-    if (exp) params.append("exp", exp);
-    params.append("page", page.toString());
-    params.append("limit", PAGE_SIZE.toString());
-    fetch(`/api/companies?${params.toString()}`)
-      .then((res) => res.json())      .then((data) => {
-        setCompanies(data.data || []);
-        setTotal(data.total || 0);
-        setLoading(false);      })
-      .catch(() => setLoading(false));
-  }, [role, mode, exp, page]);
-  
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">      {/* Enhanced Navigation Bar */}
+
+    return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+      <Toaster />
+      {/* Enhanced Navigation Bar */}
       <motion.nav 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -608,7 +697,7 @@ export default function CompanySearchPage() {
         >
           {/* Results Counter */}
           <AnimatePresence>
-            {!loading && (
+            {!loading2 && (
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -634,7 +723,7 @@ export default function CompanySearchPage() {
               </motion.div>
             )}
           </AnimatePresence>          {/* Company Results */}
-          {loading ? (
+          {loading2 ? (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

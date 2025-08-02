@@ -51,20 +51,19 @@ const TemplateEditor = ({ template, onEdit, onSave }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="bg-white/80 backdrop-blur-lg rounded-3xl border border-white/20 shadow-xl overflow-hidden"
-    >
-      {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-6 text-white">
-        <div className="flex items-center justify-between">
+    >      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-4 sm:p-6 text-white">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <h3 className="text-xl font-bold">Template Editor</h3>
-            <p className="text-blue-100 mt-1">Customize your {template.templateType} template</p>
+            <h3 className="text-lg sm:text-xl font-bold">Template Editor</h3>
+            <p className="text-blue-100 mt-1 text-sm">Customize your {template.templateType} template</p>
           </div>
-          <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-3 w-full sm:w-auto">
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={copyToClipboard}
-              className="px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
+              className="w-full sm:w-auto px-4 py-2 bg-white/20 hover:bg-white/30 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
@@ -76,7 +75,7 @@ const TemplateEditor = ({ template, onEdit, onSave }) => {
               whileTap={{ scale: 0.95 }}
               onClick={handleSave}
               disabled={isSaving}
-              className="px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-green-400 rounded-xl text-sm font-medium transition-colors flex items-center gap-2"
+              className="w-full sm:w-auto px-4 py-2 bg-green-500 hover:bg-green-600 disabled:bg-green-400 rounded-xl text-sm font-medium transition-colors flex items-center justify-center gap-2"
             >
               {isSaving ? (
                 <svg className="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
@@ -92,14 +91,12 @@ const TemplateEditor = ({ template, onEdit, onSave }) => {
             </motion.button>
           </div>
         </div>
-      </div>
-
-      {/* Tabs */}
-      <div className="border-b border-gray-200">
-        <div className="flex">
+      </div>      {/* Tabs */}
+      <div className="border-b border-gray-200 overflow-x-auto">
+        <div className="flex min-w-max">
           <button
             onClick={() => setActiveTab('content')}
-            className={`px-6 py-4 text-sm font-medium transition-colors ${
+            className={`px-4 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors whitespace-nowrap ${
               activeTab === 'content'
                 ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50'
                 : 'text-gray-600 hover:text-gray-800'
@@ -109,7 +106,7 @@ const TemplateEditor = ({ template, onEdit, onSave }) => {
           </button>
           <button
             onClick={() => setActiveTab('variables')}
-            className={`px-6 py-4 text-sm font-medium transition-colors ${
+            className={`px-4 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors whitespace-nowrap ${
               activeTab === 'variables'
                 ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50'
                 : 'text-gray-600 hover:text-gray-800'
@@ -119,7 +116,7 @@ const TemplateEditor = ({ template, onEdit, onSave }) => {
           </button>
           <button
             onClick={() => setActiveTab('settings')}
-            className={`px-6 py-4 text-sm font-medium transition-colors ${
+            className={`px-4 sm:px-6 py-3 sm:py-4 text-sm font-medium transition-colors whitespace-nowrap ${
               activeTab === 'settings'
                 ? 'text-blue-600 border-b-2 border-blue-600 bg-blue-50/50'
                 : 'text-gray-600 hover:text-gray-800'
@@ -128,10 +125,8 @@ const TemplateEditor = ({ template, onEdit, onSave }) => {
             Settings
           </button>
         </div>
-      </div>
-
-      {/* Tab Content */}
-      <div className="p-6">
+      </div>      {/* Tab Content */}
+      <div className="p-4 sm:p-6">
         {activeTab === 'content' && (
           <div className="space-y-6">
             {/* Template Name */}
@@ -192,7 +187,7 @@ const TemplateEditor = ({ template, onEdit, onSave }) => {
                 Click on any variable to insert it at your cursor position in the template.
               </p>
               
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {commonVariables.map((variable) => (
                   <motion.button
                     key={variable}
@@ -214,8 +209,7 @@ const TemplateEditor = ({ template, onEdit, onSave }) => {
 
             {/* Custom Variable */}
             <div className="border-t pt-6">
-              <h5 className="font-medium text-gray-800 mb-3">Custom Variable</h5>
-              <div className="flex gap-3">
+              <h5 className="font-medium text-gray-800 mb-3">Custom Variable</h5>              <div className="flex flex-col sm:flex-row gap-3">
                 <input
                   type="text"
                   placeholder="variableName"
@@ -235,7 +229,7 @@ const TemplateEditor = ({ template, onEdit, onSave }) => {
                       input.value = '';
                     }
                   }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
+                  className="w-full sm:w-auto px-4 py-2 bg-blue-600 text-white rounded-xl hover:bg-blue-700 transition-colors"
                 >
                   Insert
                 </button>
