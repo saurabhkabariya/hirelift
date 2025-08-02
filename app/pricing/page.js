@@ -32,7 +32,7 @@ export default function PricingPage() {
   const [loadingSubscription, setLoadingSubscription] = useState(false);
   const [paymentError, setPaymentError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
-  const [paymentType, setPaymentType] = useState('subscription'); // 'subscription' or 'onetime'
+  const [paymentType, setPaymentType] = useState('onetime'); // 'subscription' or 'onetime'
 
   // Fetch current subscription status
   useEffect(() => {

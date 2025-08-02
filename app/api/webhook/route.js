@@ -133,11 +133,14 @@ async function handleSubscriptionActivated(payload) {
     created_at: Date.now() / 1000,
     subscription: subscription
   });
-
-  // Update user premium status
+  // Update user premium status with proper subscription tracking
+  const now = new Date();
   await User.findByIdAndUpdate(dbSubscription.userId, {
     isPremium: true,
-    updatedAt: new Date()
+    proPlanType: 'subscription',
+    purchaseDate: now, // Update purchase date when subscription activates
+    expiryDate: null, // Subscriptions are managed by webhook events
+    updatedAt: now
   });
 
   console.log('✅ Subscription activated and user upgraded to premium:', subscription.id);
@@ -166,11 +169,13 @@ async function handleSubscriptionCharged(payload) {
     created_at: Date.now() / 1000,
     subscription: subscription
   });
-
-  // Ensure user remains premium
+  // Ensure user remains premium with proper subscription tracking
+  const now = new Date();
   await User.findByIdAndUpdate(dbSubscription.userId, {
     isPremium: true,
-    updatedAt: new Date()
+    proPlanType: 'subscription', // Ensure this is always set for subscription users
+    expiryDate: null, // Subscriptions are managed by webhooks
+    updatedAt: now
   });
 
   console.log('✅ Subscription charged successfully:', subscription.id, 'Payment:', payment?.id);
@@ -235,11 +240,13 @@ async function handleSubscriptionCancelled(payload) {
     endAt: { $gt: new Date() },
     _id: { $ne: dbSubscription._id }
   });
-
   if (!hasOtherActiveSubscriptions) {
+    const now = new Date();
     await User.findByIdAndUpdate(dbSubscription.userId, {
       isPremium: false,
-      updatedAt: new Date()
+      proPlanType: null, // Clear subscription type
+      expiryDate: null, // Clear expiry date
+      updatedAt: now
     });
     console.log('✅ User premium status revoked due to subscription cancellation');
   }
@@ -297,12 +304,14 @@ async function handleSubscriptionResumed(payload) {
     created_at: Date.now() / 1000,
     subscription: subscription
   });
-
   // Restore premium status if subscription is active
   if (subscription.status === 'active') {
+    const now = new Date();
     await User.findByIdAndUpdate(dbSubscription.userId, {
       isPremium: true,
-      updatedAt: new Date()
+      proPlanType: 'subscription', // Ensure subscription type is set
+      expiryDate: null, // Subscriptions are managed by webhooks
+      updatedAt: now
     });
   }
 

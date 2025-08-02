@@ -86,12 +86,16 @@ async function verifyPaymentHandler(request) {
         updatedAt: new Date()
       });
 
-      // Update user premium status immediately
+      // Update user premium status immediately with proper subscription tracking
+      const now = new Date();
       const updatedUser = await User.findByIdAndUpdate(
         user._id,
         {
           isPremium: true,
-          updatedAt: new Date()
+          proPlanType: 'subscription', // Mark as subscription-based premium
+          purchaseDate: now, // Track when subscription was activated
+          expiryDate: null, // Subscriptions don't have fixed expiry (managed by webhooks)
+          updatedAt: now
         },
         { new: true }
       );
@@ -110,9 +114,10 @@ async function verifyPaymentHandler(request) {
         subscription: {
           id: subscription._id,
           status: razorpaySubscription.status,
-          razorpaySubscriptionId: razorpay_subscription_id
-        }
-      });    } else {
+          razorpaySubscriptionId: razorpay_subscription_id        }
+      });
+
+    } else {
       console.log('⚠️ Payment verification failed - subscription status not recognized');
       console.log('📊 Status details:', {
         currentStatus: razorpaySubscription.status,
