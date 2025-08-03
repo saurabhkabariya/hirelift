@@ -251,7 +251,7 @@ export default function DashboardPage() {
 
             <div className="pt-4 border-t border-[var(--gray-300)] border-opacity-20">
               <p className="text-[var(--gray-600)]">
-                Audit Count: <span className="font-semibold text-[var(--primary)]">{user.auditCount || 0}</span>
+                Audit Count: <span className="font-semibold text-[var(--primary)]">{user.isPremium? '(unlimited)' : user.auditCount || 0}</span>
               </p>
             </div>
           </div>

@@ -227,7 +227,7 @@ export default function ResumeAuditPage() {
           {/* Show audit count and premium status */}
           <div className="mt-4 flex flex-col items-center gap-1 animate-fade-in">
             <span className="text-blue-700 font-semibold text-base">{isPremium ? "Premium User" : "Free User"}</span>
-            <span className="text-gray-600 text-sm">Audits used: {auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}</span>
+            <span className="text-gray-600 text-sm">Audits used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}</span>
           </div>
         </div>
         <form
