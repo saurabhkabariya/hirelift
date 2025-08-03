@@ -1010,7 +1010,7 @@ function ATSScoreAnimation({ score }) {
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="relative w-56 h-56 bg-white rounded-3xl shadow-2xl p-6 border border-gray-200"
+        className="relative w-62 h-62 bg-white rounded-3xl shadow-2xl p-6 border border-gray-200"
       >
         <div className="text-center">
           <h3 className="text-lg font-bold text-gray-900 mb-4">Your ATS Score</h3>

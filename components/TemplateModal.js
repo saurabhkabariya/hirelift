@@ -18,12 +18,13 @@ const TemplateModal = ({
     portfolioLink: "https://yourportfolio.com",
     githubProfile: "https://github.com/yourusername"
   }
-}) => {
-  const [selectedTemplate, setSelectedTemplate] = useState(null);
+}) => {  const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [templateType, setTemplateType] = useState('email'); // 'email' or 'linkedin'
   const [editableFields, setEditableFields] = useState({});
   const [activeTab, setActiveTab] = useState('roleSpecific');
-  const [copySuccess, setCopySuccess] = useState(false);  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [isAdvancedOpen, setIsAdvancedOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(true);
   const textareaRef = useRef(null);
   
   // Portal container for rendering modal outside of parent containers
@@ -185,115 +186,123 @@ const TemplateModal = ({
 
   const modalContent = (
     <AnimatePresence>
-      {isOpen && (
-        <motion.div
+      {isOpen && (        <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start xl:items-center justify-center overflow-auto"
           style={{ pointerEvents: 'auto', zIndex: 10000 }}
           onClick={onClose}
-        >
-          <motion.div
+        >          <motion.div
             initial={{ scale: 0.8, opacity: 0, y: 50 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.8, opacity: 0, y: 50 }}
-            transition={{ type: "spring", damping: 25, stiffness: 300 }}
-            className="bg-white rounded-3xl shadow-2xl overflow-hidden flex flex-col"
-            style={{ 
-              width: '96vw', 
-              height: '96vh', 
-              maxWidth: 'none',
-              maxHeight: 'none',
-              margin: '2vh 2vw'
-            }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}            className="bg-white shadow-2xl overflow-hidden flex flex-col w-full h-full max-w-none max-h-none m-0 rounded-none xl:w-[90vw] xl:h-[90vh] xl:max-w-7xl xl:max-h-[90vh] xl:rounded-3xl xl:m-4 xl:min-h-[600px]"
             onClick={e => e.stopPropagation()}
-          >{/* Header */}
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-8 py-6 flex-shrink-0">
+          >{/* Header */}            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-4 py-4 md:px-6 md:py-6 lg:px-8 flex-shrink-0">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-6">
-                  <div className="w-16 h-16 bg-white/20 rounded-2xl flex items-center justify-center backdrop-blur-sm">
-                    <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div className="flex items-center gap-3 md:gap-6 min-w-0 flex-1">
+                  <div className="w-10 h-10 md:w-12 md:h-12 lg:w-16 lg:h-16 bg-white/20 rounded-xl md:rounded-2xl flex items-center justify-center backdrop-blur-sm flex-shrink-0">
+                    <svg className="w-5 h-5 md:w-6 md:h-6 lg:w-8 lg:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
-                  <div>
-                    <h2 className="text-3xl font-bold mb-1">Cold Outreach Templates</h2>
-                    <p className="text-blue-100 text-lg">
+                  <div className="min-w-0 flex-1">
+                    <h2 className="text-lg md:text-xl lg:text-3xl font-bold mb-1 truncate">Cold Outreach Templates</h2>
+                    <p className="text-blue-100 text-sm md:text-base lg:text-lg truncate">
                       {company.companyName} • {selectedRole}
                     </p>
                   </div>
                 </div>
                 <button
                   onClick={onClose}
-                  className="w-12 h-12 rounded-2xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all hover:scale-110"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-white/10 hover:bg-white/20 flex items-center justify-center transition-all hover:scale-110 flex-shrink-0 ml-2"                >
+                  <svg className="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
                   </svg>
                 </button>
               </div>
             </div>            {/* Main Content */}
-            <div className="flex flex-1 overflow-hidden">
-              {/* Left Sidebar - Template Selection */}
-              <div className="w-96 border-r border-gray-200 bg-gray-50/50 flex flex-col">
-                <div className="p-6 border-b border-gray-200 bg-white">
+            <div className="flex flex-col xl:flex-row flex-1 overflow-hidden">              {/* Left Sidebar - Template Selection */}
+              <div className={`w-full xl:w-80 2xl:w-96 border-b xl:border-b-0 xl:border-r border-gray-200 bg-gray-50/50 flex flex-col xl:max-h-none transition-all duration-300 ${
+                selectedTemplate && !isMobileSidebarOpen ? 'max-h-16' : 'max-h-80'
+              }`}>
+                {/* Mobile Toggle Header */}
+                <div className="xl:hidden bg-white border-b border-gray-200 p-4 flex items-center justify-between">
+                  <h3 className="font-semibold text-gray-800">
+                    {selectedTemplate ? selectedTemplate.name : 'Select Template'}
+                  </h3>
+                  {selectedTemplate && (
+                    <button
+                      onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+                      className="text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      {isMobileSidebarOpen ? 'Hide' : 'Change'}
+                    </button>
+                  )}
+                </div>
+                
+                <div className={`flex flex-col flex-1 transition-all duration-300 ${
+                  selectedTemplate && !isMobileSidebarOpen ? 'xl:flex hidden' : 'flex'
+                }`}>
+                  <div className="p-4 md:p-6 border-b border-gray-200 bg-white flex-shrink-0">
                   {/* Template Type Toggle */}
-                  <div className="flex bg-gray-100 rounded-2xl p-1.5 mb-6">
+                  <div className="flex bg-gray-100 rounded-xl md:rounded-2xl p-1 mb-4 md:mb-6">
                     <button
                       onClick={() => setTemplateType('email')}
-                      className={`flex-1 py-3 px-5 rounded-xl text-base font-medium transition-all flex items-center justify-center gap-3 ${
+                      className={`flex-1 py-2.5 md:py-3 px-3 md:px-5 rounded-lg md:rounded-xl text-sm md:text-base font-medium transition-all flex items-center justify-center gap-2 md:gap-3 ${
                         templateType === 'email'
                           ? 'bg-white text-blue-600 shadow-md'
                           : 'text-gray-600 hover:text-gray-800'
                       }`}
                     >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                       </svg>
-                      Email
+                      <span>Email</span>
                     </button>
                     <button
                       onClick={() => setTemplateType('linkedin')}
-                      className={`flex-1 py-3 px-5 rounded-xl text-base font-medium transition-all flex items-center justify-center gap-3 ${
+                      className={`flex-1 py-2.5 md:py-3 px-3 md:px-5 rounded-lg md:rounded-xl text-sm md:text-base font-medium transition-all flex items-center justify-center gap-2 md:gap-3 ${
                         templateType === 'linkedin'
                           ? 'bg-white text-blue-600 shadow-md'
                           : 'text-gray-600 hover:text-gray-800'
                       }`}
                     >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 md:w-5 md:h-5" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                       </svg>
-                      LinkedIn
+                      <span>LinkedIn</span>
                     </button>
-                  </div>                  {/* Template Category Tabs */}
-                  <div className="flex bg-gray-100 rounded-2xl p-1.5">
+                  </div>
+
+                  {/* Template Category Tabs */}
+                  <div className="flex bg-gray-100 rounded-xl md:rounded-2xl p-1">
                     {templates.roleSpecific && templates.roleSpecific[templateType] && templates.roleSpecific[templateType].length > 0 && (
                       <button
                         onClick={() => setActiveTab('roleSpecific')}
-                        className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all ${
+                        className={`flex-1 py-2 md:py-2.5 px-2 md:px-4 rounded-lg md:rounded-xl text-sm font-medium transition-all ${
                           activeTab === 'roleSpecific'
                             ? 'bg-white text-blue-600 shadow-md'
                             : 'text-gray-600 hover:text-gray-800'
                         }`}
                       >
-                        🎯 Role-Specific
+                        🎯 <span>Role-Specific</span>
                       </button>
                     )}
                     <button
                       onClick={() => setActiveTab('general')}
-                      className={`flex-1 py-2.5 px-4 rounded-xl text-sm font-medium transition-all ${
+                      className={`flex-1 py-2 md:py-2.5 px-2 md:px-4 rounded-lg md:rounded-xl text-sm font-medium transition-all ${
                         activeTab === 'general'
                           ? 'bg-white text-blue-600 shadow-md'
                           : 'text-gray-600 hover:text-gray-800'
                       }`}
                     >
-                      📝 General
+                      📝 <span>General</span>
                     </button>
                   </div>
                 </div>                {/* Template List */}
-                <div className="flex-1 overflow-y-auto p-6">
-                  <div className="space-y-4">
+                <div className="flex-1 overflow-y-auto p-4 md:p-6 max-h-60 xl:max-h-none min-h-0">                  <div className="space-y-3 md:space-y-4">
                     {(() => {
                       const roleSpecificTemplates = templates.roleSpecific || {};
                       const generalTemplates = templates.general || {};
@@ -304,35 +313,41 @@ const TemplateModal = ({
                       return currentTemplates.map((template) => (
                         <motion.button
                           key={template.id}
-                          whileHover={{ scale: 1.02, y: -2 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => setSelectedTemplate(template)}
-                          className={`w-full text-left p-5 rounded-2xl border transition-all relative overflow-hidden ${
+                          whileHover={{ scale: 1.01, y: -1 }}
+                          whileTap={{ scale: 0.99 }}
+                          onClick={() => {
+                            setSelectedTemplate(template);
+                            // Auto-hide sidebar on mobile when template is selected
+                            if (window.innerWidth < 1280) {
+                              setIsMobileSidebarOpen(false);
+                            }
+                          }}
+                          className={`w-full text-left p-3 md:p-5 rounded-xl md:rounded-2xl border transition-all relative overflow-hidden ${
                             selectedTemplate?.id === template.id
                               ? 'border-blue-300 bg-blue-50 shadow-lg'
                               : 'border-gray-200 hover:border-gray-300 hover:shadow-md bg-white'
                           }`}
                         >
                           {selectedTemplate?.id === template.id && (
-                            <div className="absolute top-0 left-0 w-1.5 h-full bg-blue-500 rounded-r"></div>
+                            <div className="absolute top-0 left-0 w-1 md:w-1.5 h-full bg-blue-500 rounded-r"></div>
                           )}
-                          <h3 className={`font-semibold text-base mb-3 ${
+                          <h3 className={`font-semibold text-sm md:text-base mb-2 md:mb-3 ${
                             selectedTemplate?.id === template.id ? 'text-blue-700' : 'text-gray-800'
                           }`}>
                             {template.name}
                           </h3>
                           {template.subject && (
-                            <p className="text-sm text-gray-500 line-clamp-2 mb-3">
+                            <p className="text-sm text-gray-500 line-clamp-2 mb-2 md:mb-3">
                               {template.subject.replace(/{[^}]+}/g, '...')}
                             </p>
                           )}
                           <div className="flex items-center justify-between">
-                            <span className={`text-sm px-3 py-1.5 rounded-full font-medium ${
+                            <span className={`text-sm px-2 md:px-3 py-1 md:py-1.5 rounded-full font-medium ${
                               templateType === 'email' 
                                 ? 'bg-green-100 text-green-700'
                                 : 'bg-blue-100 text-blue-700'
                             }`}>
-                              {templateType === 'email' ? '📧 Email' : '💼 LinkedIn'}
+                              {templateType === 'email' ? '📧' : '💼'} <span>{templateType === 'email' ? 'Email' : 'LinkedIn'}</span>
                             </span>
                           </div>
                         </motion.button>
@@ -340,26 +355,27 @@ const TemplateModal = ({
                     })()}
                   </div>
                 </div>
+                </div>
               </div>{/* Right Side - Template Preview and Customization */}
-              <div className="flex-1 flex flex-col overflow-hidden">
+              <div className="flex-1 flex flex-col overflow-hidden min-h-0">
                 {selectedTemplate ? (
                   <>                    {/* Template Header with Copy Button */}
-                    <div className="bg-white border-b border-gray-200 px-8 py-6">
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                    <div className="bg-white border-b border-gray-200 px-4 py-4 md:px-8 md:py-6 flex-shrink-0">
+                      <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="text-xl md:text-2xl font-bold text-gray-800 flex items-center gap-3 mb-2">
                             {templateType === 'email' ? (
-                              <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-5 h-5 md:w-6 md:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                               </svg>
                             ) : (
-                              <svg className="w-6 h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-5 h-5 md:w-6 md:h-6 text-blue-600" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                               </svg>
                             )}
-                            {selectedTemplate.name}
+                            <span className="truncate">{selectedTemplate.name}</span>
                           </h3>
-                          <p className="text-gray-500 text-base mt-2">
+                          <p className="text-gray-500 text-sm md:text-base">
                             {templateType === 'email' ? 'Email Template' : 'LinkedIn Message Template'}
                           </p>
                         </div>
@@ -367,7 +383,7 @@ const TemplateModal = ({
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
                           onClick={copyToClipboard}
-                          className={`flex items-center gap-3 px-8 py-4 rounded-2xl font-semibold text-lg transition-all ${
+                          className={`flex items-center justify-center gap-2 md:gap-3 px-6 py-3 md:px-8 md:py-4 rounded-xl md:rounded-2xl font-semibold text-base md:text-lg transition-all w-full md:w-auto ${
                             copySuccess 
                               ? 'bg-green-500 text-white'
                               : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white hover:shadow-xl'
@@ -375,14 +391,14 @@ const TemplateModal = ({
                         >
                           {copySuccess ? (
                             <>
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                               </svg>
                               Copied!
                             </>
                           ) : (
                             <>
-                              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <svg className="w-4 h-4 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
                               </svg>
                               Copy to Clipboard
@@ -391,43 +407,43 @@ const TemplateModal = ({
                         </motion.button>
                       </div>
                     </div>                    {/* Scrollable Content Area */}
-                    <div className="flex-1 overflow-y-auto">
-                      <div className="p-8 space-y-8">
+                    <div className="flex-1 overflow-y-auto min-h-0">
+                      <div className="p-4 md:p-8 space-y-6 md:space-y-8">
                         {/* Basic Information Form */}
-                        <div className="bg-white rounded-2xl border border-gray-200 p-8">
-                          <h4 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-3">
-                            <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="bg-white rounded-xl md:rounded-2xl border border-gray-200 p-4 md:p-8">
+                          <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-6 flex items-center gap-3">
+                            <svg className="w-5 h-5 md:w-6 md:h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                             Your Information
                           </h4>
-                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                             <div className="space-y-2">
-                              <label className="block text-base font-medium text-gray-700">Full Name *</label>
+                              <label className="block text-sm md:text-base font-medium text-gray-700">Full Name *</label>
                               <input
                                 type="text"
                                 placeholder="Your Full Name"
                                 value={editableFields.userName || userInfo.name}
                                 onChange={(e) => updateField('userName', e.target.value)}
-                                className="w-full px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className="w-full px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                               />
                             </div>
                             <div className="space-y-2">
-                              <label className="block text-base font-medium text-gray-700">Email Address *</label>
+                              <label className="block text-sm md:text-base font-medium text-gray-700">Email Address *</label>
                               <input
                                 type="email"
                                 placeholder="your.email@example.com"
                                 value={editableFields.userEmail || userInfo.email}
                                 onChange={(e) => updateField('userEmail', e.target.value)}
-                                className="w-full px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className="w-full px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                               />
                             </div>
                             <div className="space-y-2">
-                              <label className="block text-base font-medium text-gray-700">Experience Level</label>
+                              <label className="block text-sm md:text-base font-medium text-gray-700">Experience Level</label>
                               <select
                                 value={editableFields.experience || userInfo.experience}
                                 onChange={(e) => updateField('experience', e.target.value)}
-                                className="w-full px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className="w-full px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                               >
                                 <option value="Fresher">Fresher</option>
                                 <option value="0-1 years">0-1 years</option>
@@ -438,62 +454,62 @@ const TemplateModal = ({
                               </select>
                             </div>
                             <div className="space-y-2">
-                              <label className="block text-base font-medium text-gray-700">Your Skills</label>
+                              <label className="block text-sm md:text-base font-medium text-gray-700">Your Skills</label>
                               <input
                                 type="text"
                                 placeholder="React, Node.js, Python..."
                                 value={editableFields.skills || userInfo.skills}
                                 onChange={(e) => updateField('skills', e.target.value)}
-                                className="w-full px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className="w-full px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                               />
                             </div>
                           </div>
                         </div>
 
                         {/* Company Contact Information */}
-                        <div className="bg-white rounded-2xl border border-gray-200 p-8">
-                          <h4 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-3">
-                            <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="bg-white rounded-xl md:rounded-2xl border border-gray-200 p-4 md:p-8">
+                          <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-6 flex items-center gap-3">
+                            <svg className="w-5 h-5 md:w-6 md:h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                             </svg>
                             Company Details
                           </h4>
-                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                             <div className="space-y-2">
-                              <label className="block text-base font-medium text-gray-700">HR Contact Name</label>
+                              <label className="block text-sm md:text-base font-medium text-gray-700">HR Contact Name</label>
                               <input
                                 type="text"
                                 placeholder="HR Representative Name"
                                 value={editableFields.hrName || company.hrContacts?.[0]?.name || 'Hiring Manager'}
                                 onChange={(e) => updateField('hrName', e.target.value)}
-                                className="w-full px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className="w-full px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                               />
                             </div>
                             <div className="space-y-2">
-                              <label className="block text-base font-medium text-gray-700">LinkedIn Profile</label>
+                              <label className="block text-sm md:text-base font-medium text-gray-700">LinkedIn Profile</label>
                               <input
                                 type="url"
                                 placeholder="https://linkedin.com/in/yourprofile"
                                 value={editableFields.linkedinProfile || userInfo.linkedinProfile}
                                 onChange={(e) => updateField('linkedinProfile', e.target.value)}
-                                className="w-full px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
+                                className="w-full px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                               />
                             </div>
                           </div>
                         </div>                        {/* Advanced Customization */}
-                        <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+                        <div className="bg-white rounded-xl md:rounded-2xl border border-gray-200 overflow-hidden">
                           <button
                             onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
-                            className="w-full px-8 py-6 bg-gray-50 hover:bg-gray-100 transition-colors flex items-center justify-between"
+                            className="w-full px-4 py-4 md:px-8 md:py-6 bg-gray-50 hover:bg-gray-100 transition-colors flex items-center justify-between"
                           >
-                            <h4 className="text-xl font-semibold text-gray-800 flex items-center gap-3">
-                              <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <h4 className="text-lg md:text-xl font-semibold text-gray-800 flex items-center gap-3">
+                              <svg className="w-5 h-5 md:w-6 md:h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                               </svg>
                               Advanced Customization
                             </h4>
-                            <svg className={`w-6 h-6 text-gray-500 transition-transform ${isAdvancedOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg className={`w-5 h-5 md:w-6 md:h-6 text-gray-500 transition-transform ${isAdvancedOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                             </svg>
                           </button>
@@ -505,49 +521,49 @@ const TemplateModal = ({
                                 exit={{ height: 0, opacity: 0 }}
                                 className="overflow-hidden"
                               >
-                                <div className="p-8 bg-white">
-                                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                <div className="p-4 md:p-8 bg-white">
+                                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
                                     <input
                                       type="text"
                                       placeholder="Your Portfolio URL"
                                       value={editableFields.portfolioLink || userInfo.portfolioLink}
                                       onChange={(e) => updateField('portfolioLink', e.target.value)}
-                                      className="px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                      className="px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     />
                                     <input
                                       type="text"
                                       placeholder="GitHub Profile"
                                       value={editableFields.githubProfile || userInfo.githubProfile}
                                       onChange={(e) => updateField('githubProfile', e.target.value)}
-                                      className="px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                      className="px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     />
                                     <input
                                       type="text"
                                       placeholder="Key Achievement 1"
                                       value={editableFields.achievement1 || ''}
                                       onChange={(e) => updateField('achievement1', e.target.value)}
-                                      className="px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                      className="px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     />
                                     <input
                                       type="text"
                                       placeholder="Key Achievement 2"
                                       value={editableFields.achievement2 || ''}
                                       onChange={(e) => updateField('achievement2', e.target.value)}
-                                      className="px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                      className="px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     />
                                     <input
                                       type="text"
                                       placeholder="Tech Stack/Specialization"
                                       value={editableFields.techStack || ''}
                                       onChange={(e) => updateField('techStack', e.target.value)}
-                                      className="px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                      className="px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     />
                                     <input
                                       type="text"
                                       placeholder="Specific Interest Area"
                                       value={editableFields.specificArea || ''}
                                       onChange={(e) => updateField('specificArea', e.target.value)}
-                                      className="px-5 py-4 border border-gray-300 rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                      className="px-4 py-3 md:px-5 md:py-4 border border-gray-300 rounded-lg md:rounded-xl text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                     />
                                   </div>
                                 </div>
@@ -557,15 +573,15 @@ const TemplateModal = ({
                         </div>
 
                         {/* Template Preview */}
-                        <div className="bg-white rounded-2xl border border-gray-200 p-8">
-                          <h4 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-3">
-                            <svg className="w-6 h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div className="bg-white rounded-xl md:rounded-2xl border border-gray-200 p-4 md:p-8">
+                          <h4 className="text-lg md:text-xl font-semibold text-gray-800 mb-4 md:mb-6 flex items-center gap-3">
+                            <svg className="w-5 h-5 md:w-6 md:h-6 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                             </svg>
                             Preview
                           </h4>
-                          <div className="bg-gray-50 rounded-2xl p-6 border border-gray-200">
-                            <pre className="whitespace-pre-wrap text-base text-gray-800 font-mono leading-relaxed max-h-96 overflow-y-auto">
+                          <div className="bg-gray-50 rounded-xl md:rounded-2xl p-4 md:p-6 border border-gray-200">
+                            <pre className="whitespace-pre-wrap text-sm md:text-base text-gray-800 font-mono leading-relaxed max-h-64 md:max-h-96 overflow-y-auto">
                               {fillTemplate(selectedTemplate)}
                             </pre>
                           </div>
