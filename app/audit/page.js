@@ -24,24 +24,31 @@ export default function ResumeAuditPage() {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef();
   const { user, loading: userLoading, refetchUser } = useAuth();
-  const router = useRouter();
+  const router = useRouter();  // State for local audit count (for non-logged-in users)
   const [localAuditCount, setLocalAuditCount] = useState(() => {
     if (typeof window !== "undefined") {
       return parseInt(localStorage.getItem("auditCount") || "0", 10);
     }
     return 0;
   });
-  // --- Fix audit count display ---
-  const [displayAuditCount, setDisplayAuditCount] = useState(user?.auditCount ?? localAuditCount);
-  useEffect(() => {
-    setDisplayAuditCount(user?.auditCount ?? localAuditCount);
-  }, [user, localAuditCount]);
-  // --- End fix ---
 
-  
+  // State for real-time audit count display
+  const [currentAuditCount, setCurrentAuditCount] = useState(0);
+
+  // Update current audit count when user data changes or local count changes
+  useEffect(() => {
+    if (user && typeof user.auditCount === 'number') {
+      // For logged-in users, use server audit count
+      setCurrentAuditCount(user.auditCount);
+    } else {
+      // For non-logged-in users, use local audit count
+      setCurrentAuditCount(localAuditCount);
+    }
+  }, [user, localAuditCount]);
+
   // Helper: isPremium and auditCount
-  const isPremium = user?.isPremium;
-  const auditCount = displayAuditCount;
+  const isPremium = user?.isPremium || false;
+  const auditCount = currentAuditCount;
   
   // Show loading for audit count if user is loading
   const auditCountDisplay = userLoading ? '...' : auditCount;
@@ -70,13 +77,30 @@ export default function ResumeAuditPage() {
       pdfDiv.style.display = "none";
     }
   };
-
-  // Update local audit count after audit
+  // Update local audit count after successful audit
   const incrementLocalAuditCount = () => {
     if (typeof window !== "undefined") {
       const newCount = localAuditCount + 1;
       setLocalAuditCount(newCount);
       localStorage.setItem("auditCount", newCount.toString());
+      
+      // Update current audit count immediately for UI
+      if (!user) {
+        setCurrentAuditCount(newCount);
+      }
+    }
+  };
+
+  // Update audit count after successful audit for logged-in users
+  const updateUserAuditCount = async () => {
+    try {
+      await refetchUser();
+      // Force re-fetch user data to get updated audit count
+      if (user && typeof user.auditCount === 'number') {
+        setCurrentAuditCount(user.auditCount + 1);
+      }
+    } catch (error) {
+      console.error('Failed to update user audit count:', error);
     }
   };
 
@@ -130,26 +154,33 @@ export default function ResumeAuditPage() {
     }
     return JOB_ROLES.find((r) => r.label === role)?.keywords || [];
   };
-
-  // Handle audit submit
+  // Handle audit submit with robust count checking
   const handleSubmit = async (e) => {
     e.preventDefault();
     setResult(null);
     setError("");
+    
     if (!file) {
       setError("Please upload a PDF resume.");
       return;
     }
+    
     const keywords = getKeywords();
     if (!keywords.length) {
       setError("Please enter at least one keyword.");
       return;
     }
-    if (!canAudit) {
+    
+    // Double-check audit eligibility before submission
+    const currentCount = user?.auditCount ?? localAuditCount;
+    const isUserPremium = user?.isPremium || false;
+    
+    if (!isUserPremium && currentCount >= 1) {
       setError("Your 1 free audit is exhausted. Upgrade to premium to continue.");
       setTimeout(() => router.push("/pricing"), 2000);
       return;
     }
+    
     setLoading(true);
     try {
       const formData = new FormData();
@@ -172,18 +203,33 @@ export default function ResumeAuditPage() {
           setTimeout(() => router.push("/pricing"), 2000);
           return;
         }
-        throw new Error(data.error || "Audit failed");
-      }
-      setResult(data);
-      // Increment audit count if not premium
+        throw new Error(data.error || "Audit failed");      }
+        setResult(data);
+      
+      // Successfully completed audit - increment count and show feedback
       if (!isPremium) {
         if (user) {
-          // Refetch user to update auditCount in context and UI
-          await refetchUser();
+          // For logged-in users, update audit count from server
+          await updateUserAuditCount();
+          toast.success('Audit completed! Count updated.', {
+            duration: 2000,
+            position: 'top-center',
+          });
         } else {
+          // For non-logged-in users, increment local count
           incrementLocalAuditCount();
+          toast.success('Audit completed! 1 free audit used.', {
+            duration: 2000,
+            position: 'top-center',
+          });
         }
+      } else {
+        toast.success('Audit completed successfully!', {
+          duration: 2000,
+          position: 'top-center',
+        });
       }
+      
     } catch (err) {
       setError(err.message || "Something went wrong");
     } finally {
@@ -223,11 +269,18 @@ export default function ResumeAuditPage() {
           </h1>
           <p className="text-lg text-gray-600 animate-fade-in delay-100">
             Instantly analyze your resume for ATS compatibility and job fit.
-          </p>
-          {/* Show audit count and premium status */}
+          </p>          {/* Show audit count and premium status */}
           <div className="mt-4 flex flex-col items-center gap-1 animate-fade-in">
             <span className="text-blue-700 font-semibold text-base">{isPremium ? "Premium User" : "Free User"}</span>
-            <span className="text-gray-600 text-sm">Audits used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}</span>
+            <span className="text-gray-600 text-sm">
+              Audits used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}
+            </span>
+            {/* Debug info - remove in production */}
+            {process.env.NODE_ENV === 'development' && (
+              <div className="text-xs text-gray-400 mt-1">
+                Debug: User={user ? 'Yes' : 'No'}, UserCount={user?.auditCount}, LocalCount={localAuditCount}, CurrentCount={currentAuditCount}
+              </div>
+            )}
           </div>
         </div>
         <form

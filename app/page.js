@@ -11,8 +11,7 @@ import {
   FaTimes, 
   FaRocket, 
   FaUsers, 
-  FaLinkedin, 
-  FaSquareXTwitter, 
+  FaLinkedin,
   FaEnvelope,
   FaEdit,
   FaStar,
@@ -24,6 +23,7 @@ import {
   FaShieldAlt,
   FaAward
 } from 'react-icons/fa';
+import { FaSquareXTwitter } from "react-icons/fa6";
 import { IoSparkles } from "react-icons/io5";
 
 const navLinks = [
@@ -37,7 +37,6 @@ export default function HomePage() {
   const [mounted, setMounted] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [atsScore, setAtsScore] = useState(25);
-
   useEffect(() => {
     setMounted(true);
     
@@ -46,8 +45,29 @@ export default function HomePage() {
       setAtsScore(95);
     }, 2000);
 
-    return () => clearTimeout(timer);
-  }, []);
+    // Close mobile menu when clicking outside
+    const handleClickOutside = (event) => {
+      if (mobileMenuOpen && !event.target.closest('header')) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    // Close mobile menu on window resize
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener('click', handleClickOutside);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [mobileMenuOpen]);
   if (!mounted) {
     return null;
   }
@@ -100,8 +120,7 @@ export default function HomePage() {
     }
   };
 
-  return (
-    <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)]">      {/* Header */}
+  return (    <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] relative">      {/* Header */}
       <motion.header
         initial="hidden"
         animate="visible"
@@ -169,43 +188,82 @@ export default function HomePage() {
             </Link>
           </motion.div>
         </div>
-        
-        {/* Mobile Menu Button */}
+          {/* Mobile Menu Button */}
         <motion.button 
           variants={popUp}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="md:hidden p-2 rounded-lg bg-blue-600 text-white shadow-lg"
+          onClick={(e) => {
+            e.stopPropagation();
+            setMobileMenuOpen(!mobileMenuOpen);
+          }}
+          className="md:hidden p-2 rounded-lg bg-blue-600 text-white shadow-lg relative z-50"
+          aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
         >
-          {mobileMenuOpen ? <FaTimes className="w-5 h-5" /> : <FaBars className="w-5 h-5" />}
+          <motion.div
+            animate={{ rotate: mobileMenuOpen ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            {mobileMenuOpen ? <FaTimes className="w-5 h-5" /> : <FaBars className="w-5 h-5" />}
+          </motion.div>
         </motion.button>
-      </motion.header>
-
-      {/* Mobile Menu */}
-      <AnimatePresence>
+      </motion.header>      {/* Mobile Menu */}
+      <AnimatePresence mode="wait">
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white/95 backdrop-blur-lg border-b border-blue-100 sticky top-[72px] z-40 shadow-lg"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ 
+              duration: 0.2,
+              ease: "easeInOut"
+            }}
+            className="md:hidden bg-white/98 backdrop-blur-lg border-b border-blue-100 fixed top-[73px] left-0 right-0 z-40 shadow-lg"
           >
-            <div className="px-6 py-4 space-y-4">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ delay: 0.1, duration: 0.15 }}
+              className="px-6 py-4 space-y-3 max-h-[calc(100vh-73px)] overflow-y-auto"
+            >
               {navLinks.map((link, index) => (
                 <motion.a
                   key={link.name}
                   href={link.href}
-                  initial={{ opacity: 0, x: -20 }}
+                  initial={{ opacity: 0, x: -15 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-gray-700 hover:text-blue-600 font-semibold py-2 border-b border-gray-100 last:border-b-0 transition-colors duration-200"
+                  transition={{ 
+                    delay: index * 0.05,
+                    duration: 0.2,
+                    ease: "easeOut"
+                  }}
+                  onClick={(e) => {
+                    setMobileMenuOpen(false);
+                    // Smooth scroll to section
+                    if (link.href.startsWith('#')) {
+                      e.preventDefault();
+                      const element = document.querySelector(link.href);
+                      if (element) {
+                        element.scrollIntoView({ 
+                          behavior: 'smooth',
+                          block: 'start'
+                        });
+                      }
+                    }
+                  }}
+                  className="block text-gray-700 hover:text-blue-600 font-semibold py-3 px-2 rounded-lg hover:bg-blue-50 transition-all duration-200 border-b border-gray-100 last:border-b-0"
                 >
                   {link.name}
                 </motion.a>
               ))}
-              <div className="flex flex-col gap-3 pt-4">
+              
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.25, duration: 0.2 }}
+                className="flex flex-col gap-3 pt-4 border-t border-gray-200"
+              >
                 <Link 
                   href="/auth"
                   onClick={() => setMobileMenuOpen(false)}
@@ -216,16 +274,16 @@ export default function HomePage() {
                 <Link 
                   href="/auth?mode=signup"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="px-6 py-3 rounded-xl text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold shadow-lg transition-all duration-200"
+                  className="px-6 py-3 rounded-xl text-center bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200"
                 >
                   Get Started
                 </Link>
-              </div>
-            </div>
+              </motion.div>
+            </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>      {/* Hero Section */}
-      <section id="home" className="relative h-screen flex items-center justify-center px-6 pt-10 pb-16 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      </AnimatePresence>{/* Hero Section */}
+      <section id="home" className="relative min-h-screen md:h-screen flex items-center justify-center px-6 pt-10 pb-16 overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50">
         {/* Background Elements */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full mix-blend-multiply filter blur-3xl animate-blob"></div>
