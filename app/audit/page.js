@@ -276,11 +276,11 @@ export default function ResumeAuditPage() {
               Audits used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}
             </span>
             {/* Debug info - remove in production */}
-            {process.env.NODE_ENV === 'development' && (
+            {/* {process.env.NODE_ENV === 'development' && (
               <div className="text-xs text-gray-400 mt-1">
                 Debug: User={user ? 'Yes' : 'No'}, UserCount={user?.auditCount}, LocalCount={localAuditCount}, CurrentCount={currentAuditCount}
               </div>
-            )}
+            )} */}
           </div>
         </div>
         <form
