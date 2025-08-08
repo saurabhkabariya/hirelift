@@ -129,7 +129,7 @@ export default function HowItWorksSection({ handleRedirect }) {
             </div>
             
             <p className="text-gray-600 mb-6">
-              Join thousands of professionals who've transformed their job search with our proven system
+              Join thousands of professionals who&apos;ve transformed their job search with our proven system
             </p>
             
             <button

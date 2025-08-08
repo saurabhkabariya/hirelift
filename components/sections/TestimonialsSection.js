@@ -55,7 +55,7 @@ export default function TestimonialsSection() {
               </div>
               
               <blockquote className="text-gray-700 mb-4 italic">
-                "{testimonial.quote}"
+                &quot;{testimonial.quote}&quot;
               </blockquote>
               
               <div className="bg-green-100 border border-green-300 rounded-lg p-3 text-center">
