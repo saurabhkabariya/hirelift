@@ -31,7 +31,7 @@ export default function FloatingCTA({ handleRedirect }) {
             className="flex items-center gap-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white px-6 py-4 rounded-full shadow-xl hover:shadow-green-500/30 transition-all duration-300 hover:scale-105"
           >
             <FaRocket className="w-5 h-5" />
-            <span className="font-bold">Start Free Audit</span>
+            <span className="font-bold">Start First Audit</span>
             <span className="bg-yellow-300 text-yellow-900 text-xs font-bold px-2 py-1 rounded-full">FREE</span>
           </button>
         </motion.div>

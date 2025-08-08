@@ -66,7 +66,7 @@ export default function HeroSection({ handleRedirect }) {
             className="group px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-xl rounded-xl shadow-xl hover:shadow-green-500/30 transition-all duration-300 flex items-center gap-3 hover:scale-105"
           >
             <FaRocket className="w-5 h-5" />
-            Start Free Audit
+            Start First Audit
             <span className="bg-yellow-300 text-yellow-900 text-sm px-2 py-1 rounded-full font-bold">FREE</span>
           </button>
           
