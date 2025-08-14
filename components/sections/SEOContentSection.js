@@ -141,7 +141,7 @@ export default function SEOContentSection() {
             Ready to Transform Your Job Search?
           </h3>
           <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Join thousands of professionals who've used HireLift to optimize their resumes, 
+            Join thousands of professionals who&apos;ve used HireLift to optimize their resumes, 
             connect with HR managers, and land their dream jobs faster.
           </p>
         </div>

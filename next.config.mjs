@@ -70,11 +70,6 @@ const nextConfig = {
 
   // Generate static paths for better SEO
   trailingSlash: false,
-  
-  // Experimental features for better performance
-  experimental: {
-    optimizeCss: true,
-  },
 };
 
 export default nextConfig;
