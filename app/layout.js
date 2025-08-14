@@ -96,6 +96,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <head>
         {/* SEO Meta Tags */}
+        <meta name="google-site-verification" content="HKgvrxQDwRgmswOq7p_GoG2yId-fcWZkSjyAEGC_ASw" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#2563eb" />
         <link rel="canonical" href="https://hirelift.vercel.app" />
