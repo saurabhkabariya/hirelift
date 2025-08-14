@@ -15,15 +15,17 @@ import TestimonialsSection from '../components/sections/TestimonialsSection';
 import HowItWorksSection from '../components/sections/HowItWorksSection';
 import FeaturesSection from '../components/sections/FeaturesSection';
 import PricingSection from '../components/sections/PricingSection';
+import SEOContentSection from '../components/sections/SEOContentSection';
 import FooterSection from '../components/sections/FooterSection';
 import FloatingCTA from '../components/FloatingCTA';
+import StructuredData from '../components/StructuredData';
 
 const navLinks = [
-  { name: "Home", href: "#home" },
-  { name: "How it Works", href: "#how-it-works" },
-  { name: "Testimonials", href: "#testimonials" },
-  { name: "Features", href: "#features" },
-  { name: "Pricing", href: "#pricing" },
+  { name: "Home", href: "#home", description: "AI-powered resume optimization platform" },
+  { name: "How it Works", href: "#how-it-works", description: "3-step process to optimize your job search" },
+  { name: "Testimonials", href: "#testimonials", description: "Success stories from our users" },
+  { name: "Features", href: "#features", description: "Complete job search toolkit" },
+  { name: "Pricing", href: "#pricing", description: "Affordable plans for every job seeker" },
 ];
 
 // Smooth scroll utility
@@ -76,6 +78,9 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white relative overflow-x-hidden">
+      {/* Structured Data for SEO */}
+      <StructuredData />
+      
       {/* Loading Bar Component */}
       <LoadingBar isLoading={isLoading} onComplete={stopLoading} />
       
@@ -201,6 +206,9 @@ export default function HomePage() {
 
       {/* Pricing Section - Light Background */}
       <PricingSection handleRedirect={handleRedirect} />
+
+      {/* SEO Content Section - White Background */}
+      <SEOContentSection />
 
       {/* Footer - Dark Background */}
       <FooterSection />
