@@ -96,7 +96,7 @@ export default function StructuredData() {
       },
       "offers": {
         "@type": "Offer",
-        "url": "https://hirelift.io/pricing",
+        "url": "https://hirelift.vercel.app/pricing",
         "priceCurrency": "USD",
         "price": "0",
         "priceValidUntil": "2025-12-31",
