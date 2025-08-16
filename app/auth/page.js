@@ -13,12 +13,30 @@ export default function AuthPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
+  // Get redirect URL from search params
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = urlParams.get('redirect');
+    const authMode = urlParams.get('mode');
+    
+    if (authMode === 'signup') {
+      setMode('signup');
+    }
+  }, []);
+
   // Redirect if user is already authenticated
   useEffect(() => {
     if (user && !loading) {
-      window.location.href = '/dashboard';
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get('redirect');
+      
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      } else {
+        window.location.href = '/dashboard';
+      }
     }
-  }, [user, loading, router]);
+  }, [user, loading]);
 
   // Show loading screen while checking auth state
   if (loading) {

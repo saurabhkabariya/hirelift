@@ -171,6 +171,13 @@ export default function ResumeAuditPage() {
       return;
     }
     
+    // Check if user is logged in before proceeding with audit
+    if (!user) {
+      // Redirect to login page with return URL
+      router.push("/auth?redirect=/audit");
+      return;
+    }
+    
     // Double-check audit eligibility before submission
     const currentCount = user?.auditCount ?? localAuditCount;
     const isUserPremium = user?.isPremium || false;
@@ -271,10 +278,24 @@ export default function ResumeAuditPage() {
             Instantly analyze your resume for ATS compatibility and job fit.
           </p>          {/* Show audit count and premium status */}
           <div className="mt-4 flex flex-col items-center gap-1 animate-fade-in">
-            <span className="text-blue-700 font-semibold text-base">{isPremium ? "Premium User" : "Free User"}</span>
-            <span className="text-gray-600 text-sm">
-              Audits used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}
-            </span>
+            {user ? (
+              <>
+                <span className="text-blue-700 font-semibold text-base">{isPremium ? "Premium User" : "Free User"}</span>
+                <span className="text-gray-600 text-sm">
+                  Audits used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}
+                </span>
+              </>
+            ) : (
+              <>
+                <span className="text-blue-700 font-semibold text-base">Guest User</span>
+                <span className="text-gray-600 text-sm">
+                  Login required to audit your resume
+                </span>
+                <span className="text-blue-500 text-xs">
+                  ✨ Get 1 free audit after signup + unlimited with premium
+                </span>
+              </>
+            )}
             {/* Debug info - remove in production */}
             {/* {process.env.NODE_ENV === 'development' && (
               <div className="text-xs text-gray-400 mt-1">
@@ -386,7 +407,7 @@ export default function ResumeAuditPage() {
             ) : (
               <FaSearch className="text-white" />
             )}
-            {loading ? "Auditing..." : "Audit Resume"}
+            {loading ? "Auditing..." : user ? "Audit Resume" : "Login & Audit Resume"}
           </motion.button>
           <AnimatePresence>
             {error && (
