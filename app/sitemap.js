@@ -1,64 +1,66 @@
 export default function sitemap() {
+  const baseUrl = "https://hirelift.vercel.app";
+
   return [
     {
-      url: 'https://hirelift.vercel.app',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
+      url: `${baseUrl}`,
+      lastModified: new Date().toISOString().split("T")[0], // YYYY-MM-DD
+      changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: 'https://hirelift.vercel.app/audit',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
+      url: `${baseUrl}/audit`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "weekly",
       priority: 0.9,
     },
     {
-      url: 'https://hirelift.vercel.app/pricing',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
+      url: `${baseUrl}/pricing`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "monthly",
       priority: 0.8,
     },
     {
-      url: 'https://hirelift.vercel.app/auth',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
+      url: `${baseUrl}/auth`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "monthly",
       priority: 0.7,
     },
     {
-      url: 'https://hirelift.vercel.app/dashboard',
-      lastModified: new Date(),
-      changeFrequency: 'daily',
+      url: `${baseUrl}/dashboard`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "daily",
       priority: 0.8,
     },
     {
-      url: 'https://hirelift.vercel.app/company-search',
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
+      url: `${baseUrl}/company-search`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "weekly",
       priority: 0.8,
     },
     {
-      url: 'https://hirelift.vercel.app/contact',
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
+      url: `${baseUrl}/contact`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "monthly",
       priority: 0.6,
     },
     {
-      url: 'https://hirelift.vercel.app/privacy',
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
+      url: `${baseUrl}/privacy`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "yearly",
       priority: 0.3,
     },
     {
-      url: 'https://hirelift.vercel.app/terms',
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
+      url: `${baseUrl}/terms`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "yearly",
       priority: 0.3,
     },
     {
-      url: 'https://hirelift.vercel.app/refund',
-      lastModified: new Date(),
-      changeFrequency: 'yearly',
+      url: `${baseUrl}/refund`,
+      lastModified: new Date().toISOString().split("T")[0],
+      changeFrequency: "yearly",
       priority: 0.3,
-    }
-  ]
+    },
+  ];
 }
