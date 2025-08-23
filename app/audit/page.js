@@ -3,7 +3,7 @@ import AuditResultCard from "@/components/AuditResultCard";
 import JOB_ROLES from "@/data/jobRoles";
 import FeedbackButton from "../../components/feedback/FeedbackButton";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { FaFilePdf, FaUserTie, FaSearch, FaCheckCircle, FaExclamationCircle, FaUserEdit, FaChevronDown, FaTimesCircle } from "react-icons/fa";
+import { FaFilePdf, FaUserTie, FaSearch, FaCheckCircle, FaExclamationCircle, FaUserEdit, FaChevronDown, FaTimesCircle, FaBuilding, FaCrown } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import jsPDF from "jspdf";
@@ -274,9 +274,15 @@ export default function ResumeAuditPage() {
           <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent drop-shadow-lg mb-2 animate-fade-in">
             Resume ATS Audit
           </h1>
-          <p className="text-lg text-gray-600 animate-fade-in delay-100">
+          <p className="text-lg text-gray-600 animate-fade-in delay-100 mb-2">
             Instantly analyze your resume for ATS compatibility and job fit.
-          </p>          {/* Show audit count and premium status */}
+          </p>
+          <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 px-4 py-2 rounded-full animate-fade-in delay-200">
+            <span className="text-green-600 font-semibold text-sm">🎉 FREE Analysis</span>
+            <span className="text-green-700 text-sm">• No signup required • Instant results</span>
+          </div>
+
+          {/* Show audit count and premium status */}
           <div className="mt-4 flex flex-col items-center gap-1 animate-fade-in">
             {user ? (
               <>
@@ -520,6 +526,9 @@ export default function ResumeAuditPage() {
                   </button>
                 </div>
               </motion.div>
+
+              {/* HR Directory CTA - Conversion Focused */}
+              <HRDirectoryCTA user={user} isPremium={isPremium} />
 
               {/* Recommended Resume Template Card */}
               <RecommendedTemplateCard />
@@ -821,5 +830,149 @@ function SuggestedImprovements({ result }) {
       </ul>
       
     </div>
+  );
+}
+
+// HR Directory CTA Component
+function HRDirectoryCTA({ user, isPremium }) {
+  const router = useRouter();
+
+  const handleUpgradeClick = () => {
+    router.push('/pricing');
+  };
+
+  const handleHRDirectoryClick = () => {
+    router.push('/company-search');
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, delay: 0.2 }}
+      className="mt-8 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 rounded-2xl shadow-2xl p-8 border-2 border-transparent bg-clip-border relative overflow-hidden"
+      style={{
+        backgroundImage: 'linear-gradient(white, white), linear-gradient(45deg, #7c3aed, #3b82f6, #06b6d4)',
+        backgroundOrigin: 'border-box',
+        backgroundClip: 'content-box, border-box'
+      }}
+    >
+      {/* Background Pattern */}
+      <div className="absolute inset-0 opacity-5">
+        <div className="absolute top-10 left-10 w-20 h-20 bg-purple-500 rounded-full blur-xl"></div>
+        <div className="absolute bottom-10 right-10 w-32 h-32 bg-blue-500 rounded-full blur-xl"></div>
+      </div>
+
+      <div className="relative z-10">
+        <div className="text-center mb-6">
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
+            className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg"
+          >
+            <FaBuilding className="text-white text-3xl" />
+          </motion.div>
+          
+          <h3 className="text-2xl font-extrabold bg-gradient-to-r from-purple-700 via-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
+            🎯 Ready for the Next Step?
+          </h3>
+          <p className="text-gray-700 text-lg font-medium mb-4">
+            Your resume is optimized! Now connect directly with hiring managers and skip the application queue.
+          </p>
+        </div>
+
+        {/* Stats Row */}
+        <div className="flex justify-center gap-8 mb-6">
+          <div className="text-center">
+            <div className="text-2xl font-bold text-purple-600">500+</div>
+            <div className="text-sm text-gray-600 font-medium">HR Contacts</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-blue-600">75%</div>
+            <div className="text-sm text-gray-600 font-medium">Response Rate</div>
+          </div>
+          <div className="text-center">
+            <div className="text-2xl font-bold text-cyan-600">3x</div>
+            <div className="text-sm text-gray-600 font-medium">Faster Hiring</div>
+          </div>
+        </div>
+
+        {/* Features Grid */}
+        <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 mb-6 border border-purple-100">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="flex items-center gap-2">
+              <FaCheckCircle className="text-green-500 text-sm" />
+              <span className="text-gray-700 text-sm font-medium">Direct HR Emails</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FaCheckCircle className="text-green-500 text-sm" />
+              <span className="text-gray-700 text-sm font-medium">LinkedIn Profiles</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FaCheckCircle className="text-green-500 text-sm" />
+              <span className="text-gray-700 text-sm font-medium">Message Templates</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FaCheckCircle className="text-green-500 text-sm" />
+              <span className="text-gray-700 text-sm font-medium">Company Insights</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FaCheckCircle className="text-green-500 text-sm" />
+              <span className="text-gray-700 text-sm font-medium">Job Openings</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <FaCheckCircle className="text-green-500 text-sm" />
+              <span className="text-gray-700 text-sm font-medium">Hiring Trends</span>
+            </div>
+          </div>
+        </div>
+
+        {/* CTA Section */}
+        <div className="text-center">
+          {isPremium ? (
+            <motion.button
+              onClick={handleHRDirectoryClick}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-3 text-lg mx-auto group"
+            >
+              <FaBuilding className="w-6 h-6 group-hover:animate-bounce" />
+              Access HR Directory
+              <motion.span
+                animate={{ x: [0, 5, 0] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="text-xl"
+              >
+                🚀
+              </motion.span>
+            </motion.button>
+          ) : (
+            <div className="space-y-4">
+              <motion.button
+                onClick={handleUpgradeClick}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-3 text-lg mx-auto group"
+              >
+                <FaCrown className="w-6 h-6 group-hover:animate-bounce" />
+                Unlock HR Directory - Upgrade to Pro
+                <motion.span
+                  animate={{ x: [0, 5, 0] }}
+                  transition={{ duration: 1.5, repeat: Infinity }}
+                  className="text-xl"
+                >
+                  💎
+                </motion.span>
+              </motion.button>
+              
+              <p className="text-sm text-gray-600">
+                🎉 <strong>Special Offer:</strong> Get unlimited audits + HR directory access
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </motion.div>
   );
 } 

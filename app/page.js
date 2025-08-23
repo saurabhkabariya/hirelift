@@ -11,6 +11,7 @@ import { useLoading } from '../hooks/useLoading';
 
 // Import modular sections
 import HeroSection from '../components/sections/HeroSection';
+import LeadMagnetSection from '../components/sections/LeadMagnetSection';
 import TestimonialsSection from '../components/sections/TestimonialsSection';
 import HowItWorksSection from '../components/sections/HowItWorksSection';
 import FeaturesSection from '../components/sections/FeaturesSection';
@@ -23,7 +24,7 @@ import StructuredData from '../components/StructuredData';
 const navLinks = [
   { name: "Home", href: "#home", description: "AI-powered resume optimization platform" },
   { name: "How it Works", href: "#how-it-works", description: "3-step process to optimize your job search" },
-  { name: "Testimonials", href: "#testimonials", description: "Success stories from our users" },
+  { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
   { name: "Features", href: "#features", description: "Complete job search toolkit" },
   { name: "Pricing", href: "#pricing", description: "Affordable plans for every job seeker" },
 ];
@@ -119,7 +120,7 @@ export default function HomePage() {
           {navLinks.map((link) => (
             <button
               key={link.name}
-              onClick={() => scrollToSection(link.href)}
+              onClick={() => link.isExternal ? handleRedirect(link.href) : scrollToSection(link.href)}
               className="text-gray-300 hover:text-white font-medium transition-colors duration-300 cursor-pointer"
             >
               {link.name}
@@ -166,7 +167,11 @@ export default function HomePage() {
                 <button
                   key={link.name}
                   onClick={() => {
-                    scrollToSection(link.href);
+                    if (link.isExternal) {
+                      handleRedirect(link.href);
+                    } else {
+                      scrollToSection(link.href);
+                    }
                     setMobileMenuOpen(false);
                   }}
                   className="block text-xl font-semibold text-gray-300 hover:text-white transition-colors w-full text-left"
@@ -194,6 +199,9 @@ export default function HomePage() {
         )}
       </AnimatePresence>      {/* Hero Section - Dark Background */}
       <HeroSection handleRedirect={handleRedirect} />
+
+      {/* Lead Magnet Section - White Background */}
+      <LeadMagnetSection handleRedirect={handleRedirect} />
 
       {/* How It Works Section - Light Background */}
       <HowItWorksSection handleRedirect={handleRedirect} />
