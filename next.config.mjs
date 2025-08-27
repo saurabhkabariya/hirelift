@@ -1,5 +1,10 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Performance optimizations
+  experimental: {
+    optimizePackageImports: ['react-icons', 'framer-motion'],
+  },
+  
   // Optimize for SEO and performance
   compress: true,
   poweredByHeader: false,

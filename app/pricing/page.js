@@ -10,11 +10,11 @@ import PaymentErrorModal from '@/components/payment/PaymentErrorModal';
 import paymentService from '@/lib/payment';
 import oneTimePaymentService from '@/lib/oneTimePayment';
 import toast from 'react-hot-toast';
+import Header from '../../components/Header';
 import { 
   Check, 
   Star, 
   Zap, 
-  ArrowLeft,
   Crown,
   Infinity,
   Users,
@@ -360,51 +360,9 @@ export default function PricingPage() {
         <div className="absolute bottom-[10%] left-[30%] w-96 h-96 bg-[var(--accent)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
-      {/* Header */}
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass sticky top-0 z-50 backdrop-blur-lg shadow-sm border-b border-opacity-20 border-[var(--gray-300)]"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">          <div className="flex justify-between items-center py-4">
-            <div className="flex items-center">
-              <motion.button
-                whileHover={{ scale: 1.1, x: -3 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => router.back()}
-                className="mr-4 p-2 hover:bg-[var(--background-dark)]/10 rounded-xl transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5 text-[var(--foreground)]" />
-              </motion.button>
-              <h1 className="text-2xl font-bold gradient-text">
-                Pricing Plans
-              </h1>
-            </div>            {user && (
-              <div className="flex items-center space-x-4">
-                <span className="text-sm text-[var(--foreground)]">
-                  Current: <span className="font-bold">{user.isPremium ? 'Pro' : 'Free'}</span>
-                </span>
-                {user.isPremium && (
-                  <motion.span
-                    whileHover={{ scale: 1.05 }}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gradient-to-r from-purple-600 to-blue-600 text-white shadow-lg"
-                  >
-                    <Crown className="w-3 h-3 mr-1" />
-                    Premium
-                  </motion.span>
-                )}
-                {loadingSubscription && (
-                  <div className="animate-pulse text-xs text-gray-500">
-                    Loading subscription...
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-      </motion.header>
+      <Header />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 mt-20">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

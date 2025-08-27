@@ -1,0 +1,271 @@
+'use client';
+
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { FaClock, FaUser, FaTag, FaArrowLeft, FaTwitter, FaLinkedin, FaFacebook, FaShare } from 'react-icons/fa';
+import { getAllBlogPosts } from '../../data/blogPosts';
+import { getDetailedBlogContent } from '../../data/blogContent';
+import BlogAnalytics from './BlogAnalytics';
+import BlogSchema from './BlogSchema';
+import MarkdownRenderer from './MarkdownRenderer';
+import Header from '../Header';
+
+export default function BlogPostPage({ post }) {
+  const allPosts = getAllBlogPosts();
+  const relatedPosts = allPosts
+    .filter(p => p.slug !== post.slug && p.category === post.category)
+    .slice(0, 3);
+  
+  const detailedContent = getDetailedBlogContent(post.slug);
+  const contentToDisplay = detailedContent || post.content;
+
+  const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
+  const shareText = `${post.title} - ${post.excerpt}`;
+
+  const handleShare = (platform) => {
+    const urls = {
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+      linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`
+    };
+    
+    if (urls[platform]) {
+      window.open(urls[platform], '_blank', 'width=600,height=400');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      <Header variant="blog" />
+      <BlogAnalytics slug={post.slug} title={post.title} category={post.category} />
+      <BlogSchema post={post} />
+      
+      {/* Header */}
+      <section className="py-12 px-6 bg-white border-b mt-20">
+        <div className="max-w-4xl mx-auto">
+          <Link 
+            href="/blog"
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-8 transition-colors"
+          >
+            <FaArrowLeft className="w-4 h-4" />
+            Back to Blog
+          </Link>
+          
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-8"
+          >
+            <div className="flex flex-wrap items-center gap-3 mb-6">
+              <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
+                {post.category}
+              </span>
+              {post.tags.map((tag) => (
+                <span key={tag} className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm">
+                  #{tag}
+                </span>
+              ))}
+            </div>
+            
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              {post.title}
+            </h1>
+            
+            <p className="text-xl text-gray-600 mb-8 leading-relaxed">
+              {post.excerpt}
+            </p>
+            
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-6 text-sm text-gray-500">
+                <span className="flex items-center gap-2">
+                  <FaUser className="w-4 h-4" />
+                  {post.author}
+                </span>
+                <span className="flex items-center gap-2">
+                  <FaClock className="w-4 h-4" />
+                  {post.readTime}
+                </span>
+                <span>{post.publishDate}</span>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-gray-500">Share:</span>
+                <button
+                  onClick={() => handleShare('twitter')}
+                  className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
+                  title="Share on Twitter"
+                >
+                  <FaTwitter className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleShare('linkedin')}
+                  className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
+                  title="Share on LinkedIn"
+                >
+                  <FaLinkedin className="w-4 h-4" />
+                </button>
+                <button
+                  onClick={() => handleShare('facebook')}
+                  className="p-2 bg-blue-100 text-blue-600 rounded-lg hover:bg-blue-200 transition-colors"
+                  title="Share on Facebook"
+                >
+                  <FaFacebook className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Content */}
+      <section className="py-16 px-6">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="bg-white rounded-2xl shadow-lg p-8 md:p-12 mb-12"
+          >
+            {detailedContent ? (
+              <MarkdownRenderer content={detailedContent} />
+            ) : (
+              <div className="prose prose-lg max-w-none">
+                <div className="text-gray-700 leading-relaxed space-y-6">
+                  <p className="text-xl leading-relaxed text-gray-800">
+                    {post.excerpt}
+                  </p>
+                  <div className="mt-8 p-6 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                    <p className="text-lg text-gray-700">
+                      {contentToDisplay}
+                    </p>
+                  </div>
+                  <div className="mt-8 text-center">
+                    <p className="text-gray-600 mb-4">
+                      Want to read more comprehensive guides like this?
+                    </p>
+                    <Link
+                      href="/blog"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Explore More Articles
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.div>
+
+          {/* CTA Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center mb-16"
+          >
+            <h3 className="text-2xl font-bold mb-4">
+              Ready to Accelerate Your Job Search?
+            </h3>
+            <p className="text-lg mb-6 opacity-90">
+              Get personalized job search guidance and access to our exclusive tools
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/audit"
+                className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+              >
+                Try Free ATS Checker
+              </Link>
+              <Link
+                href="/pricing"
+                className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors"
+              >
+                View Pro Features
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Related Posts */}
+          {relatedPosts.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6 }}
+            >
+              <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center">
+                Related Articles
+              </h3>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedPosts.map((relatedPost, index) => (
+                  <motion.article
+                    key={relatedPost.slug}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.7 + index * 0.1 }}
+                    className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow overflow-hidden"
+                  >
+                    <div className="p-6">
+                      <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm font-semibold mb-3 inline-block">
+                        {relatedPost.category}
+                      </span>
+                      
+                      <h4 className="text-lg font-bold text-gray-900 mb-2 hover:text-blue-600 transition-colors">
+                        <Link href={`/blog/${relatedPost.slug}`}>
+                          {relatedPost.title}
+                        </Link>
+                      </h4>
+                      
+                      <p className="text-gray-600 mb-4 text-sm leading-relaxed">
+                        {relatedPost.excerpt.substring(0, 120)}...
+                      </p>
+                      
+                      <div className="flex items-center justify-between text-xs text-gray-500">
+                        <span className="flex items-center gap-1">
+                          <FaClock className="w-3 h-3" />
+                          {relatedPost.readTime}
+                        </span>
+                        <span>{relatedPost.publishDate}</span>
+                      </div>
+                    </div>
+                  </motion.article>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </section>
+
+      {/* Schema.org structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            "headline": post.title,
+            "description": post.excerpt,
+            "author": {
+              "@type": "Person",
+              "name": post.author
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "HireLift",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://hirelift.vercel.app/logo.png"
+              }
+            },
+            "datePublished": post.publishDate,
+            "dateModified": post.publishDate,
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": `https://hirelift.vercel.app/blog/${post.slug}`
+            },
+            "keywords": post.keywords?.join(", "),
+            "articleSection": post.category
+          })
+        }}
+      />
+    </div>
+  );
+}

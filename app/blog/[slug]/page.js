@@ -1,0 +1,53 @@
+import { notFound } from 'next/navigation';
+import { getBlogPostBySlug, getAllBlogPosts } from '../../../data/blogPosts';
+import BlogPostPage from '../../../components/blog/BlogPostPage';
+
+export async function generateStaticParams() {
+  const posts = getAllBlogPosts();
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
+
+export async function generateMetadata({ params }) {
+  const post = getBlogPostBySlug(params.slug);
+  
+  if (!post) {
+    return {
+      title: 'Blog Post Not Found | HireLift',
+      description: 'The requested blog post could not be found.'
+    };
+  }
+
+  return {
+    title: post.metaTitle || post.title,
+    description: post.metaDescription || post.excerpt,
+    keywords: post.keywords?.join(', '),
+    openGraph: {
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || post.excerpt,
+      type: 'article',
+      publishedTime: post.publishDate,
+      authors: [post.author],
+      tags: post.tags,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.metaTitle || post.title,
+      description: post.metaDescription || post.excerpt,
+    },
+    alternates: {
+      canonical: `https://hirelift.vercel.app/blog/${params.slug}`
+    }
+  };
+}
+
+export default function BlogPost({ params }) {
+  const post = getBlogPostBySlug(params.slug);
+  
+  if (!post) {
+    notFound();
+  }
+
+  return <BlogPostPage post={post} />;
+}

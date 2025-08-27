@@ -10,6 +10,7 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Header from "../../components/Header";
 import Image from "next/image";
 import toast from "react-hot-toast";
 
@@ -246,29 +247,13 @@ export default function ResumeAuditPage() {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-start px-2 pb-4 pt-1">
-      {/* Navigation Bar */}
-      <nav className="w-full flex items-center justify-between px-6 py-4 mb-6 bg-white/80 rounded-2xl shadow border border-blue-100 backdrop-blur-md sticky top-0 z-40">
-        <div className="flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-600 to-blue-400 flex items-center justify-center text-white font-bold text-xl shadow-md">
-              <span className="z-10">H</span>
-            </div>
-            <span className="text-2xl font-extrabold tracking-tight gradient-text group-hover:text-blue-700 transition">HireLift</span>
-          </Link>
-        </div>
-        <button
-          onClick={() => router.push(user ? "/dashboard" : "/")}
-          className="flex items-center gap-2 px-4 py-2 rounded-lg bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold shadow-sm border border-blue-200 transition"
-        >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
-          Back
-        </button>
-      </nav>
+      <Header />
+      
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-full max-w-2xl"
+        className="w-full max-w-2xl mt-20"
       >
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent drop-shadow-lg mb-2 animate-fade-in">

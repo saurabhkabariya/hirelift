@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
+import Header from '../../components/Header';
 import { useAuth } from '@/contexts/AuthContext';
 import { getAllTemplates, POPULAR_ROLES } from '@/data/emailTemplates';
 import TemplateEditor from '@/components/TemplateEditor';
@@ -234,49 +235,14 @@ export default function PlaygroundPage() {
         <div className="absolute top-[10%] left-[15%] w-64 h-64 bg-[var(--primary-light)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
         <div className="absolute top-[40%] right-[15%] w-72 h-72 bg-[var(--secondary-light)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
         <div className="absolute bottom-[10%] left-[35%] w-80 h-80 bg-[var(--accent)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>      {/* Header - Enhanced mobile responsiveness */}
-      <motion.header
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass sticky top-0 z-50 backdrop-blur-lg shadow-sm border-b border-opacity-20 border-[var(--gray-300)]"
-      >
-        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-3 sm:py-4">
-            <div className="flex items-center min-w-0 flex-1 sm:flex-none">
-              <Link href="/dashboard" className="flex items-center group">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-xl bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] flex items-center justify-center text-white font-bold text-lg sm:text-xl shadow-md mr-2 sm:mr-3">
-                  <span className="z-10">H</span>
-                </div>
-                <h1 className="text-lg sm:text-2xl font-bold gradient-text truncate">
-                  HireLift
-                </h1>
-              </Link>
-            </div>
-            <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowFilters(!showFilters)}
-                className={`flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 rounded-xl transition-all font-medium text-xs sm:text-sm whitespace-nowrap ${
-                  showFilters 
-                    ? 'bg-blue-500 text-white shadow-lg' 
-                    : 'bg-blue-100 text-blue-600 hover:bg-blue-200'
-                }`}
-              >
-                <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
-                </svg>
-                <span className="hidden xs:inline sm:inline">Filters</span>
-              </motion.button>
-            </div>
-          </div>
-        </div>
-      </motion.header>      {/* Navigation Breadcrumb - Enhanced mobile layout */}
+      </div>      <Header />
+
+      {/* Navigation Breadcrumb - Enhanced mobile layout */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white/90 backdrop-blur-md border-b border-blue-100"
+        className="bg-white/90 backdrop-blur-md border-b border-blue-100 mt-20"
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 lg:gap-4 py-3">            <nav className="flex items-center gap-2 text-xs sm:text-sm w-full lg:w-auto overflow-hidden">

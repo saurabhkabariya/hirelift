@@ -31,27 +31,27 @@ export default function HeroSection({ handleRedirect }) {
           ✅ <span>95% Success Rate • 100+ Hired • Proven Results</span>
         </motion.div>
         
-        {/* Main Heading */}
+        {/* Main Heading - SEO Optimized */}
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
           className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-8"
         >
-          <span className="text-white">Stop Getting</span><br />
-          <span className="bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">REJECTED</span><br />
-          <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Start Getting Hired</span>
+          <span className="text-white">India's Favourite</span><br />
+          <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Job Hunt Assistant</span><br />
+          <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Get Hired 3x Faster</span>
         </motion.h1>
         
-        {/* Value Proposition */}
+        {/* Value Proposition - Keyword Rich */}
         <motion.p
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
           className="text-xl md:text-2xl text-gray-200 max-w-4xl mx-auto mb-12 leading-relaxed"
         >
-          AI-powered resume optimization + Direct HR connections + Proven templates = 
-          <span className="text-green-300 font-bold"> 3x faster job success</span>
+          Free ATS resume checker + Cold email templates + HR directory + Job search tools = 
+          <span className="text-green-300 font-bold"> Success for 100+ Indian job seekers</span>
         </motion.p>
         
         {/* CTA Buttons */}
