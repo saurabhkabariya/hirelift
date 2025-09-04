@@ -20,7 +20,7 @@ export const metadata = {
     default: "HireLift - Job Hunt Assistant Platform for India | ATS Resume Optimizer",
     template: "%s | HireLift - India's Leading Job Search Platform"
   },
-  description: "India's leading job hunt platform. Free ATS resume checker, cold email templates, HR directory & job search tools. Get hired 3x faster with 85% ATS pass rate. Trusted by 10,000+ Indian job seekers.",
+  description: "India's leading job hunt platform. Free ATS resume checker, cold email templates, HR directory & job search tools. Get hired 3x faster with 85% ATS pass rate. Trusted by 100+ Indian job seekers.",
   keywords: [
     // Job Hunt & Career (20 keywords)
     "jobs", "jobs near me", "job search", "jobs hiring", "work from home jobs", 
@@ -71,8 +71,8 @@ export const metadata = {
     type: "website",
     locale: "en_IN",
     url: "https://hirelift.vercel.app",
-    title: "HireLift - India's #1 Job Hunt Assistant Platform | ATS Resume Optimizer",
-    description: "India's leading job hunt platform with free ATS resume checker, cold email templates, and HR directory. Get hired 3x faster with 85% ATS pass rate. Trusted by 10,000+ Indian job seekers.",
+    title: "HireLift - India's leading Job Hunt Assistant Platform | ATS Resume Optimizer",
+    description: "India's leading job hunt platform with free ATS resume checker, cold email templates, and HR directory. Get hired 3x faster with 85% ATS pass rate. Trusted by 100+ Indian job seekers.",
     siteName: "HireLift",
     images: [
       {
@@ -86,7 +86,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "HireLift - India's #1 Job Hunt Assistant Platform | Free ATS Resume Checker",
+    title: "HireLift - India's leading Job Hunt Assistant Platform | Free ATS Resume Checker",
     description: "Get hired 3x faster with India's leading job hunt platform. Free ATS resume optimization, cold email templates, HR directory & proven job search tools.",
     creator: "@hirelift",
     site: "@hirelift",
