@@ -10,7 +10,9 @@ import {
   Crown,
   ArrowRight,
   Sparkles,
-  Gift
+  Gift,
+  Mail,
+  Clock
 } from 'lucide-react';
 
 // Separate component for search params logic
@@ -158,6 +160,43 @@ function PaymentSuccessContent() {
             </div>
           </div>
         </motion.div>
+
+        {/* Verification Notice for Premium Plans */}
+        {parseInt(amount) > 99 && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.65 }}
+            className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 rounded-2xl p-6"
+          >
+            <div className="flex items-center justify-center mb-3">
+              <Clock className="w-6 h-6 text-blue-600 mr-2" />
+              <h3 className="text-lg font-semibold text-gray-900">
+                Payment Verification
+              </h3>
+            </div>
+            
+            <div className="text-sm text-gray-700 text-center space-y-3">
+              <p>
+                <strong>We will contact you after verifying your payment through email.</strong>
+              </p>
+              <p>
+                If you don't get any response from our side within <strong>24 to 48 hours</strong> of payment, 
+                feel free to contact us directly.
+              </p>
+            </div>
+
+            <motion.button
+              onClick={() => router.push('/contact')}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              className="w-full mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center"
+            >
+              <Mail className="w-4 h-4 mr-2" />
+              Contact Us
+            </motion.button>
+          </motion.div>
+        )}
 
         {/* Redirect Notice */}
         <motion.div
