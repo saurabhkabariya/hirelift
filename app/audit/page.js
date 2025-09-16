@@ -2,6 +2,7 @@
 import AuditResultCard from "@/components/AuditResultCard";
 import JOB_ROLES from "@/data/jobRoles";
 import FeedbackButton from "../../components/feedback/FeedbackButton";
+import UpgradeCTA from "../../components/UpgradeCTA";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { FaFilePdf, FaUserTie, FaSearch, FaCheckCircle, FaExclamationCircle, FaUserEdit, FaChevronDown, FaTimesCircle, FaBuilding, FaCrown } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
@@ -10,9 +11,9 @@ import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Header from "../../components/Header";
 import Image from "next/image";
 import toast from "react-hot-toast";
+import { LogOut, User, CreditCard, Home, BarChart } from "lucide-react";
 
 
 export default function ResumeAuditPage() {
@@ -24,8 +25,16 @@ export default function ResumeAuditPage() {
   const [error, setError] = useState("");
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef();
-  const { user, loading: userLoading, refetchUser } = useAuth();
-  const router = useRouter();  // State for local audit count (for non-logged-in users)
+  const { user, loading: userLoading, refetchUser, signOutUser } = useAuth();
+  const router = useRouter();  
+  
+  // Handle logout
+  const handleLogout = async () => {
+    await signOutUser();
+    router.push('/auth');
+  };
+
+  // State for local audit count (for non-logged-in users)
   const [localAuditCount, setLocalAuditCount] = useState(() => {
     if (typeof window !== "undefined") {
       return parseInt(localStorage.getItem("auditCount") || "0", 10);
@@ -247,13 +256,84 @@ export default function ResumeAuditPage() {
 
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-start px-2 pb-4 pt-1">
-      <Header />
+      {/* Custom Audit Page Navigation */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="w-full bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between py-4">
+            {/* Logo/Brand */}
+            <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-3 group">
+              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200">
+                <span className="text-white font-bold text-lg">H</span>
+              </div>
+              <span className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+                HireLift
+              </span>
+            </Link>
+
+            {/* Navigation Links */}
+            <div className="flex items-center gap-4">
+              {user ? (
+                <>
+                  <Link 
+                    href="/dashboard" 
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                  >
+                    <Home className="w-4 h-4" />
+                    <span className="hidden sm:inline">Dashboard</span>
+                  </Link>
+                  
+                  <Link 
+                    href="/pricing" 
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
+                  >
+                    <CreditCard className="w-4 h-4" />
+                    <span className="hidden sm:inline">Upgrade</span>
+                  </Link>
+
+                  {/* User Menu */}
+                  <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
+                    <div className="flex items-center gap-2">
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                        <User className="w-4 h-4 text-white" />
+                      </div>
+                      <span className="text-sm font-medium text-gray-700 hidden md:inline">
+                        {user?.name || user?.email?.split('@')[0]}
+                      </span>
+                    </div>
+                    
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 text-sm"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span className="hidden sm:inline">Logout</span>
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <Link 
+                  href="/auth" 
+                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
+                >
+                  <User className="w-4 h-4" />
+                  <span>Login</span>
+                </Link>
+              )}
+            </div>
+          </div>
+        </div>
+      </motion.div>
       
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="w-full max-w-2xl mt-20"
+        className="w-full max-w-2xl mt-8"
       >
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent drop-shadow-lg mb-2 animate-fade-in">
@@ -501,7 +581,9 @@ export default function ResumeAuditPage() {
                     )) : <span className="text-gray-400">None</span>}
                   </div>
                 </div>
-                <SuggestedImprovements result={result} />                {/* Download Audit Button */}
+                <SuggestedImprovements result={result} />                
+                
+                {/* Download Audit Button */}
                 <div className="flex justify-center mt-8">
                   <button
                     onClick={handleDownloadAudit}
@@ -511,6 +593,9 @@ export default function ResumeAuditPage() {
                   </button>
                 </div>
               </motion.div>
+
+              {/* Upgrade CTA - Score-based recommendations */}
+              <UpgradeCTA totalScore={result.totalScore} user={user} />
 
               {/* HR Directory CTA - Conversion Focused */}
               <HRDirectoryCTA user={user} isPremium={isPremium} />

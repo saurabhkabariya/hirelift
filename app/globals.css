@@ -385,3 +385,7 @@ body {
   background-size: 200% 100%;
   animation: shine 3s ease-in-out infinite;
 }
+
+button{
+  cursor: pointer;
+}
