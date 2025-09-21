@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
-import { updateBrevoContact, PLAN_TYPES } from '@/lib/brevoService';
+import { createContact, updateBrevoContact, PLAN_TYPES } from '@/lib/brevoService';
 
 export async function POST(request) {
   try {
@@ -58,6 +58,8 @@ export async function POST(request) {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
     
     let user;
+    let isNewUser = false;
+    
     if (existingUser && !existingUser.emailVerified) {
       // Update existing unverified user (from OTP process)
       existingUser.password = hashedPassword;
@@ -65,8 +67,11 @@ export async function POST(request) {
       existingUser.verifiedAt = new Date();
       await existingUser.save();
       user = existingUser;
+      // This is actually completion of an existing signup, so treat as new
+      isNewUser = true;
     } else {
       // Create new user (skipEmailVerification=true)
+      isNewUser = true;
       user = new User({
         email: email.toLowerCase(),
         password: hashedPassword,
@@ -81,20 +86,28 @@ export async function POST(request) {
 
     // Add user to Brevo email marketing
     try {
-      const brevoResult = await updateBrevoContact(user.email, PLAN_TYPES.FREE, {
-        additionalAttributes: {
-          AUTH_METHOD: 'email_password',
-          SIGNUP_DATE: user.createdAt.toISOString(),
-          SOURCE: 'hirelift_email_signup',
-          EMAIL_VERIFIED: user.emailVerified,
-          USER_ID: user._id.toString()
-        }
-      });
-      
-      if (brevoResult.success) {
-        console.log(`📧 Brevo contact ${brevoResult.action}: ${user.email} (${PLAN_TYPES.FREE})`);
+      if (isNewUser) {
+        // Create new contact in Brevo
+        console.log(`🆕 Creating new Brevo contact for: ${user.email}`);
+        await createContact(
+          user.email, 
+          PLAN_TYPES.FREE, 
+          user.firstName || '', 
+          user.lastName || ''
+        );
+        console.log(`✅ Brevo contact created for ${user.email} (${PLAN_TYPES.FREE})`);
       } else {
-        console.error(`❌ Brevo contact failed for ${user.email}:`, brevoResult.error);
+        // This shouldn't happen in current logic, but keeping for safety
+        console.log(`🔄 Updating existing Brevo contact for: ${user.email}`);
+        await updateBrevoContact(user.email, PLAN_TYPES.FREE, {
+          additionalAttributes: {
+            AUTH_METHOD: 'email_password',
+            SIGNUP_DATE: user.createdAt.toISOString(),
+            SOURCE: 'hirelift_email_signup',
+            EMAIL_VERIFIED: user.emailVerified,
+            USER_ID: user._id.toString()
+          }
+        });
       }
     } catch (brevoError) {
       console.error(`❌ Brevo integration error for ${user.email}:`, brevoError);

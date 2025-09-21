@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
-import { updateBrevoContact, PLAN_TYPES } from '@/lib/brevoService';
+import { createContact, updateBrevoContact, PLAN_TYPES } from '@/lib/brevoService';
 
 export async function POST(request) {
   try {
@@ -24,7 +24,10 @@ export async function POST(request) {
       ]
     });
 
+    let isNewUser = false;
+    
     if (user) {
+      // Existing user - update Firebase UID if needed
       if (!user.firebaseUid) {
         user.firebaseUid = firebaseUid;
       }
@@ -36,6 +39,8 @@ export async function POST(request) {
       
       await user.save();
     } else {
+      // New user - create account
+      isNewUser = true;
       user = new User({
         email: email.toLowerCase(),
         password: null,
@@ -52,19 +57,34 @@ export async function POST(request) {
       await user.save();
     }
 
+    // Handle Brevo contact creation/update
     try {
-      await updateBrevoContact(email, PLAN_TYPES.FREE, {
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
-        additionalAttributes: {
-          USER_ID: user._id.toString(),
-          AUTH_METHOD: 'google',
-          LAST_LOGIN: new Date().toISOString(),
-          EMAIL_VERIFIED: 'true'
-        }
-      });
+      if (isNewUser) {
+        // Create new contact in Brevo
+        console.log(`🆕 Creating new Brevo contact for: ${email}`);
+        await createContact(
+          email, 
+          PLAN_TYPES.FREE, 
+          user.firstName || '', 
+          user.lastName || ''
+        );
+      } else {
+        // Update existing contact
+        console.log(`🔄 Updating existing Brevo contact for: ${email}`);
+        await updateBrevoContact(email, PLAN_TYPES.FREE, {
+          firstName: user.firstName || '',
+          lastName: user.lastName || '',
+          additionalAttributes: {
+            USER_ID: user._id.toString(),
+            AUTH_METHOD: 'google',
+            LAST_LOGIN: new Date().toISOString(),
+            EMAIL_VERIFIED: 'true'
+          }
+        });
+      }
     } catch (brevoError) {
-      console.error('Brevo update failed:', brevoError.message);
+      console.error('❌ Brevo operation failed:', brevoError.message);
+      // Continue with signup even if Brevo fails
     }
 
     user.lastLoginAt = new Date();
