@@ -4,6 +4,7 @@ import razorpayService from '@/lib/razorpay';
 import Subscription from '@/models/Subscription';
 import User from '@/models/User';
 import connectDB from '@/lib/mongodb';
+import { updateBrevoContact, PLAN_TYPES } from '@/lib/brevoService';
 
 /**
  * POST /api/payment/verify
@@ -101,6 +102,29 @@ async function verifyPaymentHandler(request) {
       );
 
       console.log('✅ Payment verified and user upgraded to premium:', user.email);
+
+      // Update user plan in Brevo for subscription
+      try {
+        const brevoResult = await updateBrevoContact(user.email, PLAN_TYPES.BASIC, {
+          additionalAttributes: {
+            SUBSCRIPTION_PAYMENT_DATE: now.toISOString(),
+            SUBSCRIPTION_STATUS: 'active',
+            RAZORPAY_SUBSCRIPTION_ID: razorpay_subscription_id,
+            RAZORPAY_PAYMENT_ID: razorpay_payment_id,
+            PAYMENT_TYPE: 'subscription',
+            BILLING_CYCLE: 'monthly'
+          }
+        });
+        
+        if (brevoResult.success) {
+          console.log(`📧 Brevo contact updated: ${user.email} -> ${PLAN_TYPES.BASIC} (subscription)`);
+        } else {
+          console.error(`❌ Brevo update failed for ${user.email}:`, brevoResult.error);
+        }
+      } catch (brevoError) {
+        console.error(`❌ Brevo integration error for ${user.email}:`, brevoError);
+        // Don't fail the payment verification due to Brevo errors
+      }
 
       return NextResponse.json({
         success: true,

@@ -3,6 +3,7 @@ import razorpayService from '@/lib/razorpay';
 import Subscription from '@/models/Subscription';
 import User from '@/models/User';
 import connectDB from '@/lib/mongodb';
+import { updateBrevoContact, PLAN_TYPES } from '@/lib/brevoService';
 
 /**
  * POST /api/webhook
@@ -171,12 +172,31 @@ async function handleSubscriptionCharged(payload) {
   });
   // Ensure user remains premium with proper subscription tracking
   const now = new Date();
-  await User.findByIdAndUpdate(dbSubscription.userId, {
+  const updatedUser = await User.findByIdAndUpdate(dbSubscription.userId, {
     isPremium: true,
     proPlanType: 'subscription', // Ensure this is always set for subscription users
     expiryDate: null, // Subscriptions are managed by webhooks
     updatedAt: now
   });
+
+  // Update user plan in Brevo for subscription payment
+  if (updatedUser) {
+    try {
+      await updateBrevoContact(updatedUser.email, PLAN_TYPES.BASIC, {
+        additionalAttributes: {
+          SUBSCRIPTION_CHARGED_DATE: now.toISOString(),
+          SUBSCRIPTION_STATUS: 'active',
+          RAZORPAY_SUBSCRIPTION_ID: subscription.id,
+          RAZORPAY_PAYMENT_ID: payment?.id || 'webhook_payment',
+          PAYMENT_TYPE: 'subscription',
+          WEBHOOK_EVENT: 'subscription.charged'
+        }
+      });
+      console.log(`📧 Brevo updated for subscription charged: ${updatedUser.email}`);
+    } catch (brevoError) {
+      console.error(`❌ Brevo update failed for subscription charged:`, brevoError);
+    }
+  }
 
   console.log('✅ Subscription charged successfully:', subscription.id, 'Payment:', payment?.id);
 
@@ -205,6 +225,44 @@ async function handleSubscriptionCompleted(payload) {
     created_at: Date.now() / 1000,
     subscription: subscription
   });
+
+  // Check if user should lose premium status when subscription completes
+  const hasOtherActiveSubscriptions = await Subscription.findOne({
+    userId: dbSubscription.userId,
+    status: 'active',
+    endAt: { $gt: new Date() },
+    _id: { $ne: dbSubscription._id }
+  });
+  
+  if (!hasOtherActiveSubscriptions) {
+    const now = new Date();
+    const updatedUser = await User.findByIdAndUpdate(dbSubscription.userId, {
+      isPremium: false,
+      proPlanType: null, // Clear subscription type
+      expiryDate: null, // Clear expiry date
+      updatedAt: now
+    });
+
+    // Downgrade user to free plan in Brevo when subscription completes
+    if (updatedUser) {
+      try {
+        await updateBrevoContact(updatedUser.email, PLAN_TYPES.FREE, {
+          additionalAttributes: {
+            SUBSCRIPTION_COMPLETED_DATE: now.toISOString(),
+            SUBSCRIPTION_STATUS: 'completed',
+            RAZORPAY_SUBSCRIPTION_ID: subscription.id,
+            PREVIOUS_PLAN: 'basic',
+            WEBHOOK_EVENT: 'subscription.completed'
+          }
+        });
+        console.log(`📧 Brevo downgraded to free after completion: ${updatedUser.email}`);
+      } catch (brevoError) {
+        console.error(`❌ Brevo downgrade failed after completion:`, brevoError);
+      }
+    }
+
+    console.log('✅ User premium status revoked due to subscription completion');
+  }
 
   console.log('✅ Subscription completed:', subscription.id);
 
@@ -240,14 +298,34 @@ async function handleSubscriptionCancelled(payload) {
     endAt: { $gt: new Date() },
     _id: { $ne: dbSubscription._id }
   });
+  
   if (!hasOtherActiveSubscriptions) {
     const now = new Date();
-    await User.findByIdAndUpdate(dbSubscription.userId, {
+    const updatedUser = await User.findByIdAndUpdate(dbSubscription.userId, {
       isPremium: false,
       proPlanType: null, // Clear subscription type
       expiryDate: null, // Clear expiry date
       updatedAt: now
     });
+
+    // Downgrade user to free plan in Brevo
+    if (updatedUser) {
+      try {
+        await updateBrevoContact(updatedUser.email, PLAN_TYPES.FREE, {
+          additionalAttributes: {
+            SUBSCRIPTION_CANCELLED_DATE: now.toISOString(),
+            SUBSCRIPTION_STATUS: 'cancelled',
+            RAZORPAY_SUBSCRIPTION_ID: subscription.id,
+            PREVIOUS_PLAN: 'basic',
+            WEBHOOK_EVENT: 'subscription.cancelled'
+          }
+        });
+        console.log(`📧 Brevo downgraded to free: ${updatedUser.email}`);
+      } catch (brevoError) {
+        console.error(`❌ Brevo downgrade failed:`, brevoError);
+      }
+    }
+
     console.log('✅ User premium status revoked due to subscription cancellation');
   }
 
@@ -307,12 +385,29 @@ async function handleSubscriptionResumed(payload) {
   // Restore premium status if subscription is active
   if (subscription.status === 'active') {
     const now = new Date();
-    await User.findByIdAndUpdate(dbSubscription.userId, {
+    const updatedUser = await User.findByIdAndUpdate(dbSubscription.userId, {
       isPremium: true,
       proPlanType: 'subscription', // Ensure subscription type is set
       expiryDate: null, // Subscriptions are managed by webhooks
       updatedAt: now
     });
+
+    // Update user plan in Brevo for subscription resumption
+    if (updatedUser) {
+      try {
+        await updateBrevoContact(updatedUser.email, PLAN_TYPES.BASIC, {
+          additionalAttributes: {
+            SUBSCRIPTION_RESUMED_DATE: now.toISOString(),
+            SUBSCRIPTION_STATUS: 'active',
+            RAZORPAY_SUBSCRIPTION_ID: subscription.id,
+            WEBHOOK_EVENT: 'subscription.resumed'
+          }
+        });
+        console.log(`📧 Brevo updated for subscription resumed: ${updatedUser.email}`);
+      } catch (brevoError) {
+        console.error(`❌ Brevo update failed for subscription resumed:`, brevoError);
+      }
+    }
   }
 
   console.log('✅ Subscription resumed:', subscription.id);
