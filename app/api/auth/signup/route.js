@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
+import { updateBrevoContact, PLAN_TYPES } from '@/lib/brevoService';
 
 export async function POST(request) {
   try {
@@ -76,6 +77,28 @@ export async function POST(request) {
       });
 
       await user.save();
+    }
+
+    // Add user to Brevo email marketing
+    try {
+      const brevoResult = await updateBrevoContact(user.email, PLAN_TYPES.FREE, {
+        additionalAttributes: {
+          AUTH_METHOD: 'email_password',
+          SIGNUP_DATE: user.createdAt.toISOString(),
+          SOURCE: 'hirelift_email_signup',
+          EMAIL_VERIFIED: user.emailVerified,
+          USER_ID: user._id.toString()
+        }
+      });
+      
+      if (brevoResult.success) {
+        console.log(`📧 Brevo contact ${brevoResult.action}: ${user.email} (${PLAN_TYPES.FREE})`);
+      } else {
+        console.error(`❌ Brevo contact failed for ${user.email}:`, brevoResult.error);
+      }
+    } catch (brevoError) {
+      console.error(`❌ Brevo integration error for ${user.email}:`, brevoError);
+      // Don't fail the signup process, just log the error
     }
 
     // Return success response (without password)

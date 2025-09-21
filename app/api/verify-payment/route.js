@@ -4,6 +4,7 @@ import razorpayService from '@/lib/razorpay';
 import User from '@/models/User';
 import connectDB from '@/lib/mongodb';
 import crypto from 'crypto';
+import { updateBrevoContact, PLAN_TYPES } from '@/lib/brevoService';
 
 /**
  * POST /api/verify-payment
@@ -112,6 +113,55 @@ async function verifyPaymentHandler(request) {
 
     console.log('✅ User upgraded to one-time Pro:', user.email);
     console.log('📅 Pro access expires on:', expiryDate.toISOString());
+
+    // Update user plan in Brevo
+    try {
+      const paymentAmount = paymentDetails.amount / 100; // Convert from paise to rupees
+      let brevoPlanType = PLAN_TYPES.PREMIUM; // Default
+      
+      // Map payment amount to plan type
+      switch (paymentAmount) {
+        case 99:
+          brevoPlanType = PLAN_TYPES.BASIC;
+          break;
+        case 299:
+          brevoPlanType = PLAN_TYPES.RESUME_ATS_FIX;
+          break;
+        case 599:
+          brevoPlanType = PLAN_TYPES.PROFESSIONAL;
+          break;
+        case 999:
+          brevoPlanType = PLAN_TYPES.PREMIUM;
+          break;
+        default:
+          if (paymentAmount >= 500) brevoPlanType = PLAN_TYPES.PREMIUM;
+          else if (paymentAmount >= 200) brevoPlanType = PLAN_TYPES.PROFESSIONAL;
+          else brevoPlanType = PLAN_TYPES.BASIC;
+      }
+      
+      const brevoResult = await updateBrevoContact(user.email, brevoPlanType, {
+        additionalAttributes: {
+          LAST_PAYMENT_DATE: new Date().toISOString(),
+          PAYMENT_AMOUNT: paymentAmount.toString(),
+          PAYMENT_METHOD: 'razorpay',
+          PAYMENT_TYPE: 'onetime',
+          RAZORPAY_PAYMENT_ID: razorpay_payment_id,
+          RAZORPAY_ORDER_ID: razorpay_order_id,
+          PURCHASE_DATE: purchaseDate.toISOString(),
+          EXPIRY_DATE: expiryDate.toISOString(),
+          USER_ID: user._id.toString()
+        }
+      });
+      
+      if (brevoResult.success) {
+        console.log(`💳 Payment success: Updated Brevo contact ${user.email} to ${brevoPlanType}`);
+      } else {
+        console.error(`❌ Brevo update failed for ${user.email}:`, brevoResult.error);
+      }
+    } catch (brevoError) {
+      console.error(`❌ Brevo integration error for ${user.email}:`, brevoError);
+      // Don't fail the payment process, just log the error
+    }
 
     // Schedule automatic premium removal after 30 days
     // Note: In production, use a job queue like Bull or Agenda for this
