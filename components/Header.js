@@ -5,10 +5,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes } from 'react-icons/fa';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Header = ({ variant = 'default' }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
+  const { user, signOutUser } = useAuth();
 
   // Different navigation links for different pages
   const defaultNavLinks = [
@@ -58,6 +60,12 @@ const Header = ({ variant = 'default' }) => {
     }
   };
 
+  const handleLogout = async () => {
+    await signOutUser();
+    router.push('/');
+    setMobileMenuOpen(false);
+  };
+
   return (
     <>
       {/* Clean Header */}
@@ -66,8 +74,8 @@ const Header = ({ variant = 'default' }) => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
         className={`fixed top-0 z-50 w-full flex items-center justify-between px-6 lg:px-12 py-4 transition-all duration-500 ${
-          mobileMenuOpen ? 'bg-slate-950/98 backdrop-blur-2xl' : 'bg-slate-800/90 backdrop-blur-xl'
-        } border-b border-white/10`}
+          mobileMenuOpen ? 'bg-gray-900/98 backdrop-blur-2xl' : 'bg-gray-900/90 backdrop-blur-xl'
+        } border-b border-purple-500/20`}
       >
         {/* Logo */}
         <Link href="/">
@@ -75,7 +83,7 @@ const Header = ({ variant = 'default' }) => {
             className="flex items-center gap-3 cursor-pointer"
             whileHover={{ scale: 1.05 }}
           >
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-400 to-cyan-400 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
               H
             </div>
             <span className="text-2xl font-bold tracking-tight text-white">
@@ -90,7 +98,7 @@ const Header = ({ variant = 'default' }) => {
             <button
               key={link.name}
               onClick={() => handleNavClick(link)}
-              className="text-gray-300 hover:text-white font-medium transition-colors duration-300 cursor-pointer"
+              className="text-gray-300 hover:text-purple-300 font-medium transition-colors duration-300 cursor-pointer"
             >
               {link.name}
             </button>
@@ -99,18 +107,40 @@ const Header = ({ variant = 'default' }) => {
         
         {/* Desktop Auth Buttons */}
         <div className="hidden lg:flex items-center gap-4">
-          <button 
-            onClick={() => handleRedirect('/auth')}
-            className="px-6 py-2 rounded-lg text-gray-300 hover:text-white border border-gray-600 hover:border-gray-500 transition-all duration-300"
-          >
-            Login
-          </button>
-          <button 
-            onClick={() => handleRedirect('/auth?mode=signup')}
-            className="px-6 py-2 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 shadow-lg"
-          >
-            Get Started
-          </button>
+          {user ? (
+            <>
+              {/* <div className="text-gray-300 text-sm">
+                Welcome, {user.email?.split('@')[0]}
+              </div> */}
+              <button 
+                onClick={() => handleRedirect('/dashboard')}
+                className="px-6 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-lg"
+              >
+                Go to Dashboard
+              </button>
+              <button 
+                onClick={handleLogout}
+                className="px-6 py-2 rounded-lg text-gray-300 hover:text-white border border-gray-600 hover:border-purple-400 transition-all duration-300"
+              >
+                Logout
+              </button>
+            </>
+          ) : (
+            <>
+              <button 
+                onClick={() => handleRedirect('/auth')}
+                className="px-6 py-2 rounded-lg text-gray-300 hover:text-white border border-gray-600 hover:border-purple-400 transition-all duration-300"
+              >
+                Login
+              </button>
+              <button 
+                onClick={() => handleRedirect('/auth?mode=signup')}
+                className="px-6 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 shadow-lg"
+              >
+                Get Started
+              </button>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
@@ -129,14 +159,14 @@ const Header = ({ variant = 'default' }) => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="fixed top-[84px] left-0 right-0 z-40 lg:hidden bg-slate-950/98 backdrop-blur-2xl border-b border-white/10"
+            className="fixed top-[84px] left-0 right-0 z-40 lg:hidden bg-gray-900/98 backdrop-blur-2xl border-b border-purple-500/20"
           >
             <div className="px-6 py-6 space-y-4">
               {navLinks.map((link) => (
                 <motion.button
                   key={link.name}
                   onClick={() => handleNavClick(link)}
-                  className="block w-full text-left py-3 px-4 rounded-lg text-gray-300 hover:text-white hover:bg-white/5 transition-all duration-300"
+                  className="block w-full text-left py-3 px-4 rounded-lg text-gray-300 hover:text-purple-300 hover:bg-purple-500/10 transition-all duration-300"
                   whileHover={{ x: 10 }}
                 >
                   <div className="font-medium">{link.name}</div>
@@ -144,19 +174,41 @@ const Header = ({ variant = 'default' }) => {
                 </motion.button>
               ))}
               
-              <div className="pt-4 space-y-3 border-t border-white/10">
-                <button 
-                  onClick={() => handleRedirect('/auth')}
-                  className="block w-full py-3 px-4 rounded-lg text-gray-300 hover:text-white border border-gray-600 hover:border-gray-500 transition-all duration-300 text-center"
-                >
-                  Login
-                </button>
-                <button 
-                  onClick={() => handleRedirect('/auth?mode=signup')}
-                  className="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-500 text-white font-semibold hover:from-blue-600 hover:to-cyan-600 transition-all duration-300 text-center"
-                >
-                  Get Started
-                </button>
+              <div className="pt-4 space-y-3 border-t border-purple-500/20">
+                {user ? (
+                  <>
+                    <div className="text-gray-300 text-sm px-4">
+                      Welcome, {user.email?.split('@')[0]}
+                    </div>
+                    <button 
+                      onClick={() => handleRedirect('/dashboard')}
+                      className="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 text-center"
+                    >
+                      Go to Dashboard
+                    </button>
+                    <button 
+                      onClick={handleLogout}
+                      className="block w-full py-3 px-4 rounded-lg text-gray-300 hover:text-white border border-gray-600 hover:border-purple-400 transition-all duration-300 text-center"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => handleRedirect('/auth')}
+                      className="block w-full py-3 px-4 rounded-lg text-gray-300 hover:text-white border border-gray-600 hover:border-purple-400 transition-all duration-300 text-center"
+                    >
+                      Login
+                    </button>
+                    <button 
+                      onClick={() => handleRedirect('/auth?mode=signup')}
+                      className="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 text-center"
+                    >
+                      Get Started
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>
