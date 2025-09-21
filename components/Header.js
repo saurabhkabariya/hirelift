@@ -177,9 +177,9 @@ const Header = ({ variant = 'default' }) => {
               <div className="pt-4 space-y-3 border-t border-purple-500/20">
                 {user ? (
                   <>
-                    <div className="text-gray-300 text-sm px-4">
+                    {/* <div className="text-gray-300 text-sm px-4">
                       Welcome, {user.email?.split('@')[0]}
-                    </div>
+                    </div> */}
                     <button 
                       onClick={() => handleRedirect('/dashboard')}
                       className="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold hover:from-purple-600 hover:to-pink-600 transition-all duration-300 text-center"
