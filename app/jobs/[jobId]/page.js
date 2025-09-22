@@ -1,42 +1,51 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import JobDetail from '@/components/JobDetail.jsx';
+import { connectDB } from '@/lib/mongodb';
+import Job from '@/models/Job';
+import { fetchRemoteOkJobs } from '@/lib/remoteok';
 
-// This function runs on the server
+// This function runs on the server - using direct DB queries instead of HTTP requests
 async function getJob(jobId) {
   try {
-    // More robust base URL detection for different environments
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
-                   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` :
-                   process.env.NEXT_PUBLIC_SITE_URL ||
-                   'http://localhost:3000';
-                   
-    const response = await fetch(`${baseUrl}/api/jobs/${jobId}`, {
-      next: { revalidate: 300 }, // Revalidate every 5 minutes
-      headers: {
-        'Content-Type': 'application/json',
+    await connectDB();
+    let job = null;
+    
+    // First try to find in manual jobs by MongoDB _id
+    if (jobId.length === 24) { // MongoDB ObjectId length
+      job = await Job.findById(jobId).lean();
+      if (job) {
+        // Convert MongoDB _id to string and add source info
+        job.id = job._id.toString();
+        job.source = job.source || 'manual';
+        return job;
       }
-    });
-
-    if (!response.ok) {
-      console.error(`Failed to fetch job ${jobId}:`, response.status, response.statusText);
-      if (response.status === 404) {
-        return null;
-      }
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    if (!data.success) {
-      console.error(`API returned success: false for job ${jobId}:`, data.message);
-      return null;
     }
     
-    return data.data;
+    // If not found, try to find by externalId (for RemoteOK jobs)
+    job = await Job.findOne({ externalId: jobId, source: 'remoteok' }).lean();
+    if (job) {
+      job.id = job._id.toString();
+      return job;
+    }
+    
+    // If still not found, check RemoteOK jobs directly (cached)
+    try {
+      const remoteOkJobs = await fetchRemoteOkJobs();
+      const remoteJob = remoteOkJobs.find(j => j.externalId === jobId || j.id === jobId);
+      
+      if (remoteJob) {
+        return remoteJob;
+      }
+    } catch (error) {
+      console.error('Error fetching RemoteOK jobs:', error);
+      // Continue to return null if RemoteOK fails
+    }
+    
+    return null;
   } catch (error) {
-    console.error('Error fetching job:', error);
+    console.error('Error fetching job directly:', error);
     console.error('Job ID:', jobId);
-    console.error('Base URL used:', process.env.NEXT_PUBLIC_BASE_URL || 'fallback URL');
     return null;
   }
 }
@@ -143,10 +152,23 @@ export async function generateMetadata({ params }) {
 // Main page component
 export default async function JobDetailPage({ params }) {
   const { jobId } = await params;
-  const job = await getJob(jobId);
+  
+  // Try to get job data server-side
+  let job = null;
+  try {
+    job = await getJob(jobId);
+  } catch (error) {
+    console.error('Server-side job fetch failed:', error);
+    // Let the component handle client-side fallback
+  }
 
+  // If no job found server-side, let the JobDetail component handle client-side fetching
   if (!job) {
-    notFound();
+    return (
+      <Suspense fallback={<JobDetailSkeleton />}>
+        <JobDetail jobId={jobId} job={null} />
+      </Suspense>
+    );
   }
 
   return (
@@ -166,3 +188,4 @@ export async function generateStaticParams() {
 // Ensure this page is dynamically rendered
 export const dynamic = 'force-dynamic';
 export const dynamicParams = true;
+export const revalidate = 300; // Revalidate every 5 minutes

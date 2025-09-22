@@ -1,14 +1,88 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { notFound } from "next/navigation";
 import ApplyOverlay from "./ApplyOverlay.jsx";
 import JobCard from "./JobCard.jsx";
 
-export default function JobDetail({ job }) {
+export default function JobDetail({ job: initialJob, jobId }) {
   const router = useRouter();
   const [showApplyOverlay, setShowApplyOverlay] = useState(false);
+  const [job, setJob] = useState(initialJob);
+  const [loading, setLoading] = useState(!initialJob);
+  const [error, setError] = useState(null);
+
+  // Client-side job fetching if no job data provided
+  useEffect(() => {
+    if (!job && jobId) {
+      const fetchJob = async () => {
+        try {
+          setLoading(true);
+          const response = await fetch(`/api/jobs/${jobId}`);
+          
+          if (!response.ok) {
+            if (response.status === 404) {
+              notFound();
+              return;
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          
+          const data = await response.json();
+          if (data.success) {
+            setJob(data.data);
+          } else {
+            throw new Error(data.message || 'Failed to fetch job');
+          }
+        } catch (error) {
+          console.error('Client-side job fetch failed:', error);
+          setError(error.message);
+          notFound();
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchJob();
+    }
+  }, [job, jobId]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading job details...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">Error loading job: {error}</p>
+          <button 
+            onClick={() => router.back()} 
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // If still no job data, show not found
+  if (!job) {
+    notFound();
+    return null;
+  }
 
   const {
     _id,
