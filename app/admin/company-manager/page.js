@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import CompanyForm from "@/components/CompanyForm";
 import CompanyRow from "@/components/CompanyRow";
+import JobForm from "@/components/JobForm";
 import toast from "react-hot-toast";
 
 const ADMIN_EMAIL = "websiteads074@gmail.com";
@@ -20,6 +21,39 @@ export default function CompanyManagerPage() {
   const [jsonValidation, setJsonValidation] = useState({ isValid: null, message: "" });
   const [pending, setPending] = useState([]);
   const [pageLoading, setPageLoading] = useState(false);
+
+  // Job management state
+  const [jobs, setJobs] = useState([]);
+  const [jobTotal, setJobTotal] = useState(0);
+  const [jobPage, setJobPage] = useState(1);
+  const [editingJob, setEditingJob] = useState(null);
+  const [jobBulkJson, setJobBulkJson] = useState("");
+  const [jobJsonValidation, setJobJsonValidation] = useState({ isValid: null, message: "" });
+  const [pendingJobs, setPendingJobs] = useState([]);
+  const [jobPageLoading, setJobPageLoading] = useState(false);
+
+  const validateJobJson = (json) => {
+    try {
+      const jobs = JSON.parse(json);
+      if (!Array.isArray(jobs)) {
+        return { isValid: false, message: "JSON must be an array of job objects" };
+      }
+      
+      for (let i = 0; i < jobs.length; i++) {
+        const job = jobs[i];
+        if (!job.title || !job.company || !job.location || !job.description || !job.url) {
+          return { 
+            isValid: false, 
+            message: `Job ${i + 1}: Missing required fields (title, company, location, description, url)` 
+          };
+        }
+      }
+      
+      return { isValid: true, message: `${jobs.length} valid jobs found` };
+    } catch (error) {
+      return { isValid: false, message: "Invalid JSON format" };
+    }
+  };
 
   // Fetch companies
   useEffect(() => {
@@ -40,6 +74,36 @@ export default function CompanyManagerPage() {
       .then((res) => res.json())
       .then((data) => setPending(data.data || []));
   }, [companies]);
+
+  // Fetch jobs
+  useEffect(() => {
+    setJobPageLoading(true);
+    fetch(`/api/jobs?page=${jobPage}&limit=${PAGE_SIZE}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setJobs(data.jobs || []);
+        setJobTotal(data.total || 0);
+        setJobPageLoading(false);
+      })
+      .catch(() => setJobPageLoading(false));
+  }, [jobPage]);
+
+  // Fetch pending jobs
+  useEffect(() => {
+    fetch(`/api/jobs?status=draft&page=1&limit=100`)
+      .then((res) => res.json())
+      .then((data) => setPendingJobs(data.jobs || []));
+  }, [jobs]);
+
+  // Job JSON validation effect
+  useEffect(() => {
+    if (jobBulkJson.trim()) {
+      const validation = validateJobJson(jobBulkJson);
+      setJobJsonValidation(validation);
+    } else {
+      setJobJsonValidation({ isValid: null, message: "" });
+    }
+  }, [jobBulkJson]);
 
     // JSON validation effect
   useEffect(() => {
@@ -214,7 +278,120 @@ export default function CompanyManagerPage() {
       toast.error("Status update failed");
     }
   };
+
+  // Job Management Functions
+  const fetchJobs = () => {
+    setJobPageLoading(true);
+    fetch(`/api/jobs?page=${jobPage}&limit=${PAGE_SIZE}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setJobs(data.jobs || []);
+        setJobTotal(data.total || 0);
+        setJobPageLoading(false);
+      })
+      .catch(() => setJobPageLoading(false));
+  };
+
+  const fetchPendingJobs = () => {
+    fetch(`/api/jobs?status=draft&page=1&limit=100`)
+      .then((res) => res.json())
+      .then((data) => setPendingJobs(data.jobs || []));
+  };
+
+  const handleJobAdd = async (data) => {
+    const res = await fetch("/api/jobs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    
+    if (res.ok) {
+      toast.success("Job added successfully!");
+      fetchJobs();
+      fetchPendingJobs();
+    } else {
+      const error = await res.json();
+      toast.error(error.message || "Failed to add job");
+    }
+  };
+
+  const handleJobBulkAdd = async () => {
+    try {
+      const jobs = JSON.parse(jobBulkJson);
+      const res = await fetch("/api/jobs/bulk", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobs }),
+      });
+      
+      if (res.ok) {
+        const result = await res.json();
+        toast.success(`${result.successful} jobs added successfully!`);
+        if (result.failed > 0) {
+          toast.error(`${result.failed} jobs failed to add`);
+        }
+        setJobBulkJson("");
+        setJobJsonValidation({ isValid: null, message: "" });
+        fetchJobs();
+        fetchPendingJobs();
+      } else {
+        const error = await res.json();
+        toast.error(error.message || "Bulk upload failed");
+      }
+    } catch (error) {
+      toast.error("Invalid JSON format");
+    }
+  };
+
+  const handleJobEdit = (job) => setEditingJob(job);
+
+  const handleJobUpdate = async (data) => {
+    const res = await fetch(`/api/jobs/${editingJob._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    });
+    
+    if (res.ok) {
+      toast.success("Job updated successfully!");
+      setEditingJob(null);
+      fetchJobs();
+      fetchPendingJobs();
+    } else {
+      const error = await res.json();
+      toast.error(error.message || "Failed to update job");
+    }
+  };
+
+  const handleJobDelete = async (id) => {
+    const res = await fetch(`/api/jobs/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      toast.success("Job deleted successfully!");
+      fetchJobs();
+      fetchPendingJobs();
+    } else {
+      toast.error("Failed to delete job");
+    }
+  };
+
+  const handleJobStatusToggle = async (job, status) => {
+    const res = await fetch(`/api/jobs/${job._id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ status }),
+    });
+    
+    if (res.ok) {
+      toast.success(`Job status set to ${status}`);
+      setPendingJobs(pendingJobs.filter((j) => j._id !== job._id));
+      fetchJobs();
+    } else {
+      toast.error("Status update failed");
+    }
+  };
+
   const totalPages = Math.ceil(total / PAGE_SIZE);
+  const jobTotalPages = Math.ceil(jobTotal / PAGE_SIZE);
 
   // Animation variants
   const containerVariants = {
@@ -754,22 +931,74 @@ export default function CompanyManagerPage() {
                       <span className="hidden sm:inline">Previous</span>
                     </motion.button>
 
-                    <div className="flex items-center gap-1">
-                      {Array.from({ length: totalPages }, (_, i) => (
-                        <motion.button
-                          key={i}
-                          whileHover={{ scale: 1.1 }}
-                          whileTap={{ scale: 0.9 }}
-                          className={`w-10 h-10 rounded-lg font-semibold transition-all duration-200 ${
-                            page === i + 1
-                              ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg"
-                              : "bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200"
-                          }`}
-                          onClick={() => setPage(i + 1)}
-                        >
-                          {i + 1}
-                        </motion.button>
-                      ))}
+                    <div className="flex items-center gap-1 max-w-xs sm:max-w-sm overflow-x-auto scrollbar-hide">
+                      {/* First page */}
+                      {page > 3 && (
+                        <>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="w-10 h-10 rounded-lg font-semibold transition-all duration-200 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 flex-shrink-0"
+                            onClick={() => setPage(1)}
+                          >
+                            1
+                          </motion.button>
+                          {page > 4 && (
+                            <span className="px-2 text-gray-400 flex-shrink-0">...</span>
+                          )}
+                        </>
+                      )}
+
+                      {/* Page numbers around current page */}
+                      {Array.from({ length: Math.min(totalPages, 5) }, (_, i) => {
+                        let pageNum;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (page <= 3) {
+                          pageNum = i + 1;
+                        } else if (page >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = page - 2 + i;
+                        }
+
+                        if (pageNum < 1 || pageNum > totalPages) return null;
+                        if (pageNum === 1 && page > 3) return null;
+                        if (pageNum === totalPages && page < totalPages - 2) return null;
+
+                        return (
+                          <motion.button
+                            key={pageNum}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className={`w-10 h-10 rounded-lg font-semibold transition-all duration-200 flex-shrink-0 ${
+                              page === pageNum
+                                ? "bg-gradient-to-r from-blue-600 to-blue-500 text-white shadow-lg"
+                                : "bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200"
+                            }`}
+                            onClick={() => setPage(pageNum)}
+                          >
+                            {pageNum}
+                          </motion.button>
+                        );
+                      })}
+
+                      {/* Last page */}
+                      {page < totalPages - 2 && (
+                        <>
+                          {page < totalPages - 3 && (
+                            <span className="px-2 text-gray-400 flex-shrink-0">...</span>
+                          )}
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="w-10 h-10 rounded-lg font-semibold transition-all duration-200 bg-blue-50 text-blue-600 hover:bg-blue-100 border border-blue-200 flex-shrink-0"
+                            onClick={() => setPage(totalPages)}
+                          >
+                            {totalPages}
+                          </motion.button>
+                        </>
+                      )}
                     </div>
 
                     <motion.button
@@ -789,7 +1018,598 @@ export default function CompanyManagerPage() {
               )}
             </>
           )}
-        </motion.div>        {/* Enhanced Edit Modal */}
+        </motion.div>
+
+        {/* ====== JOB MANAGEMENT SECTION ====== */}
+        
+        {/* Job Manager Header */}
+        <motion.div 
+          variants={cardVariants}
+          className="text-center mb-8 mt-16"
+        >
+          <motion.h1 
+            initial={{ scale: 0.9 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.5 }}
+            className="text-4xl sm:text-5xl py-2 font-extrabold bg-gradient-to-r from-green-700 via-green-500 to-green-400 bg-clip-text text-transparent mb-4"
+          >
+            Job Manager
+          </motion.h1>
+          <motion.p 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="text-lg text-gray-600 max-w-2xl mx-auto"
+          >
+            Add, edit, approve, and manage job postings with powerful admin tools.
+          </motion.p>
+        </motion.div>
+
+        {/* Job Form Section */}
+        <motion.div 
+          variants={cardVariants}
+          className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 mb-8 border border-green-100"
+        >
+          <div className="flex flex-col lg:flex-row gap-8">
+            <motion.div 
+              whileHover={{ scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="flex-1"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-600 to-green-400 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m-8 0V6a2 2 0 00-2 2v6m0 0v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-semibold bg-gradient-to-r from-green-700 to-green-500 bg-clip-text text-transparent">
+                  Add New Job
+                </h2>
+              </div>
+              <JobForm onSubmit={handleJobAdd} />
+            </motion.div>
+
+            <motion.div 
+              whileHover={{ scale: 1.01 }}
+              transition={{ type: "spring", stiffness: 300 }}
+              className="flex-1"
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-600 to-green-400 flex items-center justify-center">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                </div>
+                <h2 className="text-xl font-semibold bg-gradient-to-r from-green-700 to-green-500 bg-clip-text text-transparent">
+                  Bulk Add Jobs (JSON)
+                </h2>
+              </div>
+              
+              <div className="mb-4">
+                <motion.details 
+                  whileHover={{ scale: 1.01 }}
+                  className="text-sm text-gray-600 bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200 shadow-sm"
+                >
+                  <summary className="cursor-pointer hover:text-green-600 font-semibold flex items-center gap-2 mb-2">
+                    <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                    </svg>
+                    📋 JSON Format Example & Guidelines
+                  </summary>
+                  
+                  <div className="space-y-4 mt-4">
+                    <div className="bg-white rounded-lg p-4 border border-green-100">
+                      <h4 className="font-semibold text-green-700 mb-3 flex items-center gap-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                        Field Requirements
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                        <div>
+                          <span className="font-medium text-red-600">Required:</span>
+                          <ul className="mt-1 space-y-1 text-gray-600">
+                            <li>• title (string)</li>
+                            <li>• company (string)</li>
+                            <li>• location (string)</li>
+                            <li>• description (string)</li>
+                            <li>• url (string)</li>
+                            <li>• tags (array)</li>
+                          </ul>
+                        </div>
+                        <div>
+                          <span className="font-medium text-blue-600">Optional:</span>
+                          <ul className="mt-1 space-y-1 text-gray-600">
+                            <li>• jobType (string)</li>
+                            <li>• workMode (string)</li>
+                            <li>• experienceLevel (string)</li>
+                            <li>• salaryRange (object)</li>
+                            <li>• companyLogo (string)</li>
+                            <li>• shortDescription (string)</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                      <h5 className="font-semibold text-gray-700 mb-2 text-xs">📝 Example JSON Format:</h5>
+                      <pre className="text-xs text-gray-600 bg-white p-3 rounded border overflow-x-auto">
+{`[
+  {
+    "title": "Senior React Developer",
+    "company": "TechCorp Solutions",
+    "location": "Remote",
+    "description": "We are looking for an experienced React developer...",
+    "url": "https://company.com/careers/react-dev",
+    "tags": ["React", "JavaScript", "TypeScript", "Node.js"],
+    "jobType": "full-time",
+    "workMode": "remote",
+    "experienceLevel": "senior",
+    "salaryRange": {
+      "min": 80000,
+      "max": 120000,
+      "currency": "USD",
+      "period": "yearly"
+    },
+    "companyLogo": "https://company.com/logo.png"
+  }
+]`}
+                      </pre>
+                    </div>
+                  </div>
+                </motion.details>
+              </div>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-green-700 mb-2">
+                    JSON Data
+                  </label>
+                  <textarea
+                    value={jobBulkJson}
+                    onChange={(e) => setJobBulkJson(e.target.value)}
+                    placeholder="Paste your job array JSON here..."
+                    rows="12"
+                    className="w-full border-2 border-green-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all duration-200 bg-white font-mono text-sm resize-vertical"
+                  />
+                </div>
+                
+                {/* JSON Validation Status */}
+                {jobJsonValidation.message && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`p-3 rounded-lg text-sm font-medium ${
+                      jobJsonValidation.isValid === true
+                        ? "bg-green-100 text-green-700 border border-green-200"
+                        : jobJsonValidation.isValid === false
+                        ? "bg-red-100 text-red-700 border border-red-200"
+                        : "bg-blue-100 text-blue-700 border border-blue-200"
+                    }`}
+                  >
+                    {jobJsonValidation.message}
+                  </motion.div>
+                )}
+                
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleJobBulkAdd}
+                  disabled={!jobJsonValidation.isValid}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white font-semibold rounded-xl hover:from-green-700 hover:to-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                  </svg>
+                  Upload Jobs
+                </motion.button>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        {/* Pending Job Approvals */}
+        <motion.div 
+          variants={cardVariants}
+          className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 mb-8 border border-green-100"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-orange-600 to-orange-400 flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-semibold bg-gradient-to-r from-orange-700 to-orange-500 bg-clip-text text-transparent">
+              Pending Job Approvals
+            </h2>
+            <motion.span 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="px-3 py-1 bg-orange-100 text-orange-700 text-sm font-medium rounded-full"
+            >
+              {pendingJobs.length} pending
+            </motion.span>
+          </div>
+          
+          {pendingJobs.length === 0 ? (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-12"
+            >
+              <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+                <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <p className="text-gray-500 font-medium">All caught up! No pending jobs.</p>
+            </motion.div>
+          ) : (
+            <div className="overflow-x-auto rounded-xl border border-green-100">
+              <table className="min-w-full text-sm">
+                <thead>
+                  <tr className="bg-gradient-to-r from-green-50 to-green-100">
+                    <th className="p-4 text-left font-semibold text-green-700">Job Title</th>
+                    <th className="p-4 text-left font-semibold text-green-700">Company</th>
+                    <th className="p-4 text-left font-semibold text-green-700">Location</th>
+                    <th className="p-4 text-left font-semibold text-green-700">Type</th>
+                    <th className="p-4 text-left font-semibold text-green-700">Status</th>
+                    <th className="p-4 text-left font-semibold text-green-700">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pendingJobs.map((job, index) => (
+                    <motion.tr 
+                      key={job._id}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className="border-b border-green-50 hover:bg-green-50/50 transition-colors"
+                    >
+                      <td className="p-4 font-semibold text-gray-800">{job.title}</td>
+                      <td className="p-4 text-gray-600">{job.company}</td>
+                      <td className="p-4 text-gray-600">{job.location}</td>
+                      <td className="p-4">
+                        <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium capitalize">
+                          {job.jobType?.replace('-', ' ')}
+                        </span>
+                      </td>
+                      <td className="p-4">
+                        <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full text-xs font-medium capitalize">
+                          {job.status}
+                        </span>
+                      </td>
+                      <td className="p-4 flex gap-2">
+                        <motion.button 
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="px-3 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors font-medium text-xs"
+                          onClick={() => handleJobStatusToggle(job, "active")}
+                        >
+                          Approve
+                        </motion.button>
+                        <motion.button 
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors font-medium text-xs"
+                          onClick={() => handleJobStatusToggle(job, "rejected")}
+                        >
+                          Reject
+                        </motion.button>
+                      </td>
+                    </motion.tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </motion.div>
+
+        {/* Job List */}
+        <motion.div 
+          variants={cardVariants}
+          className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 border border-green-100"
+        >
+          <div className="flex items-center gap-3 mb-6">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-green-600 to-green-400 flex items-center justify-center">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m-8 0V6a2 2 0 00-2 2v6m0 0v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-semibold bg-gradient-to-r from-green-700 to-green-500 bg-clip-text text-transparent">
+              All Jobs
+            </h2>
+            <motion.span 
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              className="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full"
+            >
+              {jobTotal} total
+            </motion.span>
+          </div>
+          
+          {jobPageLoading ? (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex flex-col items-center justify-center py-20"
+            >
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="w-12 h-12 border-4 border-green-200 border-t-green-600 rounded-full mb-4"
+              />
+              <p className="text-green-600 font-medium">Loading jobs...</p>
+            </motion.div>
+          ) : (
+            <>
+              {jobs.length === 0 ? (
+                <motion.div 
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  className="text-center py-12"
+                >
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0V6a2 2 0 012 2v6M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m-8 0V6a2 2 0 00-2 2v6m0 0v2a2 2 0 002 2h12a2 2 0 002-2v-2" />
+                    </svg>
+                  </div>
+                  <p className="text-gray-500 font-medium">No jobs found. Add your first job!</p>
+                </motion.div>
+              ) : (
+                <div className="overflow-x-auto rounded-xl border border-green-100">
+                  <table className="min-w-full text-sm">
+                    <thead>
+                      <tr className="bg-gradient-to-r from-green-50 to-green-100">
+                        <th className="p-4 text-left font-semibold text-green-700">Job Title</th>
+                        <th className="p-4 text-left font-semibold text-green-700">Company</th>
+                        <th className="p-4 text-left font-semibold text-green-700">Location</th>
+                        <th className="p-4 text-left font-semibold text-green-700">Type</th>
+                        <th className="p-4 text-left font-semibold text-green-700">Status</th>
+                        <th className="p-4 text-left font-semibold text-green-700">Posted</th>
+                        <th className="p-4 text-left font-semibold text-green-700">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {jobs.map((job, index) => (
+                        <motion.tr 
+                          key={job._id}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="border-b border-green-50 hover:bg-green-50/50 transition-colors"
+                        >
+                          <td className="p-4">
+                            <div className="flex items-center gap-3">
+                              <div>
+                                <div className="font-semibold text-gray-800">{job.title}</div>
+                                <div className="text-xs text-gray-500">
+                                  {job.tags?.slice(0, 3).join(", ")}
+                                  {job.tags?.length > 3 && ` +${job.tags.length - 3} more`}
+                                </div>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="p-4 text-gray-600">{job.company}</td>
+                          <td className="p-4 text-gray-600">{job.location}</td>
+                          <td className="p-4">
+                            <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium capitalize">
+                              {job.jobType?.replace('-', ' ')}
+                            </span>
+                          </td>
+                          <td className="p-4">
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
+                              job.status === 'active' ? 'bg-green-100 text-green-700' :
+                              job.status === 'draft' ? 'bg-orange-100 text-orange-700' :
+                              job.status === 'expired' ? 'bg-gray-100 text-gray-700' :
+                              'bg-red-100 text-red-700'
+                            }`}>
+                              {job.status}
+                            </span>
+                          </td>
+                          <td className="p-4 text-gray-600 text-xs">
+                            {job.daysAgo}
+                          </td>
+                          <td className="p-4">
+                            <div className="flex gap-2">
+                              <motion.button 
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="px-3 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors font-medium text-xs"
+                                onClick={() => handleJobEdit(job)}
+                              >
+                                Edit
+                              </motion.button>
+                              <motion.button 
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
+                                className="px-3 py-2 bg-red-100 text-red-700 rounded-lg hover:bg-red-200 transition-colors font-medium text-xs"
+                                onClick={() => {
+                                  if (confirm('Are you sure you want to delete this job?')) {
+                                    handleJobDelete(job._id);
+                                  }
+                                }}
+                              >
+                                Delete
+                              </motion.button>
+                            </div>
+                          </td>
+                        </motion.tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* Job Pagination */}
+              {jobTotalPages > 1 && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-8 pt-6 border-t border-green-100"
+                >
+                  <div className="text-sm text-gray-600 font-medium">
+                    Showing {((jobPage - 1) * PAGE_SIZE) + 1} to {Math.min(jobPage * PAGE_SIZE, jobTotal)} of {jobTotal} jobs
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setJobPage(jobPage - 1)}
+                      disabled={jobPage === 1}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-green-50 text-green-600 hover:bg-green-100 border border-green-200"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+                      </svg>
+                      <span className="hidden sm:inline">Previous</span>
+                    </motion.button>
+
+                    <div className="flex items-center gap-1 max-w-xs sm:max-w-sm overflow-x-auto scrollbar-hide">
+                      {/* First page */}
+                      {jobPage > 3 && (
+                        <>
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="w-10 h-10 rounded-lg font-semibold transition-all duration-200 bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 flex-shrink-0"
+                            onClick={() => setJobPage(1)}
+                          >
+                            1
+                          </motion.button>
+                          {jobPage > 4 && (
+                            <span className="px-2 text-gray-400 flex-shrink-0">...</span>
+                          )}
+                        </>
+                      )}
+
+                      {/* Page numbers around current page */}
+                      {Array.from({ length: Math.min(jobTotalPages, 5) }, (_, i) => {
+                        let pageNum;
+                        if (jobTotalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (jobPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (jobPage >= jobTotalPages - 2) {
+                          pageNum = jobTotalPages - 4 + i;
+                        } else {
+                          pageNum = jobPage - 2 + i;
+                        }
+
+                        if (pageNum < 1 || pageNum > jobTotalPages) return null;
+                        if (pageNum === 1 && jobPage > 3) return null;
+                        if (pageNum === jobTotalPages && jobPage < jobTotalPages - 2) return null;
+
+                        return (
+                          <motion.button
+                            key={pageNum}
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className={`w-10 h-10 rounded-lg font-semibold transition-all duration-200 flex-shrink-0 ${
+                              jobPage === pageNum
+                                ? "bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg"
+                                : "bg-green-50 text-green-600 hover:bg-green-100 border border-green-200"
+                            }`}
+                            onClick={() => setJobPage(pageNum)}
+                          >
+                            {pageNum}
+                          </motion.button>
+                        );
+                      })}
+
+                      {/* Last page */}
+                      {jobPage < jobTotalPages - 2 && (
+                        <>
+                          {jobPage < jobTotalPages - 3 && (
+                            <span className="px-2 text-gray-400 flex-shrink-0">...</span>
+                          )}
+                          <motion.button
+                            whileHover={{ scale: 1.1 }}
+                            whileTap={{ scale: 0.9 }}
+                            className="w-10 h-10 rounded-lg font-semibold transition-all duration-200 bg-green-50 text-green-600 hover:bg-green-100 border border-green-200 flex-shrink-0"
+                            onClick={() => setJobPage(jobTotalPages)}
+                          >
+                            {jobTotalPages}
+                          </motion.button>
+                        </>
+                      )}
+                    </div>
+
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setJobPage(jobPage + 1)}
+                      disabled={jobPage === jobTotalPages}
+                      className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-green-50 text-green-600 hover:bg-green-100 border border-green-200"
+                    >
+                      <span className="hidden sm:inline">Next</span>
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+                      </svg>
+                    </motion.button>
+                  </div>
+                </motion.div>
+              )}
+            </>
+          )}
+        </motion.div>
+
+
+        {/* Job Edit Modal */}
+        <AnimatePresence>
+          {editingJob && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+              onClick={() => setEditingJob(null)}
+            >
+              <motion.div 
+                initial={{ scale: 0.9, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.9, opacity: 0, y: 20 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto relative"
+                onClick={(e) => e.stopPropagation()}
+              >
+                {/* Modal Header */}
+                <div className="sticky top-0 bg-gradient-to-r from-green-600 to-green-500 text-white p-6 rounded-t-2xl">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-white/20 flex items-center justify-center">
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold">Edit Job</h2>
+                        <p className="text-green-100 text-sm">{editingJob.title}</p>
+                      </div>
+                    </div>
+                    <motion.button 
+                      whileHover={{ scale: 1.1, rotate: 90 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                      onClick={() => setEditingJob(null)}
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </motion.button>
+                  </div>
+                </div>
+
+                {/* Modal Content */}
+                <div className="p-6 bg-white text-gray-800">
+                  <JobForm initialValues={editingJob} onSubmit={handleJobUpdate} />
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>        {/* Enhanced Edit Modal */}
         <AnimatePresence>
           {editing && (
             <motion.div 

@@ -16,6 +16,7 @@ const Header = ({ variant = 'default' }) => {
   const defaultNavLinks = [
     { name: "Home", href: "#home", description: "AI-powered resume optimization platform" },
     { name: "How it Works", href: "#how-it-works", description: "3-step process to optimize your job search" },
+    { name: "Jobs", href: "/jobs", description: "Browse remote jobs and career opportunities", isExternal: true },
     { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
     { name: "Features", href: "#features", description: "Complete job search toolkit" },
     { name: "Blog", href: "/blog", description: "Career advice and job search tips", isExternal: true },
@@ -24,6 +25,7 @@ const Header = ({ variant = 'default' }) => {
 
   const blogNavLinks = [
     { name: "Home", href: "/", description: "Back to homepage", isExternal: true },
+    { name: "Jobs", href: "/jobs", description: "Browse remote jobs and career opportunities", isExternal: true },
     { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
     { name: "Blog", href: "/blog", description: "Career advice and job search tips", isExternal: true },
     { name: "Pricing", href: "/#pricing", description: "Affordable plans for every job seeker", isExternal: true },

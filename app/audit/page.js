@@ -280,6 +280,16 @@ export default function ResumeAuditPage() {
               {user ? (
                 <>
                   <Link 
+                    href="/jobs" 
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
+                    </svg>
+                    <span className="hidden sm:inline">Jobs</span>
+                  </Link>
+                  
+                  <Link 
                     href="/dashboard" 
                     className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
                   >
@@ -316,13 +326,25 @@ export default function ResumeAuditPage() {
                   </div>
                 </>
               ) : (
-                <Link 
-                  href="/auth" 
-                  className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
-                >
-                  <User className="w-4 h-4" />
-                  <span>Login</span>
-                </Link>
+                <>
+                  <Link 
+                    href="/jobs" 
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
+                    </svg>
+                    <span className="hidden sm:inline">Jobs</span>
+                  </Link>
+                  
+                  <Link 
+                    href="/auth" 
+                    className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
+                  >
+                    <User className="w-4 h-4" />
+                    <span>Login</span>
+                  </Link>
+                </>
               )}
             </div>
           </div>
