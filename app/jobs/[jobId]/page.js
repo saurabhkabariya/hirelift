@@ -158,7 +158,11 @@ export default async function JobDetailPage({ params }) {
 
 // For static generation optimization
 export async function generateStaticParams() {
-  // We can't pre-generate all job pages since they're dynamic
-  // Return empty array to generate on-demand
+  // Return empty array to enable dynamic rendering on-demand
+  // This ensures all job pages are rendered dynamically at request time
   return [];
 }
+
+// Ensure this page is dynamically rendered
+export const dynamic = 'force-dynamic';
+export const dynamicParams = true;

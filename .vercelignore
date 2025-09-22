@@ -1,0 +1,15 @@
+# Vercel ignore file
+# Make sure critical files are included
+
+# Don't ignore these important files
+!app/jobs/[jobId]/page.js
+!app/api/jobs/[id]/route.js
+
+# Standard ignores
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.next/
+node_modules/
+*.log
