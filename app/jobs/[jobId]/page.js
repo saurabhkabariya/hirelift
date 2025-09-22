@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { notFound } from 'next/navigation';
-import JobDetail from '@/components/JobDetail';
+import JobDetail from '@/components/JobDetail.jsx';
 
 // This function runs on the server
 async function getJob(jobId) {

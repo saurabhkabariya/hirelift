@@ -1,10 +1,10 @@
 "use client";
-import React, { useState, useEffect, useRef, Suspense } from "react";
+import React, { useState, useEffect, useRef, Suspense, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import toast, { Toaster } from 'react-hot-toast';
-import JobCard from "@/components/JobCard";
+import JobCard from "@/components/JobCard.jsx";
 
 const PAGE_SIZE = 12;
 
@@ -63,25 +63,39 @@ function JobsPageContent() {
   const searchParams = useSearchParams();
   
   // Filter states
-  const [search, setSearch] = useState(searchParams?.get('q') || '');
-  const [selectedTags, setSelectedTags] = useState(searchParams?.get('tags')?.split(',').filter(Boolean) || []);
-  const [jobType, setJobType] = useState(searchParams?.get('jobType') || '');
-  const [workMode, setWorkMode] = useState(searchParams?.get('workMode') || '');
-  const [experienceLevel, setExperienceLevel] = useState(searchParams?.get('experienceLevel') || '');
-  const [location, setLocation] = useState(searchParams?.get('location') || '');
-  const [sort, setSort] = useState(searchParams?.get('sort') || 'date');
+  const [search, setSearch] = useState('');
+  const [selectedTags, setSelectedTags] = useState([]);
+  const [jobType, setJobType] = useState('');
+  const [workMode, setWorkMode] = useState('');
+  const [experienceLevel, setExperienceLevel] = useState('');
+  const [location, setLocation] = useState('');
+  const [sort, setSort] = useState('date');
   
   // Data states
   const [jobs, setJobs] = useState([]);
   const [pagination, setPagination] = useState({});
   const [availableFilters, setAvailableFilters] = useState({});
   const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(parseInt(searchParams?.get('page') || '1'));
+  const [page, setPage] = useState(1);
   
   // UI states
   const [showTagDropdown, setShowTagDropdown] = useState(false);
   const [tagSearchTerm, setTagSearchTerm] = useState("");
   const tagDropdownRef = useRef(null);
+
+  // Initialize from search params after component mounts
+  useEffect(() => {
+    if (searchParams) {
+      setSearch(searchParams.get('q') || '');
+      setSelectedTags(searchParams.get('tags')?.split(',').filter(Boolean) || []);
+      setJobType(searchParams.get('jobType') || '');
+      setWorkMode(searchParams.get('workMode') || '');
+      setExperienceLevel(searchParams.get('experienceLevel') || '');
+      setLocation(searchParams.get('location') || '');
+      setSort(searchParams.get('sort') || 'date');
+      setPage(parseInt(searchParams.get('page') || '1'));
+    }
+  }, [searchParams]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -97,31 +111,8 @@ function JobsPageContent() {
     };
   }, []);
 
-  // Fetch jobs when filters change
-  useEffect(() => {
-    fetchJobs();
-  }, [search, selectedTags, jobType, workMode, experienceLevel, location, sort, page]);
-
-  // Update URL when filters change
-  useEffect(() => {
-    const params = new URLSearchParams();
-    if (search) params.set('q', search);
-    if (selectedTags.length > 0) params.set('tags', selectedTags.join(','));
-    if (jobType) params.set('jobType', jobType);
-    if (workMode) params.set('workMode', workMode);
-    if (experienceLevel) params.set('experienceLevel', experienceLevel);
-    if (location) params.set('location', location);
-    if (sort !== 'date') params.set('sort', sort);
-    if (page !== 1) params.set('page', page.toString());
-    
-    const queryString = params.toString();
-    const newUrl = queryString ? `/jobs?${queryString}` : '/jobs';
-    
-    // Update URL without triggering a re-render
-    window.history.replaceState(null, '', newUrl);
-  }, [search, selectedTags, jobType, workMode, experienceLevel, location, sort, page]);
-
-  const fetchJobs = async () => {
+  // Fetch jobs function with useCallback to make it stable
+  const fetchJobs = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -152,7 +143,31 @@ function JobsPageContent() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [search, selectedTags, jobType, workMode, experienceLevel, location, sort, page]);
+
+  // Fetch jobs when filters change
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (search) params.set('q', search);
+    if (selectedTags.length > 0) params.set('tags', selectedTags.join(','));
+    if (jobType) params.set('jobType', jobType);
+    if (workMode) params.set('workMode', workMode);
+    if (experienceLevel) params.set('experienceLevel', experienceLevel);
+    if (location) params.set('location', location);
+    if (sort !== 'date') params.set('sort', sort);
+    if (page !== 1) params.set('page', page.toString());
+    
+    const queryString = params.toString();
+    const newUrl = queryString ? `/jobs?${queryString}` : '/jobs';
+    
+    // Update URL without triggering a re-render
+    window.history.replaceState(null, '', newUrl);
+  }, [search, selectedTags, jobType, workMode, experienceLevel, location, sort, page]);
 
   const handleTagSelect = (tag) => {
     if (!selectedTags.includes(tag)) {

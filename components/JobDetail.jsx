@@ -3,8 +3,8 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import ApplyOverlay from "./ApplyOverlay";
-import JobCard from "./JobCard";
+import ApplyOverlay from "./ApplyOverlay.jsx";
+import JobCard from "./JobCard.jsx";
 
 export default function JobDetail({ job }) {
   const router = useRouter();

@@ -76,7 +76,9 @@ export async function GET(request) {
         fetchRemoteOkJobs()
       ]);
       
-      allJobs = mergeJobSources(manualJobs, remoteOkJobs);
+      // Apply filters to RemoteOK jobs as well
+      const filteredRemoteOkJobs = applyFiltersToRemoteJobs(remoteOkJobs, filters);
+      allJobs = mergeJobSources(manualJobs, filteredRemoteOkJobs);
     } else if (source === 'manual') {
       // Only manual jobs
       allJobs = await fetchManualJobs(filters);
