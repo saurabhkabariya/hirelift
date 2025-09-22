@@ -219,7 +219,7 @@ function JobsPageContent() {
   const hasActiveFilters = search || selectedTags.length > 0 || jobType || workMode || experienceLevel || location;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100">
+    <div className="min-h-screen bg-gradient-to-br pb-8 from-blue-50 via-white to-blue-100">
       <Toaster />
       
       {/* Navigation Bar */}

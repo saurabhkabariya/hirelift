@@ -182,8 +182,38 @@ export default function JobDetail({ job: initialJob, jobId }) {
   const cleanDescription = (html) => {
     if (!html) return '';
     
-    // Basic HTML cleaning - you might want to use a proper sanitizer in production
-    return html
+    // First, fix character encoding issues
+    let cleaned = html
+      // Common UTF-8 encoding issues
+      .replace(/ð/g, '👋')
+      .replace(/â/g, "'")
+      .replace(/â/g, "'")
+      .replace(/â/g, '"')
+      .replace(/â/g, '"')
+      .replace(/â¢/g, '•')
+      .replace(/â/g, '–')
+      .replace(/â/g, '—')
+      .replace(/â¦/g, '...')
+      .replace(/Â/g, '')
+      .replace(/â¬/g, '€')
+      .replace(/Â£/g, '£')
+      .replace(/Â¥/g, '¥')
+      .replace(/â¹/g, '‹')
+      .replace(/âº/g, '›')
+      .replace(/â«/g, '«')
+      .replace(/â»/g, '»')
+      .replace(/â°/g, '°')
+      .replace(/âª/g, '™')
+      .replace(/â®/g, '®')
+      .replace(/â©/g, '©')
+      // Remove any remaining strange encoding artifacts
+      .replace(/[^\x00-\x7F\u00A0-\uFFFF]/g, '')
+      // Normalize whitespace
+      .replace(/\s+/g, ' ')
+      .trim();
+    
+    // Basic HTML cleaning - remove potentially dangerous content
+    return cleaned
       .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
       .replace(/<style\b[^<]*(?:(?!<\/style>)<[^<]*)*<\/style>/gi, '')
       .replace(/on\w+="[^"]*"/gi, '');
