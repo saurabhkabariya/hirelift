@@ -34,7 +34,7 @@ export async function GET(request, { params }) {
   try {
     await connectDB();
     
-    const { id } = params;
+    const { id } = await params;
     let job = null;
     
     // First try to find in manual jobs by MongoDB _id

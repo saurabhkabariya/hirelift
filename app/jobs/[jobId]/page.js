@@ -5,12 +5,21 @@ import JobDetail from '@/components/JobDetail.jsx';
 // This function runs on the server
 async function getJob(jobId) {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
+    // More robust base URL detection for different environments
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 
+                   process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` :
+                   process.env.NEXT_PUBLIC_SITE_URL ||
+                   'http://localhost:3000';
+                   
     const response = await fetch(`${baseUrl}/api/jobs/${jobId}`, {
-      next: { revalidate: 300 } // Revalidate every 5 minutes
+      next: { revalidate: 300 }, // Revalidate every 5 minutes
+      headers: {
+        'Content-Type': 'application/json',
+      }
     });
 
     if (!response.ok) {
+      console.error(`Failed to fetch job ${jobId}:`, response.status, response.statusText);
       if (response.status === 404) {
         return null;
       }
@@ -18,9 +27,16 @@ async function getJob(jobId) {
     }
 
     const data = await response.json();
-    return data.success ? data.data : null;
+    if (!data.success) {
+      console.error(`API returned success: false for job ${jobId}:`, data.message);
+      return null;
+    }
+    
+    return data.data;
   } catch (error) {
     console.error('Error fetching job:', error);
+    console.error('Job ID:', jobId);
+    console.error('Base URL used:', process.env.NEXT_PUBLIC_BASE_URL || 'fallback URL');
     return null;
   }
 }
@@ -96,7 +112,8 @@ function JobDetailSkeleton() {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }) {
-  const job = await getJob(params.jobId);
+  const { jobId } = await params;
+  const job = await getJob(jobId);
   
   if (!job) {
     return {
@@ -125,7 +142,8 @@ export async function generateMetadata({ params }) {
 
 // Main page component
 export default async function JobDetailPage({ params }) {
-  const job = await getJob(params.jobId);
+  const { jobId } = await params;
+  const job = await getJob(jobId);
 
   if (!job) {
     notFound();
