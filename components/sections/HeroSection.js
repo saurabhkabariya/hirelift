@@ -38,7 +38,7 @@ export default function HeroSection({ handleRedirect }) {
           transition={{ delay: 0.4 }}
           className="text-4xl md:text-6xl lg:text-7xl font-black leading-tight mb-8"
         >
-          <span className="text-white">India's Favourite</span><br />
+          <span className="text-white">India's Leading</span><br />
           <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Job Hunt Assistant</span><br />
           <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">Get Hired 3x Faster</span>
         </motion.h1>

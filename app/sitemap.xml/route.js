@@ -21,6 +21,18 @@ export async function GET() {
       priority: 0.9,
     },
     {
+      loc: `${baseUrl}/jobs`,
+      lastmod: currentDate,
+      changefreq: "daily",
+      priority: 0.9,
+    },
+    {
+      loc: `${baseUrl}/post-job`,
+      lastmod: currentDate,
+      changefreq: "monthly",
+      priority: 0.8,
+    },
+    {
       loc: `${baseUrl}/playground`,
       lastmod: currentDate,
       changefreq: "weekly",
@@ -51,18 +63,34 @@ export async function GET() {
       priority: 0.6,
     },
     {
+      loc: `${baseUrl}/contact`,
+      lastmod: currentDate,
+      changefreq: "monthly",
+      priority: 0.7,
+    },
+    {
+      loc: `${baseUrl}/privacy`,
+      lastmod: currentDate,
+      changefreq: "yearly",
+      priority: 0.5,
+    },
+    {
+      loc: `${baseUrl}/terms`,
+      lastmod: currentDate,
+      changefreq: "yearly",
+      priority: 0.5,
+    },
+    {
+      loc: `${baseUrl}/refund`,
+      lastmod: currentDate,
+      changefreq: "yearly",
+      priority: 0.4,
+    },
+    {
       loc: `${baseUrl}/dashboard`,
       lastmod: currentDate,
       changefreq: "weekly",
       priority: 0.7,
-    },
-
-    // Blog main page
-    {
-      loc: `${baseUrl}/blog`,
-      lastmod: currentDate,
-      changefreq: "daily",
-      priority: 0.8,
     },
 
     // Dynamic blog posts
@@ -73,50 +101,13 @@ export async function GET() {
       priority: post.featured ? 0.8 : 0.7,
     })),
 
-    // Location-based pages for Indian cities
+    
+    // RSS Feeds and additional resources
     {
-      loc: `${baseUrl}/jobs/mumbai`,
+      loc: `${baseUrl}/jobs/feed.xml`,
       lastmod: currentDate,
-      changefreq: "weekly",
+      changefreq: "daily",
       priority: 0.6,
-    },
-    {
-      loc: `${baseUrl}/jobs/delhi`,
-      lastmod: currentDate,
-      changefreq: "weekly",
-      priority: 0.6,
-    },
-    {
-      loc: `${baseUrl}/jobs/bangalore`,
-      lastmod: currentDate,
-      changefreq: "weekly",
-      priority: 0.6,
-    },
-    {
-      loc: `${baseUrl}/jobs/chennai`,
-      lastmod: currentDate,
-      changefreq: "weekly",
-      priority: 0.6,
-    },
-
-    // Tool-specific landing pages
-    {
-      loc: `${baseUrl}/tools/ats-resume-checker`,
-      lastmod: currentDate,
-      changefreq: "monthly",
-      priority: 0.7,
-    },
-    {
-      loc: `${baseUrl}/tools/resume-optimizer`,
-      lastmod: currentDate,
-      changefreq: "monthly",
-      priority: 0.7,
-    },
-    {
-      loc: `${baseUrl}/tools/cold-email-generator`,
-      lastmod: currentDate,
-      changefreq: "monthly",
-      priority: 0.7,
     }
   ];
 

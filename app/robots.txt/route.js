@@ -5,14 +5,17 @@ export function GET() {
 User-agent: *
 Allow: /
 Allow: /audit
+Allow: /jobs
+Allow: /post-job
 Allow: /playground
 Allow: /pricing
 Allow: /auth
 Allow: /dashboard
 Allow: /blog/
-Allow: /resources/
-Allow: /guides/
-Allow: /templates/
+Allow: /contact
+Allow: /privacy
+Allow: /terms
+Allow: /refund
 
 # Disallow admin and private areas
 Disallow: /api/
