@@ -48,7 +48,7 @@ export default function FooterSection() {
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className='text-center'>
             <h4 className="font-bold mb-6">Quick Links</h4>
             <div className="space-y-3">
               {[
@@ -79,7 +79,7 @@ export default function FooterSection() {
           </div>
 
           {/* Services */}
-          <div>
+          <div className='text-center'>
             <h4 className="font-bold mb-6">Services</h4>
             <div className="space-y-3">
               {[
@@ -108,7 +108,7 @@ export default function FooterSection() {
           </div>
 
           {/* Legal */}
-          <div>
+          <div className='text-center'>
             <h4 className="font-bold mb-6">Legal & Support</h4>
             <div className="space-y-3">
               {[

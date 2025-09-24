@@ -19,7 +19,7 @@ const scrollToSection = (sectionId) => {
 
 export default function HeroSection({ handleRedirect }) {
   return (
-    <section id="home" className="relative flex items-center justify-center px-6 pt-32 pb-20 min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950">
+    <section id="home" className="relative flex items-center justify-center px-6 pt-22 pb-6 min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950">
       <div className="max-w-5xl mx-auto text-center relative z-10">
         {/* Power Badge */}
         <motion.div
@@ -59,7 +59,7 @@ export default function HeroSection({ handleRedirect }) {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
+          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
         >
           <button 
             onClick={() => handleRedirect('/audit')}
@@ -71,10 +71,26 @@ export default function HeroSection({ handleRedirect }) {
           </button>
           
           <button 
-            onClick={() => scrollToSection('#pricing')}
-            className="px-8 py-4 border-2 border-blue-400/60 text-blue-200 font-bold text-xl rounded-xl hover:bg-blue-400/10 transition-all duration-300 hover:scale-105"
+            onClick={() => handleRedirect('/jobs')}
+            className="px-8 py-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-bold text-xl rounded-xl shadow-xl hover:shadow-blue-500/30 transition-all duration-300 flex items-center gap-3 hover:scale-105"
           >
-            View Pricing
+            Browse Free Jobs
+            <span className="bg-green-300 text-green-900 text-sm px-2 py-1 rounded-full font-bold">1000+</span>
+          </button>
+        </motion.div>
+
+        {/* Secondary CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9 }}
+          className="flex justify-center mb-4"
+        >
+          <button 
+            onClick={() => scrollToSection('#pricing')}
+            className="px-6 py-3 border-2 border-blue-400/60 text-blue-200 font-semibold text-lg rounded-xl hover:bg-blue-400/10 transition-all duration-300 hover:scale-105"
+          >
+            View All Plans
           </button>
         </motion.div>
         

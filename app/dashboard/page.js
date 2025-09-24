@@ -16,6 +16,7 @@ export default function DashboardPage() {
   const router = useRouter();  const [activeTab, setActiveTab] = useState('overview');
   const [isAdmin, setisAdmin] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if(user.email === ADMIN_EMAIL){
@@ -85,66 +86,152 @@ export default function DashboardPage() {
         className="bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4">
+          <div className="flex items-center justify-between py-3 sm:py-4">
             {/* Logo/Brand */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200">
-                <span className="text-white font-bold text-lg">H</span>
+            <Link href="/" className="flex items-center gap-2 sm:gap-3 group">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200">
+                <span className="text-white font-bold text-base sm:text-lg">H</span>
               </div>
-              <span className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+              <span className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
                 HireLift
               </span>
             </Link>
 
-            {/* Navigation Links */}
-            <div className="flex items-center gap-6">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+              </svg>
+            </button>
+
+            {/* Desktop Navigation Links */}
+            <div className="hidden lg:flex items-center gap-4 xl:gap-6">
               <Link 
                 href="/jobs" 
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium"
+                className="flex items-center gap-2 px-3 xl:px-4 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium text-sm xl:text-base"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
                 </svg>
-                <span>Jobs</span>
+                <span className="hidden xl:inline">Jobs</span>
               </Link>
 
               <Link 
                 href="/pricing" 
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
+                className="flex items-center gap-2 px-3 xl:px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium text-sm xl:text-base"
               >
                 <CreditCard className="w-4 h-4" />
-                <span>Upgrade Plan</span>
+                <span className="hidden xl:inline">Upgrade</span>
               </Link>
               
               <Link 
                 href="/audit" 
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                className="flex items-center gap-2 px-3 xl:px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium text-sm xl:text-base"
               >
                 <BarChart className="w-4 h-4" />
-                <span>ATS Audit</span>
+                <span className="hidden xl:inline">Audit</span>
               </Link>
 
               {/* User Menu */}
-              <div className="flex items-center gap-3 pl-4 border-l border-gray-200">
+              <div className="flex items-center gap-2 xl:gap-3 pl-3 xl:pl-4 border-l border-gray-200">
                 <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <User className="w-4 h-4 text-white" />
+                  <div className="w-7 h-7 xl:w-8 xl:h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                    <User className="w-3 h-3 xl:w-4 xl:h-4 text-white" />
                   </div>
-                  <span className="text-sm font-medium text-gray-700 hidden sm:inline">
+                  <span className="text-xs xl:text-sm font-medium text-gray-700 hidden xl:inline max-w-[100px] truncate">
                     {user?.name || user?.email?.split('@')[0]}
                   </span>
                 </div>
                 
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 text-sm"
+                  className="flex items-center gap-1 xl:gap-2 px-2 xl:px-3 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 text-xs xl:text-sm"
                 >
-                  <LogOut className="w-4 h-4" />
-                  <span className="hidden sm:inline">Logout</span>
+                  <LogOut className="w-3 h-3 xl:w-4 xl:h-4" />
+                  <span className="hidden xl:inline">Logout</span>
                 </button>
               </div>
             </div>
           </div>
+
+          {/* Mobile Menu */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="lg:hidden border-t border-gray-200 py-4"
+              >
+                <div className="space-y-2">
+                  <Link 
+                    href="/jobs"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 rounded-lg transition-all duration-200 font-medium"
+                  >
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
+                    </svg>
+                    <span>Browse Jobs</span>
+                    <div className="ml-auto px-2 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">
+                      Free
+                    </div>
+                  </Link>
+
+                  <Link 
+                    href="/audit"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 font-medium"
+                  >
+                    <BarChart className="w-5 h-5" />
+                    <span>ATS Resume Audit</span>
+                    
+                  </Link>
+
+                  <Link 
+                    href="/pricing"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-3 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium"
+                  >
+                    <CreditCard className="w-5 h-5" />
+                    <span>Upgrade Plan</span>
+                    {!user?.isPremium && (
+                      <div className="ml-auto px-2 py-1 bg-white/20 text-white text-xs font-medium rounded-full">
+                        Premium
+                      </div>
+                    )}
+                  </Link>
+
+                  <div className="border-t border-gray-200 pt-3 mt-3">
+                    <div className="flex items-center gap-3 px-4 py-2 text-gray-600">
+                      <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                        <User className="w-4 h-4 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="font-medium text-gray-900">
+                          {user?.name || user?.email?.split('@')[0]}
+                        </div>
+                        <div className="text-sm text-gray-500 truncate">
+                          {user?.email}
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-3 px-4 py-3 w-full text-left text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 font-medium"
+                    >
+                      <LogOut className="w-5 h-5" />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
 
@@ -284,7 +371,7 @@ export default function DashboardPage() {
                   <span className="text-red-700 font-semibold">Administrator</span>
                   <motion.span 
                     onClick={()=>router.push('/admin/company-manager')}
-                    className="ml-2 text-xs px-2 py-1 bg-red-100 text-red-800 rounded-full hover:cursor-pointer"
+                    className="ml-2 text-xs px-2 py-1 text-center bg-red-100 text-red-800 rounded-full hover:cursor-pointer"
                   >
                     Admin Panel Access
                   </motion.span>

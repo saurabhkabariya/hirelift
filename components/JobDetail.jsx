@@ -109,18 +109,47 @@ export default function JobDetail({ job: initialJob, jobId }) {
 
   // Format creation date if daysAgo is not available
   const getTimeAgo = () => {
-    if (daysAgo) return daysAgo;
+    if (daysAgo && daysAgo !== 'undefined' && !isNaN(daysAgo)) {
+      return daysAgo;
+    }
+    
+    if (!createdAt) {
+      return 'Recently';
+    }
     
     try {
       const now = new Date();
       const posted = new Date(createdAt);
+      
+      // Check if the date is valid
+      if (isNaN(posted.getTime())) {
+        return 'Recently';
+      }
+      
       const diffTime = Math.abs(now - posted);
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+      const diffHours = Math.floor(diffTime / (1000 * 60 * 60));
+      const diffMinutes = Math.floor(diffTime / (1000 * 60));
       
-      if (diffDays === 0) return 'Today';
+      if (diffDays === 0) {
+        if (diffHours === 0) {
+          if (diffMinutes === 0) {
+            return 'Just now';
+          }
+          return `${diffMinutes} minute${diffMinutes === 1 ? '' : 's'} ago`;
+        }
+        return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+      }
       if (diffDays === 1) return '1 day ago';
-      return `${diffDays} days ago`;
-    } catch {
+      if (diffDays < 30) return `${diffDays} days ago`;
+      if (diffDays < 365) {
+        const diffMonths = Math.floor(diffDays / 30);
+        return `${diffMonths} month${diffMonths === 1 ? '' : 's'} ago`;
+      }
+      const diffYears = Math.floor(diffDays / 365);
+      return `${diffYears} year${diffYears === 1 ? '' : 's'} ago`;
+    } catch (error) {
+      console.error('Error calculating time ago:', error);
       return 'Recently';
     }
   };
@@ -245,7 +274,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
               </Link>
 
               {/* Breadcrumb */}
-              <nav className="hidden sm:flex items-center gap-2 text-sm">
+              <nav className="hidden md:flex items-center gap-2 text-sm">
                 <span className="text-gray-400">•</span>
                 <Link
                   href="/jobs"
@@ -256,17 +285,17 @@ export default function JobDetail({ job: initialJob, jobId }) {
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                 </svg>
-                <span className="text-blue-700 font-semibold truncate max-w-[200px]">{title}</span>
+                <span className="text-blue-700 font-semibold truncate max-w-[150px] lg:max-w-[200px]">{title}</span>
               </nav>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <motion.button
                 onClick={() => router.back()}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-xl hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200 font-medium"
+                className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-xl hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200 font-medium text-sm"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
@@ -278,12 +307,13 @@ export default function JobDetail({ job: initialJob, jobId }) {
                 href="/audit"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-xl hover:from-green-200 hover:to-emerald-200 transition-all duration-200 border border-green-200 font-medium"
+                className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-green-100 to-emerald-100 text-green-700 rounded-xl hover:from-green-200 hover:to-emerald-200 transition-all duration-200 border border-green-200 font-medium text-sm"
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
                 <span className="hidden sm:inline">ATS Check</span>
+                <span className="sm:hidden">Check</span>
               </motion.a>
             </div>
           </div>
@@ -311,14 +341,14 @@ export default function JobDetail({ job: initialJob, jobId }) {
           )}
 
           {/* Company and Job Info */}
-          <div className="flex items-start gap-6 mb-6">
+          <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6 mb-6">
             {/* Company Logo */}
-            <div className="flex-shrink-0">
+            <div className="flex-shrink-0 self-center sm:self-start">
               {companyLogo ? (
                 <img 
                   src={companyLogo} 
                   alt={`${company} logo`}
-                  className="w-20 h-20 rounded-xl object-cover bg-gray-100 shadow-md"
+                  className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl object-cover bg-gray-100 shadow-md"
                   onError={(e) => {
                     e.target.style.display = 'none';
                     e.target.nextElementSibling.style.display = 'flex';
@@ -326,36 +356,36 @@ export default function JobDetail({ job: initialJob, jobId }) {
                 />
               ) : null}
               <div 
-                className={`w-20 h-20 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-2xl shadow-md ${companyLogo ? 'hidden' : 'flex'}`}
+                className={`w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-xl sm:text-2xl shadow-md ${companyLogo ? 'hidden' : 'flex'}`}
               >
                 {company.charAt(0).toUpperCase()}
               </div>
             </div>
 
             {/* Job Details */}
-            <div className="flex-1">
-              <div className="flex items-start justify-between mb-4">
-                <div>
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between mb-4 gap-3">
+                <div className="min-w-0 flex-1">
                   <motion.h1 
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="text-3xl font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent mb-2"
+                    className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-700 to-blue-500 bg-clip-text text-transparent mb-2 leading-tight"
                   >
                     {title}
                   </motion.h1>
-                  <div className="flex items-center gap-4 text-lg text-gray-600 mb-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-base sm:text-lg text-gray-600 mb-2">
                     <div className="flex items-center gap-2">
-                      <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                       </svg>
-                      <span className="font-semibold">{company}</span>
+                      <span className="font-semibold truncate">{company}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <svg className="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                       </svg>
-                      <span>{location}</span>
+                      <span className="truncate">{location}</span>
                     </div>
                   </div>
                 </div>
@@ -363,71 +393,71 @@ export default function JobDetail({ job: initialJob, jobId }) {
                 {/* Source Badge */}
                 <motion.div 
                   whileHover={{ scale: 1.05 }}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border ${sourceBadge.className}`}
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full text-xs sm:text-sm font-medium border ${sourceBadge.className} self-start`}
                 >
                   {sourceBadge.icon}
-                  {sourceBadge.text}
+                  <span className="whitespace-nowrap">{sourceBadge.text}</span>
                 </motion.div>
               </div>
 
               {/* Job Badges */}
-              <div className="flex flex-wrap gap-3 mb-6">
+              <div className="flex flex-wrap gap-2 sm:gap-3 mb-4 sm:mb-6">
                 {jobType && (
                   <motion.span 
                     whileHover={{ scale: 1.05 }}
-                    className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-md"
+                    className="inline-flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-blue-500 to-blue-600 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold shadow-md"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8" />
                     </svg>
-                    {jobType.replace('-', ' ').toUpperCase()}
+                    <span className="whitespace-nowrap">{jobType.replace('-', ' ').toUpperCase()}</span>
                   </motion.span>
                 )}
 
                 {workMode && (
                   <motion.span 
                     whileHover={{ scale: 1.05 }}
-                    className="inline-flex items-center gap-2 bg-green-50 text-green-700 px-4 py-2 rounded-full text-sm font-semibold border border-green-200"
+                    className="inline-flex items-center gap-1 sm:gap-2 bg-green-50 text-green-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold border border-green-200"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" />
                     </svg>
-                    {workMode.charAt(0).toUpperCase() + workMode.slice(1)} Work
+                    <span className="whitespace-nowrap">{workMode.charAt(0).toUpperCase() + workMode.slice(1)} Work</span>
                   </motion.span>
                 )}
 
                 {experienceLevel && (
                   <motion.span 
                     whileHover={{ scale: 1.05 }}
-                    className="inline-flex items-center gap-2 bg-purple-50 text-purple-700 px-4 py-2 rounded-full text-sm font-semibold border border-purple-200"
+                    className="inline-flex items-center gap-1 sm:gap-2 bg-purple-50 text-purple-700 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-semibold border border-purple-200"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
-                    {experienceLevel.charAt(0).toUpperCase() + experienceLevel.slice(1)} Level
+                    <span className="whitespace-nowrap">{experienceLevel.charAt(0).toUpperCase() + experienceLevel.slice(1)} Level</span>
                   </motion.span>
                 )}
               </div>
 
               {/* Salary and Apply Button */}
-              <div className="flex items-center justify-between">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <motion.div 
                   whileHover={{ scale: 1.02 }}
-                  className="flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 px-6 py-3 rounded-xl border border-green-200 shadow-sm"
+                  className="flex items-center gap-2 sm:gap-3 bg-gradient-to-r from-green-50 to-emerald-50 text-green-700 px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl border border-green-200 shadow-sm"
                 >
-                  <svg className="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                   </svg>
-                  <span className="font-semibold text-lg">{getSalaryDisplay()}</span>
+                  <span className="font-semibold text-base sm:text-lg truncate">{getSalaryDisplay()}</span>
                 </motion.div>
 
                 <motion.button
                   onClick={handleApplyClick}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="flex items-center gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white px-8 py-4 rounded-xl text-lg font-bold shadow-lg hover:from-orange-600 hover:to-red-600 transition-all duration-200"
+                  className="flex items-center justify-center gap-2 sm:gap-3 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-bold shadow-lg hover:from-orange-600 hover:to-red-600 transition-all duration-200 whitespace-nowrap"
                 >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
                   </svg>
                   Apply Now

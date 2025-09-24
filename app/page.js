@@ -8,12 +8,12 @@ import Header from '../components/Header';
 
 // Import modular sections
 import HeroSection from '../components/sections/HeroSection';
-import LeadMagnetSection from '../components/sections/LeadMagnetSection';
-import TestimonialsSection from '../components/sections/TestimonialsSection';
+import FreeJobsSection from '../components/sections/FreeJobsSection';
 import HowItWorksSection from '../components/sections/HowItWorksSection';
+import TestimonialsSection from '../components/sections/TestimonialsSection';
 import FeaturesSection from '../components/sections/FeaturesSection';
-import FAQSection from '../components/sections/FAQSection';
 import PricingSection from '../components/sections/PricingSection';
+import FAQSection from '../components/sections/FAQSection';
 import SEOContentSection from '../components/sections/SEOContentSection';
 import FooterSection from '../components/sections/FooterSection';
 import FloatingCTA from '../components/FloatingCTA';
@@ -21,6 +21,7 @@ import StructuredData from '../components/StructuredData';
 
 const navLinks = [
   { name: "Home", href: "#home", description: "AI-powered resume optimization platform" },
+  { name: "Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
   { name: "How it Works", href: "#how-it-works", description: "3-step process to optimize your job search" },
   { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
   { name: "Features", href: "#features", description: "Complete job search toolkit" },
@@ -76,8 +77,8 @@ export default function HomePage() {
       {/* Hero Section - Dark Background */}
       <HeroSection handleRedirect={handleRedirect} />
 
-      {/* Lead Magnet Section - White Background */}
-      <LeadMagnetSection handleRedirect={handleRedirect} />
+      {/* Free Jobs Section - Light Background - NEW FEATURE SHOWCASE */}
+      <FreeJobsSection handleRedirect={handleRedirect} />
 
       {/* How It Works Section - Light Background */}
       <HowItWorksSection handleRedirect={handleRedirect} />
@@ -88,11 +89,11 @@ export default function HomePage() {
       {/* Features Section - Dark Background */}
       <FeaturesSection />
 
-      {/* FAQ Section - Light Background */}
-      <FAQSection />
-
       {/* Pricing Section - Light Background */}
       <PricingSection handleRedirect={handleRedirect} />
+
+      {/* FAQ Section - Light Background */}
+      <FAQSection />
 
       {/* SEO Content Section - White Background */}
       <SEOContentSection />

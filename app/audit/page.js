@@ -4,7 +4,7 @@ import JOB_ROLES from "@/data/jobRoles";
 import FeedbackButton from "../../components/feedback/FeedbackButton";
 import UpgradeCTA from "../../components/UpgradeCTA";
 import { useState, useRef, useCallback, useEffect } from "react";
-import { FaFilePdf, FaUserTie, FaSearch, FaCheckCircle, FaExclamationCircle, FaUserEdit, FaChevronDown, FaTimesCircle, FaBuilding, FaCrown } from "react-icons/fa";
+import { FaFilePdf, FaUserTie, FaSearch, FaCheckCircle, FaExclamationCircle, FaUserEdit, FaChevronDown, FaTimesCircle, FaBuilding, FaCrown, FaBars, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import jsPDF from "jspdf";
@@ -24,6 +24,7 @@ export default function ResumeAuditPage() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
   const [dragActive, setDragActive] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const inputRef = useRef();
   const { user, loading: userLoading, refetchUser, signOutUser } = useAuth();
   const router = useRouter();  
@@ -55,6 +56,19 @@ export default function ResumeAuditPage() {
       setCurrentAuditCount(localAuditCount);
     }
   }, [user, localAuditCount]);
+
+  // Cleanup body scroll on component unmount or mobile menu close
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mobileMenuOpen) {
+      document.body.style.overflow = 'unset';
+    }
+  }, [mobileMenuOpen]);
 
   // Helper: isPremium and auditCount
   const isPremium = user?.isPremium || false;
@@ -264,19 +278,19 @@ export default function ResumeAuditPage() {
         className="w-full bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between py-4">
+          <div className="flex items-center justify-between py-3 lg:py-4">
             {/* Logo/Brand */}
-            <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-3 group">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200">
-                <span className="text-white font-bold text-lg">H</span>
+            <Link href={user ? "/dashboard" : "/"} className="flex items-center gap-2 sm:gap-3 group">
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200">
+                <span className="text-white font-bold text-base sm:text-lg">H</span>
               </div>
-              <span className="text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+              <span className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
                 HireLift
               </span>
             </Link>
 
-            {/* Navigation Links */}
-            <div className="flex items-center gap-4">
+            {/* Desktop Navigation Links */}
+            <div className="hidden lg:flex items-center gap-4">
               {user ? (
                 <>
                   <Link 
@@ -286,7 +300,7 @@ export default function ResumeAuditPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
                     </svg>
-                    <span className="hidden sm:inline">Jobs</span>
+                    Jobs
                   </Link>
                   
                   <Link 
@@ -294,7 +308,7 @@ export default function ResumeAuditPage() {
                     className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
                   >
                     <Home className="w-4 h-4" />
-                    <span className="hidden sm:inline">Dashboard</span>
+                    Dashboard
                   </Link>
                   
                   <Link 
@@ -302,7 +316,7 @@ export default function ResumeAuditPage() {
                     className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
                   >
                     <CreditCard className="w-4 h-4" />
-                    <span className="hidden sm:inline">Upgrade</span>
+                    Upgrade
                   </Link>
 
                   {/* User Menu */}
@@ -311,7 +325,7 @@ export default function ResumeAuditPage() {
                       <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
                         <User className="w-4 h-4 text-white" />
                       </div>
-                      <span className="text-sm font-medium text-gray-700 hidden md:inline">
+                      <span className="text-sm font-medium text-gray-700 hidden xl:inline">
                         {user?.name || user?.email?.split('@')[0]}
                       </span>
                     </div>
@@ -321,7 +335,7 @@ export default function ResumeAuditPage() {
                       className="flex items-center gap-2 px-3 py-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all duration-200 text-sm"
                     >
                       <LogOut className="w-4 h-4" />
-                      <span className="hidden sm:inline">Logout</span>
+                      <span className="hidden xl:inline">Logout</span>
                     </button>
                   </div>
                 </>
@@ -334,7 +348,7 @@ export default function ResumeAuditPage() {
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
                     </svg>
-                    <span className="hidden sm:inline">Jobs</span>
+                    Jobs
                   </Link>
                   
                   <Link 
@@ -342,12 +356,195 @@ export default function ResumeAuditPage() {
                     className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium"
                   >
                     <User className="w-4 h-4" />
-                    <span>Login</span>
+                    Login
                   </Link>
                 </>
               )}
             </div>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => {
+                setMobileMenuOpen(!mobileMenuOpen);
+                // Prevent body scroll when menu is open
+                if (!mobileMenuOpen) {
+                  document.body.style.overflow = 'hidden';
+                } else {
+                  document.body.style.overflow = 'unset';
+                }
+              }}
+              className="lg:hidden p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 transition-colors"
+              aria-label="Toggle mobile menu"
+            >
+              {mobileMenuOpen ? (
+                <FaTimes className="w-5 h-5" />
+              ) : (
+                <FaBars className="w-5 h-5" />
+              )}
+            </button>
           </div>
+
+          {/* Mobile Menu */}
+          <AnimatePresence>
+            {mobileMenuOpen && (
+              <>
+                {/* Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40 lg:hidden"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    document.body.style.overflow = 'unset';
+                  }}
+                />
+                
+                {/* Mobile Navigation Panel */}
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute top-full left-0 right-0 bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-lg z-50 lg:hidden"
+                >
+                  <div className="px-4 py-4 space-y-3">
+                    {user ? (
+                      <>
+                        {/* User Info */}
+                        <div className="flex items-center gap-3 p-3 bg-blue-50/80 rounded-lg border border-blue-100">
+                          <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
+                            <User className="w-5 h-5 text-white" />
+                          </div>
+                          <div>
+                            <p className="font-semibold text-gray-900 text-sm">
+                              {user?.name || user?.email?.split('@')[0]}
+                            </p>
+                            <p className="text-xs text-gray-600">
+                              {isPremium ? 'Premium User' : 'Free User'}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Navigation Links */}
+                        <Link 
+                          href="/jobs" 
+                          className="flex items-center gap-3 p-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium"
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            document.body.style.overflow = 'unset';
+                          }}
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
+                          </svg>
+                          <span>Browse Jobs</span>
+                          <div className="ml-auto bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded-full font-medium">
+                            Free
+                          </div>
+                        </Link>
+                        
+                        <Link 
+                          href="/dashboard" 
+                          className="flex items-center gap-3 p-3 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium"
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            document.body.style.overflow = 'unset';
+                          }}
+                        >
+                          <Home className="w-5 h-5" />
+                          <span>Dashboard</span>
+                        </Link>
+                        
+                        <Link 
+                          href="/audit" 
+                          className="flex items-center gap-3 p-3 text-blue-700 bg-blue-100 rounded-lg font-medium"
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            document.body.style.overflow = 'unset';
+                          }}
+                        >
+                          <BarChart className="w-5 h-5" />
+                          <span>Resume Audit</span>
+                          <div className="ml-auto bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
+                            Current
+                          </div>
+                        </Link>
+                        
+                        <Link 
+                          href="/pricing" 
+                          className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium shadow-lg"
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            document.body.style.overflow = 'unset';
+                          }}
+                        >
+                          <CreditCard className="w-5 h-5" />
+                          <span>Upgrade to Pro</span>
+                          <div className="ml-auto bg-white/20 text-white text-xs px-2 py-1 rounded-full font-medium">
+                            Premium
+                          </div>
+                        </Link>
+
+                        {/* Logout Button */}
+                        <button
+                          onClick={() => {
+                            handleLogout();
+                            setMobileMenuOpen(false);
+                            document.body.style.overflow = 'unset';
+                          }}
+                          className="w-full flex items-center gap-3 p-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-all duration-200 font-medium"
+                        >
+                          <LogOut className="w-5 h-5" />
+                          <span>Logout</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link 
+                          href="/jobs" 
+                          className="flex items-center gap-3 p-3 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium"
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            document.body.style.overflow = 'unset';
+                          }}
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
+                          </svg>
+                          <span>Browse Jobs</span>
+                          <div className="ml-auto bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded-full font-medium">
+                            Free
+                          </div>
+                        </Link>
+
+                        <div className="flex items-center gap-3 p-3 text-blue-700 bg-blue-100 rounded-lg font-medium">
+                          <BarChart className="w-5 h-5" />
+                          <span>Resume Audit</span>
+                          <div className="ml-auto bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
+                            Current
+                          </div>
+                        </div>
+                        
+                        <Link 
+                          href="/auth" 
+                          className="flex items-center gap-3 p-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-medium shadow-lg"
+                          onClick={() => {
+                            setMobileMenuOpen(false);
+                            document.body.style.overflow = 'unset';
+                          }}
+                        >
+                          <User className="w-5 h-5" />
+                          <span>Login / Sign Up</span>
+                        </Link>
+                      </>
+                    )}
+                  </div>
+                </motion.div>
+              </>
+            )}
+          </AnimatePresence>
         </div>
       </motion.div>
       
