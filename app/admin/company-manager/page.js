@@ -291,14 +291,19 @@ export default function CompanyManagerPage() {
   // Job Management Functions
   const fetchJobs = () => {
     setJobPageLoading(true);
-    fetch(`/api/jobs?page=${jobPage}&limit=${PAGE_SIZE}`)
+    console.log('Fetching jobs...', { page: jobPage, limit: PAGE_SIZE });
+    fetch(`/api/jobs?page=${jobPage}&limit=${PAGE_SIZE}&source=manual&includeAll=true`)
       .then((res) => res.json())
       .then((data) => {
+        console.log('Jobs API response:', data);
         setJobs(data.jobs || []);
         setJobTotal(data.total || 0);
         setJobPageLoading(false);
       })
-      .catch(() => setJobPageLoading(false));
+      .catch((error) => {
+        console.error('Error fetching jobs:', error);
+        setJobPageLoading(false);
+      });
   };
 
   const fetchPendingJobs = () => {
@@ -341,10 +346,19 @@ export default function CompanyManagerPage() {
       
       if (res.ok) {
         const result = await res.json();
-        toast.success(`${result.added} jobs added successfully!`);
-        if (result.errors && result.errors.length > 0) {
-          toast.error(`${result.errors.length} jobs failed to add`);
-          console.error('Job errors:', result.errors);
+        console.log('Bulk upload result:', result);
+        
+        const addedCount = result.results?.added || 0;
+        const updatedCount = result.results?.updated || 0;
+        const errorCount = result.results?.errors?.length || 0;
+        
+        if (addedCount > 0 || updatedCount > 0) {
+          toast.success(`${addedCount} jobs created, ${updatedCount} jobs updated!`);
+        }
+        
+        if (errorCount > 0) {
+          toast.error(`${errorCount} jobs failed to process`);
+          console.error('Job processing errors:', result.results.errors);
         }
         setJobBulkJson("");
         setJobJsonValidation({ isValid: null, message: "" });
@@ -1200,10 +1214,9 @@ export default function CompanyManagerPage() {
                             "jobType": "full-time",
                             "workMode": "hybrid",
                             "experienceLevel": "senior",
-                            "url": "https://example.com/apply/react-developer",
+                            "url": "https://example.com/apply/react-developer-001",
                             "tags": ["react", "javascript", "typescript", "frontend"],
-                            "salary": "₹15-25 LPA",
-                            "requirements": "5+ years of React experience, TypeScript knowledge, good communication skills"
+                            "salary": "₹15-25 LPA"
                           },
                           {
                             "title": "Data Scientist",
@@ -1213,10 +1226,45 @@ export default function CompanyManagerPage() {
                             "jobType": "full-time",
                             "workMode": "remote",
                             "experienceLevel": "mid",
-                            "url": "https://example.com/apply/data-scientist",
+                            "url": "https://example.com/apply/data-scientist-002",
                             "tags": ["python", "machine-learning", "data-science", "tensorflow"],
-                            "salary": "₹12-18 LPA",
-                            "requirements": "3+ years in data science, Python, ML frameworks, statistics background"
+                            "salary": "₹12-18 LPA"
+                          },
+                          {
+                            "title": "Backend Engineer",
+                            "company": "DevOps Solutions",
+                            "location": "Delhi, Delhi",
+                            "description": "Looking for a Backend Engineer to build scalable APIs and microservices. Experience with Node.js, Python, and cloud platforms required.",
+                            "jobType": "full-time",
+                            "workMode": "onsite",
+                            "experienceLevel": "mid",
+                            "url": "https://example.com/apply/backend-engineer-003",
+                            "tags": ["nodejs", "python", "apis", "microservices"],
+                            "salary": "₹10-16 LPA"
+                          },
+                          {
+                            "title": "Frontend Designer",
+                            "company": "Creative Agency",
+                            "location": "Pune, Maharashtra",
+                            "description": "Creative Frontend Designer needed to create beautiful, responsive user interfaces. Must have experience with modern CSS frameworks and design systems.",
+                            "jobType": "part-time",
+                            "workMode": "remote",
+                            "experienceLevel": "entry",
+                            "url": "https://example.com/apply/frontend-designer-004",
+                            "tags": ["css", "design", "ui-ux", "figma"],
+                            "salary": "₹6-10 LPA"
+                          },
+                          {
+                            "title": "DevOps Engineer",
+                            "company": "Cloud Systems Inc",
+                            "location": "Hyderabad, Telangana",
+                            "description": "Experienced DevOps Engineer required for managing cloud infrastructure, CI/CD pipelines, and containerized applications.",
+                            "jobType": "full-time",
+                            "workMode": "hybrid",
+                            "experienceLevel": "senior",
+                            "url": "https://example.com/apply/devops-engineer-005",
+                            "tags": ["docker", "kubernetes", "aws", "jenkins"],
+                            "salary": "₹18-28 LPA"
                           }
                         ];
                         setJobBulkJson(JSON.stringify(exampleJobs, null, 2));

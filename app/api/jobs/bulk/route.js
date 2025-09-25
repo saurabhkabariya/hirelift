@@ -199,12 +199,15 @@ export async function POST(request) {
             .slice(0, 20); // Limit to 20 tags
         }
         
-        // Check for existing job with same title and company
+        // Check for existing job with same title, company, and URL (more specific duplicate detection)
         const existingJob = await Job.findOne({
-          title: new RegExp(`^${processedJobData.title}$`, 'i'),
-          company: new RegExp(`^${processedJobData.company}$`, 'i'),
+          title: new RegExp(`^${processedJobData.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i'),
+          company: new RegExp(`^${processedJobData.company.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i'),
+          url: processedJobData.url,
           source: 'manual'
         });
+        
+        console.log(`Job ${i + 1}: "${processedJobData.title}" at "${processedJobData.company}"`, existingJob ? 'EXISTS - UPDATING' : 'NEW - CREATING');
         
         if (existingJob) {
           // Update existing job

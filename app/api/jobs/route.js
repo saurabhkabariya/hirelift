@@ -48,6 +48,8 @@ export async function GET(request) {
     const experienceLevel = searchParams.get('experienceLevel');
     const sort = searchParams.get('sort') || 'date'; // date, relevance
     const source = searchParams.get('source'); // manual, remoteok, or all (default)
+    const includeAll = searchParams.get('includeAll') === 'true'; // For admin - include all statuses
+    const status = searchParams.get('status'); // Specific status filter
     
     // Build filters object
     const filters = {
@@ -72,7 +74,7 @@ export async function GET(request) {
     if (!source || source === 'all') {
       // Fetch both manual and RemoteOK jobs
       const [manualJobs, remoteOkJobs] = await Promise.all([
-        fetchManualJobs(filters),
+        fetchManualJobs(filters, includeAll, status),
         fetchRemoteOkJobs()
       ]);
       
@@ -81,7 +83,7 @@ export async function GET(request) {
       allJobs = mergeJobSources(manualJobs, filteredRemoteOkJobs);
     } else if (source === 'manual') {
       // Only manual jobs
-      allJobs = await fetchManualJobs(filters);
+      allJobs = await fetchManualJobs(filters, includeAll, status);
     } else if (source === 'remoteok') {
       // Only RemoteOK jobs
       const remoteOkJobs = await fetchRemoteOkJobs();
@@ -112,7 +114,8 @@ export async function GET(request) {
     
     return NextResponse.json({
       success: true,
-      data: paginatedJobs,
+      jobs: paginatedJobs, // Frontend expects 'jobs' not 'data'
+      total: total, // Frontend expects 'total' at root level
       pagination: {
         page,
         limit,
@@ -213,10 +216,62 @@ export async function POST(request) {
 }
 
 // Helper function to fetch manual jobs with filters
-async function fetchManualJobs(filters) {
+async function fetchManualJobs(filters, includeAll = false, statusFilter = null) {
   try {
-    const jobs = await Job.findActiveJobs(filters)
+    let query;
+    
+    if (includeAll) {
+      // Admin view - show all jobs regardless of status or expiration
+      query = Job.find({ source: 'manual' });
+      
+      // Apply specific status filter if provided
+      if (statusFilter) {
+        query = query.where({ status: statusFilter });
+      }
+    } else {
+      // Public view - only active, non-expired jobs
+      query = Job.findActiveJobs(filters);
+    }
+    
+    // Apply other filters
+    if (filters.tags && filters.tags.length > 0) {
+      query = query.where({ tags: { $in: filters.tags } });
+    }
+    
+    if (filters.company) {
+      query = query.where({ company: new RegExp(filters.company, 'i') });
+    }
+    
+    if (filters.location) {
+      query = query.where({ location: new RegExp(filters.location, 'i') });
+    }
+    
+    if (filters.jobType) {
+      query = query.where({ jobType: filters.jobType });
+    }
+    
+    if (filters.workMode) {
+      query = query.where({ workMode: filters.workMode });
+    }
+    
+    if (filters.experienceLevel) {
+      query = query.where({ experienceLevel: filters.experienceLevel });
+    }
+    
+    if (filters.search) {
+      query = query.where({
+        $or: [
+          { title: new RegExp(filters.search, 'i') },
+          { description: new RegExp(filters.search, 'i') },
+          { company: new RegExp(filters.search, 'i') },
+          { tags: { $in: [new RegExp(filters.search, 'i')] } }
+        ]
+      });
+    }
+    
+    const jobs = await query
       .select('-rawRemote') // Exclude raw data for performance
+      .sort({ createdAt: -1 })
       .lean();
     
     return jobs;
