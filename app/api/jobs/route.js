@@ -219,7 +219,39 @@ async function fetchManualJobs(filters) {
       .select('-rawRemote') // Exclude raw data for performance
       .lean();
     
-    return jobs;
+    // Add daysAgo calculation for each job
+    const now = new Date();
+    return jobs.map(job => {
+      let daysAgo = 'Recently';
+      
+      if (job.createdAt) {
+        try {
+          const createdDate = new Date(job.createdAt);
+          if (!isNaN(createdDate.getTime())) {
+            const diffTime = Math.abs(now - createdDate);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            if (diffDays === 0) daysAgo = 'Today';
+            else if (diffDays === 1) daysAgo = '1 day ago';
+            else if (diffDays < 30) daysAgo = `${diffDays} days ago`;
+            else if (diffDays < 365) {
+              const months = Math.floor(diffDays / 30);
+              daysAgo = months === 1 ? '1 month ago' : `${months} months ago`;
+            } else {
+              daysAgo = 'Over a year ago';
+            }
+          }
+        } catch (error) {
+          console.warn('Error calculating daysAgo for manual job:', error);
+        }
+      }
+      
+      return {
+        ...job,
+        daysAgo
+      };
+    });
+    
   } catch (error) {
     console.error('Error fetching manual jobs:', error);
     return [];

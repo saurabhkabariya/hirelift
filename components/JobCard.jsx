@@ -28,18 +28,63 @@ export default function JobCard({ job }) {
 
   // Format creation date if daysAgo is not available
   const getTimeAgo = () => {
-    if (daysAgo) return daysAgo;
+    if (daysAgo && daysAgo !== 'Invalid date') return daysAgo;
     
     try {
       const now = new Date();
-      const posted = new Date(createdAt);
+      
+      // Handle different date formats
+      let posted;
+      if (createdAt) {
+        // If it's already a Date object
+        if (createdAt instanceof Date) {
+          posted = createdAt;
+        }
+        // If it's a string or number, try to parse it
+        else {
+          posted = new Date(createdAt);
+        }
+        
+        // Check if the date is valid
+        if (isNaN(posted.getTime())) {
+          // Try parsing as Unix timestamp (seconds)
+          if (typeof createdAt === 'number' || /^\d+$/.test(String(createdAt))) {
+            posted = new Date(Number(createdAt) * 1000);
+          }
+          
+          // If still invalid, fallback to now
+          if (isNaN(posted.getTime())) {
+            posted = now;
+          }
+        }
+        
+        // Additional validation: ensure the date isn't in the future or too far in the past
+        const diffTime = now - posted;
+        const maxDays = 365 * 2; // 2 years
+        const minDays = 0;
+        
+        if (diffTime < 0 || diffTime > (maxDays * 24 * 60 * 60 * 1000)) {
+          posted = now;
+        }
+        
+      } else {
+        posted = now;
+      }
+      
       const diffTime = Math.abs(now - posted);
       const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
       
       if (diffDays === 0) return 'Today';
       if (diffDays === 1) return '1 day ago';
-      return `${diffDays} days ago`;
-    } catch {
+      if (diffDays < 30) return `${diffDays} days ago`;
+      
+      const diffMonths = Math.floor(diffDays / 30);
+      if (diffMonths === 1) return '1 month ago';
+      if (diffMonths < 12) return `${diffMonths} months ago`;
+      
+      return 'Over a year ago';
+    } catch (error) {
+      console.warn('Error calculating time ago:', error, { createdAt, daysAgo });
       return 'Recently';
     }
   };
