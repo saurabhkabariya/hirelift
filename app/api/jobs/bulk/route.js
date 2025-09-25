@@ -34,6 +34,7 @@ export async function POST(request) {
     // Check authentication and admin status
     const { user, error } = await verifyAuth(request);
     if (error || !user || user.email !== 'websiteads074@gmail.com') {
+      console.log('Auth failed:', { error, userEmail: user?.email });
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -43,9 +44,11 @@ export async function POST(request) {
     await connectDB();
     
     const jobsData = await request.json();
+    console.log('Received jobsData:', { isArray: Array.isArray(jobsData), length: jobsData?.length, sample: jobsData?.[0] });
     
     // Validate input is array
     if (!Array.isArray(jobsData)) {
+      console.log('Not an array, received:', typeof jobsData, jobsData);
       return NextResponse.json(
         {
           success: false,
@@ -113,7 +116,7 @@ export async function POST(request) {
         const processedJobData = {
           ...jobData,
           source: 'manual',
-          postedBy: session.user.id,
+          postedBy: user._id,
           status: jobData.status || 'active'
         };
         

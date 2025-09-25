@@ -328,6 +328,11 @@ export default function CompanyManagerPage() {
     try {
       const jobs = JSON.parse(jobBulkJson);
       
+      // Debug: Log the payload being sent
+      console.log('Sending jobs payload:', jobs);
+      console.log('Is array?', Array.isArray(jobs));
+      console.log('Length:', jobs.length);
+      
       const res = await fetch("/api/jobs/bulk", {
         method: "POST",
         headers: getAuthHeaders(),
@@ -339,6 +344,7 @@ export default function CompanyManagerPage() {
         toast.success(`${result.added} jobs added successfully!`);
         if (result.errors && result.errors.length > 0) {
           toast.error(`${result.errors.length} jobs failed to add`);
+          console.error('Job errors:', result.errors);
         }
         setJobBulkJson("");
         setJobJsonValidation({ isValid: null, message: "" });
@@ -346,7 +352,8 @@ export default function CompanyManagerPage() {
         fetchPendingJobs();
       } else {
         const error = await res.json();
-        toast.error(error.error || "Bulk upload failed");
+        console.error('API Error Response:', error);
+        toast.error(error.error || error.message || "Bulk upload failed");
       }
     } catch (error) {
       toast.error("Invalid JSON format or network error");
@@ -1177,13 +1184,58 @@ export default function CompanyManagerPage() {
               
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-semibold text-green-700 mb-2">
-                    JSON Data
-                  </label>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="block text-sm font-semibold text-green-700">
+                      JSON Data
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const exampleJobs = [
+                          {
+                            "title": "Senior React Developer",
+                            "company": "TechCorp India",
+                            "location": "Mumbai, Maharashtra",
+                            "description": "We are looking for a Senior React Developer to join our dynamic team. You'll work on cutting-edge web applications using React, TypeScript, and modern development tools.",
+                            "jobType": "full-time",
+                            "workMode": "hybrid",
+                            "experienceLevel": "senior",
+                            "url": "https://example.com/apply/react-developer",
+                            "tags": ["react", "javascript", "typescript", "frontend"],
+                            "salary": "₹15-25 LPA",
+                            "requirements": "5+ years of React experience, TypeScript knowledge, good communication skills"
+                          },
+                          {
+                            "title": "Data Scientist",
+                            "company": "AI Solutions Ltd",
+                            "location": "Bangalore, Karnataka",
+                            "description": "Join our AI team as a Data Scientist. Work on machine learning models, data analysis, and predictive analytics for various industry clients.",
+                            "jobType": "full-time",
+                            "workMode": "remote",
+                            "experienceLevel": "mid",
+                            "url": "https://example.com/apply/data-scientist",
+                            "tags": ["python", "machine-learning", "data-science", "tensorflow"],
+                            "salary": "₹12-18 LPA",
+                            "requirements": "3+ years in data science, Python, ML frameworks, statistics background"
+                          }
+                        ];
+                        setJobBulkJson(JSON.stringify(exampleJobs, null, 2));
+                      }}
+                      className="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-200 transition-colors"
+                    >
+                      Load Example
+                    </button>
+                  </div>
+                  <div className="text-xs text-gray-600 mb-2 p-3 bg-gray-50 rounded-lg">
+                    <strong>Required fields:</strong> title, company, location, description, jobType, url<br/>
+                    <strong>jobType options:</strong> full-time, part-time, contract, internship, freelance<br/>
+                    <strong>workMode options:</strong> remote, hybrid, onsite<br/>
+                    <strong>experienceLevel options:</strong> entry, mid, senior, lead, executive
+                  </div>
                   <textarea
                     value={jobBulkJson}
                     onChange={(e) => setJobBulkJson(e.target.value)}
-                    placeholder="Paste your job array JSON here..."
+                    placeholder="Paste your job array JSON here or click 'Load Example' to see the format..."
                     rows="12"
                     className="w-full border-2 border-green-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all duration-200 bg-white font-mono text-sm resize-vertical"
                   />
