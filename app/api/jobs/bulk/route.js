@@ -34,7 +34,6 @@ export async function POST(request) {
     // Check authentication and admin status
     const { user, error } = await verifyAuth(request);
     if (error || !user || user.email !== 'websiteads074@gmail.com') {
-      console.log('Auth failed:', { error, userEmail: user?.email });
       return NextResponse.json(
         { success: false, error: 'Unauthorized' },
         { status: 401 }
@@ -44,11 +43,9 @@ export async function POST(request) {
     await connectDB();
     
     const jobsData = await request.json();
-    console.log('Received jobsData:', { isArray: Array.isArray(jobsData), length: jobsData?.length, sample: jobsData?.[0] });
     
     // Validate input is array
     if (!Array.isArray(jobsData)) {
-      console.log('Not an array, received:', typeof jobsData, jobsData);
       return NextResponse.json(
         {
           success: false,
@@ -116,7 +113,7 @@ export async function POST(request) {
         const processedJobData = {
           ...jobData,
           source: 'manual',
-          postedBy: user._id,
+          postedBy: session.user.id,
           status: jobData.status || 'active'
         };
         
@@ -199,15 +196,12 @@ export async function POST(request) {
             .slice(0, 20); // Limit to 20 tags
         }
         
-        // Check for existing job with same title, company, and URL (more specific duplicate detection)
+        // Check for existing job with same title and company
         const existingJob = await Job.findOne({
-          title: new RegExp(`^${processedJobData.title.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i'),
-          company: new RegExp(`^${processedJobData.company.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i'),
-          url: processedJobData.url,
+          title: new RegExp(`^${processedJobData.title}$`, 'i'),
+          company: new RegExp(`^${processedJobData.company}$`, 'i'),
           source: 'manual'
         });
-        
-        console.log(`Job ${i + 1}: "${processedJobData.title}" at "${processedJobData.company}"`, existingJob ? 'EXISTS - UPDATING' : 'NEW - CREATING');
         
         if (existingJob) {
           // Update existing job

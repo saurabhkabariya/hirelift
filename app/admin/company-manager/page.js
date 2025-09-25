@@ -10,15 +10,6 @@ import toast from "react-hot-toast";
 const ADMIN_EMAIL = "websiteads074@gmail.com";
 const PAGE_SIZE = 10;
 
-// Helper function to get authenticated headers
-const getAuthHeaders = () => {
-  const token = localStorage.getItem('token');
-  return {
-    "Content-Type": "application/json",
-    ...(token && { "Authorization": `Bearer ${token}` })
-  };
-};
-
 export default function CompanyManagerPage() {
   const { user, loading } = useAuth();
   const [companies, setCompanies] = useState([]);
@@ -291,19 +282,14 @@ export default function CompanyManagerPage() {
   // Job Management Functions
   const fetchJobs = () => {
     setJobPageLoading(true);
-    console.log('Fetching jobs...', { page: jobPage, limit: PAGE_SIZE });
-    fetch(`/api/jobs?page=${jobPage}&limit=${PAGE_SIZE}&source=manual&includeAll=true`)
+    fetch(`/api/jobs?page=${jobPage}&limit=${PAGE_SIZE}`)
       .then((res) => res.json())
       .then((data) => {
-        console.log('Jobs API response:', data);
         setJobs(data.jobs || []);
         setJobTotal(data.total || 0);
         setJobPageLoading(false);
       })
-      .catch((error) => {
-        console.error('Error fetching jobs:', error);
-        setJobPageLoading(false);
-      });
+      .catch(() => setJobPageLoading(false));
   };
 
   const fetchPendingJobs = () => {
@@ -315,7 +301,7 @@ export default function CompanyManagerPage() {
   const handleJobAdd = async (data) => {
     const res = await fetch("/api/jobs", {
       method: "POST",
-      headers: getAuthHeaders(),
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
     
@@ -325,40 +311,24 @@ export default function CompanyManagerPage() {
       fetchPendingJobs();
     } else {
       const error = await res.json();
-      toast.error(error.message || error.error || "Failed to add job");
+      toast.error(error.message || "Failed to add job");
     }
   };
 
   const handleJobBulkAdd = async () => {
     try {
       const jobs = JSON.parse(jobBulkJson);
-      
-      // Debug: Log the payload being sent
-      console.log('Sending jobs payload:', jobs);
-      console.log('Is array?', Array.isArray(jobs));
-      console.log('Length:', jobs.length);
-      
       const res = await fetch("/api/jobs/bulk", {
         method: "POST",
-        headers: getAuthHeaders(),
-        body: JSON.stringify(jobs), // Send jobs array directly, not wrapped in object
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ jobs }),
       });
       
       if (res.ok) {
         const result = await res.json();
-        console.log('Bulk upload result:', result);
-        
-        const addedCount = result.results?.added || 0;
-        const updatedCount = result.results?.updated || 0;
-        const errorCount = result.results?.errors?.length || 0;
-        
-        if (addedCount > 0 || updatedCount > 0) {
-          toast.success(`${addedCount} jobs created, ${updatedCount} jobs updated!`);
-        }
-        
-        if (errorCount > 0) {
-          toast.error(`${errorCount} jobs failed to process`);
-          console.error('Job processing errors:', result.results.errors);
+        toast.success(`${result.successful} jobs added successfully!`);
+        if (result.failed > 0) {
+          toast.error(`${result.failed} jobs failed to add`);
         }
         setJobBulkJson("");
         setJobJsonValidation({ isValid: null, message: "" });
@@ -366,12 +336,10 @@ export default function CompanyManagerPage() {
         fetchPendingJobs();
       } else {
         const error = await res.json();
-        console.error('API Error Response:', error);
-        toast.error(error.error || error.message || "Bulk upload failed");
+        toast.error(error.message || "Bulk upload failed");
       }
     } catch (error) {
-      toast.error("Invalid JSON format or network error");
-      console.error('Bulk upload error:', error);
+      toast.error("Invalid JSON format");
     }
   };
 
@@ -380,7 +348,7 @@ export default function CompanyManagerPage() {
   const handleJobUpdate = async (data) => {
     const res = await fetch(`/api/jobs/${editingJob._id}`, {
       method: "PUT",
-      headers: getAuthHeaders(),
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
     
@@ -391,15 +359,12 @@ export default function CompanyManagerPage() {
       fetchPendingJobs();
     } else {
       const error = await res.json();
-      toast.error(error.message || error.error || "Failed to update job");
+      toast.error(error.message || "Failed to update job");
     }
   };
 
   const handleJobDelete = async (id) => {
-    const res = await fetch(`/api/jobs/${id}`, { 
-      method: "DELETE",
-      headers: getAuthHeaders()
-    });
+    const res = await fetch(`/api/jobs/${id}`, { method: "DELETE" });
     if (res.ok) {
       toast.success("Job deleted successfully!");
       fetchJobs();
@@ -412,7 +377,7 @@ export default function CompanyManagerPage() {
   const handleJobStatusToggle = async (job, status) => {
     const res = await fetch(`/api/jobs/${job._id}`, {
       method: "PUT",
-      headers: getAuthHeaders(),
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
     });
     
@@ -421,8 +386,7 @@ export default function CompanyManagerPage() {
       setPendingJobs(pendingJobs.filter((j) => j._id !== job._id));
       fetchJobs();
     } else {
-      const error = await res.json();
-      toast.error(error.error || "Status update failed");
+      toast.error("Status update failed");
     }
   };
 
@@ -1198,92 +1162,13 @@ export default function CompanyManagerPage() {
               
               <div className="space-y-4">
                 <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <label className="block text-sm font-semibold text-green-700">
-                      JSON Data
-                    </label>
-                    <button
-                      type="button"
-                      onClick={() => {
-                        const exampleJobs = [
-                          {
-                            "title": "Senior React Developer",
-                            "company": "TechCorp India",
-                            "location": "Mumbai, Maharashtra",
-                            "description": "We are looking for a Senior React Developer to join our dynamic team. You'll work on cutting-edge web applications using React, TypeScript, and modern development tools.",
-                            "jobType": "full-time",
-                            "workMode": "hybrid",
-                            "experienceLevel": "senior",
-                            "url": "https://example.com/apply/react-developer-001",
-                            "tags": ["react", "javascript", "typescript", "frontend"],
-                            "salary": "₹15-25 LPA"
-                          },
-                          {
-                            "title": "Data Scientist",
-                            "company": "AI Solutions Ltd",
-                            "location": "Bangalore, Karnataka",
-                            "description": "Join our AI team as a Data Scientist. Work on machine learning models, data analysis, and predictive analytics for various industry clients.",
-                            "jobType": "full-time",
-                            "workMode": "remote",
-                            "experienceLevel": "mid",
-                            "url": "https://example.com/apply/data-scientist-002",
-                            "tags": ["python", "machine-learning", "data-science", "tensorflow"],
-                            "salary": "₹12-18 LPA"
-                          },
-                          {
-                            "title": "Backend Engineer",
-                            "company": "DevOps Solutions",
-                            "location": "Delhi, Delhi",
-                            "description": "Looking for a Backend Engineer to build scalable APIs and microservices. Experience with Node.js, Python, and cloud platforms required.",
-                            "jobType": "full-time",
-                            "workMode": "onsite",
-                            "experienceLevel": "mid",
-                            "url": "https://example.com/apply/backend-engineer-003",
-                            "tags": ["nodejs", "python", "apis", "microservices"],
-                            "salary": "₹10-16 LPA"
-                          },
-                          {
-                            "title": "Frontend Designer",
-                            "company": "Creative Agency",
-                            "location": "Pune, Maharashtra",
-                            "description": "Creative Frontend Designer needed to create beautiful, responsive user interfaces. Must have experience with modern CSS frameworks and design systems.",
-                            "jobType": "part-time",
-                            "workMode": "remote",
-                            "experienceLevel": "entry",
-                            "url": "https://example.com/apply/frontend-designer-004",
-                            "tags": ["css", "design", "ui-ux", "figma"],
-                            "salary": "₹6-10 LPA"
-                          },
-                          {
-                            "title": "DevOps Engineer",
-                            "company": "Cloud Systems Inc",
-                            "location": "Hyderabad, Telangana",
-                            "description": "Experienced DevOps Engineer required for managing cloud infrastructure, CI/CD pipelines, and containerized applications.",
-                            "jobType": "full-time",
-                            "workMode": "hybrid",
-                            "experienceLevel": "senior",
-                            "url": "https://example.com/apply/devops-engineer-005",
-                            "tags": ["docker", "kubernetes", "aws", "jenkins"],
-                            "salary": "₹18-28 LPA"
-                          }
-                        ];
-                        setJobBulkJson(JSON.stringify(exampleJobs, null, 2));
-                      }}
-                      className="text-xs bg-blue-100 text-blue-600 px-3 py-1 rounded-lg hover:bg-blue-200 transition-colors"
-                    >
-                      Load Example
-                    </button>
-                  </div>
-                  <div className="text-xs text-gray-600 mb-2 p-3 bg-gray-50 rounded-lg">
-                    <strong>Required fields:</strong> title, company, location, description, jobType, url<br/>
-                    <strong>jobType options:</strong> full-time, part-time, contract, internship, freelance<br/>
-                    <strong>workMode options:</strong> remote, hybrid, onsite<br/>
-                    <strong>experienceLevel options:</strong> entry, mid, senior, lead, executive
-                  </div>
+                  <label className="block text-sm font-semibold text-green-700 mb-2">
+                    JSON Data
+                  </label>
                   <textarea
                     value={jobBulkJson}
                     onChange={(e) => setJobBulkJson(e.target.value)}
-                    placeholder="Paste your job array JSON here or click 'Load Example' to see the format..."
+                    placeholder="Paste your job array JSON here..."
                     rows="12"
                     className="w-full border-2 border-green-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-green-400 focus:border-green-400 transition-all duration-200 bg-white font-mono text-sm resize-vertical"
                   />
