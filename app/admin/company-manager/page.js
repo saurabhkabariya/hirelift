@@ -10,6 +10,15 @@ import toast from "react-hot-toast";
 const ADMIN_EMAIL = "websiteads074@gmail.com";
 const PAGE_SIZE = 10;
 
+// Helper function to get authenticated headers
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  return {
+    "Content-Type": "application/json",
+    ...(token && { "Authorization": `Bearer ${token}` })
+  };
+};
+
 export default function CompanyManagerPage() {
   const { user, loading } = useAuth();
   const [companies, setCompanies] = useState([]);
@@ -301,7 +310,7 @@ export default function CompanyManagerPage() {
   const handleJobAdd = async (data) => {
     const res = await fetch("/api/jobs", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
     
@@ -311,24 +320,25 @@ export default function CompanyManagerPage() {
       fetchPendingJobs();
     } else {
       const error = await res.json();
-      toast.error(error.message || "Failed to add job");
+      toast.error(error.message || error.error || "Failed to add job");
     }
   };
 
   const handleJobBulkAdd = async () => {
     try {
       const jobs = JSON.parse(jobBulkJson);
+      
       const res = await fetch("/api/jobs/bulk", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jobs }),
+        headers: getAuthHeaders(),
+        body: JSON.stringify(jobs), // Send jobs array directly, not wrapped in object
       });
       
       if (res.ok) {
         const result = await res.json();
-        toast.success(`${result.successful} jobs added successfully!`);
-        if (result.failed > 0) {
-          toast.error(`${result.failed} jobs failed to add`);
+        toast.success(`${result.added} jobs added successfully!`);
+        if (result.errors && result.errors.length > 0) {
+          toast.error(`${result.errors.length} jobs failed to add`);
         }
         setJobBulkJson("");
         setJobJsonValidation({ isValid: null, message: "" });
@@ -336,10 +346,11 @@ export default function CompanyManagerPage() {
         fetchPendingJobs();
       } else {
         const error = await res.json();
-        toast.error(error.message || "Bulk upload failed");
+        toast.error(error.error || "Bulk upload failed");
       }
     } catch (error) {
-      toast.error("Invalid JSON format");
+      toast.error("Invalid JSON format or network error");
+      console.error('Bulk upload error:', error);
     }
   };
 
@@ -348,7 +359,7 @@ export default function CompanyManagerPage() {
   const handleJobUpdate = async (data) => {
     const res = await fetch(`/api/jobs/${editingJob._id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(),
       body: JSON.stringify(data),
     });
     
@@ -359,12 +370,15 @@ export default function CompanyManagerPage() {
       fetchPendingJobs();
     } else {
       const error = await res.json();
-      toast.error(error.message || "Failed to update job");
+      toast.error(error.message || error.error || "Failed to update job");
     }
   };
 
   const handleJobDelete = async (id) => {
-    const res = await fetch(`/api/jobs/${id}`, { method: "DELETE" });
+    const res = await fetch(`/api/jobs/${id}`, { 
+      method: "DELETE",
+      headers: getAuthHeaders()
+    });
     if (res.ok) {
       toast.success("Job deleted successfully!");
       fetchJobs();
@@ -377,7 +391,7 @@ export default function CompanyManagerPage() {
   const handleJobStatusToggle = async (job, status) => {
     const res = await fetch(`/api/jobs/${job._id}`, {
       method: "PUT",
-      headers: { "Content-Type": "application/json" },
+      headers: getAuthHeaders(),
       body: JSON.stringify({ status }),
     });
     
@@ -386,7 +400,8 @@ export default function CompanyManagerPage() {
       setPendingJobs(pendingJobs.filter((j) => j._id !== job._id));
       fetchJobs();
     } else {
-      toast.error("Status update failed");
+      const error = await res.json();
+      toast.error(error.error || "Status update failed");
     }
   };
 
