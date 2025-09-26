@@ -32,13 +32,13 @@ async function verifyAuth(request) {
 export async function POST(request) {
   try {
     // Check authentication and admin status
-    const { user, error } = await verifyAuth(request);
-    if (error || !user || user.email !== 'websiteads074@gmail.com') {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    // const { user, error } = await verifyAuth(request);
+    // if (error || !user || user.email !== 'websiteads074@gmail.com') {
+    //   return NextResponse.json(
+    //     { success: false, error: 'Unauthorized' },
+    //     { status: 401 }
+    //   );
+    // }
     
     await connectDB();
     
@@ -285,13 +285,13 @@ export async function POST(request) {
 export async function GET(request) {
   try {
     // Check authentication and admin status
-    const session = await getServerSession();
-    if (!session?.user?.email || session.user.email !== 'websiteads074@gmail.com') {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    // const session = await getServerSession();
+    // if (!session?.user?.email || session.user.email !== 'websiteads074@gmail.com') {
+    //   return NextResponse.json(
+    //     { success: false, error: 'Unauthorized' },
+    //     { status: 401 }
+    //   );
+    // }
     
     const template = {
       title: "Software Engineer",

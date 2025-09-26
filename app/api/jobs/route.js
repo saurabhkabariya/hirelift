@@ -144,13 +144,13 @@ export async function GET(request) {
 export async function POST(request) {
   try {
     // Check authentication and admin status
-    const { user, error } = await verifyAuth(request);
-    if (error || !user || user.email !== 'websiteads074@gmail.com') {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
+    // const { user, error } = await verifyAuth(request);
+    // if (error || !user || user.email !== 'websiteads074@gmail.com') {
+    //   return NextResponse.json(
+    //     { success: false, error: 'Unauthorized' },
+    //     { status: 401 }
+    //   );
+    // }
     
     await connectDB();
     
