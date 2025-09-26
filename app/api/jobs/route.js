@@ -176,6 +176,10 @@ export async function POST(request) {
     // jobData.postedBy = session.user.id;
     jobData.status = 'active';
     
+    // For manual jobs, generate a unique externalId to avoid any potential conflicts
+    // Even though the sparse index should handle null values, we'll be explicit
+    jobData.externalId = `manual_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    
     // Create job
     const job = new Job(jobData);
     await job.save();
@@ -191,11 +195,31 @@ export async function POST(request) {
     
     // Handle duplicate key error
     if (error.code === 11000) {
+      // Extract field information from the error
+      let duplicateField = 'unknown field';
+      let message = 'A duplicate entry already exists';
+      
+      if (error.message) {
+        // Try to extract the field name from the error message
+        const keyMatch = error.message.match(/dup key: { (\w+):/);
+        if (keyMatch) {
+          duplicateField = keyMatch[1];
+        }
+        
+        // Check if it's the compound index on source and externalId
+        if (error.message.includes('source_1_externalId_1')) {
+          duplicateField = 'externalId';
+          message = 'A job with this external ID already exists for this source';
+        }
+      }
+      
       return NextResponse.json(
         {
           success: false,
-          error: 'Duplicate job',
-          message: 'A job with this external ID already exists'
+          error: 'Duplicate entry',
+          message,
+          field: duplicateField,
+          details: error.message
         },
         { status: 409 }
       );
