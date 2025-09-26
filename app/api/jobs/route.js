@@ -173,7 +173,7 @@ export async function POST(request) {
     
     // Set manual job defaults
     jobData.source = 'manual';
-    jobData.postedBy = session.user.id;
+    // jobData.postedBy = session.user.id;
     jobData.status = 'active';
     
     // Create job
