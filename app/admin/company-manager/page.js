@@ -25,6 +25,7 @@ export default function CompanyManagerPage() {
   // Job management state
   const [jobs, setJobs] = useState([]);
   const [jobTotal, setJobTotal] = useState(0);
+  const [jobTotalPages, setJobTotalPages] = useState(1);
   const [jobPage, setJobPage] = useState(1);
   const [editingJob, setEditingJob] = useState(null);
   const [jobBulkJson, setJobBulkJson] = useState("");
@@ -81,8 +82,9 @@ export default function CompanyManagerPage() {
     fetch(`/api/jobs?page=${jobPage}&limit=${PAGE_SIZE}`)
       .then((res) => res.json())
       .then((data) => {
-        setJobs(data.jobs || []);
-        setJobTotal(data.total || 0);
+        setJobs(data.data || []);
+        setJobTotal(data.pagination?.total || 0);
+        setJobTotalPages(data.pagination?.totalPages || 1);
         setJobPageLoading(false);
       })
       .catch(() => setJobPageLoading(false));
@@ -92,7 +94,7 @@ export default function CompanyManagerPage() {
   useEffect(() => {
     fetch(`/api/jobs?status=draft&page=1&limit=100`)
       .then((res) => res.json())
-      .then((data) => setPendingJobs(data.jobs || []));
+      .then((data) => setPendingJobs(data.data || []));
   }, [jobs]);
 
   // Job JSON validation effect
@@ -285,8 +287,9 @@ export default function CompanyManagerPage() {
     fetch(`/api/jobs?page=${jobPage}&limit=${PAGE_SIZE}`)
       .then((res) => res.json())
       .then((data) => {
-        setJobs(data.jobs || []);
-        setJobTotal(data.total || 0);
+        setJobs(data.data || []);
+        setJobTotal(data.pagination?.total || 0);
+        setJobTotalPages(data.pagination?.totalPages || 1);
         setJobPageLoading(false);
       })
       .catch(() => setJobPageLoading(false));
@@ -295,7 +298,7 @@ export default function CompanyManagerPage() {
   const fetchPendingJobs = () => {
     fetch(`/api/jobs?status=draft&page=1&limit=100`)
       .then((res) => res.json())
-      .then((data) => setPendingJobs(data.jobs || []));
+      .then((data) => setPendingJobs(data.data || []));
   };
 
   const handleJobAdd = async (data) => {
@@ -391,7 +394,6 @@ export default function CompanyManagerPage() {
   };
 
   const totalPages = Math.ceil(total / PAGE_SIZE);
-  const jobTotalPages = Math.ceil(jobTotal / PAGE_SIZE);
 
   // Animation variants
   const containerVariants = {
