@@ -6,28 +6,28 @@ import jwt from 'jsonwebtoken';
 import User from '@/models/User';
 
 // Helper function to verify JWT token and get user
-async function verifyAuth(request) {
-  try {
-    const authHeader = request.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return { user: null, error: 'No token provided' };
-    }
+// async function verifyAuth(request) {
+//   try {
+//     const authHeader = request.headers.get('authorization');
+//     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+//       return { user: null, error: 'No token provided' };
+//     }
 
-    const token = authHeader.substring(7);
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+//     const token = authHeader.substring(7);
+//     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     
-    await connectDB();
-    const user = await User.findById(decoded.userId);
+//     await connectDB();
+//     const user = await User.findById(decoded.userId);
     
-    if (!user) {
-      return { user: null, error: 'User not found' };
-    }
+//     if (!user) {
+//       return { user: null, error: 'User not found' };
+//     }
 
-    return { user, error: null };
-  } catch (error) {
-    return { user: null, error: 'Invalid token' };
-  }
-}
+//     return { user, error: null };
+//   } catch (error) {
+//     return { user: null, error: 'Invalid token' };
+//   }
+// }
 
 // GET /api/jobs/[id] - Get job by ID
 export async function GET(request, { params }) {
