@@ -48,6 +48,7 @@ export async function GET(request) {
     const experienceLevel = searchParams.get('experienceLevel');
     const sort = searchParams.get('sort') || 'date'; // date, relevance
     const source = searchParams.get('source'); // manual, remoteok, or all (default)
+    const featured = searchParams.get('featured') === 'true'; // featured jobs only
     
     // Build filters object
     const filters = {
@@ -57,7 +58,8 @@ export async function GET(request) {
       location,
       jobType,
       workMode,
-      experienceLevel
+      experienceLevel,
+      featured
     };
     
     // Remove empty filters
@@ -69,8 +71,11 @@ export async function GET(request) {
 
     let allJobs = [];
     
-    if (!source || source === 'all') {
-      // Fetch both manual and RemoteOK jobs
+    // If filtering for featured jobs, only fetch manual jobs
+    if (filters.featured) {
+      allJobs = await fetchManualJobs(filters);
+    } else if (!source || source === 'all') {
+      // Fetch both manual and RemoteOK jobs (default behavior)
       const [manualJobs, remoteOkJobs] = await Promise.all([
         fetchManualJobs(filters),
         fetchRemoteOkJobs()

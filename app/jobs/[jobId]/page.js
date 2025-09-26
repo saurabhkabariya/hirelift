@@ -5,6 +5,42 @@ import { connectDB } from '@/lib/mongodb';
 import Job from '@/models/Job';
 import { fetchRemoteOkJobs } from '@/lib/remoteok';
 
+// Serialize job data for client component
+function serializeJob(job) {
+  if (!job) return null;
+  
+  // Convert MongoDB document to plain object
+  const serialized = {
+    _id: job._id ? job._id.toString() : job._id,
+    id: job._id ? job._id.toString() : job.id,
+    externalId: job.externalId,
+    source: job.source,
+    title: job.title,
+    company: job.company,
+    location: job.location,
+    description: job.description,
+    shortDescription: job.shortDescription,
+    tags: job.tags || [],
+    jobType: job.jobType,
+    workMode: job.workMode,
+    experienceLevel: job.experienceLevel,
+    formattedSalary: job.formattedSalary,
+    salaryRange: job.salaryRange,
+    url: job.url,
+    companyLogo: job.companyLogo,
+    isFeatured: job.isFeatured,
+    status: job.status,
+    viewCount: job.viewCount,
+    createdAt: job.createdAt ? job.createdAt.toString() : job.createdAt,
+    updatedAt: job.updatedAt ? job.updatedAt.toString() : job.updatedAt,
+    expiresAt: job.expiresAt ? job.expiresAt.toString() : job.expiresAt,
+    daysAgo: job.daysAgo,
+    __v: job.__v
+  };
+  
+  return serialized;
+}
+
 // This function runs on the server - using direct DB queries instead of HTTP requests
 async function getJob(jobId) {
   try {
@@ -171,9 +207,12 @@ export default async function JobDetailPage({ params }) {
     );
   }
 
+  // Serialize the job data to make it safe for client components
+  const serializedJob = serializeJob(job);
+
   return (
     <Suspense fallback={<JobDetailSkeleton />}>
-      <JobDetail job={job} />
+      <JobDetail job={serializedJob} />
     </Suspense>
   );
 }

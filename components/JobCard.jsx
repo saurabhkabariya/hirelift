@@ -89,6 +89,36 @@ export default function JobCard({ job }) {
     }
   };
 
+  // Get currency symbol based on currency code
+  const getCurrencySymbol = (currency = 'USD') => {
+    const symbols = {
+      'USD': '$',
+      'EUR': '€',
+      'GBP': '£',
+      'INR': '₹',
+      'CAD': 'C$',
+      'AUD': 'A$',
+      'JPY': '¥',
+      'CNY': '¥',
+      'KRW': '₩',
+      'SGD': 'S$',
+      'CHF': 'CHF ',
+      'SEK': 'kr ',
+      'NOK': 'kr ',
+      'DKK': 'kr ',
+      'PLN': 'zł ',
+      'CZK': 'Kč ',
+      'HUF': 'Ft ',
+      'RUB': '₽',
+      'BRL': 'R$',
+      'MXN': '$',
+      'ZAR': 'R ',
+      'TRY': '₺',
+      'ILS': '₪'
+    };
+    return symbols[currency.toUpperCase()] || currency.toUpperCase() + ' ';
+  };
+
   // Format salary or show default
   const getSalaryDisplay = () => {
     if (formattedSalary && formattedSalary !== 'Salary not specified') {
@@ -96,12 +126,13 @@ export default function JobCard({ job }) {
     }
     if (job.salaryRange?.min || job.salaryRange?.max) {
       const { min, max, currency = 'USD' } = job.salaryRange;
+      const currencySymbol = getCurrencySymbol(currency);
       if (min && max) {
-        return `$${min.toLocaleString()} - $${max.toLocaleString()}`;
+        return `${currencySymbol}${min.toLocaleString()} - ${currencySymbol}${max.toLocaleString()}`;
       } else if (min) {
-        return `From $${min.toLocaleString()}`;
+        return `From ${currencySymbol}${min.toLocaleString()}`;
       } else if (max) {
-        return `Up to $${max.toLocaleString()}`;
+        return `Up to ${currencySymbol}${max.toLocaleString()}`;
       }
     }
     return 'Competitive salary';

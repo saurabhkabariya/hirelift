@@ -154,6 +154,36 @@ export default function JobDetail({ job: initialJob, jobId }) {
     }
   };
 
+  // Get currency symbol based on currency code
+  const getCurrencySymbol = (currency = 'USD') => {
+    const symbols = {
+      'USD': '$',
+      'EUR': '€',
+      'GBP': '£',
+      'INR': '₹',
+      'CAD': 'C$',
+      'AUD': 'A$',
+      'JPY': '¥',
+      'CNY': '¥',
+      'KRW': '₩',
+      'SGD': 'S$',
+      'CHF': 'CHF ',
+      'SEK': 'kr ',
+      'NOK': 'kr ',
+      'DKK': 'kr ',
+      'PLN': 'zł ',
+      'CZK': 'Kč ',
+      'HUF': 'Ft ',
+      'RUB': '₽',
+      'BRL': 'R$',
+      'MXN': '$',
+      'ZAR': 'R ',
+      'TRY': '₺',
+      'ILS': '₪'
+    };
+    return symbols[currency.toUpperCase()] || currency.toUpperCase() + ' ';
+  };
+
   // Format salary or show default
   const getSalaryDisplay = () => {
     if (formattedSalary && formattedSalary !== 'Salary not specified') {
@@ -161,12 +191,13 @@ export default function JobDetail({ job: initialJob, jobId }) {
     }
     if (job.salaryRange?.min || job.salaryRange?.max) {
       const { min, max, currency = 'USD' } = job.salaryRange;
+      const currencySymbol = getCurrencySymbol(currency);
       if (min && max) {
-        return `$${min.toLocaleString()} - $${max.toLocaleString()}`;
+        return `${currencySymbol}${min.toLocaleString()} - ${currencySymbol}${max.toLocaleString()}`;
       } else if (min) {
-        return `From $${min.toLocaleString()}`;
+        return `From ${currencySymbol}${min.toLocaleString()}`;
       } else if (max) {
-        return `Up to $${max.toLocaleString()}`;
+        return `Up to ${currencySymbol}${max.toLocaleString()}`;
       }
     }
     return 'Competitive salary';
@@ -292,7 +323,14 @@ export default function JobDetail({ job: initialJob, jobId }) {
             {/* Action Buttons */}
             <div className="flex items-center gap-2 sm:gap-3">
               <motion.button
-                onClick={() => router.back()}
+                onClick={() => {
+                  // Check if there's a referrer from the same origin, otherwise go to jobs page
+                  if (document.referrer && document.referrer.includes(window.location.origin)) {
+                    router.back();
+                  } else {
+                    router.push('/jobs');
+                  }
+                }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 rounded-xl hover:from-gray-200 hover:to-gray-300 transition-all duration-200 border border-gray-200 font-medium text-sm"
@@ -334,7 +372,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
             <motion.div 
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="absolute top-4 right-4 bg-yellow-400 text-yellow-900 px-4 py-2 rounded-full text-sm font-bold shadow-lg"
+              className="absolute top-1 right-1 sm:top-8 sm:right-50 bg-yellow-400 text-yellow-900 px-3 py-2 sm:px-4 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg z-10"
             >
               ⭐ Featured Job
             </motion.div>

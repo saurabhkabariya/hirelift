@@ -240,6 +240,10 @@ jobSchema.statics.findActiveJobs = function(filters = {}) {
     ];
   }
   
+  if (filters.featured) {
+    query.isFeatured = true;
+  }
+  
   return this.find(query);
 };
 

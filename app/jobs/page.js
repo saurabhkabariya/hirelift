@@ -70,30 +70,65 @@ function JobsPageContent() {
   const [experienceLevel, setExperienceLevel] = useState('');
   const [location, setLocation] = useState('');
   const [sort, setSort] = useState('date');
+  const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   
   // Data states
   const [jobs, setJobs] = useState([]);
+  const [featuredJobs, setFeaturedJobs] = useState([]);
   const [pagination, setPagination] = useState({});
   const [availableFilters, setAvailableFilters] = useState({});
   const [loading, setLoading] = useState(false);
+  const [featuredLoading, setFeaturedLoading] = useState(false);
   const [page, setPage] = useState(1);
   
   // UI states
   const [showTagDropdown, setShowTagDropdown] = useState(false);
   const [tagSearchTerm, setTagSearchTerm] = useState("");
   const tagDropdownRef = useRef(null);
+  
+  // Refs for preventing multiple simultaneous fetches and tracking component state
+  const isInitializingRef = useRef(false);
+  const isMountedRef = useRef(true);
+  const currentRequestIdRef = useRef(0);
+
+  // Reset mounted state on component mount
+  useEffect(() => {
+    isMountedRef.current = true;
+  }, []);
 
   // Initialize from search params after component mounts
   useEffect(() => {
-    if (searchParams) {
-      setSearch(searchParams.get('q') || '');
-      setSelectedTags(searchParams.get('tags')?.split(',').filter(Boolean) || []);
-      setJobType(searchParams.get('jobType') || '');
-      setWorkMode(searchParams.get('workMode') || '');
-      setExperienceLevel(searchParams.get('experienceLevel') || '');
-      setLocation(searchParams.get('location') || '');
-      setSort(searchParams.get('sort') || 'date');
-      setPage(parseInt(searchParams.get('page') || '1'));
+    if (searchParams && !isInitializingRef.current) {
+      isInitializingRef.current = true;
+      
+      // Batch all state updates to prevent multiple re-renders
+      const updates = {
+        search: searchParams.get('q') || '',
+        tags: searchParams.get('tags')?.split(',').filter(Boolean) || [],
+        jobType: searchParams.get('jobType') || '',
+        workMode: searchParams.get('workMode') || '',
+        experienceLevel: searchParams.get('experienceLevel') || '',
+        location: searchParams.get('location') || '',
+        sort: searchParams.get('sort') || 'date',
+        page: parseInt(searchParams.get('page') || '1'),
+        featuredOnly: searchParams.get('featured') === 'true'
+      };
+      
+      // Only update states if they're different to prevent unnecessary re-renders
+      if (updates.search !== search) setSearch(updates.search);
+      if (JSON.stringify(updates.tags) !== JSON.stringify(selectedTags)) setSelectedTags(updates.tags);
+      if (updates.jobType !== jobType) setJobType(updates.jobType);
+      if (updates.workMode !== workMode) setWorkMode(updates.workMode);
+      if (updates.experienceLevel !== experienceLevel) setExperienceLevel(updates.experienceLevel);
+      if (updates.location !== location) setLocation(updates.location);
+      if (updates.sort !== sort) setSort(updates.sort);
+      if (updates.page !== page) setPage(updates.page);
+      if (updates.featuredOnly !== showFeaturedOnly) setShowFeaturedOnly(updates.featuredOnly);
+      
+      // Allow future initializations after a short delay
+      setTimeout(() => {
+        isInitializingRef.current = false;
+      }, 100);
     }
   }, [searchParams]);
 
@@ -113,8 +148,16 @@ function JobsPageContent() {
 
   // Fetch jobs function with useCallback to make it stable
   const fetchJobs = useCallback(async () => {
+    // Generate a unique request ID to handle race conditions
+    const requestId = ++currentRequestIdRef.current;
+    
     setLoading(true);
     try {
+      // Check if component is still mounted and this is the latest request
+      if (!isMountedRef.current || requestId !== currentRequestIdRef.current) {
+        return;
+      }
+      
       const params = new URLSearchParams();
       if (search) params.append('q', search);
       if (selectedTags.length > 0) params.append('tags', selectedTags.join(','));
@@ -122,12 +165,24 @@ function JobsPageContent() {
       if (workMode) params.append('workMode', workMode);
       if (experienceLevel) params.append('experienceLevel', experienceLevel);
       if (location) params.append('location', location);
+      if (showFeaturedOnly) params.append('featured', 'true');
       params.append('sort', sort);
       params.append('page', page.toString());
       params.append('limit', PAGE_SIZE.toString());
 
       const response = await fetch(`/api/jobs?${params.toString()}`);
+      
+      // Check if this is still the latest request and component is mounted
+      if (!isMountedRef.current || requestId !== currentRequestIdRef.current) {
+        return;
+      }
+      
       const data = await response.json();
+
+      // Final check before updating state
+      if (!isMountedRef.current || requestId !== currentRequestIdRef.current) {
+        return;
+      }
 
       if (data.success) {
         setJobs(data.data || []);
@@ -138,17 +193,73 @@ function JobsPageContent() {
         console.error('API Error:', data.message);
       }
     } catch (error) {
-      toast.error('Error loading jobs');
-      console.error('Fetch error:', error);
+      // Only show errors if this is still the latest request and component is mounted
+      if (isMountedRef.current && requestId === currentRequestIdRef.current) {
+        toast.error('Error loading jobs');
+        console.error('Fetch error:', error);
+      }
     } finally {
-      setLoading(false);
+      // Only update loading state if this is the latest request and component is mounted
+      if (isMountedRef.current && requestId === currentRequestIdRef.current) {
+        setLoading(false);
+      }
     }
-  }, [search, selectedTags, jobType, workMode, experienceLevel, location, sort, page]);
+  }, [search, selectedTags, jobType, workMode, experienceLevel, location, sort, page, showFeaturedOnly]);
 
   // Fetch jobs when filters change
   useEffect(() => {
     fetchJobs();
   }, [fetchJobs]);
+
+  // Fetch featured jobs function
+  const fetchFeaturedJobs = useCallback(async () => {
+    if (!isMountedRef.current) return;
+    
+    setFeaturedLoading(true);
+    try {
+      const response = await fetch('/api/jobs?featured=true&limit=3&sort=date');
+      
+      // Check if component is still mounted
+      if (!isMountedRef.current) {
+        return;
+      }
+      
+      const data = await response.json();
+
+      // Check again before updating state
+      if (!isMountedRef.current) {
+        return;
+      }
+
+      if (data.success) {
+        setFeaturedJobs(data.data || []);
+      } else {
+        console.error('Featured jobs API Error:', data.message);
+      }
+    } catch (error) {
+      // Only show errors if component is still mounted
+      if (isMountedRef.current) {
+        console.error('Featured jobs fetch error:', error);
+      }
+    } finally {
+      // Only update state if component is still mounted
+      if (isMountedRef.current) {
+        setFeaturedLoading(false);
+      }
+    }
+  }, []);
+
+  // Fetch featured jobs on mount
+  useEffect(() => {
+    fetchFeaturedJobs();
+  }, [fetchFeaturedJobs]);
+
+  // Cleanup function to mark component as unmounted
+  useEffect(() => {
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
   // Update URL when filters change
   useEffect(() => {
@@ -161,13 +272,14 @@ function JobsPageContent() {
     if (location) params.set('location', location);
     if (sort !== 'date') params.set('sort', sort);
     if (page !== 1) params.set('page', page.toString());
+    if (showFeaturedOnly) params.set('featured', 'true');
     
     const queryString = params.toString();
     const newUrl = queryString ? `/jobs?${queryString}` : '/jobs';
     
     // Update URL without triggering a re-render
     window.history.replaceState(null, '', newUrl);
-  }, [search, selectedTags, jobType, workMode, experienceLevel, location, sort, page]);
+  }, [search, selectedTags, jobType, workMode, experienceLevel, location, sort, page, showFeaturedOnly]);
 
   const handleTagSelect = (tag) => {
     if (!selectedTags.includes(tag)) {
@@ -307,7 +419,7 @@ function JobsPageContent() {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="text-4xl sm:text-5xl font-extrabold bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent drop-shadow-lg mb-4 py-2"
           >
-            Job Opportunities
+            {showFeaturedOnly ? 'Featured Jobs' : 'Job Opportunities'}
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0 }}
@@ -315,8 +427,10 @@ function JobsPageContent() {
             transition={{ delay: 0.2, duration: 0.6 }}
             className="text-lg text-gray-600 max-w-2xl mx-auto"
           >
-            Discover remote and on-site opportunities from top companies worldwide. 
-            No login required - start exploring your next career move today.
+            {showFeaturedOnly 
+              ? 'Discover our hand-picked premium job opportunities from top companies worldwide.'
+              : 'Discover remote and on-site opportunities from top companies worldwide. No login required - start exploring your next career move today.'
+            }
           </motion.p>
         </motion.div>
 
@@ -603,6 +717,68 @@ function JobsPageContent() {
             </div>
           </div>
         </motion.div>
+
+        {/* Featured Jobs Section */}
+        {featuredJobs.length > 0 && !showFeaturedOnly && (
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.6 }}
+            className="mb-8"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center gap-2">
+                <svg className="w-6 h-6 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <h2 className="text-2xl font-bold bg-gradient-to-r from-yellow-600 via-orange-500 to-red-500 bg-clip-text text-transparent">
+                  Featured Jobs
+                </h2>
+              </div>
+              <div className="flex-1 h-px bg-gradient-to-r from-yellow-200 via-orange-200 to-red-200"></div>
+              <Link
+                href={showFeaturedOnly ? "/jobs" : "/jobs?featured=true"}
+                className="px-4 py-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white rounded-lg hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 text-sm font-medium shadow-md hover:shadow-lg"
+              >
+                {showFeaturedOnly ? "View All Jobs" : "View All Featured"}
+              </Link>
+            </div>
+
+            {featuredLoading ? (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 rounded-2xl p-6 border-2 border-yellow-200 animate-pulse">
+                    <div className="h-6 bg-yellow-200 rounded mb-4"></div>
+                    <div className="h-4 bg-yellow-200 rounded mb-2"></div>
+                    <div className="h-4 bg-yellow-200 rounded mb-4 w-3/4"></div>
+                    <div className="flex gap-2 mb-4">
+                      <div className="h-6 bg-yellow-200 rounded-full w-16"></div>
+                      <div className="h-6 bg-yellow-200 rounded-full w-20"></div>
+                    </div>
+                    <div className="h-10 bg-yellow-200 rounded"></div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {featuredJobs.map((job, index) => (
+                  <motion.div
+                    key={job._id || job.externalId || index}
+                    initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="relative group h-full"
+                  >
+                    {/* Enhanced Job Card */}
+                    <div className="bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50 rounded-2xl p-6 border-2 border-yellow-200 shadow-lg hover:shadow-xl transition-all duration-300 transform group-hover:scale-105 group-hover:border-orange-300 h-full">
+                      <JobCard job={job} />
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </motion.div>
+        )}
 
         {/* Results Summary */}
         <motion.div 
