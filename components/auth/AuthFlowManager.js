@@ -54,7 +54,9 @@ export default function AuthFlowManager({ mode = 'login' }) {
       const result = await signUpWithEmail(
         pendingSignupData.email, 
         pendingSignupData.password,
-        true // skipEmailVerification flag since OTP is already verified
+        true, // skipEmailVerification flag since OTP is already verified
+        pendingSignupData.firstName || '',
+        pendingSignupData.lastName || ''
       );
 
       if (result.success) {

@@ -12,6 +12,8 @@ export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [for
     email: '',
     password: '',
     confirmPassword: '',
+    firstName: '',
+    lastName: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -52,6 +54,16 @@ export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [for
   };
   const validateForm = () => {
     const newErrors = {};
+
+    // Name validation for signup
+    if (mode === 'signup') {
+      if (!formData.firstName.trim()) {
+        newErrors.firstName = 'First name is required';
+      }
+      if (!formData.lastName.trim()) {
+        newErrors.lastName = 'Last name is required';
+      }
+    }
 
     // Email validation
     if (!formData.email) {
@@ -105,7 +117,7 @@ export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [for
         result = await signInWithEmail(formData.email, formData.password);
         if (result.success) {
           // Form will be handled by the parent component
-          setFormData({ email: '', password: '', confirmPassword: '' });
+          setFormData({ email: '', password: '', confirmPassword: '', firstName: '', lastName: '' });
           setCaptchaInput('');
           setAcceptTerms(false);
           generateNewCaptcha();
@@ -116,9 +128,9 @@ export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [for
           await onAuthSubmit(formData, true);
         } else {
           // Fallback to direct signup (without OTP)
-          result = await signUpWithEmail(formData.email, formData.password);
+          result = await signUpWithEmail(formData.email, formData.password, true, formData.firstName, formData.lastName);
           if (result.success) {
-            setFormData({ email: '', password: '', confirmPassword: '' });
+            setFormData({ email: '', password: '', confirmPassword: '', firstName: '', lastName: '' });
             setCaptchaInput('');
             setAcceptTerms(false);
             generateNewCaptcha();
@@ -216,6 +228,71 @@ export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [for
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Name Fields - Only for Signup */}
+          {mode === 'signup' && (
+            <>
+              <div className="grid grid-cols-2 gap-4">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 }}
+                >
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    First Name
+                  </label>
+                  <input
+                    type="text"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                      errors.firstName ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder="First name"
+                  />
+                  {errors.firstName && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="mt-1 text-sm text-red-600"
+                    >
+                      {errors.firstName}
+                    </motion.p>
+                  )}
+                </motion.div>
+                
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.25 }}
+                >
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                    className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                      errors.lastName ? 'border-red-300' : 'border-gray-300'
+                    }`}
+                    placeholder="Last name"
+                  />
+                  {errors.lastName && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="mt-1 text-sm text-red-600"
+                    >
+                      {errors.lastName}
+                    </motion.p>
+                  )}
+                </motion.div>
+              </div>
+            </>
+          )}
+
           {/* Email Field */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}

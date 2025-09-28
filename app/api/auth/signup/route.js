@@ -6,7 +6,7 @@ import { createContact, updateBrevoContact, PLAN_TYPES } from '@/lib/brevoServic
 
 export async function POST(request) {
   try {
-    const { email, password, skipEmailVerification = false } = await request.json();
+    const { email, password, skipEmailVerification = false, firstName = '', lastName = '' } = await request.json();
 
     // Validate input
     if (!email || !password) {
@@ -63,6 +63,8 @@ export async function POST(request) {
     if (existingUser && !existingUser.emailVerified) {
       // Update existing unverified user (from OTP process)
       existingUser.password = hashedPassword;
+      existingUser.firstName = firstName.trim();
+      existingUser.lastName = lastName.trim();
       existingUser.emailVerified = true;
       existingUser.verifiedAt = new Date();
       await existingUser.save();
@@ -74,6 +76,8 @@ export async function POST(request) {
       isNewUser = true;
       user = new User({
         email: email.toLowerCase(),
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
         password: hashedPassword,
         auditCount: 0,
         isPremium: false,
@@ -93,7 +97,8 @@ export async function POST(request) {
           user.email, 
           PLAN_TYPES.FREE, 
           user.firstName || '', 
-          user.lastName || ''
+          user.lastName || '',
+          user.highestATSScore || 0
         );
         console.log(`✅ Brevo contact created for ${user.email} (${PLAN_TYPES.FREE})`);
       } else {

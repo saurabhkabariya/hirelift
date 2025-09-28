@@ -27,6 +27,7 @@ export function AuthProvider({ children }) {
         body: JSON.stringify({
           email: user.email,
           firebaseUid: user.uid,
+          displayName: user.displayName || '',
         }),
       });
 
@@ -78,7 +79,7 @@ export function AuthProvider({ children }) {
     }
   };
   // Sign up with email/password
-  const signUpWithEmail = async (email, password, skipEmailVerification = false) => {
+  const signUpWithEmail = async (email, password, skipEmailVerification = false, firstName = '', lastName = '') => {
     try {
       setError(null);
       const response = await fetch('/api/auth/signup', {
@@ -89,7 +90,9 @@ export function AuthProvider({ children }) {
         body: JSON.stringify({ 
           email, 
           password, 
-          skipEmailVerification 
+          skipEmailVerification,
+          firstName,
+          lastName
         }),
       });
 

@@ -8,11 +8,25 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     trim: true,
   },
+  firstName: {
+    type: String,
+    default: '',
+    trim: true,
+  },
+  lastName: {
+    type: String,
+    default: '',
+    trim: true,
+  },
   password: {
     type: String,
     required: false, // Can be null for Google Auth users
   },
   auditCount: {
+    type: Number,
+    default: 0,
+  },
+  highestATSScore: {
     type: Number,
     default: 0,
   },

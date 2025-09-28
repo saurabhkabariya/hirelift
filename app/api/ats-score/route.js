@@ -5,6 +5,7 @@ import { scoreResume } from '@/services/scoreResume';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
 import jwt from 'jsonwebtoken';
+import { updateBrevoContact, PLAN_TYPES } from '@/lib/brevoService';
 
 export const dynamic = 'force-dynamic';
 
@@ -78,9 +79,36 @@ export async function POST(req) {
     // Score resume
     const result = scoreResume({ text, pageCount, keywords });
 
-    // If user is authenticated and not premium, increment auditCount
-    if (user && !isPremium) {
-      user.auditCount = (user.auditCount || 0) + 1;
+    // If user is authenticated, handle scoring and tracking
+    if (user) {
+      // If not premium, increment auditCount
+      if (!isPremium) {
+        user.auditCount = (user.auditCount || 0) + 1;
+      }
+      
+      // Update highest ATS score if this score is higher
+      const previousHighestScore = user.highestATSScore || 0;
+      if (result.totalScore > previousHighestScore) {
+        user.highestATSScore = result.totalScore;
+        
+        // Update Brevo contact with new highest score
+        try {
+          const currentPlanType = user.isPremium ? PLAN_TYPES.PREMIUM : PLAN_TYPES.FREE;
+          await updateBrevoContact(user.email, currentPlanType, {
+            FIRSTNAME: user.firstName || '',
+            LASTNAME: user.lastName || '',
+            additionalAttributes: {
+              ATS_SCORE: result.totalScore,
+              LAST_ATS_UPDATE: new Date().toISOString()
+            }
+          });
+          console.log(`✅ Updated Brevo contact for ${user.email} with new highest ATS score: ${result.totalScore}`);
+        } catch (brevoError) {
+          console.error(`❌ Failed to update Brevo contact for ${user.email}:`, brevoError);
+          // Don't fail the scoring process due to Brevo errors
+        }
+      }
+      
       await user.save();
     }
 

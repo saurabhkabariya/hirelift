@@ -6,13 +6,22 @@ import { createContact, updateBrevoContact, PLAN_TYPES } from '@/lib/brevoServic
 
 export async function POST(request) {
   try {
-    const { email, firebaseUid } = await request.json();
+    const { email, firebaseUid, displayName = '' } = await request.json();
 
     if (!email || !firebaseUid) {
       return NextResponse.json(
         { error: 'Email and Firebase UID are required' },
         { status: 400 }
       );
+    }
+
+    // Parse displayName into firstName and lastName
+    let firstName = '';
+    let lastName = '';
+    if (displayName.trim()) {
+      const nameParts = displayName.trim().split(' ');
+      firstName = nameParts[0] || '';
+      lastName = nameParts.slice(1).join(' ') || '';
     }
 
     await connectDB();
@@ -32,6 +41,12 @@ export async function POST(request) {
         user.firebaseUid = firebaseUid;
       }
       
+      // Update names if they're not set and we have displayName
+      if ((!user.firstName || !user.lastName) && (firstName || lastName)) {
+        user.firstName = user.firstName || firstName;
+        user.lastName = user.lastName || lastName;
+      }
+      
       if (!user.emailVerified) {
         user.emailVerified = true;
         user.verifiedAt = new Date();
@@ -43,6 +58,8 @@ export async function POST(request) {
       isNewUser = true;
       user = new User({
         email: email.toLowerCase(),
+        firstName: firstName,
+        lastName: lastName,
         password: null,
         firebaseUid: firebaseUid,
         auditCount: 0,
@@ -66,7 +83,8 @@ export async function POST(request) {
           email, 
           PLAN_TYPES.FREE, 
           user.firstName || '', 
-          user.lastName || ''
+          user.lastName || '',
+          user.highestATSScore || 0
         );
       } else {
         // Update existing contact
@@ -78,7 +96,8 @@ export async function POST(request) {
             USER_ID: user._id.toString(),
             AUTH_METHOD: 'google',
             LAST_LOGIN: new Date().toISOString(),
-            EMAIL_VERIFIED: 'true'
+            EMAIL_VERIFIED: 'true',
+            ATS_SCORE: user.highestATSScore || 0
           }
         });
       }
