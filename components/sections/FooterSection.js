@@ -52,8 +52,8 @@ export default function FooterSection() {
             <h4 className="font-bold mb-6">Quick Links</h4>
             <div className="space-y-3">
               {[
-                { name: "Features", action: () => scrollToSection('#features') },
                 { name: "How it Works", action: () => scrollToSection('#how-it-works') },
+                { name: "Features", action: () => scrollToSection('#features') },
                 { name: "Pricing", action: () => scrollToSection('#pricing') },
                 { name: "Get Started", href: "/auth" }
               ].map((link) => (
@@ -61,7 +61,7 @@ export default function FooterSection() {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className="block text-gray-400 hover:text-white transition-colors"
+                    className="block text-gray-400 hover:text-white transition-colors text-left"
                   >
                     {link.name}
                   </Link>
@@ -84,9 +84,10 @@ export default function FooterSection() {
             <div className="space-y-3">
               {[
                 { name: "Resume Audit", href: "/audit", badge: "FREE" },
-                { name: "Template Playground", href: "/playground", badge: "FREE" },
-                { name: "Pricing Plans", href: "/pricing" },
-                { name: "HR Directory", href: "#", badge: "PRO" }
+                { name: "Job Board", href: "/jobs", badge: "FREE" },
+                { name: "Templates", href: "/playground", badge: "FREE" },
+                { name: "HR Directory", href: "/company-search", badge: "PREMIUM" },
+                { name: "Dashboard", href: "/dashboard" },
               ].map((service) => (
                 <div key={service.name} className="flex items-center gap-2">
                   <Link 

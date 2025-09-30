@@ -19,50 +19,35 @@ export default function FAQSection() {
 
   const faqs = [
     {
-      question: "What is ATS resume optimization and why do I need it?",
-      answer: "ATS (Applicant Tracking System) resume optimization is the process of formatting and writing your resume to pass through automated screening systems used by 95% of Indian companies. HireLift's free ATS checker analyzes your resume against 50+ ATS criteria and provides instant feedback to improve your chances of getting past the initial screening. Without ATS optimization, your resume might be rejected before any human ever sees it.",
-      category: "ATS Resume"
+      question: "Is my resume data safe?",
+      answer: "Yes, your resume data is 100% secure. We use enterprise-grade encryption to protect your information and never share your data with third parties. All uploads are processed securely and your privacy is our top priority.",
+      category: "Privacy & Security"
     },
     {
-      question: "How do I get direct HR contacts in India?",
-      answer: "HireLift provides India's most comprehensive HR directory with verified contacts of hiring managers, recruiters, and HR heads across 1000+ Indian companies. Our Pro plan includes direct email addresses, LinkedIn profiles, phone numbers, and company contact information. This allows you to bypass traditional job portals and reach decision-makers directly, increasing your response rate by 300%.",
-      category: "HR Directory"
+      question: "Does HireLift guarantee jobs?",
+      answer: "No, we don't guarantee jobs, but we maximize your interview chances. HireLift optimizes your resume for ATS systems, provides direct HR contacts, and gives you proven templates - significantly improving your odds of landing interviews and job offers.",
+      category: "Expectations"
     },
     {
-      question: "What are the best cold email templates for job applications in India?",
-      answer: "HireLift's Cold Email Playground offers 50+ proven templates specifically designed for the Indian job market. These include job inquiry emails, follow-up sequences, networking messages, and LinkedIn DM templates. Our templates have a 75% average response rate and are customized for different industries, experience levels, and job roles popular in India.",
-      category: "Cold Email"
-    },
-    {
-      question: "How effective is HireLift compared to traditional job portals like Naukri?",
-      answer: "HireLift users get hired 3x faster than traditional job portal users. While job portals have low response rates (2-5%), HireLift's direct approach through optimized resumes and HR outreach achieves 15-25% response rates. Our users report getting interview calls within 2-3 weeks compared to 2-3 months on traditional portals.",
-      category: "Effectiveness"
-    },
-    {
-      question: "Is HireLift suitable for freshers and experienced professionals?",
-      answer: "Yes! HireLift works for all experience levels. For freshers, we provide entry-level resume templates, internship application emails, and contacts for companies actively hiring freshers. For experienced professionals, we offer senior-level templates, salary negotiation guides, and connections with senior HR managers and hiring directors.",
-      category: "Experience Levels"
-    },
-    {
-      question: "Which Indian cities and industries does HireLift cover?",
-      answer: "HireLift covers all major Indian cities including Mumbai, Delhi NCR, Bangalore, Chennai, Hyderabad, Pune, Kolkata, and 20+ other cities. We support all industries including IT, Finance, Healthcare, Manufacturing, Consulting, E-commerce, Startups, and Government sectors. Our HR directory includes companies from Fortune 500 to emerging startups.",
-      category: "Coverage"
-    },
-    {
-      question: "How much does HireLift cost and what's included in each plan?",
-      answer: "HireLift offers a free plan with 1 ATS resume audit and basic email templates. Our Pro plan costs ₹99/month (50% off launch price) and includes unlimited resume audits, complete HR directory access, premium email templates, priority support, and advanced job search tools. ROI is guaranteed - most users get job offers worth 10-50x the subscription cost.",
+      question: "Why only ₹99?",
+      answer: "We believe every fresher and job seeker in India deserves access to quality job search tools. At ₹99, HireLift is affordable for everyone while providing premium features that typically cost 10x more on other platforms.",
       category: "Pricing"
     },
     {
-      question: "How quickly can I see results with HireLift?",
-      answer: "Most HireLift users see results within 1-2 weeks. The ATS optimization shows immediate improvement in your resume score. Cold email outreach typically generates responses within 3-5 days. On average, our users report getting 2-5 interview calls in their first month, compared to 0-1 calls from traditional job applications.",
-      category: "Results Timeline"
+      question: "How effective is HireLift compared to traditional job portals?",
+      answer: "HireLift users get hired 3x faster than traditional job portal users. While job portals have low response rates (2-5%), HireLift's direct approach through optimized resumes and HR outreach achieves 15-25% response rates.",
+      category: "Effectiveness"
     },
     {
-      question: "Is my personal data safe with HireLift?",
-      answer: "Absolutely! HireLift follows strict data protection protocols. Your resume data is encrypted and never shared with third parties. We're compliant with Indian data protection laws and use enterprise-grade security. Your personal information and job search activities remain completely confidential.",
-      category: "Privacy & Security"
+      question: "What happens after I audit my resume?",
+      answer: "After your free audit, you'll receive a detailed ATS score with specific suggestions to improve your resume. You can then upgrade to get unlimited audits, access to our HR directory, and proven cold email templates.",
+      category: "Process"
     },
+    {
+      question: "How quickly can I see results?",
+      answer: "Most users see results within 1-2 weeks. The ATS optimization shows immediate improvement in your resume score. Cold email outreach typically generates responses within 3-5 days of sending.",
+      category: "Timeline"
+    }
   ];
 
   return (

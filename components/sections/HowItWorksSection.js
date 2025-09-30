@@ -1,38 +1,33 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FaCheckCircle, FaBuilding, FaEdit, FaRocket } from 'react-icons/fa';
+import { FaUpload, FaChartLine, FaCrown } from 'react-icons/fa';
 
 export default function HowItWorksSection({ handleRedirect }) {
   const steps = [
     {
       step: "1",
-      title: "Fix Your ATS Score",
-      description: "Our AI analyzes your resume and identifies exactly why you're getting rejected. Transform your low ATS score into a high-performing resume.",
-      icon: FaCheckCircle,
-      benefit: "85% ATS Pass Rate",
-      stat: "2x More Interviews",
-      color: "from-red-500 to-pink-500"
+      title: "Upload Resume",
+      description: "Simply upload your current resume in PDF format. Our AI will analyze it instantly and identify all the issues.",
+      icon: FaUpload,
+      color: "from-blue-500 to-blue-600"
     },
     {
       step: "2", 
-      title: "Connect with HRs Directly",
-      description: "Access curated lists of HR contacts and company details. No more applying into the void - reach decision-makers directly.",
-      icon: FaBuilding,
-      benefit: "Direct HR Access",
-      stat: "Skip the Queue",
-      color: "from-blue-500 to-cyan-500"
+      title: "Get ATS Score + Fix Suggestions",
+      description: "Receive a detailed ATS compatibility score with specific suggestions on keywords, formatting, and content improvements.",
+      icon: FaChartLine,
+      color: "from-green-500 to-green-600"
     },
     {
       step: "3",
-      title: "Send Winning Messages", 
-      description: "Use our proven outreach templates that get responses. Customize professional emails and LinkedIn messages that make HRs want to interview you.",
-      icon: FaEdit,
-      benefit: "75% Response Rate",
-      stat: "Land Your Dream Job",
-      color: "from-green-500 to-emerald-500"
+      title: "Upgrade for Unlimited Audits & HR Directory", 
+      description: "Access unlimited resume audits, 500+ verified HR contacts, cold email templates, and job preparation tools.",
+      icon: FaCrown,
+      color: "from-purple-500 to-purple-600"
     }
   ];
+
   return (
     <section id="how-it-works" className="py-20 px-6 bg-gradient-to-br from-slate-50 to-blue-50 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-indigo-50/50"></div>
@@ -44,127 +39,67 @@ export default function HowItWorksSection({ handleRedirect }) {
           className="text-center mb-16"
         >
           <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-100 to-indigo-100 px-4 py-2 rounded-full mb-6">
-            <span className="text-blue-600 font-semibold">🚀 Proven Process</span>
+            <span className="text-blue-600 font-semibold">🚀 Simple Process</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            How It Works
+            How It <span className="bg-gradient-to-r from-blue-500 to-indigo-500 bg-clip-text text-transparent">Works</span>
           </h2>
-          <p className="text-xl text-gray-700 max-w-2xl mx-auto">
-            Our proven 3-step process has helped <span className="font-bold text-blue-600">100+ professionals</span> land their dream jobs
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Get from resume upload to interview calls in just 3 simple steps
           </p>
         </motion.div>
 
-        <div className="relative">
-          {/* Progress Line for Desktop */}
-          <div className="hidden md:block absolute top-26 left-1/2 transform -translate-x-1/2 w-full max-w-4xl">
-            <div className="flex justify-between items-center px-10">
-              <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-pink-500 rounded-full"></div>
-              <div className="flex-1 h-1 bg-gradient-to-r from-red-500 via-blue-500 to-green-500 mx-4"></div>
-              <div className="w-4 h-4 bg-gradient-to-r from-blue-500 to-cyan-500 rounded-full"></div>
-              <div className="flex-1 h-1 bg-gradient-to-r from-blue-500 to-green-500 mx-4"></div>
-              <div className="w-4 h-4 bg-gradient-to-r from-green-500 to-emerald-500 rounded-full"></div>
-            </div>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 md:gap-12">
-            {steps.map((step, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 40 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className="text-center group"
-              >
-                <div className="relative mb-8">
-                  {/* Main Icon Container */}
-                  <div className={`w-24 h-24 bg-gradient-to-r ${step.color} rounded-2xl flex items-center justify-center mx-auto shadow-2xl group-hover:scale-110 transition-all duration-300`}>
-                    <step.icon className="w-12 h-12 text-white" />
-                  </div>
-                  
-                  {/* Step Number Badge */}
-                  <div className="absolute -top-3 -right-1 w-10 h-10 bg-white border-4 border-gray-100 rounded-full flex items-center justify-center text-gray-900 font-bold text-lg shadow-lg">
+        <div className="grid md:grid-cols-3 gap-8 mb-16">
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 + index * 0.1 }}
+              className="relative group"
+            >
+              {/* Connecting Line */}
+              {index < steps.length - 1 && (
+                <div className="hidden md:block absolute top-16 left-full w-full h-0.5 bg-gradient-to-r from-gray-300 to-gray-200 z-0 transform translate-x-4"></div>
+              )}
+              
+              <div className="relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 text-center">
+                {/* Step Number */}
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                  <div className={`w-8 h-8 bg-gradient-to-r ${step.color} rounded-full flex items-center justify-center text-white font-bold text-sm`}>
                     {step.step}
                   </div>
-                  
-                  {/* Benefit Badge */}
-                  <div className="mt-8">
-                    <span className={`inline-flex items-center px-3 py-1 bg-gradient-to-r ${step.color} text-white text-sm font-bold rounded-full shadow-lg`}>
-                      ✨ {step.benefit}
-                    </span>
-                  </div>
                 </div>
-                
-                <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors duration-300">
-                  {step.title}
-                </h3>
-                
-                <p className="text-gray-600 leading-relaxed mb-6 text-base md:text-lg">
-                  {step.description}
-                </p>
-                
-                {/* Result Highlight */}
-                <div className="bg-white rounded-xl p-4 shadow-lg border border-gray-100 group-hover:shadow-xl transition-all duration-300">
-                  <div className="text-sm text-gray-500 mb-1">Expected Result:</div>
-                  <div className={`font-bold text-lg bg-gradient-to-r ${step.color} bg-clip-text text-transparent`}>
-                    {step.stat}
-                  </div>
+
+                {/* Icon */}
+                <div className={`inline-flex p-4 bg-gradient-to-r ${step.color} rounded-2xl mb-6 mt-4`}>
+                  <step.icon className="w-8 h-8 text-white" />
                 </div>
-              </motion.div>
-            ))}
-          </div>
+
+                {/* Content */}
+                <h3 className="text-xl font-bold text-gray-900 mb-4">{step.title}</h3>
+                <p className="text-gray-600 leading-relaxed">{step.description}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Enhanced CTA Section */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-center mt-16"
+          transition={{ delay: 0.8 }}
+          className="text-center"
         >
-          <div className="bg-white rounded-2xl p-8 shadow-2xl border border-gray-100 max-w-2xl mx-auto">
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <span className="text-2xl">🎯</span>
-              <span className="font-bold text-gray-900">Ready to Get Started?</span>
-            </div>
-            
-            <p className="text-gray-600 mb-6">
-              Join thousands of professionals who&apos;ve transformed their job search with our proven system
-            </p>
-            
-            <div className="sm:hidden mb-3">
-              <span className="inline-block bg-yellow-300 text-yellow-900 text-xs px-3 py-1 rounded-full font-bold animate-pulse">
-                FREE AUDIT
-              </span>
-            </div>
-            
-            <button
-              onClick={() => handleRedirect('/audit')}
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 sm:gap-3 px-6 sm:px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-bold text-base sm:text-xl rounded-xl shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-105 group"
-            >
-              <FaRocket className="w-5 h-5 sm:w-6 sm:h-6 group-hover:animate-bounce flex-shrink-0" />
-              <span className="hidden sm:inline">Start Your Success Story</span>
-              <span className="sm:hidden">Start Success Story</span>
-              <span className="hidden sm:inline bg-yellow-300 text-yellow-900 text-xs px-2 py-1 rounded-full font-bold animate-pulse ml-1">
-                FREE
-              </span>
-            </button>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 mt-6 text-sm text-gray-500">
-              <div className="flex items-center gap-1">
-                <FaCheckCircle className="w-4 h-4 text-green-500" />
-                <span className="whitespace-nowrap">No Credit Card</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <FaCheckCircle className="w-4 h-4 text-green-500" />
-                <span className="whitespace-nowrap">Instant Results</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <FaCheckCircle className="w-4 h-4 text-green-500" />
-                <span className="whitespace-nowrap">100% Free</span>
-              </div>
-            </div>
-          </div>
+          <button 
+            onClick={() => handleRedirect('/audit')}
+            className="px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-xl rounded-xl shadow-xl hover:shadow-green-500/30 transition-all duration-300 hover:scale-105"
+          >
+            Try Your Free Audit Now
+          </button>
+          <p className="text-gray-500 mt-4">No credit card required • Takes less than 2 minutes</p>
         </motion.div>
       </div>
     </section>

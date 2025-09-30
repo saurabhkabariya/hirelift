@@ -8,13 +8,12 @@ import Header from '../components/Header';
 
 // Import modular sections
 import HeroSection from '../components/sections/HeroSection';
-import FreeJobsSection from '../components/sections/FreeJobsSection';
+import ProblemSolutionSection from '../components/sections/ProblemSolutionSection';
 import HowItWorksSection from '../components/sections/HowItWorksSection';
-import TestimonialsSection from '../components/sections/TestimonialsSection';
-import FeaturesSection from '../components/sections/FeaturesSection';
+import ProofTrustSection from '../components/sections/ProofTrustSection';
 import PricingSection from '../components/sections/PricingSection';
 import FAQSection from '../components/sections/FAQSection';
-import SEOContentSection from '../components/sections/SEOContentSection';
+import FinalCTASection from '../components/sections/FinalCTASection';
 import FooterSection from '../components/sections/FooterSection';
 import FloatingCTA from '../components/FloatingCTA';
 import StructuredData from '../components/StructuredData';
@@ -77,17 +76,14 @@ export default function HomePage() {
       {/* Hero Section - Dark Background */}
       <HeroSection handleRedirect={handleRedirect} />
 
-      {/* Free Jobs Section - Light Background - NEW FEATURE SHOWCASE */}
-      <FreeJobsSection handleRedirect={handleRedirect} />
+      {/* Problem → Solution Section - Light Background */}
+      <ProblemSolutionSection handleRedirect={handleRedirect} />
 
       {/* How It Works Section - Light Background */}
       <HowItWorksSection handleRedirect={handleRedirect} />
 
-      {/* Testimonials Section - White Background */}
-      <TestimonialsSection />
-
-      {/* Features Section - Dark Background */}
-      <FeaturesSection />
+      {/* Proof & Trust Section - White Background */}
+      <ProofTrustSection />
 
       {/* Pricing Section - Light Background */}
       <PricingSection handleRedirect={handleRedirect} />
@@ -95,8 +91,8 @@ export default function HomePage() {
       {/* FAQ Section - Light Background */}
       <FAQSection />
 
-      {/* SEO Content Section - White Background */}
-      <SEOContentSection />
+      {/* Final CTA Section - Dark Background */}
+      <FinalCTASection handleRedirect={handleRedirect} />
 
       {/* Footer - Dark Background */}
       <FooterSection />
