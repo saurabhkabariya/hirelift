@@ -32,15 +32,15 @@ export default function PricingPage() {
   const [paymentError, setPaymentError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
 
-  // Handle subscription upgrade
-  const handleProUpgrade = async () => {
+  // Handle Basic plan one-time upgrade (30 days)
+  const handleBasicUpgrade = async () => {
     if (!user) {
       router.push('/auth?redirect=' + encodeURIComponent('/pricing'));
       return;
     }
 
-    if (user.isPremium && user.proPlanType === 'subscription') {
-      toast.success('You already have a Pro subscription!');
+    if (user.isPremium && user.proPlanType === 'basic') {
+      toast.success('You already have the Basic plan!');
       return;
     }
 
@@ -48,10 +48,12 @@ export default function PricingPage() {
       setPaymentLoading(true);
       setLoadingStage('preparing');
 
-      await paymentService.createSubscription({
-        planId: 'plan_QzYt9RLYww9UcP',
+      await oneTimePaymentService.createOneTimePayment({
+        amount: 99,
+        description: 'HireLift Basic Plan (30 days)',
         user,
         router, // Pass router for auth error handling
+        planType: 'basic',
         onPaymentStart: () => {
           setLoadingStage('processing');
         },
@@ -59,7 +61,7 @@ export default function PricingPage() {
           setLoadingStage('verifying');
           await refetchUser();
           setPaymentLoading(false);
-          toast.success('Successfully upgraded to Pro!');
+          toast.success('Successfully upgraded to Basic plan!');
           router.push('/dashboard');
         },
         onPaymentError: (error) => {
@@ -77,7 +79,7 @@ export default function PricingPage() {
         }
       });
     } catch (error) {
-      console.error('Subscription error:', error);
+      console.error('Basic plan upgrade error:', error);
       
       // Check for JWT expiration or auth errors
       if (isAuthError(error)) {
@@ -91,18 +93,20 @@ export default function PricingPage() {
     }
   };
 
-  // Handle one-time upgrades for resume services
+  // Handle one-time upgrades for all paid plans
   const handleOneTimeUpgrade = async (plan) => {
     setLoadingStage('preparing');
     setOneTimePaymentLoading(true);
 
     const amounts = {
+      'basic': 99,
       'resume-fix': 299,
       'professional': 599,
       'premium': 999
     };
 
     const descriptions = {
+      'basic': 'HireLift Basic Plan (30 days)',
       'resume-fix': 'HireLift Resume ATS Fix Service',
       'professional': 'HireLift Professional Resume Service',
       'premium': 'HireLift Premium Career Optimization Package'
@@ -167,10 +171,6 @@ export default function PricingPage() {
           router.push('/audit');
           break;
           
-        case 'subscription':
-          await handleProUpgrade();
-          break;
-          
         case 'onetime':
           await handleOneTimeUpgrade(plan);
           break;
@@ -215,25 +215,25 @@ export default function PricingPage() {
       name: 'Basic',
       price: '₹99',
       originalPrice: '₹199',
-      billing: '/month',
-      description: 'Perfect for active job seekers',
+      billing: '/one-time (30 days)',
+      description: 'Perfect for active job seekers - 30 days access',
       features: [
-        'Unlimited ATS checks',
+        'Unlimited ATS checks (30 days)',
         'HR Directory access',
         'Advanced scoring insights',
         'Keyword optimization tips',
         'Priority email support',
         'Resume templates'
       ],
-      buttonText: user?.isPremium 
+      buttonText: user?.isPremium && user?.proPlanType === 'basic'
         ? 'Current Plan'
-        : 'Upgrade to Basic',
+        : 'Get Basic Plan',
       popular: true,
       onSale: true,
       salePercentage: 50,
       icon: Crown,
-      paymentType: 'subscription',
-      disabled: user?.isPremium
+      paymentType: 'onetime',
+      disabled: user?.isPremium && user?.proPlanType === 'basic'
     },
     {
       id: 'resume-fix',
@@ -457,7 +457,7 @@ export default function PricingPage() {
                 <tr>
                   <td className="py-4 px-2 font-medium">ATS Checks</td>
                   <td className="text-center py-4 px-2">1 check</td>
-                  <td className="text-center py-4 px-2">Unlimited</td>
+                  <td className="text-center py-4 px-2">Unlimited (30 days)</td>
                   <td className="text-center py-4 px-2">Unlimited (30 days)</td>
                   <td className="text-center py-4 px-2">Unlimited (30 days)</td>
                   <td className="text-center py-4 px-2">Unlimited (30 days)</td>
@@ -489,10 +489,10 @@ export default function PricingPage() {
                 <tr>
                   <td className="py-4 px-2 font-medium">HR Directory</td>
                   <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">✓</td>
-                  <td className="text-center py-4 px-2">✓</td>
-                  <td className="text-center py-4 px-2">✓</td>
-                  <td className="text-center py-4 px-2">✓</td>
+                  <td className="text-center py-4 px-2">✓ (30 days)</td>
+                  <td className="text-center py-4 px-2">✓ (30 days)</td>
+                  <td className="text-center py-4 px-2">✓ (30 days)</td>
+                  <td className="text-center py-4 px-2">✓ (30 days)</td>
                 </tr>
                 <tr>
                   <td className="py-4 px-2 font-medium">Personal Consultation</td>

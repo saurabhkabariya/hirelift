@@ -268,9 +268,19 @@ export default function JobDetail({ job: initialJob, jobId }) {
       .replace(/â©/g, '©')
       // Remove any remaining strange encoding artifacts
       .replace(/[^\x00-\x7F\u00A0-\uFFFF]/g, '')
-      // Normalize whitespace
-      .replace(/\s+/g, ' ')
       .trim();
+    
+    // Convert newlines to HTML line breaks for proper formatting
+    // Handle both \r\n (Windows) and \n (Unix) line endings
+    cleaned = cleaned
+      .replace(/\r\n/g, '\n')  // Normalize Windows line endings
+      .replace(/\n\s*\n/g, '</p><p>')  // Convert double newlines to paragraph breaks
+      .replace(/\n/g, '<br>')  // Convert single newlines to line breaks
+      .replace(/^/, '<p>')     // Start with opening paragraph tag
+      .replace(/$/, '</p>');   // End with closing paragraph tag
+    
+    // Clean up any empty paragraphs that might have been created
+    cleaned = cleaned.replace(/<p>\s*<\/p>/g, '');
     
     // Basic HTML cleaning - remove potentially dangerous content
     return cleaned
