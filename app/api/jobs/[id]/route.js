@@ -58,7 +58,9 @@ export async function GET(request, { params }) {
         {
           success: false,
           error: 'Job not found',
-          message: `No job found with ID: ${id}`
+          message: `This job is no longer available. It may have been filled, expired, or removed by the employer.`,
+          suggestion: 'Please browse our other available positions or check back later for new opportunities.',
+          jobId: id
         },
         { status: 404 }
       );

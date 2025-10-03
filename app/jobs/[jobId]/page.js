@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { notFound } from 'next/navigation';
 import JobDetail from '@/components/JobDetail.jsx';
 import { connectDB } from '@/lib/mongodb';
 import Job from '@/models/Job';
@@ -198,21 +197,12 @@ export default async function JobDetailPage({ params }) {
     // Let the component handle client-side fallback
   }
 
-  // If no job found server-side, let the JobDetail component handle client-side fetching
-  if (!job) {
-    return (
-      <Suspense fallback={<JobDetailSkeleton />}>
-        <JobDetail jobId={jobId} job={null} />
-      </Suspense>
-    );
-  }
-
-  // Serialize the job data to make it safe for client components
-  const serializedJob = serializeJob(job);
+  // Always render JobDetail component - it will handle the not found case
+  const serializedJob = job ? serializeJob(job) : null;
 
   return (
     <Suspense fallback={<JobDetailSkeleton />}>
-      <JobDetail job={serializedJob} />
+      <JobDetail job={serializedJob} jobId={jobId} />
     </Suspense>
   );
 }

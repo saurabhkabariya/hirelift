@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { notFound } from "next/navigation";
 import ApplyOverlay from "./ApplyOverlay.jsx";
 import JobCard from "./JobCard.jsx";
+import JobNotAvailable from "./JobNotAvailable.jsx";
 
 export default function JobDetail({ job: initialJob, jobId }) {
   const router = useRouter();
@@ -13,6 +13,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
   const [job, setJob] = useState(initialJob);
   const [loading, setLoading] = useState(!initialJob);
   const [error, setError] = useState(null);
+  const [jobNotFound, setJobNotFound] = useState(false);
 
   // Client-side job fetching if no job data provided
   useEffect(() => {
@@ -24,7 +25,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
           
           if (!response.ok) {
             if (response.status === 404) {
-              notFound();
+              setJobNotFound(true);
               return;
             }
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -39,7 +40,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
         } catch (error) {
           console.error('Client-side job fetch failed:', error);
           setError(error.message);
-          notFound();
+          setJobNotFound(true);
         } finally {
           setLoading(false);
         }
@@ -61,27 +62,9 @@ export default function JobDetail({ job: initialJob, jobId }) {
     );
   }
 
-  // Show error state
-  if (error) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">Error loading job: {error}</p>
-          <button 
-            onClick={() => router.back()} 
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-          >
-            Go Back
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  // If still no job data, show not found
-  if (!job) {
-    notFound();
-    return null;
+  // Show job not available component instead of error or notFound
+  if (jobNotFound || error || !job) {
+    return <JobNotAvailable jobId={jobId} />;
   }
 
   const {
