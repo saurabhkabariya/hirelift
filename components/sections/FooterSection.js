@@ -20,28 +20,28 @@ const scrollToSection = (sectionId) => {
 
 export default function FooterSection() {
   return (
-    <footer className="bg-slate-950 text-white py-16 px-6 border-t border-white/10 relative">
+    <footer className="bg-gray-900 text-white py-16 px-6 border-t border-cyan-400/20 relative">
       <div className="max-w-6xl mx-auto">
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           {/* Brand */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-blue-400 to-cyan-400 flex items-center justify-center text-white font-bold">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold">
                 H
               </div>
               <span className="text-2xl font-bold">HireLift</span>
             </div>
-            <p className="text-gray-400 mb-6">
+            <p className="text-gray-300 mb-6">
               Your career acceleration partner. Get noticed by recruiters with optimized resumes.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-blue-600 transition-colors">
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-cyan-600 transition-colors">
                 <FaLinkedin className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-blue-400 transition-colors">
+              <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-cyan-400 transition-colors">
                 <FaSquareXTwitter className="w-5 h-5" />
               </a>
-              <a href="mailto:hirelift01@gmail.com" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-red-600 transition-colors">
+              <a href="mailto:hirelift01@gmail.com" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-cyan-600 transition-colors">
                 <FaEnvelope className="w-5 h-5" />
               </a>
             </div>
@@ -98,7 +98,7 @@ export default function FooterSection() {
                   </Link>
                   {service.badge && (
                     <span className={`text-xs px-2 py-1 rounded-full font-bold ${
-                      service.badge === "FREE" ? "bg-green-500 text-white" : "bg-purple-500 text-white"
+                      service.badge === "FREE" ? "bg-cyan-500 text-white" : "bg-cyan-600 text-white"
                     }`}>
                       {service.badge}
                     </span>
@@ -130,12 +130,12 @@ export default function FooterSection() {
           </div>
         </div>
 
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="border-t border-cyan-400/20 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="text-gray-400">
             &copy; {new Date().getFullYear()} HireLift. All rights reserved.
           </div>
           <div className="flex items-center gap-2 text-gray-400">
-            Made with <span className="text-red-400">❤️</span> for job seekers
+            Made with <span className="text-cyan-400">❤️</span> for job seekers
           </div>
         </div>
       </div>

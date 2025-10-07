@@ -5,11 +5,11 @@ import { FaRocket, FaArrowRight } from 'react-icons/fa';
 
 export default function FinalCTASection({ handleRedirect }) {
   return (
-    <section className="py-20 px-6 bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 relative overflow-hidden">
+    <section className="py-20 px-6 bg-gradient-to-br from-slate-900 via-cyan-950 to-blue-950 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative max-w-4xl mx-auto text-center">
@@ -22,7 +22,7 @@ export default function FinalCTASection({ handleRedirect }) {
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
             Stop getting rejected by ATS.
             <br />
-            <span className="bg-gradient-to-r from-green-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent">
               Start getting interview calls.
             </span>
           </h2>
@@ -41,7 +41,7 @@ export default function FinalCTASection({ handleRedirect }) {
         >
           <button 
             onClick={() => handleRedirect('/audit')}
-            className="group px-12 py-6 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-2xl rounded-2xl shadow-2xl hover:shadow-green-500/30 transition-all duration-300 hover:scale-105 flex items-center gap-4 mx-auto"
+            className="group px-12 py-6 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-2xl rounded-2xl shadow-2xl hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-105 flex items-center gap-4 mx-auto"
           >
             <FaRocket className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
             Get Free Audit

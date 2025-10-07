@@ -51,19 +51,20 @@ export default function FAQSection() {
   ];
 
   return (
-    <section className="py-20 px-6 bg-gradient-to-br from-blue-50 to-indigo-50">
-      <div className="max-w-4xl mx-auto">
+    <section className="py-20 px-6 relative overflow-hidden">
+      <div className="absolute top-1/4 left-0 w-72 h-72 bg-gradient-to-br from-cyan-100/30 to-transparent rounded-full"></div>
+      <div className="max-w-4xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <div className="inline-flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-full mb-6">
-            <FaQuestionCircle className="w-4 h-4 text-blue-600" />
-            <span className="text-blue-700 font-semibold">Frequently Asked Questions</span>
+          <div className="inline-flex items-center gap-2 bg-cyan-100 px-4 py-2 rounded-full mb-6">
+            <FaQuestionCircle className="w-4 h-4 text-cyan-600" />
+            <span className="text-cyan-700 font-semibold">Frequently Asked Questions</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
             Everything You Need to Know About Job Search in India
           </h2>
           <p className="text-xl text-gray-600">
@@ -79,23 +80,23 @@ export default function FAQSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+              className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100 overflow-hidden"
             >
               <button
                 onClick={() => handleToggle(index)}
-                className="w-full p-6 text-left flex items-center justify-between hover:bg-gray-50 transition-colors"
+                className="w-full p-6 text-left flex items-center justify-between hover:bg-cyan-50/30 transition-colors"
               >
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
                     {faq.question}
                   </h3>
-                  <span className="text-sm text-blue-600 bg-blue-50 px-3 py-1 rounded-full">
+                  <span className="text-sm text-cyan-600 bg-cyan-50 px-3 py-1 rounded-full">
                     {faq.category}
                   </span>
                 </div>
                 <div className="ml-4">
                   {openIndex === index ? (
-                    <FaChevronUp className="w-5 h-5 text-blue-600" />
+                    <FaChevronUp className="w-5 h-5 text-cyan-600" />
                   ) : (
                     <FaChevronDown className="w-5 h-5 text-gray-500" />
                   )}
@@ -149,7 +150,7 @@ export default function FAQSection() {
             Get personalized job search guidance from our career experts
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="px-8 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+            <button className="px-8 py-3 bg-white/90 backdrop-blur-sm text-cyan-600 font-semibold rounded-lg hover:bg-white/80 transition-colors">
               Contact Support
             </button>
             <button className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors">

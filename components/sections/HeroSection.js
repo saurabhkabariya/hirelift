@@ -20,7 +20,13 @@ const scrollToSection = (sectionId) => {
 
 export default function HeroSection({ handleRedirect }) {
   return (
-    <section id="home" className="relative flex items-center justify-center px-6 pt-22 pb-6 min-h-screen bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950">
+    <section id="home" className="relative flex items-center justify-center px-6 pt-22 pb-6 min-h-screen">
+      {/* Decorative background elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-1/4 left-1/6 w-72 h-72 bg-gradient-to-r from-cyan-200/30 to-blue-200/30 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/6 w-96 h-96 bg-gradient-to-r from-blue-200/20 to-cyan-200/20 rounded-full blur-3xl"></div>
+      </div>
+      
       <div className="max-w-6xl mx-auto relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
@@ -32,8 +38,8 @@ export default function HeroSection({ handleRedirect }) {
               transition={{ delay: 0.2 }}
               className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6"
             >
-              <span className="text-white">Get Hired Faster with</span><br />
-              <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">ATS-Optimized Resumes</span>
+              <span className="text-gray-900">Get Hired Faster with</span><br />
+              <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">ATS-Optimized Resumes</span>
               <span className="text-4xl"> 🚀</span>
             </motion.h1>
             
@@ -42,7 +48,7 @@ export default function HeroSection({ handleRedirect }) {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className="text-lg md:text-xl text-gray-200 mb-8 leading-relaxed"
+              className="text-lg md:text-xl text-gray-700 mb-8 leading-relaxed"
             >
               HireLift helps Indian job seekers beat resume filters, connect with real HRs, and land more interviews.
             </motion.p>
@@ -56,7 +62,7 @@ export default function HeroSection({ handleRedirect }) {
             >
               <button 
                 onClick={() => handleRedirect('/audit')}
-                className="group px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-bold text-xl rounded-xl shadow-xl hover:shadow-green-500/30 transition-all duration-300 flex items-center gap-3 hover:scale-105"
+                className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-xl rounded-xl shadow-xl hover:shadow-cyan-500/30 transition-all duration-300 flex items-center gap-3 hover:scale-105"
               >
                 <FaRocket className="w-5 h-5" />
                 Get Free Resume Audit
@@ -64,7 +70,7 @@ export default function HeroSection({ handleRedirect }) {
               
               <button 
                 onClick={() => handleRedirect('/jobs')}
-                className="text-blue-200 font-semibold text-lg hover:text-blue-100 transition-all duration-300 flex items-center gap-2 hover:gap-3"
+                className="text-cyan-600 font-semibold text-lg hover:text-cyan-700 transition-all duration-300 flex items-center gap-2 hover:gap-3"
               >
                 Free Jobs Access →
               </button>
@@ -75,18 +81,18 @@ export default function HeroSection({ handleRedirect }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.8 }}
-              className="flex flex-wrap justify-center lg:justify-start items-center gap-6 text-sm text-gray-300"
+              className="flex flex-wrap justify-center lg:justify-start items-center gap-6 text-sm text-gray-600"
             >
               <div className="flex items-center gap-2">
-                <span className="text-green-400 font-bold">✓</span>
+                <span className="text-cyan-500 font-bold">✓</span>
                 <span>2,000+ resumes audited</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-green-400 font-bold">✓</span>
+                <span className="text-cyan-500 font-bold">✓</span>
                 <span>500+ HR contacts verified</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-green-400 font-bold">✓</span>
+                <span className="text-cyan-500 font-bold">✓</span>
                 <span>100% secure & private</span>
               </div>
             </motion.div>
@@ -101,12 +107,21 @@ export default function HeroSection({ handleRedirect }) {
           >
             <div className="relative pb-4">
               {/* Visual placeholder - laptop mockup style */}
-              <Image className='rounded-lg' src={`/ATS_Transform.webp`} alt='ATS Transform' height={100} width={500} objectFit='fill'/>
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-cyan-100/90 via-cyan-50/80 to-blue-100/90 backdrop-blur-sm p-3 border border-cyan-200/50">
+                <Image 
+                  className='rounded-xl' 
+                  src={`/ATS_Transform.webp`} 
+                  alt='ATS Transform' 
+                  height={100} 
+                  width={600} 
+                  objectFit='fill'
+                />
+              </div>
               {/* Floating elements */}
-              <div className="absolute -top-4 -right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-bounce">
+              <div className="absolute -top-4 -right-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-full text-sm font-bold animate-bounce shadow-lg">
                 95% Pass Rate
               </div>
-              <div className="absolute -bottom-4 -left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-pulse">
+              <div className="absolute -bottom-4 -left-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-full text-sm font-bold animate-pulse shadow-lg">
                 Free Audit
               </div>
             </div>

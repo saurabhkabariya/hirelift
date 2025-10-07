@@ -161,8 +161,8 @@ export default function PlaygroundPage() {
       onClick={onSelect}
       className={`relative h-full bg-white/70 backdrop-blur-sm rounded-2xl p-6 border cursor-pointer transition-all duration-300 ${
         isSelected 
-          ? 'border-blue-500 shadow-xl bg-blue-50/80' 
-          : 'border-gray-200 hover:border-blue-300 shadow-lg hover:shadow-xl'
+          ? 'border-cyan-500 shadow-xl bg-cyan-50/80' 
+          : 'border-gray-200 hover:border-cyan-300 shadow-lg hover:shadow-xl'
       }`}
     >
       {/* Favorite Button */}
@@ -187,8 +187,8 @@ export default function PlaygroundPage() {
       {/* Template Type Badge */}
       <div className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-bold mb-3 ${
         template.templateType === 'email' 
-          ? 'bg-blue-100 text-blue-700' 
-          : 'bg-purple-100 text-purple-700'
+          ? 'bg-cyan-100 text-cyan-700' 
+          : 'bg-cyan-100 text-cyan-700'
       }`}>
         {template.templateType === 'email' ? (
           <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -219,7 +219,7 @@ export default function PlaygroundPage() {
           <motion.div
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
-            className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center"
+            className="w-6 h-6 bg-cyan-500 rounded-full flex items-center justify-center"
           >
             <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -229,12 +229,11 @@ export default function PlaygroundPage() {
       </div>
     </motion.div>
   );    return (
-    <div className="min-h-screen bg-[var(--background)] overflow-x-hidden">
-      {/* Background elements - matching dashboard */}
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-40">
-        <div className="absolute top-[10%] left-[15%] w-64 h-64 bg-[var(--primary-light)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-[40%] right-[15%] w-72 h-72 bg-[var(--secondary-light)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-[10%] left-[35%] w-80 h-80 bg-[var(--accent)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+    <div className="min-h-screen bg-gray-50 overflow-x-hidden">
+      {/* Clean Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">
+        <div className="absolute top-[10%] right-[10%] w-72 h-72 bg-gradient-to-bl from-cyan-100/30 to-transparent rounded-full"></div>
+        <div className="absolute bottom-[10%] left-[10%] w-80 h-80 bg-gradient-to-tr from-blue-100/30 to-transparent rounded-full"></div>
       </div>      <Header />
 
       {/* Navigation Breadcrumb - Enhanced mobile layout */}
@@ -242,15 +241,15 @@ export default function PlaygroundPage() {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white/90 backdrop-blur-md border-b border-blue-100 mt-20"
+        className="bg-white/95 backdrop-blur-md border-b border-cyan-200/50 mt-20"
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 lg:gap-4 py-3">            <nav className="flex items-center gap-2 text-xs sm:text-sm w-full lg:w-auto overflow-hidden">
-              <Link href="/dashboard" className="text-blue-600 hover:text-blue-700 font-medium transition-colors truncate flex-shrink-0">
+              <Link href="/dashboard" className="text-cyan-600 hover:text-cyan-700 font-medium transition-colors truncate flex-shrink-0">
                 Dashboard
               </Link>
               <span className="text-gray-400 flex-shrink-0">•</span>
-              <span className="text-blue-700 font-semibold truncate min-w-0">Cold Outreach Playground</span>
+              <span className="text-cyan-700 font-semibold truncate min-w-0">Cold Outreach Playground</span>
             </nav>
 
             {/* Quick Action Buttons - Improved mobile layout */}
@@ -264,7 +263,7 @@ export default function PlaygroundPage() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-full xs:w-auto sm:w-auto flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium text-xs sm:text-sm whitespace-nowrap"
+                    className="w-full xs:w-auto sm:w-auto flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium text-xs sm:text-sm whitespace-nowrap"
                   >
                     <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -277,7 +276,7 @@ export default function PlaygroundPage() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="w-full xs:w-auto sm:w-auto flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-purple-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium text-xs sm:text-sm whitespace-nowrap relative"
+                    className="w-full xs:w-auto sm:w-auto flex items-center justify-center gap-2 px-3 sm:px-4 py-2 bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:shadow-lg transition-all duration-200 font-medium text-xs sm:text-sm whitespace-nowrap relative"
                     title="Company Search - Premium Feature"
                   >
                     <svg className="w-3 h-3 sm:w-4 sm:h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -298,7 +297,7 @@ export default function PlaygroundPage() {
                 <button
                   onClick={() => setViewMode('grid')}
                   className={`flex-1 xs:flex-none p-1.5 sm:p-2 rounded-lg transition-all ${
-                    viewMode === 'grid' ? 'bg-white text-blue-600 shadow-md' : 'text-gray-600'
+                    viewMode === 'grid' ? 'bg-white text-cyan-600 shadow-md' : 'text-gray-600'
                   }`}
                   title="Grid View"
                 >
@@ -309,7 +308,7 @@ export default function PlaygroundPage() {
                 <button
                   onClick={() => setViewMode('list')}
                   className={`flex-1 xs:flex-none p-1.5 sm:p-2 rounded-lg transition-all ${
-                    viewMode === 'list' ? 'bg-white text-blue-600 shadow-md' : 'text-gray-600'
+                    viewMode === 'list' ? 'bg-white text-cyan-600 shadow-md' : 'text-gray-600'
                   }`}
                   title="List View"
                 >
@@ -333,14 +332,14 @@ export default function PlaygroundPage() {
             <div className="flex items-start sm:items-center gap-3 sm:gap-4 w-full lg:w-auto">
               <motion.div
                 whileHover={{ scale: 1.05, rotate: 5 }}
-                className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0"
+                className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-cyan-600 to-cyan-700 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0"
               >
                 <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                 </svg>
               </motion.div>
               <div className="min-w-0 flex-1">
-                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-blue-700 to-indigo-600 bg-clip-text text-transparent">
+                <h1 className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-cyan-700 to-cyan-800 bg-clip-text text-transparent">
                   Cold Outreach Playground
                 </h1>
                 <p className="text-sm sm:text-base text-gray-600 mt-1">Design, customize, and test your outreach templates</p>
@@ -351,15 +350,15 @@ export default function PlaygroundPage() {
             <div className="flex flex-col xs:flex-row sm:flex-row lg:flex-col xl:flex-row items-stretch xs:items-center sm:items-center gap-2 sm:gap-3 text-sm w-full lg:w-auto">
               <div className="bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm flex-1 xs:flex-none text-center xs:text-left">
                 <span className="text-gray-600">Templates:</span>
-                <span className="font-bold text-blue-600 ml-1">{flattenedTemplates.length}</span>
+                <span className="font-bold text-cyan-600 ml-1">{flattenedTemplates.length}</span>
               </div>
               <div className="bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm flex-1 xs:flex-none text-center xs:text-left">
                 <span className="text-gray-600">Filtered:</span>
-                <span className="font-bold text-indigo-600 ml-1">{filteredTemplates.length}</span>
+                <span className="font-bold text-cyan-600 ml-1">{filteredTemplates.length}</span>
               </div>
               <div className="bg-white/80 backdrop-blur-sm rounded-lg px-3 py-2 shadow-sm flex-1 xs:flex-none text-center xs:text-left">
                 <span className="text-gray-600">Favorites:</span>
-                <span className="font-bold text-purple-600 ml-1">{favorites.size}</span>
+                <span className="font-bold text-cyan-600 ml-1">{favorites.size}</span>
               </div>
             </div>
           </div>
@@ -390,7 +389,7 @@ export default function PlaygroundPage() {
                       placeholder="Search templates..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/80 backdrop-blur-sm"
+                      className="w-full pl-10 pr-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-white/80 backdrop-blur-sm"
                     />
                   </div>
                 </div>
@@ -434,7 +433,7 @@ export default function PlaygroundPage() {
                   <select
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/80 backdrop-blur-sm"
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-cyan-500 bg-white/80 backdrop-blur-sm"
                   >
                     <option value="all">All Templates</option>
                     <option value="general">General Templates</option>
@@ -463,7 +462,7 @@ export default function PlaygroundPage() {
                         setCategoryFilter('all');
                         setTemplateType('email');
                       }}
-                      className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all"
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-gray-600 hover:text-cyan-600 hover:bg-cyan-50 rounded-lg transition-all"
                     >
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
@@ -495,7 +494,7 @@ export default function PlaygroundPage() {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    className="flex items-center gap-2 text-sm text-blue-600"
+                    className="flex items-center gap-2 text-sm text-cyan-600"
                   >
                     <svg className="animate-spin w-4 h-4" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
@@ -559,7 +558,7 @@ export default function PlaygroundPage() {
                       setDebouncedSearchTerm('');
                       setCategoryFilter('all');
                     }}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 text-white rounded-lg hover:bg-cyan-600 transition-colors"
                   >
                     <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />

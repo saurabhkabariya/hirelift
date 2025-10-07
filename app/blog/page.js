@@ -15,7 +15,12 @@ export default function BlogPage() {
   const categories = ["All", "ATS Resume", "Cold Email", "HR Networking", "Location Guide", "Freshers", "LinkedIn", "Salary Guide", "Interview Prep", "Remote Work", "Tech Careers"];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
+      {/* Clean Background Elements */}
+      <div className="absolute top-0 left-0 w-full h-full -z-10">
+        <div className="absolute top-1/4 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-100/30 to-transparent rounded-full"></div>
+        <div className="absolute bottom-1/4 left-0 w-80 h-80 bg-gradient-to-tr from-cyan-100/30 to-transparent rounded-full"></div>
+      </div>
       <Header variant="blog" />
       
       {/* Hero Section */}
@@ -26,7 +31,7 @@ export default function BlogPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-16"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
               Job Search Blog & Career Advice
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
@@ -40,8 +45,8 @@ export default function BlogPage() {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 border rounded-full transition-colors ${
                     selectedCategory === category
-                      ? 'bg-blue-600 text-white border-blue-600'
-                      : 'bg-white border-gray-200 text-gray-700 hover:bg-blue-50 hover:border-blue-200'
+                      ? 'bg-cyan-600 text-white border-cyan-600'
+                      : 'bg-white border-gray-200 text-gray-700 hover:bg-cyan-50 hover:border-cyan-200'
                   }`}
                 >
                   {category}
@@ -62,13 +67,13 @@ export default function BlogPage() {
               >
                 <div className="p-6">
                   <div className="flex items-center gap-3 mb-4">
-                    <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">
+                    <span className="bg-cyan-100 text-cyan-700 px-3 py-1 rounded-full text-sm font-semibold">
                       {post.category}
                     </span>
                     <span className="text-gray-500 text-sm">Featured</span>
                   </div>
                   
-                  <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors">
+                  <h2 className="text-xl font-bold text-gray-800 mb-3 group-hover:text-cyan-600 transition-colors">
                     {post.title}
                   </h2>
                   
@@ -92,7 +97,7 @@ export default function BlogPage() {
                   
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-700 transition-colors"
+                    className="inline-flex items-center gap-2 text-cyan-600 font-semibold hover:text-cyan-700 transition-colors"
                   >
                     Read Full Article
                     <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -117,7 +122,7 @@ export default function BlogPage() {
                     {post.category}
                   </span>
                   
-                  <h3 className="text-lg font-bold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors">
+                  <h3 className="text-lg font-bold text-gray-800 mb-2 group-hover:text-cyan-600 transition-colors">
                     {post.title}
                   </h3>
                   
@@ -135,7 +140,7 @@ export default function BlogPage() {
                   
                   <Link
                     href={`/blog/${post.slug}`}
-                    className="inline-flex items-center gap-2 text-blue-600 font-semibold hover:text-blue-700 transition-colors"
+                    className="inline-flex items-center gap-2 text-cyan-600 font-semibold hover:text-cyan-700 transition-colors"
                   >
                     Read Full Article
                     <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -150,7 +155,7 @@ export default function BlogPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.8 }}
-            className="mt-20 text-center p-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl text-white"
+            className="mt-20 text-center p-8 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl text-white"
           >
             <h3 className="text-2xl font-bold mb-4">
               Get Weekly Job Search Tips & Industry Updates
@@ -164,7 +169,7 @@ export default function BlogPage() {
                 placeholder="Enter your email"
                 className="px-4 py-3 rounded-lg flex-1 text-white border border-white bg-white/20 placeholder-white focus:outline-none focus:ring-2 focus:ring-white"
               />
-              <button className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
+              <button className="px-6 py-3 bg-white text-cyan-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors">
                 Subscribe Free
               </button>
             </div>

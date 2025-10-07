@@ -24,7 +24,7 @@ export default function TestimonialsSection() {
     }
   ];
   return (
-    <section id='testimonials' className="py-20 px-6 bg-white relative">
+    <section id='testimonials' className="py-20 px-6 relative">
       <div className="absolute inset-0 bg-gradient-to-br from-gray-50/30 to-blue-50/30"></div>
       <div className="relative max-w-6xl mx-auto">
         <motion.div
@@ -47,7 +47,7 @@ export default function TestimonialsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 shadow-sm"
+              className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-all duration-300 shadow-sm"
             >
               <div className="mb-4">
                 <div className="text-gray-900 font-bold text-lg">{testimonial.name}</div>

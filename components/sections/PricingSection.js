@@ -76,9 +76,9 @@ export default function PricingSection({ handleRedirect }) {
       period: "one-time",
       description: "Complete resume rewrite",
       icon: FaAward,
-      bgColor: "bg-purple-100",
-      iconColor: "text-purple-600",
-      buttonColor: "bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700",
+      bgColor: "bg-cyan-100",
+      iconColor: "text-cyan-600",
+      buttonColor: "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700",
       popular: true,
       features: [
         "Complete Resume Rewrite",
@@ -90,25 +90,26 @@ export default function PricingSection({ handleRedirect }) {
   ];
 
   return (
-    <section id="pricing" className="py-20 px-6 bg-gradient-to-br from-gray-50 to-blue-50 relative">
-      <div className="max-w-7xl mx-auto">
+    <section id="pricing" className="py-20 px-6 relative">
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-cyan-50/40 to-transparent rounded-full"></div>
+      <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
             Choose Your Success Plan
           </h2>
-          <p className="text-xl text-gray-700 mb-8">
+          <p className="text-xl text-gray-600 mb-8">
             From free audits to professional resume rewrites - we've got you covered
           </p>
           
           {/* New pricing highlight */}
-          <div className="inline-flex items-center gap-2 bg-green-100 border border-green-200 px-6 py-3 rounded-full">
-            <FaGem className="text-green-600" />
-            <span className="text-green-700 font-bold">
+          <div className="inline-flex items-center gap-2 bg-cyan-100 border border-cyan-200 px-6 py-3 rounded-full">
+            <FaGem className="text-cyan-600" />
+            <span className="text-cyan-700 font-bold">
               ✨ New Plans Available - Starting {pricingConfig.symbol}{pricingConfig.amounts.basic}
             </span>
           </div>
@@ -118,7 +119,7 @@ export default function PricingSection({ handleRedirect }) {
           {locationLoading ? (
             /* Loading state for pricing cards */
             [...Array(3)].map((_, i) => (
-              <div key={i} className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 animate-pulse">
+              <div key={i} className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-gray-200 p-8 animate-pulse">
                 <div className="h-6 bg-gray-200 rounded mb-4"></div>
                 <div className="h-8 bg-gray-300 rounded mb-2"></div>
                 <div className="h-4 bg-gray-200 rounded mb-4"></div>
@@ -138,10 +139,10 @@ export default function PricingSection({ handleRedirect }) {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className={`bg-white rounded-2xl shadow-xl ${plan.popular ? 'border-2 border-purple-300' : 'border border-gray-200'} p-8 relative`}
+              className={`bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl ${plan.popular ? 'border-2 border-cyan-300' : 'border border-gray-200'} p-8 relative`}
             >
               {plan.popular && (
-                <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-purple-500 to-blue-500 text-white text-center py-3 text-sm font-bold rounded-t-2xl">
+                <div className="absolute top-0 left-0 right-0 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-center py-3 text-sm font-bold rounded-t-2xl">
                   MOST POPULAR
                 </div>
               )}
@@ -150,9 +151,9 @@ export default function PricingSection({ handleRedirect }) {
                 <div className={`w-16 h-16 ${plan.bgColor} rounded-xl flex items-center justify-center mx-auto mb-6`}>
                   <plan.icon className={`w-8 h-8 ${plan.iconColor}`} />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">{plan.name}</h3>
+                <h3 className="text-2xl font-bold text-gray-800 mb-4">{plan.name}</h3>
                 <div className="mb-4">
-                  <span className="text-4xl font-bold text-gray-900">{plan.price}</span>
+                  <span className="text-4xl font-bold text-gray-800">{plan.price}</span>
                   {plan.period && <span className="text-gray-600 ml-1">{plan.period}</span>}
                 </div>
                 <p className="text-gray-600">{plan.description}</p>
@@ -161,7 +162,7 @@ export default function PricingSection({ handleRedirect }) {
               <div className="space-y-4 mb-8">
                 {plan.features.map((feature, idx) => (
                   <div key={idx} className="flex items-center gap-3">
-                    <FaCheckCircle className="w-5 h-5 text-green-500" />
+                    <FaCheckCircle className="w-5 h-5 text-cyan-500" />
                     <span className="text-gray-700">{feature}</span>
                   </div>
                 ))}
@@ -187,7 +188,7 @@ export default function PricingSection({ handleRedirect }) {
         >
           <button
             onClick={() => handleRedirect('/pricing')}
-            className="inline-flex items-center gap-2 cursor-pointer text-blue-600 hover:text-blue-700 font-semibold text-lg underline hover:no-underline transition-all duration-200"
+            className="inline-flex items-center gap-2 cursor-pointer text-cyan-600 hover:text-cyan-700 font-semibold text-lg underline hover:no-underline transition-all duration-200"
           >
             View All 5 Plans & Pricing Details
             <FaChartLine className="w-4 h-4" />
@@ -209,10 +210,10 @@ export default function PricingSection({ handleRedirect }) {
               transition={{ delay: index * 0.1 }}
               className="text-center"
             >
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
-                <benefit.icon className="w-6 h-6 text-blue-600" />
+              <div className="w-12 h-12 bg-cyan-100 rounded-lg flex items-center justify-center mx-auto mb-4">
+                <benefit.icon className="w-6 h-6 text-cyan-600" />
               </div>
-              <h4 className="font-bold text-gray-900 mb-2">{benefit.title}</h4>
+              <h4 className="font-bold text-gray-800 mb-2">{benefit.title}</h4>
               <p className="text-gray-600 text-sm">{benefit.desc}</p>
             </motion.div>
           ))}
