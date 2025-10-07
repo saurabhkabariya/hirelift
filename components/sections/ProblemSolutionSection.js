@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { motion } from 'framer-motion';
 import { FaTimes, FaCheck, FaFileAlt, FaUsers, FaTools } from 'react-icons/fa';

@@ -14,6 +14,7 @@ import {
   Mail,
   Clock
 } from 'lucide-react';
+import { getPricingForCountry } from '@/utils/getUserCountry';
 
 // Separate component for search params logic
 function PaymentSuccessContent() {
@@ -21,11 +22,28 @@ function PaymentSuccessContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [countdown, setCountdown] = useState(5);
+  const [pricingConfig, setPricingConfig] = useState(getPricingForCountry('IN'));
 
   const paymentType = searchParams.get('type') || 'subscription';
   const amount = searchParams.get('amount') || '99';
+  const currency = searchParams.get('currency') || 'INR';
 
   useEffect(() => {
+    // Detect location for proper currency display
+    const detectLocation = async () => {
+      try {
+        const response = await fetch('/api/detect-location');
+        if (response.ok) {
+          const locationData = await response.json();
+          setPricingConfig(getPricingForCountry(locationData.country));
+        }
+      } catch (error) {
+        console.error('Error detecting location:', error);
+      }
+    };
+
+    detectLocation();
+    
     // Refetch user data to get updated premium status
     refetchUser();
 
@@ -111,7 +129,9 @@ function PaymentSuccessContent() {
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div className="text-center">
               <div className="text-gray-500">Amount Paid</div>
-              <div className="font-semibold text-gray-900">₹{amount}</div>
+              <div className="font-semibold text-gray-900">
+                {currency === 'USD' || pricingConfig.currency === 'USD' ? '$' : '₹'}{amount}
+              </div>
             </div>
             <div className="text-center">
               <div className="text-gray-500">Access Duration</div>

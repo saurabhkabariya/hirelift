@@ -1,9 +1,33 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaCheckCircle, FaUsers, FaCrown, FaChartLine, FaShieldAlt, FaInfinity, FaUserTie, FaStar, FaAward, FaGem } from 'react-icons/fa';
+import { getPricingForCountry } from '@/utils/getUserCountry';
 
 export default function PricingSection({ handleRedirect }) {
+  const [pricingConfig, setPricingConfig] = useState(getPricingForCountry('IN'));
+  const [locationLoading, setLocationLoading] = useState(true);
+
+  // Detect user location and update pricing
+  useEffect(() => {
+    const detectLocation = async () => {
+      try {
+        const response = await fetch('/api/detect-location');
+        if (response.ok) {
+          const locationData = await response.json();
+          setPricingConfig(getPricingForCountry(locationData.country));
+        }
+      } catch (error) {
+        console.error('Error detecting location:', error);
+        // Keep default India pricing
+      } finally {
+        setLocationLoading(false);
+      }
+    };
+
+    detectLocation();
+  }, []);
   const benefits = [
     { icon: FaChartLine, title: "Fast Analysis", desc: "Get your ATS score in seconds" },
     { icon: FaShieldAlt, title: "Secure & Private", desc: "Your data is protected" },
@@ -14,7 +38,7 @@ export default function PricingSection({ handleRedirect }) {
   const plans = [
     {
       name: "Free",
-      price: "₹0",
+      price: `${pricingConfig.symbol}0`,
       period: "",
       description: "Perfect for trying out our service",
       icon: FaUsers,
@@ -31,8 +55,8 @@ export default function PricingSection({ handleRedirect }) {
     },
     {
       name: "Basic",
-      price: "₹99",
-      period: "/month",
+      price: `${pricingConfig.symbol}${pricingConfig.amounts.basic}`,
+      period: "/30 days",
       description: "Unlimited audits for job seekers",
       icon: FaStar,
       bgColor: "bg-blue-100",
@@ -48,7 +72,7 @@ export default function PricingSection({ handleRedirect }) {
     },
     {
       name: "Professional",
-      price: "₹599",
+      price: `${pricingConfig.symbol}${pricingConfig.amounts.professional}`,
       period: "one-time",
       description: "Complete resume rewrite",
       icon: FaAward,
@@ -84,12 +108,30 @@ export default function PricingSection({ handleRedirect }) {
           {/* New pricing highlight */}
           <div className="inline-flex items-center gap-2 bg-green-100 border border-green-200 px-6 py-3 rounded-full">
             <FaGem className="text-green-600" />
-            <span className="text-green-700 font-bold">✨ New Plans Available - Starting ₹99</span>
+            <span className="text-green-700 font-bold">
+              ✨ New Plans Available - Starting {pricingConfig.symbol}{pricingConfig.amounts.basic}
+            </span>
           </div>
         </motion.div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
-          {plans.map((plan, index) => (
+          {locationLoading ? (
+            /* Loading state for pricing cards */
+            [...Array(3)].map((_, i) => (
+              <div key={i} className="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 animate-pulse">
+                <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                <div className="h-8 bg-gray-300 rounded mb-2"></div>
+                <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                <div className="space-y-2 mb-6">
+                  {[...Array(4)].map((_, j) => (
+                    <div key={j} className="h-3 bg-gray-200 rounded"></div>
+                  ))}
+                </div>
+                <div className="h-10 bg-gray-300 rounded"></div>
+              </div>
+            ))
+          ) : (
+            plans.map((plan, index) => (
             <motion.div
               key={plan.name}
               initial={{ opacity: 0, y: 40 }}
@@ -132,7 +174,8 @@ export default function PricingSection({ handleRedirect }) {
                 {plan.name === 'Free' ? 'Get Started' : 'Choose Plan'}
               </button>
             </motion.div>
-          ))}
+            ))
+          )}
         </div>
 
         {/* View All Plans Link */}

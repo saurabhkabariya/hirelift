@@ -22,6 +22,7 @@ import {
   Sparkles,
   ArrowLeft
 } from 'lucide-react';
+import { getPricingForCountry } from '@/utils/getUserCountry';
 
 export default function PricingPage() {
   const { user, refetchUser } = useAuth();
@@ -31,6 +32,32 @@ export default function PricingPage() {
   const [loadingStage, setLoadingStage] = useState('preparing');
   const [paymentError, setPaymentError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  
+  // Location and pricing state
+  const [countryData, setCountryData] = useState({ country: 'IN', currency: 'INR', symbol: '₹' });
+  const [pricingConfig, setPricingConfig] = useState(getPricingForCountry('IN'));
+  const [locationLoading, setLocationLoading] = useState(true);
+
+  // Detect user location on client side
+  useEffect(() => {
+    const detectLocation = async () => {
+      try {
+        const response = await fetch('/api/detect-location');
+        if (response.ok) {
+          const locationData = await response.json();
+          setCountryData(locationData);
+          setPricingConfig(getPricingForCountry(locationData.country));
+        }
+      } catch (error) {
+        console.error('Error detecting location:', error);
+        // Keep default India pricing
+      } finally {
+        setLocationLoading(false);
+      }
+    };
+
+    detectLocation();
+  }, []);
 
   // Handle Basic plan one-time upgrade (30 days)
   const handleBasicUpgrade = async () => {
@@ -98,13 +125,6 @@ export default function PricingPage() {
     setLoadingStage('preparing');
     setOneTimePaymentLoading(true);
 
-    const amounts = {
-      'basic': 99,
-      'resume-fix': 299,
-      'professional': 599,
-      'premium': 999
-    };
-
     const descriptions = {
       'basic': 'HireLift Basic Plan (30 days)',
       'resume-fix': 'HireLift Resume ATS Fix Service',
@@ -114,7 +134,8 @@ export default function PricingPage() {
 
     try {
       await oneTimePaymentService.createOneTimePayment({
-        amount: amounts[plan.id],
+        amount: pricingConfig.amounts[plan.id],
+        currency: pricingConfig.currency,
         description: descriptions[plan.id],
         user,
         router, // Pass router for auth error handling
@@ -196,7 +217,7 @@ export default function PricingPage() {
     {
       id: 'free',
       name: 'Free',
-      price: '₹0',
+      price: `${pricingConfig.symbol}0`,
       billing: '',
       description: 'Get started with basic resume insights',
       features: [
@@ -213,8 +234,8 @@ export default function PricingPage() {
     {
       id: 'basic',
       name: 'Basic',
-      price: '₹99',
-      originalPrice: '₹199',
+      price: `${pricingConfig.symbol}${pricingConfig.amounts.basic}`,
+      originalPrice: `${pricingConfig.symbol}${pricingConfig.originalPrices.basic}`,
       billing: '/one-time (30 days)',
       description: 'Perfect for active job seekers - 30 days access',
       features: [
@@ -238,7 +259,7 @@ export default function PricingPage() {
     {
       id: 'resume-fix',
       name: 'Resume ATS Fix',
-      price: '₹299',
+      price: `${pricingConfig.symbol}${pricingConfig.amounts['resume-fix']}`,
       billing: '/one-time',
       description: 'Professional resume optimization for ATS',
       features: [
@@ -257,7 +278,7 @@ export default function PricingPage() {
     {
       id: 'professional',
       name: 'Professional',
-      price: '₹599',
+      price: `${pricingConfig.symbol}${pricingConfig.amounts.professional}`,
       billing: '/one-time',
       description: 'Complete resume rewrite or new resume creation',
       features: [
@@ -276,7 +297,7 @@ export default function PricingPage() {
     {
       id: 'premium',
       name: 'Premium',
-      price: '₹999',
+      price: `${pricingConfig.symbol}${pricingConfig.amounts.premium}`,
       billing: '/one-time',
       description: 'Complete career optimization package',
       features: [
@@ -372,9 +393,29 @@ export default function PricingPage() {
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
             Choose Your Career Growth Plan
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-4">
             From basic ATS checks to complete career optimization - find the perfect plan to accelerate your job search success.
           </p>
+          
+          {/* Location and Currency Indicator */}
+          <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
+            {locationLoading ? (
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin"></div>
+                <span>Detecting your location for pricing...</span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-2 h-2 bg-green-500 rounded-full"></span>
+                <span>Prices shown in {pricingConfig.currency} for your region</span>
+                {countryData.country === 'IN' ? (
+                  <span className="text-green-600 font-medium">🇮🇳 India</span>
+                ) : (
+                  <span className="text-blue-600 font-medium">🌍 International</span>
+                )}
+              </div>
+            )}
+          </div>
         </motion.div>
 
         {/* Desktop: 3 cards on top, 2 cards below */}
@@ -384,51 +425,72 @@ export default function PricingPage() {
           animate="visible"
           className="mb-16"
         >
-          {/* Mobile: Single column */}
-          <div className="block lg:hidden">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-              {plans.map((plan, index) => (
-                <PricingCard
-                  key={plan.id}
-                  plan={plan}
-                  index={index}
-                  onUpgrade={handlePlanUpgrade}
-                  isPopular={plan.popular}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* Desktop: 3 cards on top, 2 cards below */}
-          <div className="hidden lg:block">
-            {/* Top row: First 3 cards */}
-            <div className="grid grid-cols-3 gap-6 mb-8 justify-items-center">
-              {plans.slice(0, 3).map((plan, index) => (
-                <div key={plan.id} className="w-full max-w-sm">
-                  <PricingCard
-                    plan={plan}
-                    index={index}
-                    onUpgrade={handlePlanUpgrade}
-                    isPopular={plan.popular}
-                  />
+          {locationLoading ? (
+            /* Loading state for pricing cards */
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[...Array(5)].map((_, i) => (
+                <div key={i} className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6 animate-pulse">
+                  <div className="h-6 bg-gray-200 rounded mb-4"></div>
+                  <div className="h-8 bg-gray-300 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-4"></div>
+                  <div className="space-y-2 mb-6">
+                    {[...Array(4)].map((_, j) => (
+                      <div key={j} className="h-3 bg-gray-200 rounded"></div>
+                    ))}
+                  </div>
+                  <div className="h-10 bg-gray-300 rounded"></div>
                 </div>
               ))}
             </div>
-
-            {/* Bottom row: Last 2 cards centered */}
-            <div className="flex justify-center gap-6">
-              {plans.slice(3, 5).map((plan, index) => (
-                <div key={plan.id} className="w-full max-w-sm">
-                  <PricingCard
-                    plan={plan}
-                    index={index + 3}
-                    onUpgrade={handlePlanUpgrade}
-                    isPopular={plan.popular}
-                  />
+          ) : (
+            <>
+              {/* Mobile: Single column */}
+              <div className="block lg:hidden">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {plans.map((plan, index) => (
+                    <PricingCard
+                      key={plan.id}
+                      plan={plan}
+                      index={index}
+                      onUpgrade={handlePlanUpgrade}
+                      isPopular={plan.popular}
+                    />
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+
+              {/* Desktop: 3 cards on top, 2 cards below */}
+              <div className="hidden lg:block">
+                {/* Top row: First 3 cards */}
+                <div className="grid grid-cols-3 gap-6 mb-8 justify-items-center">
+                  {plans.slice(0, 3).map((plan, index) => (
+                    <div key={plan.id} className="w-full max-w-sm">
+                      <PricingCard
+                        plan={plan}
+                        index={index}
+                        onUpgrade={handlePlanUpgrade}
+                        isPopular={plan.popular}
+                      />
+                    </div>
+                  ))}
+                </div>
+
+                {/* Bottom row: Last 2 cards centered */}
+                <div className="flex justify-center gap-6">
+                  {plans.slice(3, 5).map((plan, index) => (
+                    <div key={plan.id} className="w-full max-w-sm">
+                      <PricingCard
+                        plan={plan}
+                        index={index + 3}
+                        onUpgrade={handlePlanUpgrade}
+                        isPopular={plan.popular}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </motion.div>
 
         <motion.section
