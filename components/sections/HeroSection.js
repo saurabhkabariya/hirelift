@@ -101,7 +101,7 @@ export default function HeroSection({ handleRedirect }) {
           >
             <div className="relative pb-4">
               {/* Visual placeholder - laptop mockup style */}
-              <Image className='rounded-lg' src={`/ATS_Transform.png`} alt='ATS Transform' height={100} width={500} objectFit='fill'/>
+              <Image className='rounded-lg' src={`/ATS_Transform.webp`} alt='ATS Transform' height={100} width={500} objectFit='fill'/>
               {/* Floating elements */}
               <div className="absolute -top-4 -right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-bounce">
                 95% Pass Rate
