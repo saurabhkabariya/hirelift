@@ -83,13 +83,12 @@ export default function ProblemSolutionSection({ handleRedirect }) {
             transition={{ duration: 0.5, ease: "easeOut" }}
             className="order-2 lg:order-1"
           >
-            <div className="sticky top-24">
-              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-3">
-                <div className="p-2 bg-red-100 rounded-lg">
-                  <FaTimes className="text-red-500 w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <span>Common Problems</span>
-              </h3>
+            <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-3">
+              <div className="p-2 bg-red-100 rounded-lg">
+                <FaTimes className="text-red-500 w-5 h-5 sm:w-6 sm:h-6" />
+              </div>
+              <span>Common Problems</span>
+            </h3>
               
               <div className="space-y-4 sm:space-y-6">
               {problems.map((problem, index) => (
@@ -172,7 +171,6 @@ export default function ProblemSolutionSection({ handleRedirect }) {
                   </div>
                 </div>
               </motion.div>
-            </div>
           </motion.div>
 
           {/* Solutions Side */}
@@ -245,6 +243,45 @@ export default function ProblemSolutionSection({ handleRedirect }) {
             </motion.div>
           </motion.div>
         </div>
+
+        {/* Pain Points Bridge Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="mt-16 mb-12"
+        >
+          <div className="max-w-4xl mx-auto p-8 bg-white/80 backdrop-blur-sm border-l-4 border-cyan-400 rounded-2xl shadow-xl">
+            <h4 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-3">
+              <span className="text-red-500">😔</span>
+              Sound Familiar?
+            </h4>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+              <div className="p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
+                <div className="text-red-400 mb-2">💔</div>
+                <p className="text-sm text-gray-600">"I've applied to 200+ jobs but only got 2 interviews"</p>
+              </div>
+              <div className="p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
+                <div className="text-red-400 mb-2">🕳️</div>
+                <p className="text-sm text-gray-600">"My resume disappears into a black hole"</p>
+              </div>
+              <div className="p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
+                <div className="text-red-400 mb-2">❓</div>
+                <p className="text-sm text-gray-600">"I don't know what I'm doing wrong"</p>
+              </div>
+              <div className="p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
+                <div className="text-red-400 mb-2">😩</div>
+                <p className="text-sm text-gray-600">"Job search is taking forever and draining me"</p>
+              </div>
+            </div>
+            <div className="mt-6 text-center">
+              <p className="text-lg font-semibold text-gray-700">
+                <span className="text-cyan-600">Good news:</span> These problems have solutions! ⬇️
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </section>
   );
