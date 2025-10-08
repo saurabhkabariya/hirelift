@@ -185,6 +185,13 @@ export default function PricingPage() {
     setLoadingStage('preparing');
     setOneTimePaymentLoading(true);
 
+    // Add timeout to prevent infinite loading
+    const timeoutId = setTimeout(() => {
+      console.warn('⏰ Payment timeout - forcing loading to stop');
+      setOneTimePaymentLoading(false);
+      toast.error('Payment timed out. Please try again.');
+    }, 300000); // 5 minutes timeout
+
     try {
       await oneTimePaymentService.createOneTimePayment({
         amount: 1, // 1 rupee test payment
@@ -194,25 +201,42 @@ export default function PricingPage() {
         router,
         planType: 'test',
         onPaymentStart: () => {
+          console.log('🚀 Test payment started');
           setLoadingStage('processing');
         },
-        onPaymentSuccess: async () => {
-          setLoadingStage('verifying');
-          setOneTimePaymentLoading(false);
-          toast.success('Test payment successful!');
+        onSuccess: async (response, order) => {
+          console.log('✅ Test payment success callback triggered');
+          clearTimeout(timeoutId);
+          setLoadingStage('completing');
+          try {
+            await refetchUser();
+            console.log('✅ User refetched successfully');
+          } catch (error) {
+            console.error('Error refetching user:', error);
+          } finally {
+            setOneTimePaymentLoading(false);
+            toast.success('Test payment successful!');
+          }
         },
-        onPaymentError: (error) => {
+        onError: (error) => {
           console.error('Test payment error:', error);
+          clearTimeout(timeoutId);
           setPaymentError(error);
           setShowErrorModal(true);
           setOneTimePaymentLoading(false);
         },
         onPaymentEnd: () => {
-          setOneTimePaymentLoading(false);
+          console.log('🏁 Test payment ended - clearing loading state');
+          clearTimeout(timeoutId);
+          // Small delay to ensure success callback completes first
+          setTimeout(() => {
+            setOneTimePaymentLoading(false);
+          }, 1000);
         }
       });
     } catch (error) {
       console.error('Test payment error:', error);
+      clearTimeout(timeoutId);
       
       if (isAuthError(error)) {
         handleAuthError(router, '/pricing');
