@@ -73,8 +73,6 @@ export default function ProblemSolutionSection({ handleRedirect }) {
           </p>
         </motion.div>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-start">
-
           {/* Pain Points Bridge Section */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -113,6 +111,8 @@ export default function ProblemSolutionSection({ handleRedirect }) {
             </div>
           </div>
         </motion.div>
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-start">
+
           
           {/* Problems Side */}
           <motion.div
