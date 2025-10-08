@@ -20,7 +20,8 @@ import {
   Shield,
   Award,
   Sparkles,
-  ArrowLeft
+  ArrowLeft,
+  Star
 } from 'lucide-react';
 import { getPricingForCountry } from '@/utils/getUserCountry';
 
