@@ -36,8 +36,20 @@ const userSchema = new mongoose.Schema({
   },
   proPlanType: {
     type: String,
-    enum: ['subscription', 'onetime'],
+    enum: ['subscription', 'onetime', 'basic', 'resume-fix', 'professional', 'premium'],
     default: null,
+  },
+  planDetails: {
+    type: {
+      type: String,
+      enum: ['basic', 'resume-fix', 'professional', 'premium'],
+      default: null
+    },
+    purchaseType: {
+      type: String,
+      enum: ['subscription', 'onetime'],
+      default: null
+    }
   },
   purchaseDate: {
     type: Date,

@@ -89,12 +89,39 @@ async function verifyPaymentHandler(request) {
     const purchaseDate = new Date();
     const expiryDate = new Date(purchaseDate.getTime() + (30 * 24 * 60 * 60 * 1000));
 
+    // Determine plan type from payment amount
+    const paymentAmount = paymentDetails.amount / 100; // Convert from paise to rupees
+    let planType = 'basic'; // Default
+    
+    switch (paymentAmount) {
+      case 99:
+        planType = 'basic';
+        break;
+      case 299:
+        planType = 'resume-fix';
+        break;
+      case 599:
+        planType = 'professional';
+        break;
+      case 999:
+        planType = 'premium';
+        break;
+      default:
+        if (paymentAmount >= 500) planType = 'premium';
+        else if (paymentAmount >= 200) planType = 'professional';
+        else planType = 'basic';
+    }
+
     // Update user to premium status
     const updatedUser = await User.findByIdAndUpdate(
       user._id,
       {
         isPremium: true,
-        proPlanType: 'onetime',
+        proPlanType: planType, // Set specific plan type
+        planDetails: {
+          type: planType,
+          purchaseType: 'onetime'
+        },
         purchaseDate: purchaseDate,
         expiryDate: expiryDate,
         paymentDetails: {
@@ -116,27 +143,24 @@ async function verifyPaymentHandler(request) {
 
     // Update user plan in Brevo
     try {
-      const paymentAmount = paymentDetails.amount / 100; // Convert from paise to rupees
       let brevoPlanType = PLAN_TYPES.PREMIUM; // Default
       
-      // Map payment amount to plan type
-      switch (paymentAmount) {
-        case 99:
+      // Map plan type to Brevo plan type
+      switch (planType) {
+        case 'basic':
           brevoPlanType = PLAN_TYPES.BASIC;
           break;
-        case 299:
+        case 'resume-fix':
           brevoPlanType = PLAN_TYPES.RESUME_ATS_FIX;
           break;
-        case 599:
+        case 'professional':
           brevoPlanType = PLAN_TYPES.PROFESSIONAL;
           break;
-        case 999:
+        case 'premium':
           brevoPlanType = PLAN_TYPES.PREMIUM;
           break;
         default:
-          if (paymentAmount >= 500) brevoPlanType = PLAN_TYPES.PREMIUM;
-          else if (paymentAmount >= 200) brevoPlanType = PLAN_TYPES.PROFESSIONAL;
-          else brevoPlanType = PLAN_TYPES.BASIC;
+          brevoPlanType = PLAN_TYPES.BASIC;
       }
       
       const brevoResult = await updateBrevoContact(user.email, brevoPlanType, {
@@ -168,13 +192,15 @@ async function verifyPaymentHandler(request) {
     setTimeout(async () => {
       try {
         const userToCheck = await User.findById(user._id);
-        if (userToCheck && userToCheck.proPlanType === 'onetime' && new Date() >= new Date(userToCheck.expiryDate)) {
+        // Check if user has any plan with expiry date and it's expired
+        if (userToCheck && userToCheck.isPremium && userToCheck.expiryDate && new Date() >= new Date(userToCheck.expiryDate)) {
           await User.findByIdAndUpdate(user._id, {
             isPremium: false,
             proPlanType: null,
+            planDetails: null,
             expiryDate: null
           });
-          console.log('⏰ One-time Pro access expired for user:', user.email);
+          console.log('⏰ Plan access expired for user:', user.email);
         }
       } catch (error) {
         console.error('❌ Error checking expiry:', error);

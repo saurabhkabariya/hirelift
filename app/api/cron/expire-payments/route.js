@@ -25,15 +25,14 @@ export async function GET(request) {
 
     console.log('🕐 Running one-time payment expiry job...');
 
-    // Find users with expired one-time payments
+    // Find users with expired payments (any plan type with expiry date)
     const now = new Date();
     const expiredUsers = await User.find({
       isPremium: true,
-      proPlanType: 'onetime',
-      expiryDate: { $lte: now }
+      expiryDate: { $exists: true, $lte: now }
     });
 
-    console.log(`📋 Found ${expiredUsers.length} users with expired one-time payments`);
+    console.log(`📋 Found ${expiredUsers.length} users with expired payments`);
 
     const results = {
       processed: 0,
@@ -46,12 +45,16 @@ export async function GET(request) {
       results.processed++;
       
       try {
-        console.log(`⏰ Processing expired payment for user: ${user.email}`);
+        console.log(`⏰ Processing expired payment for user: ${user.email} (Plan: ${user.proPlanType})`);
+
+        // Store previous plan type for Brevo
+        const previousPlan = user.planDetails?.type || user.proPlanType || 'unknown';
 
         // Update user to free plan
         await User.findByIdAndUpdate(user._id, {
           isPremium: false,
           proPlanType: null,
+          planDetails: null,
           expiryDate: null,
           updatedAt: new Date()
         });
@@ -61,8 +64,8 @@ export async function GET(request) {
           await updateBrevoContact(user.email, PLAN_TYPES.FREE, {
             additionalAttributes: {
               PAYMENT_EXPIRED_DATE: now.toISOString(),
-              PREVIOUS_PLAN: 'onetime_premium',
-              EXPIRY_REASON: 'one_time_payment_expired',
+              PREVIOUS_PLAN: previousPlan,
+              EXPIRY_REASON: 'payment_expired',
               DOWNGRADED_BY: 'system_cron'
             }
           });

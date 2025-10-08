@@ -28,19 +28,40 @@ async function createOrderHandler(request) {
       );
     }
 
-    // Check if user is already premium
-    if (user.isPremium && user.proPlanType === 'onetime') {
-      const purchaseDate = new Date(user.purchaseDate);
-      const expiryDate = new Date(purchaseDate.getTime() + (30 * 24 * 60 * 60 * 1000)); // 30 days
+    // Check if user already has an active plan
+    if (user.isPremium && user.expiryDate) {
+      const expiryDate = new Date(user.expiryDate);
       
       if (new Date() < expiryDate) {
-        return NextResponse.json(
-          { 
-            error: 'You already have an active one-time Pro access',
-            expiryDate: expiryDate.toISOString()
-          },
-          { status: 409 }
-        );
+        // User has active paid plan, check what they're trying to buy
+        const currentPlanType = user.planDetails?.type || user.proPlanType;
+        const requestedPlan = notes.planType || 'basic'; // Get plan type from request
+        
+        // Allow upgrading to higher tier plans or different services
+        const planHierarchy = {
+          'basic': 1,
+          'resume-fix': 2,
+          'professional': 3,
+          'premium': 4
+        };
+        
+        const currentPlanLevel = planHierarchy[currentPlanType] || 0;
+        const requestedPlanLevel = planHierarchy[requestedPlan] || 0;
+        
+        // Block if trying to buy same or lower tier plan
+        if (currentPlanType === requestedPlan) {
+          return NextResponse.json(
+            { 
+              error: `You already have an active ${currentPlanType} plan`,
+              expiryDate: expiryDate.toISOString(),
+              currentPlan: currentPlanType
+            },
+            { status: 409 }
+          );
+        }
+        
+        // Allow different service types (e.g., basic -> resume-fix is allowed)
+        // Only block exact same plan repurchases
       }
     }    console.log('🚀 Creating one-time payment order for user:', user.email);
 

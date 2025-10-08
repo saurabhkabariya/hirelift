@@ -23,14 +23,13 @@ export async function GET(request) {
 
     console.log('🕒 Running expiry check cron job...');
 
-    // Find users with expired one-time premium access
+    // Find users with expired premium access (any plan with expiry date)
     const expiredUsers = await User.find({
       isPremium: true,
-      proPlanType: 'onetime',
-      expiryDate: { $lte: new Date() }
+      expiryDate: { $exists: true, $lte: new Date() }
     });
 
-    console.log(`📊 Found ${expiredUsers.length} expired one-time premium users`);
+    console.log(`📊 Found ${expiredUsers.length} expired premium users`);
 
     // Update expired users
     const updateResults = await Promise.all(
@@ -39,6 +38,7 @@ export async function GET(request) {
           await User.findByIdAndUpdate(user._id, {
             isPremium: false,
             proPlanType: null,
+            planDetails: null,
             expiryDate: null,
             updatedAt: new Date()
           });

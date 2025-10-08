@@ -38,6 +38,33 @@ export default function PricingPage() {
   const [pricingConfig, setPricingConfig] = useState(getPricingForCountry('IN'));
   const [locationLoading, setLocationLoading] = useState(true);
 
+  // Helper function to get current user plan status
+  const getUserPlanStatus = () => {
+    if (!user || !user.isPremium) {
+      return { hasActivePlan: false, currentPlan: null, isExpired: false };
+    }
+
+    // Check if plan is expired
+    const now = new Date();
+    const expiryDate = user.expiryDate ? new Date(user.expiryDate) : null;
+    const isExpired = expiryDate && now >= expiryDate;
+
+    if (isExpired) {
+      return { hasActivePlan: false, currentPlan: null, isExpired: true };
+    }
+
+    // Get current plan type
+    const currentPlan = user.planDetails?.type || user.proPlanType;
+    
+    return { 
+      hasActivePlan: true, 
+      currentPlan: currentPlan, 
+      isExpired: false 
+    };
+  };
+
+  const userPlanStatus = getUserPlanStatus();
+
   // Detect user location on client side
   useEffect(() => {
     const detectLocation = async () => {
@@ -66,7 +93,7 @@ export default function PricingPage() {
       return;
     }
 
-    if (user.isPremium && user.proPlanType === 'basic') {
+    if (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic') {
       toast.success('You already have the Basic plan!');
       return;
     }
@@ -246,7 +273,7 @@ export default function PricingPage() {
         'Priority email support',
         'Resume templates'
       ],
-      buttonText: user?.isPremium && user?.proPlanType === 'basic'
+      buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic'
         ? 'Current Plan'
         : 'Get Basic Plan',
       popular: true,
@@ -254,7 +281,7 @@ export default function PricingPage() {
       salePercentage: 50,
       icon: Crown,
       paymentType: 'onetime',
-      disabled: user?.isPremium && user?.proPlanType === 'basic'
+      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic'
     },
     {
       id: 'resume-fix',
@@ -270,10 +297,13 @@ export default function PricingPage() {
         'Expert recommendations',
         'Guaranteed ATS improvement'
       ],
-      buttonText: 'Fix My Resume',
+      buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'resume-fix'
+        ? 'Current Plan'
+        : 'Fix My Resume',
       popular: false,
       icon: Shield,
-      paymentType: 'onetime'
+      paymentType: 'onetime',
+      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'resume-fix'
     },
     {
       id: 'professional',
@@ -289,10 +319,13 @@ export default function PricingPage() {
         'ATS + human recruiter optimization',
         'Personal consultation call'
       ],
-      buttonText: 'Get Professional Resume',
+      buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'professional'
+        ? 'Current Plan'
+        : 'Get Professional Resume',
       popular: false,
       icon: Award,
-      paymentType: 'onetime'
+      paymentType: 'onetime',
+      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'professional'
     },
     {
       id: 'premium',
@@ -308,10 +341,13 @@ export default function PricingPage() {
         'Job search strategy consultation',
         '30-day follow-up support'
       ],
-      buttonText: 'Complete Career Upgrade',
+      buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'premium'
+        ? 'Current Plan'
+        : 'Complete Career Upgrade',
       popular: false,
       icon: Sparkles,
-      paymentType: 'onetime'
+      paymentType: 'onetime',
+      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'premium'
     }
   ];
 
