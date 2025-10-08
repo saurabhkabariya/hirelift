@@ -37,6 +37,9 @@ export default function PricingPage() {
   const [countryData, setCountryData] = useState({ country: 'IN', currency: 'INR', symbol: '₹' });
   const [pricingConfig, setPricingConfig] = useState(getPricingForCountry('IN'));
   const [locationLoading, setLocationLoading] = useState(true);
+  
+  // Test payment counter for admin
+  const [testPaymentCount, setTestPaymentCount] = useState(0);
 
   // Detect user location on client side
   useEffect(() => {
@@ -185,6 +188,10 @@ export default function PricingPage() {
     setLoadingStage('preparing');
     setOneTimePaymentLoading(true);
 
+    // Generate unique test ID for each payment attempt
+    const testId = Date.now();
+    const uniqueDescription = `Test Payment #${testId} - HireLift Admin`;
+
     // Add timeout to prevent infinite loading
     const timeoutId = setTimeout(() => {
       console.warn('⏰ Payment timeout - forcing loading to stop');
@@ -196,37 +203,39 @@ export default function PricingPage() {
       await oneTimePaymentService.createOneTimePayment({
         amount: 1, // 1 rupee test payment
         currency: 'INR',
-        description: 'Test Payment - HireLift Admin',
+        description: uniqueDescription,
         user,
         router,
         planType: 'test',
+        testId: testId, // Add unique test ID
         onPaymentStart: () => {
-          console.log('🚀 Test payment started');
+          console.log(`🚀 Test payment #${testId} started`);
           setLoadingStage('processing');
         },
         onSuccess: async (response, order) => {
-          console.log('✅ Test payment success callback triggered');
+          console.log(`✅ Test payment #${testId} success callback triggered`);
           clearTimeout(timeoutId);
           setLoadingStage('completing');
           try {
             await refetchUser();
             console.log('✅ User refetched successfully');
+            setTestPaymentCount(prev => prev + 1); // Increment counter
           } catch (error) {
             console.error('Error refetching user:', error);
           } finally {
             setOneTimePaymentLoading(false);
-            toast.success('Test payment successful!');
+            toast.success(`Test payment #${testId} successful!`);
           }
         },
         onError: (error) => {
-          console.error('Test payment error:', error);
+          console.error(`Test payment #${testId} error:`, error);
           clearTimeout(timeoutId);
           setPaymentError(error);
           setShowErrorModal(true);
           setOneTimePaymentLoading(false);
         },
         onPaymentEnd: () => {
-          console.log('🏁 Test payment ended - clearing loading state');
+          console.log(`🏁 Test payment #${testId} ended - clearing loading state`);
           clearTimeout(timeoutId);
           // Small delay to ensure success callback completes first
           setTimeout(() => {
@@ -235,7 +244,7 @@ export default function PricingPage() {
         }
       });
     } catch (error) {
-      console.error('Test payment error:', error);
+      console.error(`Test payment #${testId} error:`, error);
       clearTimeout(timeoutId);
       
       if (isAuthError(error)) {
@@ -572,14 +581,20 @@ export default function PricingPage() {
           >
             <div className="text-center">
               <h3 className="text-lg font-bold text-red-700 mb-2">Admin Test Panel</h3>
-              <p className="text-sm text-red-600 mb-4">Test payment functionality with ₹1 transaction</p>
+              <p className="text-sm text-red-600 mb-2">Test payment functionality with ₹1 transaction</p>
+              {testPaymentCount > 0 && (
+                <p className="text-xs text-green-600 mb-4 font-semibold">
+                  ✅ {testPaymentCount} test payment{testPaymentCount > 1 ? 's' : ''} completed successfully
+                </p>
+              )}
               <button
                 onClick={handleTestPayment}
                 disabled={oneTimePaymentLoading}
                 className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {oneTimePaymentLoading ? 'Processing Test Payment...' : 'Test Payment (₹1)'}
+                {oneTimePaymentLoading ? 'Processing Test Payment...' : `Test Payment #${testPaymentCount + 1} (₹1)`}
               </button>
+              <p className="text-xs text-gray-500 mt-2">Each test creates a unique payment ID for multiple testing</p>
             </div>
           </motion.div>
         )}
@@ -724,7 +739,7 @@ export default function PricingPage() {
           setPaymentError(null);
         }}
         onContactSupport={() => {
-          window.open('mailto:support@hirelift.com', '_blank');
+          window.open('mailto:hirelift01@gmail.com', '_blank');
         }}
       />
 
