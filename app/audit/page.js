@@ -563,7 +563,7 @@ export default function ResumeAuditPage() {
           </p>
           <div className="inline-flex items-center gap-2 bg-green-50 border border-green-200 px-4 py-2 rounded-full animate-fade-in delay-200">
             <span className="text-green-600 font-semibold text-sm">🎉 FREE Analysis</span>
-            <span className="text-green-700 text-sm">• No signup required • Instant results</span>
+            <span className="text-green-700 text-sm">• No credit card required • Instant results</span>
           </div>
 
           {/* Show audit count and premium status */}

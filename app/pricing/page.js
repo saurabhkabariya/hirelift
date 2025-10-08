@@ -53,8 +53,13 @@ export default function PricingPage() {
       return { hasActivePlan: false, currentPlan: null, isExpired: true };
     }
 
-    // Get current plan type
-    const currentPlan = user.planDetails?.type || user.proPlanType;
+    // Get current plan type - check multiple sources for robustness
+    let currentPlan = user.planDetails?.type || user.proPlanType;
+    
+    // Additional check: if proPlanType is one of the specific plans, use it
+    if (['basic', 'resume-fix', 'professional', 'premium'].includes(user.proPlanType)) {
+      currentPlan = user.proPlanType;
+    }
     
     return { 
       hasActivePlan: true, 
@@ -64,6 +69,19 @@ export default function PricingPage() {
   };
 
   const userPlanStatus = getUserPlanStatus();
+
+  // Debug: Log user plan status (remove in production)
+  useEffect(() => {
+    if (user) {
+      console.log('User Plan Debug:', {
+        isPremium: user.isPremium,
+        proPlanType: user.proPlanType,
+        planDetails: user.planDetails,
+        expiryDate: user.expiryDate,
+        userPlanStatus: userPlanStatus
+      });
+    }
+  }, [user, userPlanStatus]);
 
   // Detect user location on client side
   useEffect(() => {
@@ -93,8 +111,25 @@ export default function PricingPage() {
       return;
     }
 
-    if (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic') {
-      toast.success('You already have the Basic plan!');
+    // Multiple checks for basic plan to be extra safe
+    const hasBasicPlan = (
+      (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic') ||
+      (user.isPremium && user.proPlanType === 'basic') ||
+      (user.isPremium && user.planDetails?.type === 'basic')
+    );
+
+    // Additional check for active expiry date
+    const hasActiveExpiry = user.expiryDate && new Date(user.expiryDate) > new Date();
+
+    if (hasBasicPlan && hasActiveExpiry) {
+      toast.error('You already have an active Basic plan! Your plan expires on ' + new Date(user.expiryDate).toLocaleDateString());
+      return;
+    }
+
+    // Also check if user has any active premium plan (not just basic)
+    if (user.isPremium && hasActiveExpiry) {
+      const currentPlan = user.planDetails?.type || user.proPlanType;
+      toast.error(`You already have an active ${currentPlan} plan! Your plan expires on ` + new Date(user.expiryDate).toLocaleDateString());
       return;
     }
 
@@ -213,6 +248,23 @@ export default function PricingPage() {
       return;
     }
 
+    // Additional safety check for all plans
+    if (user.isPremium && user.expiryDate && new Date(user.expiryDate) > new Date()) {
+      const currentPlan = user.planDetails?.type || user.proPlanType;
+      
+      // Check if trying to buy the same plan
+      if (currentPlan === plan.id) {
+        toast.error(`You already have an active ${currentPlan} plan! Your plan expires on ` + new Date(user.expiryDate).toLocaleDateString());
+        return;
+      }
+      
+      // For Basic plan specifically, block all attempts
+      if (plan.id === 'basic') {
+        toast.error(`You already have an active ${currentPlan} plan! Cannot downgrade or repurchase Basic plan.`);
+        return;
+      }
+    }
+
     try {
       switch (plan.paymentType) {
         case 'free':
@@ -246,12 +298,14 @@ export default function PricingPage() {
       name: 'Free',
       price: `${pricingConfig.symbol}0`,
       billing: '',
-      description: 'Get started with basic resume insights',
+      description: 'Get started with essential career tools',
       features: [
         '1 free ATS check',
+        'Free jobs access & search',
         'Basic templates through playground',
         'Email templates access',
-        'Basic scoring insights'
+        'Basic scoring insights',
+        'Community support'
       ],
       buttonText: 'Get Started Free',
       popular: false,
@@ -273,29 +327,48 @@ export default function PricingPage() {
         'Priority email support',
         'Resume templates'
       ],
-      buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic'
-        ? 'Current Plan'
-        : 'Get Basic Plan',
+      buttonText: (() => {
+        // Check multiple sources for basic plan
+        const hasBasicPlan = (
+          (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic') ||
+          (user?.isPremium && user?.proPlanType === 'basic') ||
+          (user?.isPremium && user?.planDetails?.type === 'basic')
+        );
+        const hasActiveExpiry = user?.expiryDate && new Date(user.expiryDate) > new Date();
+        
+        return (hasBasicPlan && hasActiveExpiry) ? 'Current Plan' : 'Get Basic Plan';
+      })(),
       popular: true,
       onSale: true,
       salePercentage: 50,
       icon: Crown,
       paymentType: 'onetime',
-      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic'
+      disabled: (() => {
+        // Check multiple sources for basic plan
+        const hasBasicPlan = (
+          (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic') ||
+          (user?.isPremium && user?.proPlanType === 'basic') ||
+          (user?.isPremium && user?.planDetails?.type === 'basic')
+        );
+        const hasActiveExpiry = user?.expiryDate && new Date(user.expiryDate) > new Date();
+        
+        return hasBasicPlan && hasActiveExpiry;
+      })()
     },
     {
       id: 'resume-fix',
       name: 'Resume ATS Fix',
       price: `${pricingConfig.symbol}${pricingConfig.amounts['resume-fix']}`,
       billing: '/one-time',
-      description: 'Professional resume optimization for ATS',
+      description: '👨‍💼 Human Expert Resume Optimization',
       features: [
         'Everything in Basic (30 days)',
-        'Professional resume review',
-        'ATS optimization fixes',
-        '1 revision included',
-        'Expert recommendations',
-        'Guaranteed ATS improvement'
+        '🧑‍💼 Professional human expert review',
+        '✨ Premium ATS optimization techniques',
+        '🔄 1 expert revision included',
+        '📋 Personalized recommendations',
+        '🎯 Guaranteed ATS score improvement',
+        '⚡ High-quality premium resources'
       ],
       buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'resume-fix'
         ? 'Current Plan'
@@ -303,21 +376,24 @@ export default function PricingPage() {
       popular: false,
       icon: Shield,
       paymentType: 'onetime',
-      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'resume-fix'
+      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'resume-fix',
+      expertInvolved: true
     },
     {
       id: 'professional',
       name: 'Professional',
       price: `${pricingConfig.symbol}${pricingConfig.amounts.professional}`,
       billing: '/one-time',
-      description: 'Complete resume rewrite or new resume creation',
+      description: '🚀 Expert-Crafted Professional Resume',
       features: [
         'Everything in Basic (30 days)',
-        'Complete resume rewrite OR new resume',
-        'Industry-specific optimization',
-        '2 revisions included',
-        'ATS + human recruiter optimization',
-        'Personal consultation call'
+        '👨‍🎓 Senior expert complete rewrite OR new resume',
+        '🏢 Industry-specific premium optimization',
+        '🔄 2 expert revisions included',
+        '🎯 ATS + human recruiter optimization',
+        '📞 Personal 1-on-1 consultation call',
+        '💎 High-quality premium templates & resources',
+        '⚡ Priority expert support'
       ],
       buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'professional'
         ? 'Current Plan'
@@ -325,21 +401,25 @@ export default function PricingPage() {
       popular: false,
       icon: Award,
       paymentType: 'onetime',
-      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'professional'
+      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'professional',
+      expertInvolved: true
     },
     {
       id: 'premium',
       name: 'Premium',
       price: `${pricingConfig.symbol}${pricingConfig.amounts.premium}`,
       billing: '/one-time',
-      description: 'Complete career optimization package',
+      description: '👑 Ultimate Career Transformation Package',
       features: [
         'Everything in Professional',
-        'LinkedIn profile optimization',
-        'Custom cover letter template',
-        'Interview preparation guide',
-        'Job search strategy consultation',
-        '30-day follow-up support'
+        '🔥 Expert LinkedIn profile optimization',
+        '📝 Custom cover letter by expert writer',
+        '🎤 Personal interview coaching session',
+        '📊 Job search strategy by career consultant',
+        '🚀 30-day premium expert follow-up support',
+        '💎 Exclusive access to premium career resources',
+        '⭐ VIP priority support & fastest turnaround',
+        '🎯 Guaranteed career advancement guidance'
       ],
       buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'premium'
         ? 'Current Plan'
@@ -347,7 +427,8 @@ export default function PricingPage() {
       popular: false,
       icon: Sparkles,
       paymentType: 'onetime',
-      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'premium'
+      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'premium',
+      expertInvolved: true
     }
   ];
 
@@ -429,9 +510,68 @@ export default function PricingPage() {
           <h1 className="text-5xl font-bold text-gray-900 mb-6">
             Choose Your Career Growth Plan
           </h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-4">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             From basic ATS checks to complete career optimization - find the perfect plan to accelerate your job search success.
           </p>
+          
+          {/* USP Highlight Section */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-2xl p-6 mb-8 max-w-4xl mx-auto"
+          >
+            <div className="flex items-center justify-center gap-2 mb-4">
+              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                <Star className="w-4 h-4 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900">Premium Human Expert Services</h3>
+            </div>
+            <p className="text-gray-700 mb-4">
+              Our ATS Fix, Professional, and Premium plans include <span className="font-semibold text-purple-600">real human experts</span> who personally review and optimize your resume using <span className="font-semibold text-purple-600">high-quality premium resources</span> for the best career outcomes.
+            </p>
+            <div className="grid md:grid-cols-3 gap-4 text-sm">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span className="text-gray-600">👨‍💼 Human Expert Review</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span className="text-gray-600">💎 Premium Resources</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span className="text-gray-600">🎯 Guaranteed Results</span>
+              </div>
+            </div>
+          </motion.div>
+          
+          {/* Debug Panel - User Plan Status (remove in production) */}
+          {user && process.env.NODE_ENV === 'development' && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4 max-w-2xl mx-auto text-left text-sm"
+            >
+              <h4 className="font-bold text-yellow-800 mb-2">Debug: User Plan Status</h4>
+              <div className="grid grid-cols-2 gap-2 text-yellow-700">
+                <div>isPremium: {user.isPremium ? 'Yes' : 'No'}</div>
+                <div>proPlanType: {user.proPlanType || 'null'}</div>
+                <div>planDetails.type: {user.planDetails?.type || 'null'}</div>
+                <div>expiryDate: {user.expiryDate ? new Date(user.expiryDate).toLocaleDateString() : 'null'}</div>
+                <div>hasActivePlan: {userPlanStatus.hasActivePlan ? 'Yes' : 'No'}</div>
+                <div>currentPlan: {userPlanStatus.currentPlan || 'null'}</div>
+                <div>isExpired: {userPlanStatus.isExpired ? 'Yes' : 'No'}</div>
+                <div>Current Time: {new Date().toLocaleDateString()}</div>
+              </div>
+              <button 
+                onClick={() => console.log('Full user object:', user)}
+                className="mt-2 px-3 py-1 bg-yellow-500 text-white rounded text-xs"
+              >
+                Log Full User Object
+              </button>
+            </motion.div>
+          )}
           
           {/* Location and Currency Indicator */}
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">

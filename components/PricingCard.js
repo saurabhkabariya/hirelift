@@ -33,9 +33,15 @@ export default function PricingCard({
       initial="hidden"
       animate="visible"
       whileHover={{ y: -8, transition: { duration: 0.2 } }}
-      className={`relative bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl ${
+      className={`relative rounded-2xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl ${
+        plan.expertInvolved
+          ? 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 hover:border-purple-300'
+          : 'bg-white'
+      } ${
         isPopular 
           ? 'border-blue-500 ring-2 ring-blue-200' 
+          : plan.expertInvolved
+          ? '' // Expert styling already applied above
           : 'border-gray-200 hover:border-gray-300'
       } ${plan.disabled ? 'opacity-75' : ''}`}
     >
@@ -46,6 +52,14 @@ export default function PricingCard({
             <Crown className="w-4 h-4" />
             Most Popular
           </div>
+        </div>
+      )}
+
+      {/* Expert Badge */}
+      {plan.expertInvolved && (
+        <div className="absolute -top-2 -left-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+          <Star className="w-3 h-3" />
+          Expert
         </div>
       )}
 
@@ -119,6 +133,8 @@ export default function PricingCard({
               ? 'bg-gray-100 text-gray-500 cursor-not-allowed'
               : plan.comingSoon
               ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
+              : plan.expertInvolved
+              ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600 shadow-lg hover:shadow-xl'
               : isPopular
               ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl'
               : 'bg-gray-900 text-white hover:bg-gray-800 shadow-md hover:shadow-lg'
