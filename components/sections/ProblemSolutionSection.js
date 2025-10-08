@@ -53,9 +53,10 @@ export default function ProblemSolutionSection({ handleRedirect }) {
         
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className="text-center mb-12 sm:mb-16 lg:mb-20"
         >
           <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm px-6 py-3 rounded-full mb-6 border-2 border-cyan-200 shadow-lg">
@@ -76,10 +77,10 @@ export default function ProblemSolutionSection({ handleRedirect }) {
           
           {/* Problems Side */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
             className="order-2 lg:order-1"
           >
             <div className="sticky top-24">
@@ -111,10 +112,10 @@ export default function ProblemSolutionSection({ handleRedirect }) {
 
               {/* Impact Statistics */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
                 className="mt-8 p-6 bg-white/80 backdrop-blur-sm border-l-4 border-red-400 rounded-2xl shadow-lg"
               >
                 <h4 className="text-lg font-bold text-gray-800 mb-4 text-center">
@@ -142,10 +143,10 @@ export default function ProblemSolutionSection({ handleRedirect }) {
 
               {/* Pain Points */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 15 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.7 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
                 className="mt-6 p-6 bg-white/80 backdrop-blur-sm border-l-4 border-cyan-400 rounded-2xl shadow-lg"
               >
                 <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
@@ -176,10 +177,10 @@ export default function ProblemSolutionSection({ handleRedirect }) {
 
           {/* Solutions Side */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.4 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
             className="order-1 lg:order-2"
           >
             <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-3">
@@ -193,10 +194,10 @@ export default function ProblemSolutionSection({ handleRedirect }) {
               {solutions.map((solution, index) => (
                 <motion.div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 15 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
+                  viewport={{ once: true, margin: "-30px" }}
+                  transition={{ duration: 0.4, delay: index * 0.05, ease: "easeOut" }}
                   className="group p-6 sm:p-8 bg-white/80 backdrop-blur-sm border-l-4 border-cyan-400 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] relative overflow-hidden"
                 >
                   

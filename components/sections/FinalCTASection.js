@@ -14,9 +14,10 @@ export default function FinalCTASection({ handleRedirect }) {
 
       <div className="relative max-w-4xl mx-auto text-center">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className="mb-8"
         >
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-white mb-6 leading-tight">
@@ -33,27 +34,27 @@ export default function FinalCTASection({ handleRedirect }) {
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.2 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
           className="mb-8"
         >
           <button 
             onClick={() => handleRedirect('/audit')}
-            className="group px-12 py-6 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-2xl rounded-2xl shadow-2xl hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-105 flex items-center gap-4 mx-auto"
+            className="group px-12 py-6 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-2xl rounded-2xl shadow-2xl hover:shadow-cyan-500/30 transition-all duration-200 hover:scale-[1.02] flex items-center gap-4 mx-auto"
           >
-            <FaRocket className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
+            <FaRocket className="w-6 h-6 group-hover:rotate-12 transition-transform duration-200" />
             Get Free Audit
-            <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+            <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
           </button>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
           className="flex flex-wrap justify-center items-center gap-6 md:gap-8 text-sm text-gray-300"
         >
           <div className="flex items-center gap-2">

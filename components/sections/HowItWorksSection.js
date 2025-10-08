@@ -35,9 +35,10 @@ export default function HowItWorksSection({ handleRedirect }) {
       <div className="absolute top-1/3 right-0 w-72 h-72 bg-gradient-to-bl from-cyan-100/40 to-transparent rounded-full"></div>
       <div className="relative max-w-6xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
           className="text-center mb-8 md:mb-12 lg:mb-14"
         >
           <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm px-4 md:px-6 py-2 md:py-3 rounded-full mb-4 md:mb-6 border-2 border-cyan-200 shadow-lg">
@@ -55,10 +56,10 @@ export default function HowItWorksSection({ handleRedirect }) {
           {steps.map((step, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 + index * 0.1 }}
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ duration: 0.4, delay: index * 0.05, ease: "easeOut" }}
               className="relative group"
             >
               {/* Connecting Line */}

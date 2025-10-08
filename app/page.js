@@ -62,40 +62,32 @@ export default function HomePage() {
       {/* Loading Bar Component */}
       <LoadingBar isLoading={isLoading} onComplete={stopLoading} />
       
-      {/* Stunning Professional Background with Enhanced Cyan Theme */}
+      {/* Optimized Professional Background with Enhanced Cyan Theme */}
       <div className="fixed inset-0 z-0">
         {/* Primary gradient background with depth */}
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/90 via-cyan-50/70 to-blue-50/80"></div>
         
-        {/* Dynamic floating elements for visual appeal */}
+        {/* Simplified floating elements for visual appeal - optimized for mobile */}
         <div className="absolute inset-0 overflow-hidden">
-          {/* Large decorative blurs */}
-          <div className="absolute -top-40 -left-40 w-80 h-80 bg-gradient-to-r from-cyan-200/30 to-cyan-300/20 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-l from-blue-200/25 to-cyan-200/25 rounded-full blur-3xl"></div>
-          <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-tr from-cyan-100/30 to-blue-100/20 rounded-full blur-3xl"></div>
-          <div className="absolute top-3/4 right-1/6 w-64 h-64 bg-gradient-to-bl from-cyan-300/20 to-cyan-200/15 rounded-full blur-3xl"></div>
+          {/* Reduced blur elements for better performance */}
+          <div className="absolute -top-40 -left-40 w-80 h-80 bg-gradient-to-r from-cyan-200/20 to-cyan-300/15 rounded-full blur-2xl opacity-60"></div>
+          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-l from-blue-200/15 to-cyan-200/15 rounded-full blur-2xl opacity-60"></div>
+          <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-tr from-cyan-100/20 to-blue-100/15 rounded-full blur-2xl opacity-60"></div>
           
-          {/* Additional middle section enhancement */}
-          <div className="absolute top-1/2 left-1/5 w-60 h-60 bg-gradient-to-r from-cyan-150/25 to-blue-150/20 rounded-full blur-2xl opacity-80"></div>
-          <div className="absolute top-2/3 right-1/3 w-48 h-48 bg-gradient-to-l from-cyan-200/30 to-cyan-100/25 rounded-full blur-2xl"></div>
-          
-          {/* Subtle animated accents */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-gradient-to-r from-transparent via-cyan-50/10 to-transparent rotate-45"></div>
+          {/* Subtle static accent - removed rotation animation */}
+          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-gradient-to-r from-transparent via-cyan-50/5 to-transparent"></div>
         </div>
         
-        {/* Elegant mesh pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.03]" style={{
+        {/* Simplified mesh pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.02]" style={{
           backgroundImage: `
-            radial-gradient(circle at 1px 1px, rgba(6, 182, 212, 0.4) 1px, transparent 0)
+            radial-gradient(circle at 1px 1px, rgba(6, 182, 212, 0.3) 1px, transparent 0)
           `,
-          backgroundSize: '40px 40px'
+          backgroundSize: '50px 50px'
         }}></div>
         
-        {/* Subtle noise texture for depth and richness */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-cyan-50/10 opacity-50"></div>
-        
-        {/* Additional depth layers */}
-        <div className="absolute inset-0 bg-gradient-to-t from-cyan-50/20 via-transparent to-transparent"></div>
+        {/* Subtle depth layer */}
+        <div className="absolute inset-0 bg-gradient-to-t from-cyan-50/10 via-transparent to-transparent"></div>
       </div>
 
       {/* Header Component */}

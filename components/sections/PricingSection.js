@@ -50,6 +50,7 @@ export default function PricingSection({ handleRedirect }) {
         "1 Basic Resume Audit",
         "Email/DM Templates",
         "Basic ATS Score",
+        "Free Jobs listing",
         "Standard Support"
       ]
     },
@@ -62,9 +63,10 @@ export default function PricingSection({ handleRedirect }) {
       bgColor: "bg-blue-100",
       iconColor: "text-blue-600",
       buttonColor: "bg-blue-600 hover:bg-blue-700",
-      popular: false,
+      popular: true,
       features: [
         "Unlimited Resume Audits",
+        "HR Directory access",
         "Advanced ATS Analysis",
         "Keyword Optimization",
         "Priority Support"
@@ -79,9 +81,11 @@ export default function PricingSection({ handleRedirect }) {
       bgColor: "bg-cyan-100",
       iconColor: "text-cyan-600",
       buttonColor: "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700",
-      popular: true,
+      popular: false,
       features: [
         "Complete Resume Rewrite",
+        "Human Expert Review",
+        "Premium Resources optimized",
         "2 Revisions Included",
         "Personal Consultation",
         "ATS Optimization"
