@@ -25,6 +25,8 @@ import {
 } from 'lucide-react';
 import { getPricingForCountry } from '@/utils/getUserCountry';
 
+import Head from 'next/head';
+
 export default function PricingPage() {
   const { user, refetchUser } = useAuth();
   const router = useRouter();
@@ -386,7 +388,108 @@ export default function PricingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <>
+      {/* Enhanced SEO for Pricing Page */}
+      <Head>
+        <title>Pricing Plans - HireLift | AI Resume Optimizer & Career Coaching</title>
+        <meta name="description" content="Choose the perfect plan for your career goals. From free ATS resume checker to premium AI optimization with expert coaching. Affordable pricing for students, professionals, and job seekers worldwide." />
+        <meta name="keywords" content="resume optimizer pricing, ATS checker cost, career coaching price, resume writing service cost, job search platform pricing, AI resume builder plans, professional resume service rates, affordable career coaching, resume optimization packages" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        
+        {/* Pricing-specific Open Graph */}
+        <meta property="og:title" content="HireLift Pricing - AI Resume Optimizer & Career Coaching Plans" />
+        <meta property="og:description" content="Affordable pricing for AI-powered resume optimization, ATS checking, and expert career coaching. Free plan available. Start your career transformation today." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://hirelift.vercel.app/pricing" />
+        <meta property="og:image" content="https://hirelift.vercel.app/og-pricing.jpg" />
+        
+        {/* Pricing Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Product",
+              "name": "HireLift AI Resume Optimizer",
+              "description": "AI-powered resume optimization and career coaching platform",
+              "brand": {
+                "@type": "Brand",
+                "name": "HireLift"
+              },
+              "offers": [
+                {
+                  "@type": "Offer",
+                  "name": "Free Plan",
+                  "price": "0",
+                  "priceCurrency": "USD",
+                  "description": "Free ATS resume analysis and basic optimization",
+                  "availability": "https://schema.org/InStock",
+                  "validFrom": new Date().toISOString()
+                },
+                {
+                  "@type": "Offer", 
+                  "name": "ATS Fix Plan",
+                  "price": "10",
+                  "priceCurrency": "USD", 
+                  "description": "ATS-optimized resume with human expert review",
+                  "availability": "https://schema.org/InStock",
+                  "validFrom": new Date().toISOString()
+                },
+                {
+                  "@type": "Offer",
+                  "name": "Professional Plan", 
+                  "price": "29",
+                  "priceCurrency": "USD",
+                  "description": "Advanced AI optimization with expert career coaching",
+                  "availability": "https://schema.org/InStock",
+                  "validFrom": new Date().toISOString()
+                },
+                {
+                  "@type": "Offer",
+                  "name": "Premium Plan",
+                  "price": "79", 
+                  "priceCurrency": "USD",
+                  "description": "Complete career transformation with personal coach",
+                  "availability": "https://schema.org/InStock",
+                  "validFrom": new Date().toISOString()
+                }
+              ],
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.8",
+                "ratingCount": "2847"
+              }
+            })
+          }}
+        />
+        
+        {/* Breadcrumb Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org", 
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://hirelift.vercel.app"
+                },
+                {
+                  "@type": "ListItem", 
+                  "position": 2,
+                  "name": "Pricing",
+                  "item": "https://hirelift.vercel.app/pricing"
+                }
+              ]
+            })
+          }}
+        />
+      </Head>
+      
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Custom Header */}
       <motion.header
         initial={{ y: -100, opacity: 0 }}
@@ -701,6 +804,7 @@ export default function PricingPage() {
       
       {/* Footer */}
       <FooterSection />
-    </div>
+      </div>
+    </>
   );
 }

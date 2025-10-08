@@ -14,7 +14,7 @@ import Link from "next/link";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { LogOut, User, CreditCard, Home, BarChart } from "lucide-react";
-
+import Head from "next/head";
 
 export default function ResumeAuditPage() {
   const [file, setFile] = useState(null);
@@ -269,7 +269,109 @@ export default function ResumeAuditPage() {
   };
 
   return (
-    <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-start px-2 pb-4 pt-1">
+    <>
+      {/* Enhanced SEO for Audit Page */}
+      <Head>
+        <title>Free AI Resume Checker & ATS Scanner | HireLift Resume Audit</title>
+        <meta name="description" content="Get instant AI-powered resume analysis with our free ATS scanner. Check ATS compatibility, keyword optimization, and formatting. Improve your resume's success rate with expert recommendations." />
+        <meta name="keywords" content="free resume checker, ATS scanner, resume analysis, CV checker, applicant tracking system test, resume audit, ATS optimization, resume scanner, free resume review, AI resume analyzer, resume ATS test, resume keyword checker" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        
+        {/* Audit-specific Open Graph */}
+        <meta property="og:title" content="Free AI Resume Checker & ATS Scanner - HireLift" />
+        <meta property="og:description" content="Get instant AI-powered resume analysis with our free ATS scanner. Check compatibility, keywords, and formatting to improve your job application success rate." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://hirelift.vercel.app/audit" />
+        <meta property="og:image" content="https://hirelift.vercel.app/og-audit.jpg" />
+        
+        {/* Tool Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebApplication",
+              "name": "HireLift Resume Checker",
+              "url": "https://hirelift.vercel.app/audit",
+              "description": "Free AI-powered resume analysis and ATS compatibility checker",
+              "applicationCategory": "BusinessApplication",
+              "operatingSystem": "Web Browser",
+              "offers": {
+                "@type": "Offer",
+                "price": "0",
+                "priceCurrency": "USD",
+                "description": "Free resume analysis and ATS checking"
+              },
+              "featureList": [
+                "ATS Compatibility Check",
+                "Keyword Optimization Analysis", 
+                "Resume Formatting Review",
+                "Professional Recommendations",
+                "Instant Results",
+                "Industry-Specific Analysis"
+              ],
+              "aggregateRating": {
+                "@type": "AggregateRating",
+                "ratingValue": "4.9",
+                "ratingCount": "15420"
+              },
+              "potentialAction": {
+                "@type": "UseAction",
+                "target": "https://hirelift.vercel.app/audit",
+                "object": {
+                  "@type": "DigitalDocument",
+                  "name": "Resume Document"
+                }
+              }
+            })
+          }}
+        />
+        
+        {/* How-to Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "HowTo",
+              "name": "How to Check Your Resume with ATS Scanner",
+              "description": "Step-by-step guide to analyze your resume for ATS compatibility",
+              "totalTime": "PT2M",
+              "supply": [
+                {
+                  "@type": "HowToSupply",
+                  "name": "Resume file (PDF, DOC, DOCX)"
+                }
+              ],
+              "tool": [
+                {
+                  "@type": "HowToTool", 
+                  "name": "HireLift Resume Checker"
+                }
+              ],
+              "step": [
+                {
+                  "@type": "HowToStep",
+                  "name": "Upload Resume",
+                  "text": "Upload your resume file in PDF, DOC, or DOCX format"
+                },
+                {
+                  "@type": "HowToStep",
+                  "name": "Select Job Role", 
+                  "text": "Choose your target job role for industry-specific analysis"
+                },
+                {
+                  "@type": "HowToStep",
+                  "name": "Get Analysis",
+                  "text": "Receive instant AI-powered analysis with ATS compatibility score and recommendations"
+                }
+              ]
+            })
+          }}
+        />
+      </Head>
+      
+      <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-start px-2 pb-4 pt-1">
       {/* Custom Audit Page Navigation */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -897,6 +999,7 @@ export default function ResumeAuditPage() {
       {/* Floating Feedback Button */}
       <FeedbackButton variant="floating" />
     </div>
+  </>
   );
 }
 

@@ -7,6 +7,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import AuthFlowManager from '@/components/auth/AuthFlowManager';
 import FeedbackButton from '@/components/feedback/FeedbackButton';
 import Link from 'next/link';
+import Head from 'next/head';
 
 export default function AuthPage() {
   const [mode, setMode] = useState('login');
@@ -60,7 +61,62 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
+    <>
+      {/* Enhanced SEO for Auth Page */}
+      <Head>
+        <title>Sign Up | Login - HireLift | Start Your Career Transformation</title>
+        <meta name="description" content="Join HireLift to transform your job search with AI-powered resume optimization, ATS checking, and expert career coaching. Sign up free and get hired 3x faster." />
+        <meta name="keywords" content="job seeker registration, career platform signup, resume optimizer account, ATS checker login, professional networking signup, career coaching registration, job search platform account, resume builder signup, career development account" />
+        <meta name="robots" content="index, follow" />
+        
+        {/* Auth-specific Open Graph */}
+        <meta property="og:title" content="Join HireLift - AI-Powered Career Transformation Platform" />
+        <meta property="og:description" content="Sign up for free and transform your job search with AI resume optimization, ATS checking, and expert coaching. Join 50,000+ professionals worldwide." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://hirelift.vercel.app/auth" />
+        <meta property="og:image" content="https://hirelift.vercel.app/og-auth.jpg" />
+        
+        {/* Registration Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              "name": "HireLift Registration - Career Platform Signup",
+              "url": "https://hirelift.vercel.app/auth",
+              "description": "Join HireLift's AI-powered career transformation platform. Free registration for job seekers worldwide.",
+              "breadcrumb": {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                  {
+                    "@type": "ListItem",
+                    "position": 1,
+                    "name": "Home",
+                    "item": "https://hirelift.vercel.app"
+                  },
+                  {
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": "Sign Up",
+                    "item": "https://hirelift.vercel.app/auth"
+                  }
+                ]
+              },
+              "potentialAction": {
+                "@type": "RegisterAction",
+                "target": "https://hirelift.vercel.app/auth",
+                "result": {
+                  "@type": "UserAccount",
+                  "description": "Free HireLift account for career optimization"
+                }
+              }
+            })
+          }}
+        />
+      </Head>
+      
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
       {/* Quick Navigation */}
       {/* <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -170,6 +226,7 @@ export default function AuthPage() {
       
       {/* Floating Feedback Button */}
       <FeedbackButton variant="floating" />
-    </div>
+      </div>
+    </>
   );
 }

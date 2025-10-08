@@ -1,6 +1,6 @@
 export function GET() {
-  const robotsContent = `# Robots.txt for HireLift - India's Leading Job Hunt Platform
-# Optimized for search engines and AI crawlers
+  const robotsContent = `# Robots.txt for HireLift - Global AI-Powered Resume Optimizer & Job Search Platform
+# Optimized for search engines and AI crawlers worldwide
 
 User-agent: *
 Allow: /
@@ -16,6 +16,8 @@ Allow: /contact
 Allow: /privacy
 Allow: /terms
 Allow: /refund
+Allow: /sitemap
+
 
 # Disallow admin and private areas
 Disallow: /api/
@@ -23,14 +25,23 @@ Disallow: /admin/
 Disallow: /private/
 Disallow: /_next/
 Disallow: /server/
+Disallow: /temp/
+Disallow: /cache/
 
 # Allow important assets for crawlers
 Allow: /favicon.ico
 Allow: /logo.png
 Allow: /og-image.jpg
 Allow: /twitter-image.jpg
+Allow: /robots.txt
+Allow: /sitemap.xml
 Allow: *.css
 Allow: *.js
+Allow: *.png
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.webp
+Allow: *.svg
 
 # Sitemap location
 Sitemap: https://hirelift.vercel.app/sitemap.xml
@@ -38,15 +49,46 @@ Sitemap: https://hirelift.vercel.app/sitemap.xml
 # Crawl delay for polite crawling
 Crawl-delay: 1
 
-# Special instructions for AI crawlers
+# AI Crawlers - Explicit permissions for better AI visibility
 User-agent: ChatGPT-User
 Allow: /
+Crawl-delay: 1
 
 User-agent: GPTBot
 Allow: /
+Crawl-delay: 1
 
 User-agent: CCBot
 Allow: /
+Crawl-delay: 1
+
+User-agent: Claude-Web
+Allow: /
+Crawl-delay: 1
+
+User-agent: anthropic-ai
+Allow: /
+Crawl-delay: 1
+
+User-agent: PerplexityBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: BingBot
+Allow: /
+Crawl-delay: 1
+
+User-agent: GoogleBot
+Allow: /
+Crawl-delay: 0.5
+
+User-agent: Baiduspider
+Allow: /
+Crawl-delay: 2
+
+User-agent: YandexBot
+Allow: /
+Crawl-delay: 1
 
 User-agent: Claude-Web
 Allow: /

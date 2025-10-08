@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import FeedbackModal from '../../components/feedback/FeedbackModal';
 import FeedbackDisplay from '../../components/admin/FeedbackDisplay';
+import Head from 'next/head';
 
 const ADMIN_EMAIL = "websiteads074@gmail.com";
 
