@@ -360,7 +360,6 @@ export default function PricingPage() {
         '📝 Custom cover letter by expert writer',
         '🎤 Personal interview coaching session',
         '📊 Job search strategy by career consultant',
-        '🚀 30-day premium expert follow-up support',
         '💎 Exclusive access to premium career resources',
         '⭐ VIP priority support & fastest turnaround',
         '🎯 Guaranteed career advancement guidance'
@@ -457,38 +456,6 @@ export default function PricingPage() {
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             From basic ATS checks to complete career optimization - find the perfect plan to accelerate your job search success.
           </p>
-          
-          {/* USP Highlight Section */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-2xl p-6 mb-8 max-w-4xl mx-auto"
-          >
-            <div className="flex items-center justify-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
-                <Star className="w-4 h-4 text-white" />
-              </div>
-              <h3 className="text-lg font-bold text-gray-900">Premium Human Expert Services</h3>
-            </div>
-            <p className="text-gray-700 mb-4">
-              Our ATS Fix, Professional, and Premium plans include <span className="font-semibold text-purple-600">real human experts</span> who personally review and optimize your resume using <span className="font-semibold text-purple-600">high-quality premium resources</span> for the best career outcomes.
-            </p>
-            <div className="grid md:grid-cols-3 gap-4 text-sm">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span className="text-gray-600">👨‍💼 Human Expert Review</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span className="text-gray-600">💎 Premium Resources</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span className="text-gray-600">🎯 Guaranteed Results</span>
-              </div>
-            </div>
-          </motion.div>
           
           {/* Location and Currency Indicator */}
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
