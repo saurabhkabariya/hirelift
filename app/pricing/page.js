@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import FeedbackButton from '../../components/feedback/FeedbackButton';
 import PaymentLoadingModal from '@/components/payment/PaymentLoadingModal';
@@ -53,13 +53,8 @@ export default function PricingPage() {
       return { hasActivePlan: false, currentPlan: null, isExpired: true };
     }
 
-    // Get current plan type - check multiple sources for robustness
-    let currentPlan = user.planDetails?.type || user.proPlanType;
-    
-    // Additional check: if proPlanType is one of the specific plans, use it
-    if (['basic', 'resume-fix', 'professional', 'premium'].includes(user.proPlanType)) {
-      currentPlan = user.proPlanType;
-    }
+    // Get current plan type
+    const currentPlan = user.planDetails?.type || user.proPlanType;
     
     return { 
       hasActivePlan: true, 
@@ -68,20 +63,7 @@ export default function PricingPage() {
     };
   };
 
-  const userPlanStatus = getUserPlanStatus();
-
-  // Debug: Log user plan status (remove in production)
-  useEffect(() => {
-    if (user) {
-      console.log('User Plan Debug:', {
-        isPremium: user.isPremium,
-        proPlanType: user.proPlanType,
-        planDetails: user.planDetails,
-        expiryDate: user.expiryDate,
-        userPlanStatus: userPlanStatus
-      });
-    }
-  }, [user, userPlanStatus]);
+  const userPlanStatus = useMemo(() => getUserPlanStatus(), [user]);
 
   // Detect user location on client side
   useEffect(() => {
@@ -111,25 +93,8 @@ export default function PricingPage() {
       return;
     }
 
-    // Multiple checks for basic plan to be extra safe
-    const hasBasicPlan = (
-      (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic') ||
-      (user.isPremium && user.proPlanType === 'basic') ||
-      (user.isPremium && user.planDetails?.type === 'basic')
-    );
-
-    // Additional check for active expiry date
-    const hasActiveExpiry = user.expiryDate && new Date(user.expiryDate) > new Date();
-
-    if (hasBasicPlan && hasActiveExpiry) {
-      toast.error('You already have an active Basic plan! Your plan expires on ' + new Date(user.expiryDate).toLocaleDateString());
-      return;
-    }
-
-    // Also check if user has any active premium plan (not just basic)
-    if (user.isPremium && hasActiveExpiry) {
-      const currentPlan = user.planDetails?.type || user.proPlanType;
-      toast.error(`You already have an active ${currentPlan} plan! Your plan expires on ` + new Date(user.expiryDate).toLocaleDateString());
+    if (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic') {
+      toast.success('You already have the Basic plan!');
       return;
     }
 
@@ -184,6 +149,13 @@ export default function PricingPage() {
 
   // Handle one-time upgrades for all paid plans
   const handleOneTimeUpgrade = async (plan) => {
+    // Check if user already has this plan active
+    if (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === plan.id) {
+      toast.success(`You already have the ${plan.name} plan!`);
+      setOneTimePaymentLoading(false);
+      return;
+    }
+
     setLoadingStage('preparing');
     setOneTimePaymentLoading(true);
 
@@ -248,21 +220,10 @@ export default function PricingPage() {
       return;
     }
 
-    // Additional safety check for all plans
-    if (user.isPremium && user.expiryDate && new Date(user.expiryDate) > new Date()) {
-      const currentPlan = user.planDetails?.type || user.proPlanType;
-      
-      // Check if trying to buy the same plan
-      if (currentPlan === plan.id) {
-        toast.error(`You already have an active ${currentPlan} plan! Your plan expires on ` + new Date(user.expiryDate).toLocaleDateString());
-        return;
-      }
-      
-      // For Basic plan specifically, block all attempts
-      if (plan.id === 'basic') {
-        toast.error(`You already have an active ${currentPlan} plan! Cannot downgrade or repurchase Basic plan.`);
-        return;
-      }
+    // Check if user already has this plan active (for all plan types)
+    if (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === plan.id) {
+      toast.success(`You already have the ${plan.name} plan!`);
+      return;
     }
 
     try {
@@ -327,33 +288,15 @@ export default function PricingPage() {
         'Priority email support',
         'Resume templates'
       ],
-      buttonText: (() => {
-        // Check multiple sources for basic plan
-        const hasBasicPlan = (
-          (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic') ||
-          (user?.isPremium && user?.proPlanType === 'basic') ||
-          (user?.isPremium && user?.planDetails?.type === 'basic')
-        );
-        const hasActiveExpiry = user?.expiryDate && new Date(user.expiryDate) > new Date();
-        
-        return (hasBasicPlan && hasActiveExpiry) ? 'Current Plan' : 'Get Basic Plan';
-      })(),
+      buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic'
+        ? 'Current Plan'
+        : 'Get Basic Plan',
       popular: true,
       onSale: true,
       salePercentage: 50,
       icon: Crown,
       paymentType: 'onetime',
-      disabled: (() => {
-        // Check multiple sources for basic plan
-        const hasBasicPlan = (
-          (userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic') ||
-          (user?.isPremium && user?.proPlanType === 'basic') ||
-          (user?.isPremium && user?.planDetails?.type === 'basic')
-        );
-        const hasActiveExpiry = user?.expiryDate && new Date(user.expiryDate) > new Date();
-        
-        return hasBasicPlan && hasActiveExpiry;
-      })()
+      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'basic'
     },
     {
       id: 'resume-fix',
@@ -545,33 +488,6 @@ export default function PricingPage() {
               </div>
             </div>
           </motion.div>
-          
-          {/* Debug Panel - User Plan Status (remove in production) */}
-          {user && process.env.NODE_ENV === 'development' && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4 max-w-2xl mx-auto text-left text-sm"
-            >
-              <h4 className="font-bold text-yellow-800 mb-2">Debug: User Plan Status</h4>
-              <div className="grid grid-cols-2 gap-2 text-yellow-700">
-                <div>isPremium: {user.isPremium ? 'Yes' : 'No'}</div>
-                <div>proPlanType: {user.proPlanType || 'null'}</div>
-                <div>planDetails.type: {user.planDetails?.type || 'null'}</div>
-                <div>expiryDate: {user.expiryDate ? new Date(user.expiryDate).toLocaleDateString() : 'null'}</div>
-                <div>hasActivePlan: {userPlanStatus.hasActivePlan ? 'Yes' : 'No'}</div>
-                <div>currentPlan: {userPlanStatus.currentPlan || 'null'}</div>
-                <div>isExpired: {userPlanStatus.isExpired ? 'Yes' : 'No'}</div>
-                <div>Current Time: {new Date().toLocaleDateString()}</div>
-              </div>
-              <button 
-                onClick={() => console.log('Full user object:', user)}
-                className="mt-2 px-3 py-1 bg-yellow-500 text-white rounded text-xs"
-              >
-                Log Full User Object
-              </button>
-            </motion.div>
-          )}
           
           {/* Location and Currency Indicator */}
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
