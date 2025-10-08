@@ -37,9 +37,6 @@ export default function PricingPage() {
   const [countryData, setCountryData] = useState({ country: 'IN', currency: 'INR', symbol: '₹' });
   const [pricingConfig, setPricingConfig] = useState(getPricingForCountry('IN'));
   const [locationLoading, setLocationLoading] = useState(true);
-  
-  // Test payment counter for admin
-  const [testPaymentCount, setTestPaymentCount] = useState(0);
 
   // Detect user location on client side
   useEffect(() => {
@@ -183,14 +180,10 @@ export default function PricingPage() {
   };
 
   // Handle different plan upgrades
-  // Handle test payment for admin (1 rupee payment)
+  // Handle test payment for admin (1 rupee payment) - bypasses existing pro access check
   const handleTestPayment = async () => {
     setLoadingStage('preparing');
     setOneTimePaymentLoading(true);
-
-    // Generate unique test ID for each payment attempt
-    const testId = Date.now();
-    const uniqueDescription = `Test Payment #${testId} - HireLift Admin`;
 
     // Add timeout to prevent infinite loading
     const timeoutId = setTimeout(() => {
@@ -200,62 +193,109 @@ export default function PricingPage() {
     }, 300000); // 5 minutes timeout
 
     try {
-      await oneTimePaymentService.createOneTimePayment({
-        amount: 1, // 1 rupee test payment
-        currency: 'INR',
-        description: uniqueDescription,
-        user,
-        router,
-        planType: 'test',
-        testId: testId, // Add unique test ID
-        onPaymentStart: () => {
-          console.log(`🚀 Test payment #${testId} started`);
-          setLoadingStage('processing');
+      // Create a special test order directly without user checks
+      const testOrderResponse = await fetch('/api/create-test-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        onSuccess: async (response, order) => {
-          console.log(`✅ Test payment #${testId} success callback triggered`);
-          clearTimeout(timeoutId);
-          setLoadingStage('completing');
-          try {
-            await refetchUser();
-            console.log('✅ User refetched successfully');
-            setTestPaymentCount(prev => prev + 1); // Increment counter
-          } catch (error) {
-            console.error('Error refetching user:', error);
-          } finally {
-            setOneTimePaymentLoading(false);
-            toast.success(`Test payment #${testId} successful!`);
-          }
-        },
-        onError: (error) => {
-          console.error(`Test payment #${testId} error:`, error);
-          clearTimeout(timeoutId);
-          setPaymentError(error);
-          setShowErrorModal(true);
-          setOneTimePaymentLoading(false);
-        },
-        onPaymentEnd: () => {
-          console.log(`🏁 Test payment #${testId} ended - clearing loading state`);
-          clearTimeout(timeoutId);
-          // Small delay to ensure success callback completes first
-          setTimeout(() => {
-            setOneTimePaymentLoading(false);
-          }, 1000);
-        }
+        body: JSON.stringify({
+          amount: 100, // 1 rupee in paisa
+          currency: 'INR',
+          description: 'Test Payment - Admin Only'
+        })
       });
-    } catch (error) {
-      console.error(`Test payment #${testId} error:`, error);
-      clearTimeout(timeoutId);
-      
-      if (isAuthError(error)) {
-        handleAuthError(router, '/pricing');
-        return;
+
+      const testOrderData = await testOrderResponse.json();
+
+      if (!testOrderResponse.ok) {
+        throw new Error(testOrderData.error || 'Failed to create test order');
       }
-      
+
+      console.log('✅ Test order created:', testOrderData.order.id);
+      setLoadingStage('processing');
+
+      // Check if Razorpay is loaded
+      if (typeof window.Razorpay === 'undefined') {
+        // Load Razorpay SDK
+        const script = document.createElement('script');
+        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        script.onload = () => proceedWithTestPayment(testOrderData, timeoutId);
+        script.onerror = () => {
+          clearTimeout(timeoutId);
+          setOneTimePaymentLoading(false);
+          toast.error('Failed to load payment system');
+        };
+        document.body.appendChild(script);
+      } else {
+        proceedWithTestPayment(testOrderData, timeoutId);
+      }
+
+    } catch (error) {
+      console.error('Test payment error:', error);
+      clearTimeout(timeoutId);
       setPaymentError(error);
       setShowErrorModal(true);
       setOneTimePaymentLoading(false);
     }
+  };
+
+  // Proceed with test payment using Razorpay
+  const proceedWithTestPayment = (orderData, timeoutId) => {
+    const razorpayOptions = {
+      key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+      amount: orderData.order.amount,
+      currency: orderData.order.currency,
+      name: 'HireLift',
+      description: 'Test Payment - Admin Only',
+      image: '/favicon.ico',
+      order_id: orderData.order.id,
+      handler: async (response) => {
+        console.log('✅ Test payment successful:', response);
+        clearTimeout(timeoutId);
+        setLoadingStage('completing');
+        toast.success('Test payment successful!');
+        setTimeout(() => {
+          setOneTimePaymentLoading(false);
+        }, 2000);
+      },
+      prefill: {
+        name: user?.name || user?.email?.split('@')[0] || 'Test User',
+        email: user?.email || 'test@example.com',
+        contact: user?.phone || ''
+      },
+      notes: {
+        user_id: user?._id || user?.id,
+        payment_type: 'test'
+      },
+      theme: {
+        color: '#7209B7'
+      },
+      modal: {
+        backdropclose: false,
+        escape: false,
+        handleback: false,
+        confirm_close: true,
+        ondismiss: () => {
+          console.log('💳 Test payment modal dismissed');
+          clearTimeout(timeoutId);
+          setOneTimePaymentLoading(false);
+          toast.error('Test payment cancelled');
+        }
+      }
+    };
+
+    const razorpayInstance = new window.Razorpay(razorpayOptions);
+    
+    razorpayInstance.on('payment.failed', (response) => {
+      console.error('Test payment failed:', response.error);
+      clearTimeout(timeoutId);
+      setOneTimePaymentLoading(false);
+      toast.error(`Test payment failed: ${response.error.description || 'Unknown error'}`);
+    });
+
+    razorpayInstance.open();
   };
 
   const handlePlanUpgrade = async (plan) => {
@@ -581,20 +621,15 @@ export default function PricingPage() {
           >
             <div className="text-center">
               <h3 className="text-lg font-bold text-red-700 mb-2">Admin Test Panel</h3>
-              <p className="text-sm text-red-600 mb-2">Test payment functionality with ₹1 transaction</p>
-              {testPaymentCount > 0 && (
-                <p className="text-xs text-green-600 mb-4 font-semibold">
-                  ✅ {testPaymentCount} test payment{testPaymentCount > 1 ? 's' : ''} completed successfully
-                </p>
-              )}
+              <p className="text-sm text-red-600 mb-4">Test payment functionality with ₹1 transaction (unlimited testing)</p>
               <button
                 onClick={handleTestPayment}
                 disabled={oneTimePaymentLoading}
                 className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {oneTimePaymentLoading ? 'Processing Test Payment...' : `Test Payment #${testPaymentCount + 1} (₹1)`}
+                {oneTimePaymentLoading ? 'Processing Test Payment...' : 'Test Payment (₹1)'}
               </button>
-              <p className="text-xs text-gray-500 mt-2">Each test creates a unique payment ID for multiple testing</p>
+              <p className="text-xs text-red-500 mt-2">⚠️ This bypasses all restrictions for testing purposes</p>
             </div>
           </motion.div>
         )}
