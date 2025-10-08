@@ -140,37 +140,6 @@ export default function ProblemSolutionSection({ handleRedirect }) {
                 </div>
               </motion.div>
 
-              {/* Pain Points */}
-              <motion.div
-                initial={{ opacity: 0, y: 15 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-30px" }}
-                transition={{ duration: 0.4, delay: 0.2, ease: "easeOut" }}
-                className="mt-6 p-6 bg-white/80 backdrop-blur-sm border-l-4 border-cyan-400 rounded-2xl shadow-lg"
-              >
-                <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
-                  <span className="text-red-500">😔</span>
-                  Sound Familiar?
-                </h4>
-                <div className="grid sm:grid-cols-2 gap-3 text-sm text-gray-600">
-                  <div className="flex items-start gap-2">
-                    <span className="text-red-400 mt-0.5 flex-shrink-0">•</span>
-                    <span>"I've applied to 200+ jobs but only got 2 interviews"</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="text-red-400 mt-0.5 flex-shrink-0">•</span>
-                    <span>"My resume disappears into a black hole"</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="text-red-400 mt-0.5 flex-shrink-0">•</span>
-                    <span>"I don't know what I'm doing wrong"</span>
-                  </div>
-                  <div className="flex items-start gap-2">
-                    <span className="text-red-400 mt-0.5 flex-shrink-0">•</span>
-                    <span>"Job search is taking forever and draining me"</span>
-                  </div>
-                </div>
-              </motion.div>
           </motion.div>
 
           {/* Solutions Side */}
