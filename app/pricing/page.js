@@ -180,6 +180,51 @@ export default function PricingPage() {
   };
 
   // Handle different plan upgrades
+  // Handle test payment for admin (1 rupee payment)
+  const handleTestPayment = async () => {
+    setLoadingStage('preparing');
+    setOneTimePaymentLoading(true);
+
+    try {
+      await oneTimePaymentService.createOneTimePayment({
+        amount: 1, // 1 rupee test payment
+        currency: 'INR',
+        description: 'Test Payment - HireLift Admin',
+        user,
+        router,
+        planType: 'test',
+        onPaymentStart: () => {
+          setLoadingStage('processing');
+        },
+        onPaymentSuccess: async () => {
+          setLoadingStage('verifying');
+          setOneTimePaymentLoading(false);
+          toast.success('Test payment successful!');
+        },
+        onPaymentError: (error) => {
+          console.error('Test payment error:', error);
+          setPaymentError(error);
+          setShowErrorModal(true);
+          setOneTimePaymentLoading(false);
+        },
+        onPaymentEnd: () => {
+          setOneTimePaymentLoading(false);
+        }
+      });
+    } catch (error) {
+      console.error('Test payment error:', error);
+      
+      if (isAuthError(error)) {
+        handleAuthError(router, '/pricing');
+        return;
+      }
+      
+      setPaymentError(error);
+      setShowErrorModal(true);
+      setOneTimePaymentLoading(false);
+    }
+  };
+
   const handlePlanUpgrade = async (plan) => {
     if (!user) {
       router.push('/auth?redirect=' + encodeURIComponent('/pricing'));
@@ -492,6 +537,28 @@ export default function PricingPage() {
             </>
           )}
         </motion.div>
+
+        {/* Admin Test Payment Button - Only visible for admin */}
+        {user?.email === 'websiteads074@gmail.com' && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="bg-red-50 border-2 border-red-200 rounded-xl p-6 mb-8"
+          >
+            <div className="text-center">
+              <h3 className="text-lg font-bold text-red-700 mb-2">Admin Test Panel</h3>
+              <p className="text-sm text-red-600 mb-4">Test payment functionality with ₹1 transaction</p>
+              <button
+                onClick={handleTestPayment}
+                disabled={oneTimePaymentLoading}
+                className="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {oneTimePaymentLoading ? 'Processing Test Payment...' : 'Test Payment (₹1)'}
+              </button>
+            </div>
+          </motion.div>
+        )}
 
         <motion.section
           initial={{ opacity: 0, y: 30 }}
