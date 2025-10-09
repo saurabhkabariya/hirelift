@@ -333,50 +333,6 @@ export default function RootLayout({ children }) {
           }}
         />
 
-        {/* FAQ Structured Data for AI Chatbots */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "FAQPage",
-              "mainEntity": [
-                {
-                  "@type": "Question",
-                  "name": "What is ATS resume optimization?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "ATS resume optimization is the process of formatting and writing your resume to pass through Applicant Tracking Systems used by Indian companies. HireLift's free ATS checker analyzes your resume and provides instant feedback to improve your ATS score and get more interview calls."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "How do I get HR contacts in India?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "HireLift provides a comprehensive HR directory with verified contacts of hiring managers across Indian companies. Our Pro plan includes direct HR email addresses, LinkedIn profiles, and company contact information to help you reach decision-makers directly."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "What are the best cold email templates for job applications?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "HireLift's Cold Email Playground offers 50+ proven templates specifically designed for Indian job market. These include job inquiry emails, follow-up templates, networking messages, and LinkedIn DM templates with 75% average response rates."
-                  }
-                },
-                {
-                  "@type": "Question",
-                  "name": "How to find jobs in India effectively?",
-                  "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "HireLift combines ATS-optimized resumes with direct HR outreach to help you find jobs 3x faster in India. Use our free resume audit, access HR directories, and send personalized emails using our proven templates to skip traditional job portals and reach hiring managers directly."
-                  }
-                }
-              ]
-            })
-          }}
-        />
 
         {/* Breadcrumb Structured Data */}
         <script
