@@ -9,28 +9,7 @@ export default function JobsSchema() {
       "@type": "ItemList",
       "name": "Job Listings",
       "description": "Latest job openings in India",
-      "numberOfItems": "1000+",
-      "itemListElement": [
-        {
-          "@type": "JobPosting",
-          "@id": "https://hirelift.vercel.app/jobs/sample-job-1",
-          "title": "Software Developer Jobs in India",
-          "description": "Find software developer positions across major Indian cities",
-          "hiringOrganization": {
-            "@type": "Organization",
-            "name": "Various Companies",
-            "url": "https://hirelift.vercel.app"
-          },
-          "jobLocation": {
-            "@type": "Place",
-            "addressCountry": "IN",
-            "addressLocality": "India"
-          },
-          "employmentType": ["FULL_TIME", "PART_TIME", "CONTRACT"],
-          "industry": "Technology",
-          "occupationalCategory": "Software Development"
-        }
-      ]
+      "numberOfItems": "1000+"
     },
     "breadcrumb": {
       "@type": "BreadcrumbList",
