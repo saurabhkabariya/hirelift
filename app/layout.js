@@ -58,11 +58,6 @@ export const metadata = {
   applicationName: "HireLift",
   generator: "Next.js",
   referrer: "origin-when-cross-origin",
-  colorScheme: "light dark",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#2563eb" },
-    { media: "(prefers-color-scheme: dark)", color: "#1e40af" }
-  ],
   formatDetection: {
     email: false,
     address: false,
@@ -130,6 +125,14 @@ export const metadata = {
   },
   category: "Technology",
   classification: "Job Search Platform",
+};
+
+export const viewport = {
+  colorScheme: "light dark",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#2563eb" },
+    { media: "(prefers-color-scheme: dark)", color: "#1e40af" }
+  ],
 };
 
 export default function RootLayout({ children }) {
