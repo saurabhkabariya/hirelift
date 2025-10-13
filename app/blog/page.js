@@ -6,16 +6,85 @@ import { motion } from 'framer-motion';
 import { FaClock, FaUser, FaTag, FaArrowRight } from 'react-icons/fa';
 import { getAllBlogPosts, getPostsByCategory } from '../../data/blogPosts';
 import Header from '../../components/Header';
+import Head from 'next/head';
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const allPosts = getAllBlogPosts();
   const displayedPosts = getPostsByCategory(selectedCategory);
   
-  const categories = ["All", "ATS Resume", "Cold Email", "HR Networking", "Location Guide", "Freshers", "LinkedIn", "Salary Guide", "Interview Prep", "Remote Work", "Tech Careers"];
+  const categories = ["All", "Resume Optimization", "Remote Work", "AI Career Tools", "Global Job Search", "Interview Mastery", "Salary Negotiation", "Career Development", "Tech Careers", "Leadership", "Networking"];
 
   return (
-    <div className="min-h-screen bg-gray-50 relative overflow-hidden">
+    <>
+      {/* Enhanced SEO for Global Blog */}
+      <Head>
+        <title>Global Career Blog - Expert Job Search Tips & Resume Optimization | HireLift</title>
+        <meta name="description" content="Expert career advice for global professionals. Learn AI resume optimization, remote work strategies, international job search tips, and career development insights from industry leaders worldwide." />
+        <meta name="keywords" content="global career blog, international job search, remote work tips, AI resume optimization, career development worldwide, global job market trends, international career advice, remote job search strategies, global networking tips, career growth insights" />
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        
+        {/* Blog-specific Open Graph */}
+        <meta property="og:title" content="Global Career Blog - Expert Job Search & Career Development Tips" />
+        <meta property="og:description" content="Expert career advice for global professionals. AI resume optimization, remote work strategies, international job search tips from industry leaders worldwide." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://hirelift.vercel.app/blog" />
+        <meta property="og:image" content="https://hirelift.vercel.app/og-blog.jpg" />
+        
+        {/* Blog Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Blog",
+              "name": "HireLift Global Career Blog",
+              "url": "https://hirelift.vercel.app/blog",
+              "description": "Expert career advice and job search strategies for global professionals",
+              "inLanguage": "en-US",
+              "publisher": {
+                "@type": "Organization",
+                "name": "HireLift",
+                "logo": {
+                  "@type": "ImageObject",
+                  "url": "https://hirelift.vercel.app/logo.png"
+                }
+              },
+              "mainEntityOfPage": {
+                "@type": "WebPage",
+                "@id": "https://hirelift.vercel.app/blog"
+              }
+            })
+          }}
+        />
+        
+        {/* Breadcrumb Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              "itemListElement": [
+                {
+                  "@type": "ListItem",
+                  "position": 1,
+                  "name": "Home",
+                  "item": "https://hirelift.vercel.app"
+                },
+                {
+                  "@type": "ListItem",
+                  "position": 2,
+                  "name": "Blog",
+                  "item": "https://hirelift.vercel.app/blog"
+                }
+              ]
+            })
+          }}
+        />
+      </Head>
+      
+      <div className="min-h-screen bg-gray-50 relative overflow-hidden">
       {/* Clean Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full -z-10">
         <div className="absolute top-1/4 right-0 w-96 h-96 bg-gradient-to-bl from-cyan-100/30 to-transparent rounded-full"></div>
@@ -32,11 +101,11 @@ export default function BlogPage() {
             className="text-center mb-16"
           >
             <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
-              Job Search Blog & Career Advice
+              Global Career Insights & Job Search Mastery
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Expert guidance for Indian job seekers. Learn ATS optimization, cold email strategies, 
-              HR networking, and proven job search techniques that work in India.
+              Expert career guidance for ambitious professionals worldwide. Master AI resume optimization, 
+              remote work strategies, global networking, and cutting-edge job search techniques that work across international markets.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
               {categories.map((category) => (
@@ -158,10 +227,10 @@ export default function BlogPage() {
             className="mt-20 text-center p-8 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl text-white"
           >
             <h3 className="text-2xl font-bold mb-4">
-              Get Weekly Job Search Tips & Industry Updates
+              Get Weekly Global Career Insights & Industry Intelligence
             </h3>
             <p className="text-lg mb-6 opacity-90">
-              Join 100+ Indian job seekers getting expert career advice in their inbox
+              Join 50,000+ global professionals receiving expert career strategies, remote work tips, and international job market insights
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center max-w-md mx-auto">
               <input
@@ -176,6 +245,7 @@ export default function BlogPage() {
           </motion.div>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

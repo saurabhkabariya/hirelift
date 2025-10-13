@@ -3,6 +3,7 @@ import AuditResultCard from "@/components/AuditResultCard";
 import JOB_ROLES from "@/data/jobRoles";
 import FeedbackButton from "../../components/feedback/FeedbackButton";
 import UpgradeCTA from "../../components/UpgradeCTA";
+import AuditExhaustedPopup from "../../components/conversion/AuditExhaustedPopup";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { FaFilePdf, FaUserTie, FaSearch, FaCheckCircle, FaExclamationCircle, FaUserEdit, FaChevronDown, FaTimesCircle, FaBuilding, FaCrown, FaBars, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
@@ -25,6 +26,7 @@ export default function ResumeAuditPage() {
   const [error, setError] = useState("");
   const [dragActive, setDragActive] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showExhaustedPopup, setShowExhaustedPopup] = useState(false);
   const inputRef = useRef();
   const { user, loading: userLoading, refetchUser, signOutUser } = useAuth();
   const router = useRouter();  
@@ -242,17 +244,37 @@ export default function ResumeAuditPage() {
         if (user) {
           // For logged-in users, update audit count from server
           await updateUserAuditCount();
+          
+          // Check if this was their first audit (count was 0, now will be 1)
+          const wasFirstAudit = (user.auditCount || 0) === 0;
+          
           toast.success('Audit completed! Count updated.', {
             duration: 2000,
             position: 'top-center',
           });
+          
+          // Show conversion popup after first audit completion
+          if (wasFirstAudit) {
+            setTimeout(() => {
+              setShowExhaustedPopup(true);
+            }, 2000); // Show popup 2 seconds after audit completion
+          }
         } else {
           // For non-logged-in users, increment local count
+          const wasFirstAudit = localAuditCount === 0;
           incrementLocalAuditCount();
+          
           toast.success('Audit completed! 1 free audit used.', {
             duration: 2000,
             position: 'top-center',
           });
+          
+          // Show conversion popup after first audit completion
+          if (wasFirstAudit) {
+            setTimeout(() => {
+              setShowExhaustedPopup(true);
+            }, 2000); // Show popup 2 seconds after audit completion
+          }
         }
       } else {
         toast.success('Audit completed successfully!', {
@@ -998,6 +1020,14 @@ export default function ResumeAuditPage() {
       
       {/* Floating Feedback Button */}
       <FeedbackButton variant="floating" />
+
+      {/* Audit Exhausted Conversion Popup */}
+      <AuditExhaustedPopup 
+        isOpen={showExhaustedPopup}
+        onClose={() => setShowExhaustedPopup(false)}
+        user={user}
+      />
+      
     </div>
   </>
   );
@@ -1255,7 +1285,7 @@ function HRDirectoryCTA({ user, isPremium }) {
         <div className="absolute bottom-10 right-10 w-32 h-32 bg-blue-500 rounded-full blur-xl"></div>
       </div>
 
-      <div className="relative z-10">
+      <div className="relative z-10 p-4">
         <div className="text-center mb-6">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}

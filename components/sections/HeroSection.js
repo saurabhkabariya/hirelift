@@ -25,111 +25,152 @@ export default function HeroSection({ handleRedirect }) {
   const animConfig = getMobileAnimationConfig(isMobile);
 
   return (
-    <section id="home" className="relative flex items-center justify-center px-6 pt-22 pb-6 min-h-screen" style={{ willChange: isMobile ? 'auto' : 'transform' }}>
-      {/* Decorative background elements */}
+    <section id="home" className="relative flex items-center justify-center px-2 sm:px-3 lg:px-4 pt-20 pb-8 min-h-screen" style={{ willChange: isMobile ? 'auto' : 'transform' }}>
+      {/* Decorative background elements - optimized for all screens */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/6 w-72 h-72 bg-gradient-to-r from-cyan-200/30 to-blue-200/30 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/6 w-96 h-96 bg-gradient-to-r from-blue-200/20 to-cyan-200/20 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-1/6 w-48 sm:w-72 h-48 sm:h-72 bg-gradient-to-r from-cyan-200/30 to-blue-200/30 rounded-full blur-2xl sm:blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/6 w-64 sm:w-96 h-64 sm:h-96 bg-gradient-to-r from-blue-200/20 to-cyan-200/20 rounded-full blur-2xl sm:blur-3xl"></div>
       </div>
       
-      <div className="max-w-6xl mx-auto relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
-          <div className="text-center lg:text-left">
-            {/* Main Heading */}
+      <div className="w-full pl-6 mx-auto relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center min-h-[calc(100vh-120px)]">
+          {/* Left Content - Optimized spacing and alignment */}
+          <div className="text-center lg:text-left space-y-4 lg:space-y-6 flex flex-col justify-center px-0 lg:px-0">
+            {/* Main Heading - Responsive typography */}
             <motion.h1
               initial={animConfig.initial}
               animate={animConfig.animate}
               transition={animConfig.transition}
-              className="text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-6"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-black leading-[1.1] mb-4"
             >
-              <span className="text-gray-900">Get Hired Faster with</span><br />
-              <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">ATS-Optimized Resumes</span>
-              <span className="text-4xl"> 🚀</span>
+              <span className="text-gray-900 block mb-2">Land Your Dream Job</span>
+              <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent block">
+                3x Faster with HireLift
+              </span>
             </motion.h1>
             
-            {/* Subheadline */}
+            {/* Subheadline - Better responsive text sizing */}
             <motion.p
               initial={animConfig.initial}
               animate={animConfig.animate}
               transition={{ ...animConfig.transition, delay: isMobile ? 0.1 : 0.1 }}
-              className="text-lg md:text-xl text-gray-700 mb-8 leading-relaxed"
+              className="text-lg sm:text-xl lg:text-xl xl:text-2xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-6"
             >
-              HireLift helps Indian job seekers beat resume filters, connect with real HRs, and land more interviews.
+              Join <span className="font-bold text-cyan-600">5,000+ professionals</span> who've used our resume optimizer to beat ATS filters and get <span className="font-bold">3x more interviews</span>
             </motion.p>
-            
-            {/* CTA Buttons */}
+
+            {/* URGENCY + SCARCITY ELEMENT - Better mobile spacing */}
             <motion.div
               initial={animConfig.initial}
               animate={animConfig.animate}
-              transition={{ ...animConfig.transition, delay: isMobile ? 0.15 : 0.2 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start items-center mb-8"
+              transition={{ ...animConfig.transition, delay: isMobile ? 0.15 : 0.15 }}
+              className="bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 rounded-xl p-3 sm:p-4 mx-auto lg:mx-0"
+            >
+              <p className="text-sm sm:text-base text-orange-800 font-medium text-center lg:text-left">
+                ⚡ <span className="font-bold">Limited Time:</span> Free Resume Audit worth $10
+                <span className="block sm:inline mt-1 sm:mt-0 sm:ml-2"> (Today Only - 47 spots left)</span>
+              </p>
+            </motion.div>
+            
+            {/* CTA Buttons - Improved responsive layout */}
+            <motion.div
+              initial={animConfig.initial}
+              animate={animConfig.animate}
+              transition={{ ...animConfig.transition, delay: isMobile ? 0.2 : 0.2 }}
+              className="flex flex-col sm:flex-row gap-4 lg:gap-6 justify-center lg:justify-start items-center sm:items-start mb-6"
             >
               <motion.button 
                 onClick={() => handleRedirect('/audit')}
                 whileHover={animConfig.hover}
                 whileTap={animConfig.tap}
-                className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-xl rounded-xl shadow-xl hover:shadow-cyan-500/30 transition-all duration-200 flex items-center gap-3"
+                className="group px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-lg sm:text-xl rounded-xl shadow-xl hover:shadow-cyan-500/30 transition-all duration-200 flex items-center gap-3 w-full sm:w-auto max-w-sm sm:max-w-none flex-col"
               >
+                <div className='flex items-center gap-3'>
                 <FaRocket className="w-5 h-5" />
-                Get Free Resume Audit
+                Get FREE Audit Now 
+                </div>
+                
+                <span className='block'> (Worth $10) </span>
               </motion.button>
               
-              <button 
-                onClick={() => handleRedirect('/jobs')}
-                className="text-cyan-600 font-semibold text-lg hover:text-cyan-700 transition-all duration-200 flex items-center gap-2 hover:gap-3"
-              >
-                Free Jobs Access →
-              </button>
+              <div className="text-center h-[-webkit-fill-available] flex flex-col justify-center lg:text-left">
+                <p className="text-sm text-gray-600 font-medium">✅ 100% Free • No Credit Card Required</p>
+                <p className="text-xs text-gray-500 mt-1">⭐ 4.9/5 rating from 1,000+ users</p>
+              </div>
             </motion.div>
 
-            {/* Social Proof */}
+            {/* Enhanced Social Proof - Better responsive layout */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ ...animConfig.transition, delay: isMobile ? 0.2 : 0.3 }}
-              className="flex flex-wrap justify-center lg:justify-start items-center gap-6 text-sm text-gray-600"
+              transition={{ ...animConfig.transition, delay: isMobile ? 0.3 : 0.3 }}
+              className="flex flex-wrap justify-center lg:justify-start items-center gap-4 sm:gap-6 text-sm text-gray-600 mb-6"
             >
               <div className="flex items-center gap-2">
-                <span className="text-cyan-500 font-bold">✓</span>
-                <span>2,000+ resumes audited</span>
+                <span className="text-cyan-500 font-bold text-base">✓</span>
+                <span><strong>5,000+</strong> resumes optimized</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-cyan-500 font-bold">✓</span>
-                <span>500+ HR contacts verified</span>
+                <span className="text-cyan-500 font-bold text-base">✓</span>
+                <span><strong>95%</strong> ATS pass rate</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-cyan-500 font-bold">✓</span>
-                <span>100% secure & private</span>
+                <span className="text-cyan-500 font-bold text-base">✓</span>
+                <span><strong>3x</strong> more interviews guaranteed</span>
+              </div>
+            </motion.div>
+
+            {/* Testimonial - Optimized for all screens */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ ...animConfig.transition, delay: isMobile ? 0.35 : 0.35 }}
+              className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-lg p-4 sm:p-6 mx-auto lg:mx-0"
+            >
+              <div className="flex items-start gap-3 sm:gap-4">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold text-lg flex-shrink-0">
+                  S
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-base sm:text-lg text-gray-800 italic leading-relaxed">"Got 5 interview calls in 6 days after using HireLift. Best investment ever!"</p>
+                  <p className="text-sm sm:text-base text-gray-600 mt-2 font-medium">- Sarah K., Software Engineer</p>
+                </div>
               </div>
             </motion.div>
           </div>
 
-          {/* Right Visual */}
+          {/* Right Visual - Enhanced responsive design */}
           <motion.div
             initial={animConfig.initial}
             animate={animConfig.animate}
             transition={{ ...animConfig.transition, delay: isMobile ? 0.1 : 0.1 }}
-            className="text-center"
+            className="flex justify-center items-center order-last lg:order-last"
           >
-            <div className="relative pb-4">
-              {/* Visual placeholder - laptop mockup style */}
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl bg-gradient-to-br from-cyan-100/90 via-cyan-50/80 to-blue-100/90 backdrop-blur-sm p-3 border border-cyan-200/50">
+            <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto">
+              {/* Visual container with better responsive sizing */}
+              <div className="relative rounded-xl overflow-hidden shadow-xl bg-gradient-to-br from-cyan-100/90 via-cyan-50/80 to-blue-100/90 backdrop-blur-sm p-3 border border-cyan-200/50 transform hover:scale-105 transition-transform duration-300">
                 <Image 
-                  className='rounded-xl' 
+                  className='rounded-lg w-full h-auto' 
                   src={`/ATS_Transform.webp`} 
-                  alt='ATS Transform' 
-                  height={100} 
+                  alt='ATS Transform - AI Resume Optimization Dashboard' 
+                  height={400} 
                   width={600} 
-                  objectFit='fill'
+                  priority
+                  style={{ objectFit: 'cover' }}
                 />
               </div>
-              {/* Floating elements - static on mobile for performance */}
-              <div className={`absolute -top-4 -right-4 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg ${!isMobile ? 'animate-pulse' : ''}`}>
+              
+              {/* Floating elements - more compact positioning */}
+              <div className={`absolute -top-3 -right-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-3 py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg ${!isMobile ? 'animate-pulse' : ''} z-10`}>
                 95% Pass Rate
               </div>
-              <div className="absolute -bottom-4 -left-4 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg">
+              <div className={`absolute -bottom-3 -left-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg z-10`}>
                 Free Audit
+              </div>
+              
+              {/* Success badge - smaller and more compact */}
+              <div className="hidden sm:block absolute top-4 left-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow-lg z-10">
+                ⭐ 4.9/5
               </div>
             </div>
           </motion.div>

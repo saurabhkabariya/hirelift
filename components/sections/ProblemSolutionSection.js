@@ -7,38 +7,38 @@ export default function ProblemSolutionSection({ handleRedirect }) {
   const problems = [
     {
       icon: FaTimes,
-      title: "Resume gets rejected by ATS systems",
-      description: "Your resume isn't optimized for Applicant Tracking Systems"
+      title: "75% of resumes never reach human eyes",
+      description: "ATS systems automatically reject resumes without proper optimization"
     },
     {
       icon: FaTimes,
-      title: "No response from HR departments", 
-      description: "You're applying blindly without direct HR contacts"
+      title: "Average job seeker waits 6+ months", 
+      description: "Without strategy, most people struggle for half a year to find work"
     },
     {
       icon: FaTimes,
-      title: "Don't know what's wrong with applications",
-      description: "No feedback or guidance on improving your job search"
+      title: "Your dream job filled while you wait",
+      description: "Perfect opportunities slip away due to slow, ineffective applications"
     }
   ];
 
   const solutions = [
     {
       icon: FaFileAlt,
-      title: "Unlimited Resume Audits",
-      description: "Get detailed ATS scores and fix suggestions to beat resume filters",
+      title: "95% ATS Pass Rate Guaranteed",
+      description: "AI-powered optimization that gets your resume past filters every time",
       color: "from-cyan-500 to-cyan-600"
     },
     {
       icon: FaUsers,
-      title: "Verified HR Directory", 
-      description: "Direct access to 500+ verified HR contacts across top companies",
+      title: "Direct Access to 15,000+ HRs", 
+      description: "Skip the black hole - connect directly with hiring managers who matter",
       color: "from-blue-500 to-blue-600"
     },
     {
       icon: FaTools,
-      title: "Job Prep Tools",
-      description: "Cold email templates, interview tips, and proven strategies",
+      title: "Land Interviews in 2 Weeks",
+      description: "Proven templates and strategies that cut job search time by 70%",
       color: "from-cyan-600 to-blue-600"
     }
   ];
@@ -120,7 +120,7 @@ export default function ProblemSolutionSection({ handleRedirect }) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="order-2 lg:order-1"
+            className="order-1 lg:order-1"
           >
             <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-3">
               <div className="p-2 bg-red-100 rounded-lg">
@@ -187,7 +187,7 @@ export default function ProblemSolutionSection({ handleRedirect }) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-50px" }}
             transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-            className="order-1 lg:order-2"
+            className="order-2 lg:order-2"
           >
             <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-800 mb-6 sm:mb-8 flex items-center gap-3">
               <div className="p-2 bg-cyan-100 rounded-lg">

@@ -17,6 +17,8 @@ import FinalCTASection from '../components/sections/FinalCTASection';
 import FooterSection from '../components/sections/FooterSection';
 import FloatingCTA from '../components/FloatingCTA';
 import StructuredData from '../components/StructuredData';
+import UrgencyBanner from '../components/conversion/UrgencyBanner';
+import ExitIntentPopup from '../components/conversion/ExitIntentPopup';
 import Head from 'next/head';
 
 const navLinks = [
@@ -234,6 +236,12 @@ export default function HomePage() {
 
       {/* Floating CTA */}
       <FloatingCTA handleRedirect={handleRedirect} />
+
+      {/* Urgency Banner for Conversion Boost */}
+      <UrgencyBanner onCTAClick={() => handleRedirect('/pricing')} />
+
+      {/* Exit Intent Popup for Maximum Conversion */}
+      <ExitIntentPopup onCTAClick={() => handleRedirect('/audit')} />
       </div>
     </>
   );

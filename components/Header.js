@@ -61,8 +61,9 @@ const Header = ({ variant = 'default' }) => {
     { name: "How it Works", href: "#how-it-works", description: "3-step process to optimize your job search" },
     { name: "Testimonials", href: "#proof-trust", description: "Success stories and trust metrics" },
     { name: "Pricing", href: "#pricing", description: "Affordable plans for every job seeker" },
-    { name: "Blog", href: "/blog", description: "Latest insights and tips for job seekers" },
+    { name: "Blog", href: "/blog", description: "Latest insights and tips for job seekers", isExternal: true },
     { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
+    { name: "Free Audit", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
     { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
   ];
 
@@ -71,6 +72,7 @@ const Header = ({ variant = 'default' }) => {
     { name: "How it Works", href: "/#how-it-works", description: "3-step process to optimize your job search", isExternal: true },
     { name: "Pricing", href: "/#pricing", description: "Affordable plans for every job seeker", isExternal: true },
     { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
+    { name: "Free Audit", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
     { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
   ];
 
@@ -80,6 +82,7 @@ const Header = ({ variant = 'default' }) => {
     { name: "Pricing", href: "/#pricing", description: "Affordable plans for every job seeker", isExternal: true },
     { name: "Blog", href: "/blog", description: "Latest insights and tips for job seekers", isExternal: true },
     { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
+    { name: "Free Audit", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
   ];
 
   // Determine which navigation links to use based on current pathname

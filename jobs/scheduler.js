@@ -41,17 +41,55 @@ export function initializeCronJobs() {
  */
 export async function handleExpiredBasicPlans() {
   try {
-    console.log('🔍 Checking for expired Basic plans...');
+    console.log('🔍 Checking for expired plans...');
     
+    // Use our new check-expiry API endpoint
+    const { handleCronExpiry } = await import('../app/api/check-expiry/route.js');
+    
+    const result = await handleCronExpiry({ checkAll: true });
+    
+    if (result.success) {
+      console.log('✅ Expired plans check completed:');
+      console.log(`   - Total checked: ${result.summary.totalChecked}`);
+      console.log(`   - Expired and downgraded: ${result.summary.expiredCount}`);
+      console.log(`   - Errors: ${result.summary.errorCount}`);
+    } else {
+      console.error('❌ Expired plans check failed:', result.error);
+    }
+
+    // Also check with Brevo contacts as backup
+    await checkBrevoContactsExpiry();
+    
+    // Log summary to your monitoring system
+    await logCronJobResult('expired_plans_check', {
+      totalChecked: result.summary?.totalChecked || 0,
+      expiredCount: result.summary?.expiredCount || 0,
+      errorCount: result.summary?.errorCount || 0,
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    console.error('❌ Error in handleExpiredBasicPlans:', error);
+    
+    // Alert your monitoring system
+    await alertCronJobError('expired_plans_check', error);
+  }
+}
+
+/**
+ * Backup method: Check Brevo contacts for expired plans
+ */
+async function checkBrevoContactsExpiry() {
+  try {
     // Get all contacts with Basic plan type
     const basicContacts = await getContactsByPlanType(PLAN_TYPES.BASIC);
     
     if (basicContacts.length === 0) {
-      console.log('📊 No Basic plan users found');
+      console.log('📊 No Basic plan users found in Brevo');
       return;
     }
     
-    console.log(`📊 Found ${basicContacts.length} Basic plan users to check`);
+    console.log(`📊 Found ${basicContacts.length} Basic plan users in Brevo to check`);
     
     let expiredCount = 0;
     let errorCount = 0;
@@ -72,16 +110,16 @@ export async function handleExpiredBasicPlans() {
           });
           
           if (result.success) {
-            console.log(`⬇️ Downgraded expired user: ${contact.email}`);
+            console.log(`⬇️ Downgraded expired user in Brevo: ${contact.email}`);
             expiredCount++;
             
             // Optional: Send expiration notification email
             await sendExpirationNotification(contact.email);
             
-            // Optional: Update user in your database
+            // Update user in database
             await updateUserPlanInDatabase(contact.email, 'free');
           } else {
-            console.error(`❌ Failed to downgrade ${contact.email}:`, result.error);
+            console.error(`❌ Failed to downgrade ${contact.email} in Brevo:`, result.error);
             errorCount++;
           }
         }
@@ -95,24 +133,10 @@ export async function handleExpiredBasicPlans() {
       }
     }
     
-    console.log(`✅ Expired plans check completed:`);
-    console.log(`   - Total checked: ${basicContacts.length}`);
-    console.log(`   - Expired and downgraded: ${expiredCount}`);
-    console.log(`   - Errors: ${errorCount}`);
-    
-    // Log summary to your monitoring system
-    await logCronJobResult('expired_basic_plans', {
-      totalChecked: basicContacts.length,
-      expiredCount,
-      errorCount,
-      timestamp: new Date().toISOString()
-    });
+    console.log(`📧 Brevo contacts check completed: ${expiredCount} expired, ${errorCount} errors`);
     
   } catch (error) {
-    console.error('❌ Error in handleExpiredBasicPlans:', error);
-    
-    // Alert your monitoring system
-    await alertCronJobError('expired_basic_plans', error);
+    console.error('❌ Error in checkBrevoContactsExpiry:', error);
   }
 }
 
@@ -219,18 +243,68 @@ async function sendExpirationNotification(email) {
  */
 async function updateUserPlanInDatabase(email, planType) {
   try {
-    // Your database update logic here
     console.log(`💾 Updating database: ${email} -> ${planType}`);
     
-    // Example:
-    // await User.updateOne(
-    //   { email },
-    //   { 
-    //     planType,
-    //     subscriptionStatus: 'expired',
-    //     updatedAt: new Date()
-    //   }
-    // );
+    // Import User model dynamically
+    const { default: User } = await import('../models/User.js');
+    const { default: connectDB } = await import('../lib/mongodb.js');
+    
+    await connectDB();
+    
+    // Find user and update plan
+    const user = await User.findOne({ email });
+    if (!user) {
+      console.error(`❌ User not found in database: ${email}`);
+      return;
+    }
+
+    // Store previous plan info before updating
+    const previousPlan = {
+      isPremium: user.isPremium,
+      proPlanType: user.proPlanType,
+      planDetails: user.planDetails,
+      expiryDate: user.expiryDate
+    };
+
+    const now = new Date();
+    let updateData = {
+      updatedAt: now
+    };
+
+    if (planType === 'free') {
+      // Downgrade to free plan
+      updateData = {
+        ...updateData,
+        isPremium: false,
+        proPlanType: null,
+        planDetails: null,
+        expiryDate: null,
+        lastPremiumPlan: previousPlan, // Store for reference
+        planDowngradedAt: now
+      };
+    } else {
+      // Upgrade to premium plan
+      updateData = {
+        ...updateData,
+        isPremium: true,
+        proPlanType: planType
+      };
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email },
+      updateData,
+      { new: true }
+    );
+
+    if (updatedUser) {
+      console.log(`✅ Database updated successfully for ${email}:`);
+      console.log(`   - isPremium: ${updatedUser.isPremium}`);
+      console.log(`   - proPlanType: ${updatedUser.proPlanType}`);
+      console.log(`   - expiryDate: ${updatedUser.expiryDate}`);
+    } else {
+      console.error(`❌ Failed to update user in database: ${email}`);
+    }
     
   } catch (error) {
     console.error(`❌ Failed to update database for ${email}:`, error);

@@ -37,59 +37,63 @@ export default function PricingSection({ handleRedirect }) {
 
   const plans = [
     {
-      name: "Free",
+      name: "Free Trial",
       price: `${pricingConfig.symbol}0`,
       period: "",
-      description: "Perfect for trying out our service",
+      description: "Perfect for testing our Auditor power",
       icon: FaUsers,
       bgColor: "bg-gray-100",
       iconColor: "text-gray-600",
       buttonColor: "bg-gray-600 hover:bg-gray-700",
       popular: false,
       features: [
-        "1 Basic Resume Audit",
-        "Email/DM Templates",
-        "Basic ATS Score",
-        "Free Jobs listing",
-        "Standard Support"
-      ]
+        '1 Resume Audit (Worth $10)',
+        'Basic ATS Score & Feedback',
+        'Professional Email Templates Access',
+        'Job Board Access (100+ jobs)',
+        'Community Support',
+        'No Credit Card Required ✅'
+      ],
     },
     {
-      name: "Basic",
+      name: "Career Accelerator",
       price: `${pricingConfig.symbol}${pricingConfig.amounts.basic}`,
       period: "/30 days",
-      description: "Unlimited audits for job seekers",
+      description: "Most popular - 3x faster results",
       icon: FaStar,
-      bgColor: "bg-blue-100",
-      iconColor: "text-blue-600",
-      buttonColor: "bg-blue-600 hover:bg-blue-700",
+      bgColor: "bg-gradient-to-r from-orange-100 to-red-100",
+      iconColor: "text-orange-600",
+      buttonColor: "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600",
       popular: true,
+      badge: "MOST POPULAR",
       features: [
-        "Unlimited Resume Audits",
-        "HR Directory access",
-        "Advanced ATS Analysis",
-        "Keyword Optimization",
-        "Priority Support"
-      ]
+        'Unlimited Resume Audits (Worth $20+)',
+        '1,000+ HR Directory Access',
+        'Advanced ATS Optimization',
+        'Proven Email Templates Library',
+        'Priority Expert Support',
+        'Access to Beta features'
+      ],
     },
     {
-      name: "Professional",
+      name: "Professional Rewrite",
       price: `${pricingConfig.symbol}${pricingConfig.amounts.professional}`,
       period: "one-time",
-      description: "Complete resume rewrite",
+      description: "Human experts rewrite everything",
       icon: FaAward,
-      bgColor: "bg-cyan-100",
+      bgColor: "bg-gradient-to-r from-cyan-100 to-blue-100",
       iconColor: "text-cyan-600",
       buttonColor: "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700",
       popular: false,
       features: [
-        "Complete Resume Rewrite",
-        "Human Expert Review",
-        "Premium Resources optimized",
-        "2 Revisions Included",
-        "Personal Consultation",
-        "ATS Optimization"
-      ]
+        'Everything in Career Accelerator (30 days)',
+        'Senior expert complete rewrite OR new resume',
+        'Industry-specific premium optimization',
+        '2 expert revisions included',
+        'ATS + human recruiter optimization',
+        'High-quality premium templates & resources',
+        'Priority expert support'
+      ],
     }
   ];
 
@@ -104,18 +108,33 @@ export default function PricingSection({ handleRedirect }) {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Choose Your Success Plan
+            Turn Your Resume Into an Interview Magnet
           </h2>
-          <p className="text-xl text-gray-600 mb-8">
-            From free audits to professional resume rewrites - we've got you covered
+          <p className="text-xl text-gray-600 mb-6">
+            Join 5,000+ professionals who got hired 3x faster with our proven system
           </p>
           
-          {/* New pricing highlight */}
-          <div className="inline-flex items-center gap-2 bg-cyan-100 border border-cyan-200 px-6 py-3 rounded-full">
-            <FaGem className="text-cyan-600" />
-            <span className="text-cyan-700 font-bold">
-              ✨ New Plans Available - Starting {pricingConfig.symbol}{pricingConfig.amounts.basic}
+          {/* URGENCY ELEMENT */}
+          <div className="bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 rounded-lg px-6 py-3 mb-4 inline-block">
+            <span className="text-orange-800 font-bold">
+              ⚡ Limited Time: 50% OFF + Premium HRs access (ends in 23:47:12)
             </span>
+          </div>
+          
+          {/* SOCIAL PROOF */}
+          <div className="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-600">
+            <div className="flex items-center gap-2">
+              <span className="text-green-500 font-bold">✓</span>
+              <span><strong>1,847</strong> success stories</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-green-500 font-bold">✓</span>
+              <span><strong>4.9/5</strong> satisfaction rating</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-green-500 font-bold">✓</span>
+              <span><strong>30-day</strong> Job Interview</span>
+            </div>
           </div>
         </motion.div>
 

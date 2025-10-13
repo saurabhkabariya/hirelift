@@ -173,7 +173,9 @@ async function verifyPaymentHandler(request) {
           RAZORPAY_ORDER_ID: razorpay_order_id,
           PURCHASE_DATE: purchaseDate.toISOString(),
           EXPIRY_DATE: expiryDate.toISOString(),
-          USER_ID: user._id.toString()
+          USER_ID: user._id.toString(),
+          IS_PREMIUM: 'true',
+          PRO_PLAN_TYPE: planType
         }
       });
       
@@ -187,25 +189,9 @@ async function verifyPaymentHandler(request) {
       // Don't fail the payment process, just log the error
     }
 
-    // Schedule automatic premium removal after 30 days
-    // Note: In production, use a job queue like Bull or Agenda for this
-    setTimeout(async () => {
-      try {
-        const userToCheck = await User.findById(user._id);
-        // Check if user has any plan with expiry date and it's expired
-        if (userToCheck && userToCheck.isPremium && userToCheck.expiryDate && new Date() >= new Date(userToCheck.expiryDate)) {
-          await User.findByIdAndUpdate(user._id, {
-            isPremium: false,
-            proPlanType: null,
-            planDetails: null,
-            expiryDate: null
-          });
-          console.log('⏰ Plan access expired for user:', user.email);
-        }
-      } catch (error) {
-        console.error('❌ Error checking expiry:', error);
-      }
-    }, 30 * 24 * 60 * 60 * 1000); // 30 days
+    // Note: Plan expiry will be handled by the cron job that runs daily
+    // checking /api/check-expiry endpoint
+    console.log('📝 Plan expiry will be handled by scheduled job on:', expiryDate.toISOString());
 
     return NextResponse.json({
       success: true,
