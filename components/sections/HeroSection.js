@@ -1,10 +1,10 @@
 ﻿'use client';
 
 import { motion } from 'framer-motion';
-import Image from 'next/image';
 import { FaRocket, FaFileAlt } from 'react-icons/fa';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { getMobileAnimationConfig } from '@/utils/animationConfig';
+import ATSProgressBar from '@/components/ui/ATSProgressBar';
 
 const scrollToSection = (sectionId) => {
   const element = document.querySelector(sectionId);
@@ -146,33 +146,8 @@ export default function HeroSection({ handleRedirect }) {
             transition={{ ...animConfig.transition, delay: isMobile ? 0.1 : 0.1 }}
             className="flex justify-center items-center order-last lg:order-last"
           >
-            <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-lg mx-auto">
-              {/* Visual container with better responsive sizing */}
-              <div className="relative rounded-xl overflow-hidden shadow-xl bg-gradient-to-br from-cyan-100/90 via-cyan-50/80 to-blue-100/90 backdrop-blur-sm p-3 border border-cyan-200/50 transform hover:scale-105 transition-transform duration-300">
-                <Image 
-                  className='rounded-lg w-full h-auto' 
-                  src={`/ATS_Transform.webp`} 
-                  alt='ATS Transform - AI Resume Optimization Dashboard' 
-                  height={400} 
-                  width={600} 
-                  priority
-                  style={{ objectFit: 'cover' }}
-                />
-              </div>
-              
-              {/* Floating elements - more compact positioning */}
-              <div className={`absolute -top-3 -right-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white px-3 py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg ${!isMobile ? 'animate-pulse' : ''} z-10`}>
-                95% Pass Rate
-              </div>
-              <div className={`absolute -bottom-3 -left-3 bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg z-10`}>
-                Free Audit
-              </div>
-              
-              {/* Success badge - smaller and more compact */}
-              <div className="hidden sm:block absolute top-4 left-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-gray-900 px-3 py-1 rounded-full text-xs font-bold shadow-lg z-10">
-                ⭐ 4.9/5
-              </div>
-            </div>
+            {/* ATS Progress Bar Component */}
+            <ATSProgressBar />
           </motion.div>
         </div>
       </div>
