@@ -146,6 +146,9 @@ export default function RootLayout({ children }) {
         <link rel="canonical" href="https://hirelift.vercel.app" />
         <link rel="alternate" type="application/rss+xml" title="HireLift Blog RSS Feed" href="https://hirelift.vercel.app/feed.xml" />
         
+        {/* Razorpay Script */}
+        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+        
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

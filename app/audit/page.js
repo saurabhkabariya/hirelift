@@ -4,6 +4,7 @@ import JOB_ROLES from "@/data/jobRoles";
 import FeedbackButton from "../../components/feedback/FeedbackButton";
 import UpgradeCTA from "../../components/UpgradeCTA";
 import AuditExhaustedPopup from "../../components/conversion/AuditExhaustedPopup";
+import EnhancedATSReport from "@/components/ui/EnhancedATSReport";
 import { useState, useRef, useCallback, useEffect } from "react";
 import { FaFilePdf, FaUserTie, FaSearch, FaCheckCircle, FaExclamationCircle, FaUserEdit, FaChevronDown, FaTimesCircle, FaBuilding, FaCrown, FaBars, FaTimes } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
@@ -16,6 +17,8 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import { LogOut, User, CreditCard, Home, BarChart } from "lucide-react";
 import Head from "next/head";
+import { useLoading } from "@/hooks/useLoading";
+import LoadingBar from "@/components/LoadingBar";
 
 export default function ResumeAuditPage() {
   const [file, setFile] = useState(null);
@@ -30,12 +33,16 @@ export default function ResumeAuditPage() {
   const inputRef = useRef();
   const { user, loading: userLoading, refetchUser, signOutUser } = useAuth();
   const router = useRouter();  
+  const { isLoading, stopLoading, handleRedirect } = useLoading();
+
+  
   
   // Handle logout
   const handleLogout = async () => {
     await signOutUser();
     router.push('/auth');
   };
+
 
   // State for local audit count (for non-logged-in users)
   const [localAuditCount, setLocalAuditCount] = useState(() => {
@@ -392,6 +399,8 @@ export default function ResumeAuditPage() {
           }}
         />
       </Head>
+
+      <LoadingBar isLoading={isLoading} onComplete={stopLoading} />
       
       <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-start px-2 pb-4 pt-1">
       {/* Custom Audit Page Navigation */}
@@ -839,106 +848,27 @@ export default function ResumeAuditPage() {
         <AnimatePresence>
           {result && (
             <>
-              <motion.div
-                id="audit-result-section"
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 30 }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
-                className="mt-10 bg-white/95 rounded-2xl shadow-2xl p-8 animate-fade-in border border-blue-100"
-              >
-                <h2 className="text-2xl font-extrabold text-center mb-6 bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent">
-                  Audit Result
-                </h2>
-                <motion.div
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                  className="flex flex-col items-center mb-6"
-                >
-                  <div className="relative w-32 h-32 flex items-center justify-center mb-2">
-                    <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 120 120">
-                      <circle
-                        cx="60"
-                        cy="60"
-                        r="54"
-                        fill="none"
-                        stroke="#e0e7ef"
-                        strokeWidth="12"
-                      />
-                      <motion.circle
-                        cx="60"
-                        cy="60"
-                        r="54"
-                        fill="none"
-                        stroke="#2563eb"
-                        strokeWidth="12"
-                        strokeDasharray={339.292}
-                        strokeDashoffset={339.292 - (result.totalScore / 100) * 339.292}
-                        strokeLinecap="round"
-                        initial={{ strokeDashoffset: 339.292 }}
-                        animate={{ strokeDashoffset: 339.292 - (result.totalScore / 100) * 339.292 }}
-                        transition={{ duration: 1.2, ease: "easeInOut" }}
-                      />
-                    </svg>
-                    <span className="text-4xl font-extrabold text-blue-700 z-10">
-                      {result.totalScore}
-                    </span>
-                    <span className="absolute bottom-5 left-1/2 -translate-x-1/2 text-base text-gray-500 font-medium">/ 100</span>
-                  </div>
-                  <span className="text-sm text-gray-500">Overall Score</span>
-                </motion.div>
-                <div className="grid grid-cols-2 gap-4 text-base mb-6">
-                  <ScoreBar label="Section Score" value={result.sectionScore} color="from-green-400 to-green-600" />
-                  <ScoreBar label="Keyword Score" value={result.keywordScore} color="from-blue-400 to-blue-600" />
-                  <ScoreBar label="Length Score" value={result.lengthScore} color="from-purple-400 to-purple-600" />
-                  <ScoreBar label="Contact Score" value={result.contactScore} color="from-yellow-400 to-yellow-600" />
-                </div>
-                <div className="mt-4">
-                  <div className="font-semibold my-2 text-blue-700">Found Keywords:</div>
-                  <div className="flex flex-wrap gap-2">
-                    {result.foundKeywords.length ? result.foundKeywords.map((kw) => (
-                      <span key={kw} className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 animate-pop-in">
-                        <FaCheckCircle className="text-green-500" /> {kw}
-                      </span>
-                    )) : <span className="text-gray-400">None</span>}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <div className="font-semibold my-4 text-blue-700">Missing Keywords:</div>
-                  <div className="flex flex-wrap gap-2">
-                    {result.missingKeywords.length ? result.missingKeywords.map((kw) => (
-                      <span key={kw} className="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-semibold flex items-center gap-1 animate-pop-in">
-                        <FaExclamationCircle className="text-red-500" /> {kw}
-                      </span>
-                    )) : <span className="text-gray-400">None</span>}
-                  </div>
-                </div>
-                <div className="mt-2">
-                  <div className="font-semibold my-4 text-blue-700">Missing Sections:</div>
-                  <div className="flex flex-wrap gap-2">
-                    {result.missingSections.length ? result.missingSections.map((sec) => (
-                      <span key={sec} className="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-xs font-semibold animate-pop-in">
-                        {sec}
-                      </span>
-                    )) : <span className="text-gray-400">None</span>}
-                  </div>
-                </div>
-                <SuggestedImprovements result={result} />                
-                
-                {/* Download Audit Button */}
-                <div className="flex justify-center mt-8">
-                  <button
-                    onClick={handleDownloadAudit}
-                    className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:scale-105 hover:from-green-600 hover:to-blue-600 transition-all duration-200 flex items-center gap-2 text-lg animate-pop-in"
-                  >
-                    <FaFilePdf className="text-white text-2xl" /> Download Audit
-                  </button>
-                </div>
-              </motion.div>
+              {/* Enhanced ATS Report */}
+              <EnhancedATSReport 
+                result={result} 
+                user={user}
+                handleRedirect={handleRedirect}
+              />
 
-              {/* Upgrade CTA - Score-based recommendations */}
-              <UpgradeCTA totalScore={result.totalScore} user={user} />
+              {/* Download Audit Button */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
+                className="flex justify-center mt-8"
+              >
+                <button
+                  onClick={handleDownloadAudit}
+                  className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:scale-105 hover:from-green-600 hover:to-blue-600 transition-all duration-200 flex items-center gap-2 text-lg animate-pop-in"
+                >
+                  <FaFilePdf className="text-white text-2xl" /> Download Audit
+                </button>
+              </motion.div>
 
               {/* HR Directory CTA - Conversion Focused */}
               <HRDirectoryCTA user={user} isPremium={isPremium} />

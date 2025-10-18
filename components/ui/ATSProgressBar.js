@@ -5,8 +5,32 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export default function ATSProgressBar() {
   const [currentScore, setCurrentScore] = useState(25);
+  const [displayScore, setDisplayScore] = useState(25);
   const [showImprovement, setShowImprovement] = useState(false);
   const [animationPhase, setAnimationPhase] = useState('initial'); // initial, improving, completed
+
+  // Smooth counter animation hook
+  useEffect(() => {
+    if (displayScore !== currentScore) {
+      const duration = 1000; // 1 second for smooth counting
+      const steps = Math.abs(currentScore - displayScore);
+      const stepDuration = duration / steps;
+      
+      let current = displayScore;
+      const direction = currentScore > displayScore ? 1 : -1;
+      
+      const counter = setInterval(() => {
+        current += direction;
+        setDisplayScore(current);
+        
+        if (current === currentScore) {
+          clearInterval(counter);
+        }
+      }, Math.max(stepDuration, 25)); // Minimum 25ms per step for smooth animation
+      
+      return () => clearInterval(counter);
+    }
+  }, [currentScore, displayScore]);
 
   useEffect(() => {
     // Start the animation sequence after component mounts
@@ -16,19 +40,30 @@ export default function ATSProgressBar() {
     }, 2000);
 
     const timer2 = setTimeout(() => {
-      // Animate score from 25 to 95
-      let progress = 25;
-      const increment = (95 - 25) / 50; // 50 steps for smooth animation
+      // Animate score from 25 to 95 with easing
+      const startScore = 25;
+      const endScore = 95;
+      const duration = 2500; // 2.5 seconds
+      const startTime = Date.now();
       
-      const scoreAnimation = setInterval(() => {
-        progress += increment;
-        setCurrentScore(Math.min(95, Math.round(progress)));
+      const scoreAnimation = () => {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
         
-        if (progress >= 95) {
-          clearInterval(scoreAnimation);
+        // Easing function for smooth acceleration/deceleration
+        const easeOutCubic = 1 - Math.pow(1 - progress, 3);
+        const newScore = Math.round(startScore + (endScore - startScore) * easeOutCubic);
+        
+        setCurrentScore(newScore);
+        
+        if (progress < 1) {
+          requestAnimationFrame(scoreAnimation);
+        } else {
           setAnimationPhase('completed');
         }
-      }, 30); // 30ms intervals for smooth animation
+      };
+      
+      requestAnimationFrame(scoreAnimation);
     }, 2500);
 
     return () => {
@@ -97,42 +132,59 @@ export default function ATSProgressBar() {
                 strokeWidth="6"
                 strokeLinecap="round"
                 strokeDasharray="283"
-                className={`bg-gradient-to-r ${getScoreColor(currentScore)} stroke-current`}
+                className={`bg-gradient-to-r ${getScoreColor(displayScore)} stroke-current`}
                 style={{
-                  background: currentScore < 40 ? 'linear-gradient(to right, #ef4444, #dc2626)' :
-                             currentScore < 70 ? 'linear-gradient(to right, #eab308, #f97316)' :
+                  background: displayScore < 40 ? 'linear-gradient(to right, #ef4444, #dc2626)' :
+                             displayScore < 70 ? 'linear-gradient(to right, #eab308, #f97316)' :
                              'linear-gradient(to right, #10b981, #059669)'
                 }}
                 initial={{ strokeDashoffset: 283 }}
                 animate={{ 
-                  strokeDashoffset: 283 - (283 * currentScore) / 100,
-                  stroke: currentScore < 40 ? '#ef4444' :
-                         currentScore < 70 ? '#eab308' : '#10b981'
+                  strokeDashoffset: 283 - (283 * displayScore) / 100,
+                  stroke: displayScore < 40 ? '#ef4444' :
+                         displayScore < 70 ? '#eab308' : '#10b981'
                 }}
-                transition={{ duration: 0.8, ease: "easeOut" }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
               />
             </svg>
             
             {/* Score Display */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className="text-3xl sm:text-4xl font-bold text-slate-800 relative overflow-hidden">
+                <motion.span
+                  key={Math.floor(displayScore / 10)} // Re-animate every 10 points for smoother transitions
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ 
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 15,
+                    duration: 0.3
+                  }}
+                  className="inline-block"
+                >
+                  {displayScore}
+                </motion.span>
+                <motion.span
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.1, duration: 0.2 }}
+                  className="text-2xl sm:text-3xl ml-1"
+                >
+                  %
+                </motion.span>
+              </div>
               <motion.span 
-                key={currentScore}
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                className="text-3xl sm:text-4xl font-bold text-slate-800"
-              >
-                {currentScore}%
-              </motion.span>
-              <motion.span 
-                className={`text-sm font-medium ${
-                  currentScore < 40 ? 'text-red-600' :
-                  currentScore < 70 ? 'text-orange-600' : 'text-green-600'
+                className={`text-sm font-medium transition-colors duration-300 ${
+                  displayScore < 40 ? 'text-red-600' :
+                  displayScore < 70 ? 'text-orange-600' : 'text-green-600'
                 }`}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
+                key={getScoreLabel(displayScore)} // Re-animate when label changes
               >
-                {getScoreLabel(currentScore)}
+                {getScoreLabel(displayScore)}
               </motion.span>
             </div>
           </div>
@@ -142,14 +194,29 @@ export default function ATSProgressBar() {
         <div className="mb-6">
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm font-medium text-slate-600">Progress</span>
-            <span className="text-sm font-bold text-slate-800">{currentScore}%</span>
+            <div className="text-sm font-bold text-slate-800 relative overflow-hidden">
+              <motion.span
+                key={Math.floor(displayScore / 5)} // Re-animate every 5 points for more frequent updates
+                initial={{ y: -15, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ 
+                  type: "spring",
+                  stiffness: 150,
+                  damping: 20,
+                  duration: 0.2
+                }}
+                className="inline-block"
+              >
+                {displayScore}%
+              </motion.span>
+            </div>
           </div>
           <div className="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
             <motion.div
-              className={`h-full bg-gradient-to-r ${getScoreColor(currentScore)} rounded-full relative`}
+              className={`h-full bg-gradient-to-r ${getScoreColor(displayScore)} rounded-full relative`}
               initial={{ width: "25%" }}
-              animate={{ width: `${currentScore}%` }}
-              transition={{ duration: 1.2, ease: "easeOut" }}
+              animate={{ width: `${displayScore}%` }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             >
               {/* Shimmer effect */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent transform skew-x-12 animate-pulse"></div>
