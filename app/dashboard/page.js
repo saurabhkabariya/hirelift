@@ -135,7 +135,7 @@ export default function DashboardPage() {
                 className="flex items-center gap-2 px-3 xl:px-4 py-2 text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all duration-200 font-medium text-sm xl:text-base"
               >
                 <BarChart className="w-4 h-4" />
-                <span className="hidden xl:inline">Audit</span>
+                <span className="hidden xl:inline">Review</span>
               </Link>
 
               {/* User Menu */}
@@ -190,7 +190,7 @@ export default function DashboardPage() {
                     className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-all duration-200 font-medium"
                   >
                     <BarChart className="w-5 h-5" />
-                    <span>ATS Resume Audit</span>
+                    <span>ATS Resume Review</span>
                     
                   </Link>
 
@@ -384,7 +384,7 @@ export default function DashboardPage() {
 
             <div className="pt-4 border-t border-[var(--gray-300)] border-opacity-20">
               <p className="text-[var(--gray-600)]">
-                Audit Count: <span className="font-semibold text-[var(--primary)]">{user.isPremium? '(unlimited)' : user.auditCount || 0}</span>
+                Review Count: <span className="font-semibold text-[var(--primary)]">{user.isPremium? '(unlimited)' : user.auditCount || 0}</span>
               </p>
             </div>
           </div>
@@ -442,7 +442,7 @@ export default function DashboardPage() {
                 <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                First Audit Free
+                First Review Free
               </div>
             </motion.div>
 
@@ -451,7 +451,7 @@ export default function DashboardPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Resume Audit</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Resume Review</h3>
             <p className="text-gray-600">AI-powered ATS analysis and optimization</p>
           </motion.button>
 
@@ -644,7 +644,7 @@ export default function DashboardPage() {
                       🚀
                     </motion.span>
                   </h3>
-                  <p className="text-white/90 text-sm mb-4">Unlock unlimited audits, premium templates, and exclusive features</p>
+                  <p className="text-white/90 text-sm mb-4">Unlock unlimited reviews, premium templates, and exclusive features</p>
                   
                   <motion.div
                     whileHover={{ scale: 1.05 }}
@@ -755,7 +755,7 @@ export default function DashboardPage() {
             <div>
               <h4 className="font-semibold text-gray-800 mb-4">Quick Actions</h4>
               <div className="space-y-2">
-                <Link href="/audit" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Resume Audit</Link>
+                <Link href="/audit" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Resume Review</Link>
                 <Link href={user?.isPremium ? "/company-search" : "/pricing"} className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">
                   Company Search {!user?.isPremium && "👑"}
                 </Link>

@@ -292,7 +292,7 @@ export default function ATSResumeGuide() {
                   More Articles
                 </Link>
                 <Link href="/audit" className="text-green-600 hover:underline">
-                  Free Resume Audit
+                  Free Resume Review
                 </Link>
               </div>
             </div>

@@ -15,7 +15,7 @@ export default function NotFound() {
     },
     {
       icon: FaFileAlt,
-      title: "Free Resume Audit",
+      title: "Free Resume Review",
       description: "Get instant ATS analysis of your resume",
       link: "/audit",
       color: "from-green-500 to-emerald-500"

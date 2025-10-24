@@ -46,7 +46,7 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
       return {
         title: "⚠️ This is the exact reason you're not getting responses",
         message: "Your resume is being filtered out by ATS systems before human recruiters even see it. But don't worry - we can fix this!",
-        action: "Implement these AI suggestions then try another audit - repeat until 85 + ATS score and start getting multiple interview calls within 7 days.",
+        action: "Implement these AI suggestions then try another review - repeat until 85 + ATS score and start getting multiple interview calls within 7 days.",
         urgency: "🔥 Critical: 87% of resumes with similar scores get rejected automatically"
       };
     } else {
@@ -342,7 +342,7 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
               🚀 Fix Your Resume & Get 3x More Interviews
             </h3>
             <p className="text-blue-100 mb-4">
-              Get unlimited ATS audits, premium templates, and HR Directory Access
+              Get unlimited ATS reviews, premium templates, and HR Directory Access
             </p>
             
             <div className="flex items-center justify-center gap-6 mb-6">

@@ -67,7 +67,7 @@ export default function HeroSection({ handleRedirect }) {
               className="bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 rounded-xl p-3 sm:p-4 mx-auto lg:mx-0"
             >
               <p className="text-sm sm:text-base text-orange-800 font-medium text-center lg:text-left">
-                ⚡ <span className="font-bold">Limited Time:</span> Free Resume Audit worth $10
+                ⚡ <span className="font-bold">Limited Time:</span> Free Resume Review worth $10
                 <span className="block sm:inline mt-1 sm:mt-0 sm:ml-2"> (Today Only - 47 spots left)</span>
               </p>
             </motion.div>
@@ -87,7 +87,7 @@ export default function HeroSection({ handleRedirect }) {
               >
                 <div className='flex items-center gap-3'>
                 <FaRocket className="w-5 h-5" />
-                Get FREE Audit Now 
+                Get FREE Review Now 
                 </div>
                 
                 <span className='block'> (Worth $10) </span>

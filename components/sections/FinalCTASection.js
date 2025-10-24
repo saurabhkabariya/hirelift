@@ -45,7 +45,7 @@ export default function FinalCTASection({ handleRedirect }) {
             className="group px-12 py-6 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-2xl rounded-2xl shadow-2xl hover:shadow-cyan-500/30 transition-all duration-200 hover:scale-[1.02] flex items-center gap-4 mx-auto"
           >
             <FaRocket className="w-6 h-6 group-hover:rotate-12 transition-transform duration-200" />
-            Get Free Audit
+            Get Free Review
             <FaArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
           </button>
         </motion.div>

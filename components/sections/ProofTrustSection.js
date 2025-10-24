@@ -15,7 +15,7 @@ export default function ProofTrustSection() {
     {
       name: "Priya Patel", 
       role: "Marketing Manager at Wipro",
-      content: "I was struggling for 6 months. After using HireLift's resume audit and cold email templates, I landed my dream job in 3 weeks!",
+      content: "I was struggling for 6 months. After using HireLift's resume review and cold email templates, I landed my dream job in 3 weeks!",
       rating: 5,
       image: "/testimonials/priya.jpg"
     },
@@ -32,7 +32,7 @@ export default function ProofTrustSection() {
     {
       icon: FaUsers,
       value: "2,000+",
-      label: "resumes audited",
+      label: "Resumes Reviewed",
       color: "from-cyan-500 to-cyan-600"
     },
     {

@@ -47,7 +47,7 @@ export default function PricingSection({ handleRedirect }) {
       buttonColor: "bg-gray-600 hover:bg-gray-700",
       popular: false,
       features: [
-        '1 Resume Audit (Worth $10)',
+        '1 Resume Review (Worth $10)',
         'Basic ATS Score & Feedback',
         'Professional Email Templates Access',
         'Job Board Access (100+ jobs)',
@@ -67,7 +67,7 @@ export default function PricingSection({ handleRedirect }) {
       popular: true,
       badge: "MOST POPULAR",
       features: [
-        'Unlimited Resume Audits (Worth $20+)',
+        'Unlimited Resume Reviews (Worth $20+)',
         '1,000+ HR Directory Access',
         'Advanced ATS Optimization',
         'Proven Email Templates Library',

@@ -7,8 +7,8 @@ export default function FeaturesSection() {
   const features = [
     {
       icon: FaCheckCircle,
-      title: "Resume Audit",
-      description: "Get instant feedback on your resume with our AI-powered audit. Identify exactly what's blocking your applications.",
+      title: "Resume Review",
+      description: "Get instant feedback on your resume with our AI-powered Review. Identify exactly what's blocking your applications.",
       features: ["ATS Compatibility Score", "Keyword Optimization", "Section Analysis", "Instant Improvements"],
       badge: "FREE",
       badgeColor: "green"

@@ -132,7 +132,7 @@ export default function ResumeAuditPage() {
         setCurrentAuditCount(user.auditCount + 1);
       }
     } catch (error) {
-      console.error('Failed to update user audit count:', error);
+      console.error('Failed to update user review count:', error);
     }
   };
 
@@ -215,7 +215,7 @@ export default function ResumeAuditPage() {
     const isUserPremium = user?.isPremium || false;
     
     if (!isUserPremium && currentCount >= 1) {
-      setError("Your 1 free audit is exhausted. Upgrade to premium to continue.");
+      setError("Your 1 free review is exhausted. Upgrade to premium to continue.");
       setTimeout(() => navigateWithLoading("/pricing", "Redirecting to pricing..."), 2000);
       return;
     }
@@ -238,7 +238,7 @@ export default function ResumeAuditPage() {
       const data = await res.json();
       if (!res.ok) {
         if (res.status === 403) {
-          setError("Your 1 free audit is exhausted. Upgrade to premium to continue.");
+          setError("Your 1 free review is exhausted. Upgrade to premium to continue.");
           setTimeout(() => navigateWithLoading("/pricing", "Redirecting to pricing..."), 2000);
           return;
         }
@@ -255,7 +255,7 @@ export default function ResumeAuditPage() {
           // Check if this was their first audit (count was 0, now will be 1)
           const wasFirstAudit = (user.auditCount || 0) === 0;
           
-          toast.success('Audit completed! Count updated.', {
+          toast.success('Review completed! Count updated.', {
             duration: 2000,
             position: 'top-center',
           });
@@ -271,7 +271,7 @@ export default function ResumeAuditPage() {
           const wasFirstAudit = localAuditCount === 0;
           incrementLocalAuditCount();
           
-          toast.success('Audit completed! 1 free audit used.', {
+          toast.success('Review completed! 1 free review used.', {
             duration: 2000,
             position: 'top-center',
           });
@@ -284,7 +284,7 @@ export default function ResumeAuditPage() {
           }
         }
       } else {
-        toast.success('Audit completed successfully!', {
+        toast.success('Review completed successfully!', {
           duration: 2000,
           position: 'top-center',
         });
@@ -296,9 +296,9 @@ export default function ResumeAuditPage() {
     <>
       {/* Enhanced SEO for Audit Page */}
       <Head>
-        <title>Free AI Resume Checker & ATS Scanner | HireLift Resume Audit</title>
+        <title>Free AI Resume Checker & ATS Scanner | HireLift Resume Review</title>
         <meta name="description" content="Get instant AI-powered resume analysis with our free ATS scanner. Check ATS compatibility, keyword optimization, and formatting. Improve your resume's success rate with expert recommendations." />
-        <meta name="keywords" content="free resume checker, ATS scanner, resume analysis, CV checker, applicant tracking system test, resume audit, ATS optimization, resume scanner, free resume review, AI resume analyzer, resume ATS test, resume keyword checker" />
+        <meta name="keywords" content="free resume checker, ATS scanner, resume analysis, CV checker, applicant tracking system test, resume review, ATS optimization, resume scanner, free resume review, AI resume analyzer, resume ATS test, resume keyword checker" />
         <meta name="robots" content="index, follow, max-image-preview:large" />
         
         {/* Audit-specific Open Graph */}
@@ -592,7 +592,7 @@ export default function ResumeAuditPage() {
                           }}
                         >
                           <BarChart className="w-5 h-5" />
-                          <span>Resume Audit</span>
+                          <span>Resume Review</span>
                           <div className="ml-auto bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
                             Current
                           </div>
@@ -647,7 +647,7 @@ export default function ResumeAuditPage() {
 
                         <div className="flex items-center gap-3 p-3 text-blue-700 bg-blue-100 rounded-lg font-medium">
                           <BarChart className="w-5 h-5" />
-                          <span>Resume Audit</span>
+                          <span>Resume Review</span>
                           <div className="ml-auto bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded-full font-medium">
                             Current
                           </div>
@@ -682,7 +682,7 @@ export default function ResumeAuditPage() {
       >
         <div className="text-center mb-8">
           <h1 className="text-4xl font-extrabold bg-gradient-to-r from-blue-700 via-blue-500 to-blue-400 bg-clip-text text-transparent drop-shadow-lg mb-2 animate-fade-in">
-            Resume ATS Audit
+            Resume ATS Review
           </h1>
           <p className="text-lg text-gray-600 animate-fade-in delay-100 mb-2">
             Instantly analyze your resume for ATS compatibility and job fit.
@@ -698,17 +698,17 @@ export default function ResumeAuditPage() {
               <>
                 <span className="text-blue-700 font-semibold text-base">{isPremium ? "Premium User" : "Free User"}</span>
                 <span className="text-gray-600 text-sm">
-                  Audits used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}
+                  Reviews used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}
                 </span>
               </>
             ) : (
               <>
                 <span className="text-blue-700 font-semibold text-base">Guest User</span>
                 <span className="text-gray-600 text-sm">
-                  Login required to audit your resume
+                  Login required to review your resume
                 </span>
                 <span className="text-blue-500 text-xs">
-                  ✨ Get 1 free audit after signup + unlimited with premium
+                  ✨ Get 1 free review after signup + unlimited with premium
                 </span>
               </>
             )}
@@ -823,7 +823,7 @@ export default function ResumeAuditPage() {
             ) : (
               <FaSearch className="text-white" />
             )}
-            {loading ? "Auditing..." : user ? "Audit Resume" : "Login & Audit Resume"}
+            {loading ? "Reviewing..." : user ? "Review Resume" : "Login & Review Resume"}
           </motion.button>
           <AnimatePresence>
             {error && (
@@ -876,8 +876,8 @@ export default function ResumeAuditPage() {
                     <div style={{ width: 48, height: 48, borderRadius: 12, background: 'linear-gradient(90deg,#2563eb,#60a5fa)', display: 'flex', alignItems: 'center', justifyContent: 'center', alignContent:'center', marginTop:'auto', marginBottom:'auto', color: '#fff', fontWeight: 700, fontSize: 28 }}>H</div>
                     <span style={{ fontSize: 28, fontWeight: 800, color: '#2563eb', letterSpacing: -1 }}>HireLift</span>
                   </div>
-                  <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8, color: '#2563eb' }}>Resume ATS Audit Result</h2>
-                  <div style={{ fontSize: 16, color: '#555', marginBottom: 24 }}>Your personalized resume audit powered by HireLift</div>
+                  <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8, color: '#2563eb' }}>Resume ATS Review Result</h2>
+                  <div style={{ fontSize: 16, color: '#555', marginBottom: 24 }}>Your personalized resume Review powered by HireLift</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 24 }}>
                     <div style={{ fontSize: 48, fontWeight: 900, color: '#2563eb', lineHeight: 1 }}>{result.totalScore} <span style={{ fontSize: 20, fontWeight: 500, color: '#888' }}>/ 100</span></div>
                     <div style={{ fontSize: 16, color: '#666' }}>Overall Score</div>
@@ -1312,7 +1312,7 @@ function HRDirectoryCTA({ user, isPremium }) {
               </motion.button>
               
               <p className="text-sm text-gray-600">
-                🎉 <strong>Special Offer:</strong> Get unlimited audits + HR directory access
+                🎉 <strong>Special Offer:</strong> Get unlimited reviews + HR directory access
               </p>
             </div>
           )}

@@ -115,7 +115,7 @@ export default function AuditExhaustedPopup({ isOpen, onClose, user }) {
                   transition={{ delay: 0.3 }}
                   className="text-xl sm:text-2xl font-bold text-gray-900 mb-2"
                 >
-                  Oops! Your Free Audit is Exhausted 😔
+                  Oops! Your Free Review is Exhausted 😔
                 </motion.h2>
 
                 <motion.p
@@ -124,7 +124,7 @@ export default function AuditExhaustedPopup({ isOpen, onClose, user }) {
                   transition={{ delay: 0.4 }}
                   className="text-gray-600 text-base sm:text-lg leading-relaxed"
                 >
-                  You've used your <strong>1 free audit</strong>. Don't let your career dreams slip away!
+                  You've used your <strong>1 Free Review</strong>. Don't let your career dreams slip away!
                 </motion.p>
               </div>
 
@@ -185,7 +185,7 @@ export default function AuditExhaustedPopup({ isOpen, onClose, user }) {
                 <div className="grid grid-cols-1 gap-2 sm:gap-3 text-xs sm:text-sm">
                   <div className="flex items-center gap-2">
                     <FaCheckCircle className="text-green-500 flex-shrink-0" />
-                    <span className="text-green-800 font-medium">Unlimited Resume Audits</span>
+                    <span className="text-green-800 font-medium">Unlimited Resume Reviews</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <FaCheckCircle className="text-green-500 flex-shrink-0" />

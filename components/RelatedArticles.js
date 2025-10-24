@@ -147,7 +147,7 @@ export default function RelatedArticles({ currentSlug, category }) {
               href="/audit"
               className="px-8 py-3 bg-white text-green-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Free Resume Audit
+              Free Resume Review
             </Link>
             <Link
               href="/playground"

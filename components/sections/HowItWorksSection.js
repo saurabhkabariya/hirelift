@@ -21,8 +21,8 @@ export default function HowItWorksSection({ handleRedirect }) {
     },
     {
       step: "3",
-      title: "Upgrade for Unlimited Audits & HR Directory", 
-      description: "Access unlimited resume audits, 500+ verified HR contacts, cold email templates, and job preparation tools.",
+      title: "Upgrade for Unlimited Reviews & HR Directory", 
+      description: "Access unlimited resume Reviews, 500+ verified HR contacts, cold email templates, and job preparation tools.",
       icon: FaCrown,
       color: "from-cyan-600 to-blue-600"
     }
@@ -100,7 +100,7 @@ export default function HowItWorksSection({ handleRedirect }) {
             onClick={() => handleRedirect('/audit')}
             className="px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-lg md:text-xl rounded-xl shadow-xl hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-105"
           >
-            Try Your Free Audit Now
+            Try Your Free Review Now
           </button>
           <p className="text-sm md:text-base text-gray-500 mt-3 md:mt-4 px-4">No credit card required • Takes less than 2 minutes</p>
         </motion.div>

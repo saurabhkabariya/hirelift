@@ -265,7 +265,7 @@ export default function RefundCancellationPage() {
               <PolicyCard
                 icon={CheckCircle}
                 title="What You Get Immediately"
-                description="Resume audits, template access, and HR contact lists are available instantly once you subscribe. These are digital services that provide immediate value."
+                description="Resume Reviews, template access, and HR contact lists are available instantly once you subscribe. These are digital services that provide immediate value."
                 type="success"
               />
               

@@ -83,7 +83,7 @@ export default function FooterSection() {
             <h4 className="font-bold mb-6">Services</h4>
             <div className="space-y-3">
               {[
-                { name: "Resume Audit", href: "/audit", badge: "FREE" },
+                { name: "Resume Review", href: "/audit", badge: "FREE" },
                 { name: "Job Board", href: "/jobs", badge: "FREE" },
                 { name: "Templates", href: "/playground", badge: "FREE" },
                 { name: "HR Directory", href: "/company-search", badge: "PREMIUM" },

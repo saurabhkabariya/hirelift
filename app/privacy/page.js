@@ -259,7 +259,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-2">Secure Infrastructure</h4>
-                    <p className="text-gray-600">We use trusted cloud providers with robust security measures and regular audits.</p>
+                    <p className="text-gray-600">We use trusted cloud providers with robust security measures and regular reviews.</p>
                   </div>
                 </div>
               </Card>

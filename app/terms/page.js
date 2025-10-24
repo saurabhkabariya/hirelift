@@ -249,7 +249,7 @@ export default function TermsConditionsPage() {
             >
               <ServiceFeature
                 icon={FileText}
-                title="Resume Audit & Analysis"
+                title="Resume Review & Analysis"
                 description="AI-powered analysis of your resume content, formatting, and ATS compatibility with personalized improvement suggestions."
               />
               
@@ -294,8 +294,8 @@ export default function TermsConditionsPage() {
               className="space-y-6"
             >
               <InfoBox type="success" icon={CheckCircle} title="Subscription Model">
-                <p><strong>Free Tier:</strong> Limited access to basic resume audit and templates.</p>
-                <p><strong>Pro Tier:</strong> ₹99/month - Unlimited audits, premium templates, and HR contact lists.</p>
+                <p><strong>Free Tier:</strong> Limited access to basic resume review and templates.</p>
+                <p><strong>Pro Tier:</strong> ₹99/month - Unlimited reviews, premium templates, and HR contact lists.</p>
                 <p><strong>AI Assistant:</strong> ₹499/month - Advanced AI features (coming soon).</p>
               </InfoBox>
               

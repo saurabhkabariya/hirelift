@@ -41,7 +41,7 @@ export async function POST(req) {
 
     // If not premium and auditCount >= 1, block
     if (user && !isPremium && auditCount >= 1) {
-      return NextResponse.json({ error: 'Free audit exhausted. Please upgrade to premium.' }, { status: 403 });
+      return NextResponse.json({ error: 'Free review exhausted. Please upgrade to premium.' }, { status: 403 });
     }
 
     const formData = await req.formData();

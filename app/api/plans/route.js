@@ -46,7 +46,7 @@ export async function GET(request) {
         period: 'monthly',
         interval: 1,
         features: [
-          'Unlimited Resume Audits per month',
+          'Unlimited Resume Reviews per month',
           'Basic ATS optimization',
           'Email support',
           'Job matching alerts',

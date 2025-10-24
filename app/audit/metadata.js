@@ -1,15 +1,15 @@
 export const metadata = {
-  title: "Free ATS Resume Checker & Optimizer - India's Leading Resume Audit Tool | HireLift",
+  title: "Free ATS Resume Checker & Optimizer - India's Leading Resume Review Tool | HireLift",
   description: "Get instant ATS resume analysis for free! Check your resume's ATS compatibility, optimize keywords, and improve your job application success rate. Trusted by 10,000+ Indian job seekers.",
   keywords: [
-    "ATS resume checker", "free resume audit", "ATS optimization", "resume scanner India",
+    "ATS resume checker", "free resume review", "ATS optimization", "resume scanner India",
     "ATS friendly resume", "applicant tracking system", "resume keywords", "ATS score",
     "resume analyzer", "ATS compliant resume", "resume optimization India", "job application tips",
     "ATS resume template", "resume format checker", "free ATS audit", "resume ATS score"
   ],
   openGraph: {
     title: "Free ATS Resume Checker & Optimizer - Instant Resume Analysis | HireLift",
-    description: "Get your ATS score instantly! Free resume audit tool analyzes your resume for ATS compatibility and suggests improvements. Used by 10,000+ Indian job seekers.",
+    description: "Get your ATS score instantly! Free resume review tool analyzes your resume for ATS compatibility and suggests improvements. Used by 10,000+ Indian job seekers.",
     url: "https://hirelift.vercel.app/audit",
     type: "website",
     images: [

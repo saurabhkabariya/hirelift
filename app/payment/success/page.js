@@ -166,7 +166,7 @@ function PaymentSuccessContent() {
           <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
             <div className="flex items-center">
               <Gift className="w-4 h-4 mr-2 text-green-500" />
-              Unlimited Audits
+              Unlimited Reviews
             </div>
             <div className="flex items-center">
               <Gift className="w-4 h-4 mr-2 text-green-500" />
@@ -246,10 +246,10 @@ function PaymentSuccessContent() {
           </button>
           
           <button
-            onClick={() => navigateWithLoading('/audit', 'Loading audit tool...')}
+            onClick={() => navigateWithLoading('/audit', 'Loading review tool...')}
             className="w-full bg-white border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-50 transition-all duration-200"
           >
-            Start Resume Audit
+            Start Resume Review
           </button>        </motion.div>
       </motion.div>
     </div>

@@ -31,7 +31,7 @@ export const metadata = {
     "job application tracker", "interview preparation", "resume writing service", "career advice", "job hunting tips",
     "professional resume", "CV optimizer", "applicant tracking system", "resume keywords", "job search tools",
     "career development", "employment opportunities", "job seeker", "recruitment platform", "hiring platform",
-    "job portal", "career services", "resume audit", "job matching", "talent acquisition",
+    "job portal", "career services", "resume audit", "resume review", "job matching", "talent acquisition",
     
     // Global Job Market Keywords (20 keywords)
     "remote jobs", "work from home", "international jobs", "global careers", "freelance jobs",
@@ -358,7 +358,7 @@ export default function RootLayout({ children }) {
                 {
                   "@type": "ListItem", 
                   "position": 2,
-                  "name": "ATS Resume Audit",
+                  "name": "ATS Resume Review",
                   "item": "https://hirelift.vercel.app/audit"
                 },
                 {

@@ -7,9 +7,9 @@ export default function LeadMagnetSection({ handleRedirect }) {
   const leadMagnets = [
     {
       icon: FaFileAlt,
-      title: "Free Resume Audit",
+      title: "Free Resume Review",
       description: "Get your ATS score and detailed feedback instantly",
-      cta: "Start Free Audit",
+      cta: "Start Free Review",
       link: "/audit",
       value: "Worth ₹299",
       color: "from-green-500 to-emerald-500",
@@ -99,7 +99,7 @@ export default function LeadMagnetSection({ handleRedirect }) {
           transition={{ delay: 0.3 }}
           className="text-center mt-12"
         >
-          <p className="text-gray-600 mb-4">Ready for unlimited audits and HR contacts?</p>
+          <p className="text-gray-600 mb-4">Ready for unlimited reviews and HR contacts?</p>
           <button
             onClick={() => handleRedirect('/pricing')}
             className="px-8 py-3 bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold rounded-lg hover:from-purple-700 hover:to-blue-700 transition-all duration-300 hover:scale-105 shadow-lg"

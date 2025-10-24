@@ -270,7 +270,7 @@ export default function PricingPage() {
       billing: '',
       description: 'Test our Auditor power before you buy',
       features: [
-        '1 Resume Audit (Worth $10)',
+        '1 Resume Review (Worth $10)',
         'Basic ATS Score & Feedback',
         'Professional Email Templates Access',
         'Job Board Access (100+ jobs)',
@@ -290,7 +290,7 @@ export default function PricingPage() {
       billing: '/30 days',
       description: '🔥 Most Popular - Get hired 3x faster',
       features: [
-        'Unlimited Resume Audits (Worth $20+)',
+        'Unlimited Resume Reviews (Worth $20+)',
         '1,000+ HR Directory Access',
         'Advanced ATS Optimization',
         'Proven Email Templates Library',
@@ -951,7 +951,7 @@ export default function PricingPage() {
                   onClick={() => router.push('/audit')}
                   className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-cyan-500/30 transition-all duration-200"
                 >
-                  Start FREE Audit Now
+                  Start FREE Review Now
                 </button>
                 <p className="text-sm text-gray-600">⚡ Limited Time: 50% OFF</p>
               </div>

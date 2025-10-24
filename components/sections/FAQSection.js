@@ -39,8 +39,8 @@ export default function FAQSection() {
       category: "Effectiveness"
     },
     {
-      question: "What happens after I audit my resume?",
-      answer: "After your free audit, you'll receive a detailed ATS score with specific suggestions to improve your resume. You can then upgrade to get unlimited audits, access to our HR directory, and proven cold email templates.",
+      question: "What happens after I review my resume?",
+      answer: "After your free review, you'll receive a detailed ATS score with specific suggestions to improve your resume. You can then upgrade to get unlimited reviews, access to our HR directory, and proven cold email templates.",
       category: "Process"
     },
     {
