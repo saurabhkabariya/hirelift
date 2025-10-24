@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState, useEffect, Suspense } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import { 
   CheckCircle, 
   Calendar,
@@ -19,6 +20,7 @@ import { getPricingForCountry } from '@/utils/getUserCountry';
 // Separate component for search params logic
 function PaymentSuccessContent() {
   const { user, refetchUser } = useAuth();
+  const { navigateWithLoading, executeWithLoading } = usePageLoading();
   const router = useRouter();
   const searchParams = useSearchParams();
   const [countdown, setCountdown] = useState(5);
@@ -52,7 +54,7 @@ function PaymentSuccessContent() {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          router.push('/dashboard');
+          navigateWithLoading('/dashboard', 'Loading dashboard...');
           return 0;
         }
         return prev - 1;
@@ -207,7 +209,7 @@ function PaymentSuccessContent() {
             </div>
 
             <motion.button
-              onClick={() => router.push('/contact')}
+              onClick={() => navigateWithLoading('/contact', 'Loading contact page...')}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
               className="w-full mt-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-6 rounded-lg font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center justify-center"
@@ -236,7 +238,7 @@ function PaymentSuccessContent() {
           className="space-y-3"
         >
           <button
-            onClick={() => router.push('/dashboard')}
+            onClick={() => navigateWithLoading('/dashboard', 'Loading dashboard...')}
             className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:from-purple-700 hover:to-blue-700 transition-all duration-200 flex items-center justify-center"
           >
             Go to Dashboard
@@ -244,7 +246,7 @@ function PaymentSuccessContent() {
           </button>
           
           <button
-            onClick={() => router.push('/audit')}
+            onClick={() => navigateWithLoading('/audit', 'Loading audit tool...')}
             className="w-full bg-white border border-gray-300 text-gray-700 py-3 px-6 rounded-lg font-medium hover:bg-gray-50 transition-all duration-200"
           >
             Start Resume Audit

@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePageLoading } from "@/hooks/usePageLoading";
 import toast, { Toaster } from 'react-hot-toast';
 import CompanyCard from "@/components/CompanyCard";
 import sampleCompanies from "@/data/sampleCompanies.json";
@@ -30,6 +31,7 @@ const POPULAR_ROLES = [
 
 export default function CompanySearchPage() {
   const { user, loading } = useAuth();
+  const { executeWithLoading, navigateWithLoading } = usePageLoading();
   const router = useRouter();
   
   const [role, setRole] = useState("");

@@ -2,6 +2,7 @@
 import React, { useState, useEffect, useRef, Suspense, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
+import { usePageLoading } from "@/hooks/usePageLoading";
 import Link from "next/link";
 import toast, { Toaster } from 'react-hot-toast';
 import JobCard from "@/components/JobCard.jsx";
@@ -61,6 +62,7 @@ function JobsPageSkeleton() {
 function JobsPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { executeWithLoading } = usePageLoading();
   
   // Filter states
   const [search, setSearch] = useState('');

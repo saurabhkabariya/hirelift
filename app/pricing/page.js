@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import FeedbackButton from '../../components/feedback/FeedbackButton';
 import PaymentLoadingModal from '@/components/payment/PaymentLoadingModal';
 import PaymentErrorModal from '@/components/payment/PaymentErrorModal';

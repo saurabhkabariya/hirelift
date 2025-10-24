@@ -17,8 +17,7 @@ import Image from "next/image";
 import toast from "react-hot-toast";
 import { LogOut, User, CreditCard, Home, BarChart } from "lucide-react";
 import Head from "next/head";
-import { useLoading } from "@/hooks/useLoading";
-import LoadingBar from "@/components/LoadingBar";
+import { usePageLoading } from "@/hooks/usePageLoading";
 
 export default function ResumeAuditPage() {
   const [file, setFile] = useState(null);
@@ -33,14 +32,14 @@ export default function ResumeAuditPage() {
   const inputRef = useRef();
   const { user, loading: userLoading, refetchUser, signOutUser } = useAuth();
   const router = useRouter();  
-  const { isLoading, stopLoading, handleRedirect } = useLoading();
+  const { executeWithLoading, navigateWithLoading } = usePageLoading();
 
   
   
   // Handle logout
   const handleLogout = async () => {
     await signOutUser();
-    router.push('/auth');
+    navigateWithLoading('/auth', 'Signing out...');
   };
 
 
@@ -207,7 +206,7 @@ export default function ResumeAuditPage() {
     // Check if user is logged in before proceeding with audit
     if (!user) {
       // Redirect to login page with return URL
-      router.push("/auth?redirect=/audit");
+      navigateWithLoading("/auth?redirect=/audit", "Redirecting to login...");
       return;
     }
     
@@ -217,12 +216,12 @@ export default function ResumeAuditPage() {
     
     if (!isUserPremium && currentCount >= 1) {
       setError("Your 1 free audit is exhausted. Upgrade to premium to continue.");
-      setTimeout(() => router.push("/pricing"), 2000);
+      setTimeout(() => navigateWithLoading("/pricing", "Redirecting to pricing..."), 2000);
       return;
     }
     
-    setLoading(true);
-    try {
+    // Use the loading system for audit processing
+    await executeWithLoading(async () => {
       const formData = new FormData();
       formData.append("resume", file);
       formData.append("keywords", JSON.stringify(keywords));
@@ -240,11 +239,12 @@ export default function ResumeAuditPage() {
       if (!res.ok) {
         if (res.status === 403) {
           setError("Your 1 free audit is exhausted. Upgrade to premium to continue.");
-          setTimeout(() => router.push("/pricing"), 2000);
+          setTimeout(() => navigateWithLoading("/pricing", "Redirecting to pricing..."), 2000);
           return;
         }
-        throw new Error(data.error || "Audit failed");      }
-        setResult(data);
+        throw new Error(data.error || "Audit failed");      
+      }
+      setResult(data);
       
       // Successfully completed audit - increment count and show feedback
       if (!isPremium) {
@@ -289,12 +289,7 @@ export default function ResumeAuditPage() {
           position: 'top-center',
         });
       }
-      
-    } catch (err) {
-      setError(err.message || "Something went wrong");
-    } finally {
-      setLoading(false);
-    }
+    }, "Analyzing your resume...");
   };
 
   return (
@@ -400,8 +395,6 @@ export default function ResumeAuditPage() {
         />
       </Head>
 
-      <LoadingBar isLoading={isLoading} onComplete={stopLoading} />
-      
       <div className="w-full min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex flex-col items-center justify-start px-2 pb-4 pt-1">
       {/* Custom Audit Page Navigation */}
       <motion.div

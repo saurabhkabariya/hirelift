@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import AuthFlowManager from '@/components/auth/AuthFlowManager';
 import FeedbackButton from '@/components/feedback/FeedbackButton';
 import Link from 'next/link';
@@ -12,6 +13,7 @@ import Head from 'next/head';
 export default function AuthPage() {
   const [mode, setMode] = useState('login');
   const { user, loading } = useAuth();
+  const { navigateWithLoading } = usePageLoading();
   const router = useRouter();
 
   // Get redirect URL from search params
@@ -32,12 +34,12 @@ export default function AuthPage() {
       const redirectUrl = urlParams.get('redirect');
       
       if (redirectUrl) {
-        window.location.href = redirectUrl;
+        navigateWithLoading(redirectUrl, 'Redirecting...');
       } else {
-        window.location.href = '/dashboard';
+        navigateWithLoading('/dashboard', 'Loading dashboard...');
       }
     }
-  }, [user, loading]);
+  }, [user, loading, navigateWithLoading]);
 
   // Show loading screen while checking auth state
   if (loading) {

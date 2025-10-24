@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import FeedbackButton from '../../components/feedback/FeedbackButton';
 import { 
   ArrowLeft,
@@ -22,6 +23,7 @@ import {
 } from 'lucide-react';
 
 export default function ContactPage() {
+  const { executeWithLoading, navigateWithLoading } = usePageLoading();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -142,48 +144,40 @@ export default function ContactPage() {
     if (!validateForm()) {
       return;
     }
-    
-    setIsSubmitting(true);
-    
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
 
-      const data = await response.json();
+    await executeWithLoading(async () => {
+      setIsSubmitting(true);
+      
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData)
+        });
 
-      if (response.ok) {
-        setSubmitStatus('success');
-        setReferenceId(data.referenceId);
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        setErrors({});
-        
-        // Scroll to success message
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        throw new Error(data.error || 'Failed to send message');
+        const data = await response.json();
+
+        if (response.ok) {
+          setSubmitStatus('success');
+          setReferenceId(data.referenceId);
+          setFormData({ name: '', email: '', subject: '', message: '' });
+          setErrors({});
+          
+          // Scroll to success message
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        } else {
+          throw new Error(data.error || 'Failed to send message');
+        }
+      } catch (error) {
+        console.error('Contact form error:', error);
+        setSubmitStatus('error');
+      } finally {
+        setIsSubmitting(false);
       }
-    } catch (error) {
-      console.error('Contact form error:', error);
-      setSubmitStatus('error');
-      
-      // Set appropriate error message
-      setErrors({ 
-        submit: error.message || 'Failed to send message. Please try again.' 
-      });
-    } finally {
-      setIsSubmitting(false);
-      
-      // Clear status after 8 seconds instead of 5
-      setTimeout(() => {
-        setSubmitStatus(null);
-        setReferenceId(null);
-      }, 8000);
-    }  };
+    }, 'Sending message...');
+  };
 
   const contactInfo = [
     {

@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { LogOut, User, Mail, Crown, Zap, BarChart, FileText, UserCheck, Settings, CreditCard } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -14,6 +15,7 @@ const ADMIN_EMAIL = "websiteads074@gmail.com";
 
 export default function DashboardPage() {
   const { user, signOutUser } = useAuth();
+  const { navigateWithLoading } = usePageLoading();
   const router = useRouter();  const [activeTab, setActiveTab] = useState('overview');
   const [isAdmin, setisAdmin] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
@@ -30,7 +32,7 @@ export default function DashboardPage() {
 
   const handleLogout = async () => {
     await signOutUser();
-    router.push('/auth');
+    navigateWithLoading('/auth', 'Signing out...');
   };
 
   // Animation variants

@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import LoadingBar from '../components/LoadingBar';
-import { useLoading } from '../hooks/useLoading';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import Header from '../components/Header';
 
 // Import modular sections
@@ -47,11 +46,15 @@ const scrollToSection = (sectionId) => {
 
 export default function HomePage() {
   const [mounted, setMounted] = useState(false);
-  const { isLoading, stopLoading, handleRedirect } = useLoading();
+  const { navigateWithLoading } = usePageLoading();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  const handleRedirect = (path) => {
+    navigateWithLoading(path, 'Loading...');
+  };
 
   if (!mounted) {
     return null;
@@ -175,9 +178,6 @@ export default function HomePage() {
       <div className="min-h-screen flex flex-col bg-gradient-to-br from-cyan-50 via-cyan-50/70 to-cyan-50/50 text-gray-900 relative overflow-x-hidden">
         {/* Structured Data for SEO */}
         <StructuredData />
-      
-      {/* Loading Bar Component */}
-      <LoadingBar isLoading={isLoading} onComplete={stopLoading} />
       
       {/* Optimized Professional Background with Enhanced Cyan Theme */}
       <div className="fixed inset-0 z-0">

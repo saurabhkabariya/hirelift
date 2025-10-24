@@ -3,12 +3,14 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { usePageLoading } from "@/hooks/usePageLoading";
 import ApplyOverlay from "./ApplyOverlay.jsx";
 import JobCard from "./JobCard.jsx";
 import JobNotAvailable from "./JobNotAvailable.jsx";
 
 export default function JobDetail({ job: initialJob, jobId }) {
   const router = useRouter();
+  const { executeWithLoading, navigateWithLoading } = usePageLoading();
   const [showApplyOverlay, setShowApplyOverlay] = useState(false);
   const [job, setJob] = useState(initialJob);
   const [loading, setLoading] = useState(!initialJob);
@@ -321,7 +323,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
                   if (document.referrer && document.referrer.includes(window.location.origin)) {
                     router.back();
                   } else {
-                    router.push('/jobs');
+                    navigateWithLoading('/jobs', 'Loading jobs...');
                   }
                 }}
                 whileHover={{ scale: 1.05 }}

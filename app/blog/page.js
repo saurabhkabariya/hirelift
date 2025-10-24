@@ -4,12 +4,14 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FaClock, FaUser, FaTag, FaArrowRight } from 'react-icons/fa';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import { getAllBlogPosts, getPostsByCategory } from '../../data/blogPosts';
 import Header from '../../components/Header';
 import Head from 'next/head';
 
 export default function BlogPage() {
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const { navigateWithLoading } = usePageLoading();
   const allPosts = getAllBlogPosts();
   const displayedPosts = getPostsByCategory(selectedCategory);
   

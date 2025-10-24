@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Header from '../../components/Header';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import { getAllTemplates, POPULAR_ROLES } from '@/data/emailTemplates';
 import TemplateEditor from '@/components/TemplateEditor';
 import TemplatePreview from '@/components/TemplatePreview';
@@ -12,6 +13,7 @@ import FeedbackButton from '@/components/feedback/FeedbackButton';
 
 export default function PlaygroundPage() {
   const { user } = useAuth();
+  const { navigateWithLoading } = usePageLoading();
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [editableTemplate, setEditableTemplate] = useState(null);  const [templateType, setTemplateType] = useState('email'); // 'email' or 'linkedin'
   const [categoryFilter, setCategoryFilter] = useState('all'); // 'all', 'general', or specific role

@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { FaClock, FaUser, FaTag, FaArrowLeft, FaTwitter, FaLinkedin, FaFacebook, FaShare } from 'react-icons/fa';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import { getAllBlogPosts } from '../../data/blogPosts';
 import { getDetailedBlogContent } from '../../data/blogContent';
 import BlogAnalytics from './BlogAnalytics';
@@ -11,6 +12,7 @@ import MarkdownRenderer from './MarkdownRenderer';
 import Header from '../Header';
 
 export default function BlogPostPage({ post }) {
+  const { navigateWithLoading } = usePageLoading();
   const allPosts = getAllBlogPosts();
   const relatedPosts = allPosts
     .filter(p => p.slug !== post.slug && p.category === post.category)

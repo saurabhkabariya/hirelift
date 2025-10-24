@@ -1,8 +1,12 @@
 import { Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
+import { Suspense } from "react";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { LoadingProvider } from "@/contexts/LoadingContext";
 import { Toaster } from "react-hot-toast";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import UniversalLoadingBar from "@/components/ui/UniversalLoadingBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -145,9 +149,6 @@ export default function RootLayout({ children }) {
         <meta name="theme-color" content="#2563eb" />
         <link rel="canonical" href="https://hirelift.vercel.app" />
         <link rel="alternate" type="application/rss+xml" title="HireLift Blog RSS Feed" href="https://hirelift.vercel.app/feed.xml" />
-        
-        {/* Razorpay Script */}
-        <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
         
         <script
           type="application/ld+json"
@@ -370,37 +371,54 @@ export default function RootLayout({ children }) {
             })
           }}
         />
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-1K3S00G7VG"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-1K3S00G7VG');
-            `,
-          }}
-        />
       </head>
       
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <AuthProvider>
-          <ErrorBoundary>
-            {children}
-          </ErrorBoundary>
-          <Toaster 
-            position="top-right"
-            toastOptions={{
-              duration: 4000,
-              style: {
-                background: '#363636',
-                color: '#fff',
-              },
-            }}
-          />
-        </AuthProvider>
+        {/* Google Analytics */}
+        <Script 
+          src="https://www.googletagmanager.com/gtag/js?id=G-1K3S00G7VG"
+          strategy="afterInteractive"
+        />
+        <Script 
+          id="google-analytics"
+          strategy="afterInteractive"
+        >
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-1K3S00G7VG');
+          `}
+        </Script>
+        
+        {/* Razorpay Script */}
+        <Script 
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="lazyOnload"
+        />
+        
+        <LoadingProvider>
+          <AuthProvider>
+            <Suspense fallback={null}>
+              <UniversalLoadingBar />
+            </Suspense>
+            <ErrorBoundary>
+              {children}
+            </ErrorBoundary>
+            <Toaster 
+              position="top-right"
+              toastOptions={{
+                duration: 4000,
+                style: {
+                  background: '#363636',
+                  color: '#fff',
+                },
+              }}
+            />
+          </AuthProvider>
+        </LoadingProvider>
       </body>
     </html>
   );
