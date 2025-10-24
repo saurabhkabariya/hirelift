@@ -220,7 +220,7 @@ const Header = ({ variant = 'default' }) => {
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
           {navLinks.map((link) => {
             const isActive = activeLink === link.name;
-            const isSpecialLink = link.name === 'Free Jobs' || link.name === 'Templates'|| link.name === 'Resume Review';
+            const isSpecialLink = link.name === 'Free Jobs' || link.name === 'Templates'|| link.name === 'Resume Review' || link.name === 'Free Review';
             return (
               <div key={link.name} className="relative">
                 <button

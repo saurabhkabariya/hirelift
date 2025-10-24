@@ -2,7 +2,11 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { FaClock, FaUser, FaTag, FaArrowLeft, FaTwitter, FaLinkedin, FaFacebook, FaShare } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
+import { 
+  FaClock, FaUser, FaTag, FaArrowLeft, FaTwitter, FaLinkedin, FaFacebook, 
+  FaShare, FaBookmark, FaPrint, FaEnvelope, FaQuote, FaGlobe, FaChartLine
+} from 'react-icons/fa';
 import { usePageLoading } from '@/hooks/usePageLoading';
 import { getAllBlogPosts } from '../../data/blogPosts';
 import { getDetailedBlogContent } from '../../data/blogContent';
@@ -13,6 +17,10 @@ import Header from '../Header';
 
 export default function BlogPostPage({ post }) {
   const { navigateWithLoading } = usePageLoading();
+  const [readingProgress, setReadingProgress] = useState(0);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [estimatedReadTime, setEstimatedReadTime] = useState(post.readTime);
+  
   const allPosts = getAllBlogPosts();
   const relatedPosts = allPosts
     .filter(p => p.slug !== post.slug && p.category === post.category)
@@ -22,32 +30,84 @@ export default function BlogPostPage({ post }) {
   const contentToDisplay = detailedContent || post.content;
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
-  const shareText = `${post.title} - ${post.excerpt}`;
+  const shareText = `${post.title} - Expert career insights from HireLift`;
 
+  // Enhanced reading progress tracking
+  useEffect(() => {
+    const handleScroll = () => {
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (window.scrollY / totalHeight) * 100;
+      setReadingProgress(Math.min(progress, 100));
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Enhanced sharing with tracking
   const handleShare = (platform) => {
     const urls = {
-      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`,
+      twitter: `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}&via=hirelift`,
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`
+      facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
+      email: `mailto:?subject=${encodeURIComponent(post.title)}&body=${encodeURIComponent(`Check out this career insight: ${shareUrl}`)}`
     };
     
     if (urls[platform]) {
-      window.open(urls[platform], '_blank', 'width=600,height=400');
+      if (platform === 'email') {
+        window.location.href = urls[platform];
+      } else {
+        window.open(urls[platform], '_blank', 'width=600,height=400');
+      }
+      
+      // Track sharing event (you can integrate with analytics)
+      if (typeof gtag !== 'undefined') {
+        gtag('event', 'share', {
+          method: platform,
+          content_type: 'blog_post',
+          item_id: post.slug
+        });
+      }
     }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
+      {/* Reading Progress Bar */}
+      <div className="fixed top-0 left-0 w-full h-1 bg-gray-200 z-50">
+        <div 
+          className="h-full bg-gradient-to-r from-blue-600 to-cyan-600 transition-all duration-150"
+          style={{ width: `${readingProgress}%` }}
+        />
+      </div>
+
       <Header variant="blog" />
       <BlogAnalytics slug={post.slug} title={post.title} category={post.category} />
       <BlogSchema post={post} />
       
-      {/* Header */}
-      <section className="py-12 px-6 bg-white border-b mt-20">
-        <div className="max-w-4xl mx-auto">
+      {/* Enhanced Header */}
+      <section className="py-16 px-6 bg-white border-b mt-20 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-50/50 to-cyan-50/50"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-100/30 rounded-full blur-3xl"></div>
+        
+        <div className="max-w-4xl mx-auto relative z-10">
+          {/* Breadcrumb Navigation */}
+          <nav className="flex items-center gap-2 text-sm text-slate-600 mb-8">
+            <Link href="/" className="hover:text-blue-600 transition-colors">Home</Link>
+            <span>/</span>
+            <Link href="/blog" className="hover:text-blue-600 transition-colors">Career Blog</Link>
+            <span>/</span>
+            <Link href={`/blog?category=${post.category}`} className="hover:text-blue-600 transition-colors">
+              {post.category}
+            </Link>
+            <span>/</span>
+            <span className="text-slate-400 truncate">{post.title}</span>
+          </nav>
+
           <Link 
             href="/blog"
-            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-8 transition-colors"
+            className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-8 transition-colors font-semibold"
           >
             <FaArrowLeft className="w-4 h-4" />
             Back to Blog
