@@ -7,38 +7,38 @@ export default function ProblemSolutionSection({ handleRedirect }) {
   const problems = [
     {
       icon: FaTimes,
-      title: "75% of resumes never reach human eyes",
-      description: "ATS systems automatically reject resumes without proper optimization"
+      title: "Sending resumes into a black hole",
+      description: "You're qualified, but your applications disappear without a trace. Months of effort with nothing to show for it."
     },
     {
       icon: FaTimes,
-      title: "Average job seeker waits 6+ months", 
-      description: "Without strategy, most people struggle for half a year to find work"
+      title: "Watching bills pile up while job hunting", 
+      description: "Every rejection feels like another door closing. The financial stress is crushing your confidence."
     },
     {
       icon: FaTimes,
-      title: "Your dream job filled while you wait",
-      description: "Perfect opportunities slip away due to slow, ineffective applications"
+      title: "Your dream job getting filled by someone else",
+      description: "Perfect opportunities slip away while you wonder what you're doing wrong. The doubt is eating you alive."
     }
   ];
 
   const solutions = [
     {
       icon: FaFileAlt,
-      title: "95% ATS Pass Rate Guaranteed",
-      description: "AI-powered optimization that gets your resume past filters every time",
+      title: "See exactly what's killing your applications",
+      description: "We show you the exact words and format issues getting you rejected, so you can fix them and start getting calls",
       color: "from-cyan-500 to-cyan-600"
     },
     {
       icon: FaUsers,
-      title: "Direct Access to 15,000+ HRs", 
-      description: "Skip the black hole - connect directly with hiring managers who matter",
+      title: "Get direct access to 15,000+ hiring managers", 
+      description: "Skip the application black hole - connect directly with people who can hire you today",
       color: "from-blue-500 to-blue-600"
     },
     {
       icon: FaTools,
-      title: "Land Interviews in 2 Weeks",
-      description: "Proven templates and strategies that cut job search time by 70%",
+      title: "Land your next interview in 2 weeks",
+      description: "Stop wondering what's wrong. Get the exact templates and strategies that turn rejections into offers",
       color: "from-cyan-600 to-blue-600"
     }
   ];
@@ -63,13 +63,13 @@ export default function ProblemSolutionSection({ handleRedirect }) {
             <span className="text-cyan-700 font-bold text-sm sm:text-base">⚡ Problem → Solution</span>
           </div>
           <h2 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-black text-gray-800 mb-4 sm:mb-6 leading-tight">
-            Stop Struggling,<br className="sm:hidden" /> Start{' '}
+            Stop Wondering Why,<br className="sm:hidden" /> Start{' '}
             <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">
-              Succeeding
+              Getting Hired
             </span>
           </h2>
           <p className="text-lg sm:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            We've identified the exact problems keeping you from landing interviews - and built the perfect solutions.
+            You're talented. You deserve better than endless rejections. We'll show you exactly what's holding you back - and how to fix it.
           </p>
         </motion.div>
 
@@ -83,30 +83,25 @@ export default function ProblemSolutionSection({ handleRedirect }) {
         >
           <div className="max-w-4xl mx-auto p-8 bg-white/80 backdrop-blur-sm border-l-4 border-cyan-400 rounded-2xl shadow-xl">
             <h4 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center gap-3">
-              <span className="text-red-500">😔</span>
               Sound Familiar?
             </h4>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
               <div className="p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
-                <div className="text-red-400 mb-2">💔</div>
-                <p className="text-sm text-gray-600">"I've applied to 200+ jobs but only got 2 interviews"</p>
+                <p className="text-sm text-gray-600">"I've sent 200+ applications but my phone never rings"</p>
               </div>
               <div className="p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
-                <div className="text-red-400 mb-2">🕳️</div>
-                <p className="text-sm text-gray-600">"My resume disappears into a black hole"</p>
+                <p className="text-sm text-gray-600">"My savings are running out and I'm starting to panic"</p>
               </div>
               <div className="p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
-                <div className="text-red-400 mb-2">❓</div>
-                <p className="text-sm text-gray-600">"I don't know what I'm doing wrong"</p>
+                <p className="text-sm text-gray-600">"I feel like I'm not good enough for any job"</p>
               </div>
               <div className="p-4 bg-white/60 backdrop-blur-sm rounded-xl border border-gray-200">
-                <div className="text-red-400 mb-2">😩</div>
-                <p className="text-sm text-gray-600">"Job search is taking forever and draining me"</p>
+                <p className="text-sm text-gray-600">"Everyone else seems to be getting hired except me"</p>
               </div>
             </div>
             <div className="mt-6 text-center">
               <p className="text-lg font-semibold text-gray-700">
-                <span className="text-cyan-600">Good news:</span> These problems have solutions! ⬇️
+                <span className="text-cyan-600">The truth:</span> It's not your fault - it's your approach
               </p>
             </div>
           </div>

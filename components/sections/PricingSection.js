@@ -37,29 +37,29 @@ export default function PricingSection({ handleRedirect }) {
 
   const plans = [
     {
-      name: "Free Trial",
+      name: "Free Discovery",
       price: `${pricingConfig.symbol}0`,
       period: "",
-      description: "Perfect for testing our Auditor power",
+      description: "See exactly why you're getting rejected",
       icon: FaUsers,
       bgColor: "bg-gray-100",
       iconColor: "text-gray-600",
       buttonColor: "bg-gray-600 hover:bg-gray-700",
       popular: false,
       features: [
-        '1 Resume Review (Worth $10)',
-        'Basic ATS Score & Feedback',
-        'Professional Email Templates Access',
-        'Job Board Access (100+ jobs)',
-        'Community Support',
-        'No Credit Card Required ✅'
+        'See which words are killing your applications',
+        'Get your rejection probability score',
+        'Access proven email templates that get replies',
+        'Browse 100+ fresh job opportunities',
+        'Join our community of job seekers',
+        'No Credit Card Required'
       ],
     },
     {
-      name: "Career Accelerator",
+      name: "Career Breakthrough",
       price: `${pricingConfig.symbol}${pricingConfig.amounts.basic}`,
       period: "/30 days",
-      description: "Most popular - 3x faster results",
+      description: "Get interviews in the next 2 weeks",
       icon: FaStar,
       bgColor: "bg-gradient-to-r from-orange-100 to-red-100",
       iconColor: "text-orange-600",
@@ -67,32 +67,32 @@ export default function PricingSection({ handleRedirect }) {
       popular: true,
       badge: "MOST POPULAR",
       features: [
-        'Unlimited Resume Reviews (Worth $20+)',
-        '1,000+ HR Directory Access',
-        'Advanced ATS Optimization',
-        'Proven Email Templates Library',
-        'Priority Expert Support',
-        'Access to Beta features'
+        'See exactly which lines cause instant rejection - unlimited',
+        'Get 50 HR emails + copy-paste messages that get replies',
+        'Fix every application-killing mistake in your resume',
+        'Templates that landed 1000+ interviews',
+        'Priority support when you need guidance',
+        'Early access to new breakthrough features'
       ],
     },
     {
-      name: "Professional Rewrite",
+      name: "Done-For-You Rewrite",
       price: `${pricingConfig.symbol}${pricingConfig.amounts.professional}`,
       period: "one-time",
-      description: "Human experts rewrite everything",
+      description: "We rewrite your resume FOR YOU using recruiter psychology",
       icon: FaAward,
       bgColor: "bg-gradient-to-r from-cyan-100 to-blue-100",
       iconColor: "text-cyan-600",
       buttonColor: "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700",
       popular: false,
       features: [
-        'Everything in Career Accelerator (30 days)',
-        'Senior expert complete rewrite OR new resume',
-        'Industry-specific premium optimization',
-        '2 expert revisions included',
-        'ATS + human recruiter optimization',
-        'High-quality premium templates & resources',
-        'Priority expert support'
+        'Everything in Career Breakthrough (30 days included)',
+        'Senior expert rewrites your resume from scratch',
+        'Optimized specifically for your industry and role',
+        '2 rounds of expert revisions until perfect',
+        'Recruiter psychology formulas that get callbacks',
+        'Premium templates and resources library',
+        'White-glove priority expert support'
       ],
     }
   ];
@@ -108,16 +108,16 @@ export default function PricingSection({ handleRedirect }) {
           className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
-            Turn Your Resume Into an Interview Magnet
+            Stop Getting Rejected, Start Getting Hired
           </h2>
           <p className="text-xl text-gray-600 mb-6">
-            Join 5,000+ professionals who got hired 3x faster with our proven system
+            Join 5,000+ professionals who discovered what was killing their applications and turned it around
           </p>
           
           {/* URGENCY ELEMENT */}
           <div className="bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 rounded-lg px-6 py-3 mb-4 inline-block">
             <span className="text-orange-800 font-bold">
-              ⚡ Limited Time: 50% OFF + Premium HRs access (ends in 23:47:12)
+              Limited Time: 50% OFF + Get direct access to hiring managers (expires soon)
             </span>
           </div>
           
@@ -125,15 +125,15 @@ export default function PricingSection({ handleRedirect }) {
           <div className="flex flex-wrap justify-center items-center gap-6 text-sm text-gray-600">
             <div className="flex items-center gap-2">
               <span className="text-green-500 font-bold">✓</span>
-              <span><strong>1,847</strong> success stories</span>
+              <span><strong>1,847</strong> people got hired</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-green-500 font-bold">✓</span>
-              <span><strong>4.9/5</strong> satisfaction rating</span>
+              <span><strong>Average 60%</strong> salary increase</span>
             </div>
             <div className="flex items-center gap-2">
               <span className="text-green-500 font-bold">✓</span>
-              <span><strong>30-day</strong> Job Interview</span>
+              <span><strong>2 weeks</strong> to first interview</span>
             </div>
           </div>
         </motion.div>

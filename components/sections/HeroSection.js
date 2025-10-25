@@ -36,27 +36,27 @@ export default function HeroSection({ handleRedirect }) {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 xl:gap-16 items-center min-h-[calc(100vh-120px)]">
           {/* Left Content - Optimized spacing and alignment */}
           <div className="text-center lg:text-left space-y-4 lg:space-y-6 flex flex-col justify-center px-0 lg:px-0">
-            {/* Main Heading - Responsive typography */}
+            {/* Main Heading - Emotional and outcome-focused */}
             <motion.h1
               initial={animConfig.initial}
               animate={animConfig.animate}
               transition={animConfig.transition}
               className="text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-black leading-[1.1] mb-4"
             >
-              <span className="text-gray-900 block mb-2">Land Your Dream Job</span>
+              <span className="text-gray-900 block mb-2">Stop Getting Rejected</span>
               <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent block">
-                3x Faster with HireLift
+                Start Getting Interviewed
               </span>
             </motion.h1>
             
-            {/* Subheadline - Better responsive text sizing */}
+            {/* Subheadline - Focused on pain and transformation */}
             <motion.p
               initial={animConfig.initial}
               animate={animConfig.animate}
               transition={{ ...animConfig.transition, delay: isMobile ? 0.1 : 0.1 }}
               className="text-lg sm:text-xl lg:text-xl xl:text-2xl text-gray-700 leading-relaxed max-w-2xl mx-auto lg:mx-0 mb-6"
             >
-              Join <span className="font-bold text-cyan-600">5,000+ professionals</span> who've used our resume optimizer to beat ATS filters and get <span className="font-bold">3x more interviews</span>
+              Your resume isn't the problem - it's getting buried. Join <span className="font-bold text-cyan-600">5,000+ professionals</span> who discovered exactly why they weren't getting callbacks and <span className="font-bold">transformed their careers in weeks</span>
             </motion.p>
 
             {/* URGENCY + SCARCITY ELEMENT - Better mobile spacing */}
@@ -67,8 +67,8 @@ export default function HeroSection({ handleRedirect }) {
               className="bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 rounded-xl p-3 sm:p-4 mx-auto lg:mx-0"
             >
               <p className="text-sm sm:text-base text-orange-800 font-medium text-center lg:text-left">
-                ⚡ <span className="font-bold">Limited Time:</span> Free Resume Review worth $10
-                <span className="block sm:inline mt-1 sm:mt-0 sm:ml-2"> (Today Only - 47 spots left)</span>
+                <span className="font-bold">Limited Time:</span> See exactly which words are getting you rejected
+                <span className="block sm:inline mt-1 sm:mt-0 sm:ml-2"> (Free analysis worth $50 - Today only)</span>
               </p>
             </motion.div>
             
@@ -87,15 +87,15 @@ export default function HeroSection({ handleRedirect }) {
               >
                 <div className='flex items-center gap-3'>
                 <FaRocket className="w-5 h-5" />
-                Get FREE Review Now 
+                Find Why You're Getting Rejected
                 </div>
                 
-                <span className='block'> (Worth $10) </span>
+                <span className='block'> (Free Analysis - Worth $50) </span>
               </motion.button>
               
               <div className="text-center h-[-webkit-fill-available] flex flex-col justify-center lg:text-left">
-                <p className="text-sm text-gray-600 font-medium">✅ 100% Free • No Credit Card Required</p>
-                <p className="text-xs text-gray-500 mt-1">⭐ 4.9/5 rating from 1,000+ users</p>
+                <p className="text-sm text-gray-600 font-medium">No Credit Card Required • Instant Results</p>
+                <p className="text-xs text-gray-500 mt-1">Join 1,000+ professionals who found their blind spots</p>
               </div>
             </motion.div>
 
@@ -108,15 +108,15 @@ export default function HeroSection({ handleRedirect }) {
             >
               <div className="flex items-center gap-2">
                 <span className="text-cyan-500 font-bold text-base">✓</span>
-                <span><strong>5,000+</strong> resumes optimized</span>
+                <span><strong>5,000+</strong> careers transformed</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-cyan-500 font-bold text-base">✓</span>
-                <span><strong>95%</strong> ATS pass rate</span>
+                <span><strong>Average 60%</strong> salary increase</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-cyan-500 font-bold text-base">✓</span>
-                <span><strong>3x</strong> more interviews guaranteed</span>
+                <span><strong>2 weeks</strong> to first interview</span>
               </div>
             </motion.div>
 
@@ -132,8 +132,8 @@ export default function HeroSection({ handleRedirect }) {
                   S
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-base sm:text-lg text-gray-800 italic leading-relaxed">"Got 5 interview calls in 6 days after using HireLift. Best investment ever!"</p>
-                  <p className="text-sm sm:text-base text-gray-600 mt-2 font-medium">- Sarah K., Software Engineer</p>
+                  <p className="text-base sm:text-lg text-gray-800 italic leading-relaxed">"I was unemployed for 8 months, felt worthless. After HireLift found my resume mistakes, I got 3 offers in 2 weeks. Changed my life completely."</p>
+                  <p className="text-sm sm:text-base text-gray-600 mt-2 font-medium">- Sarah K., Now Senior Software Engineer</p>
                 </div>
               </div>
             </motion.div>
