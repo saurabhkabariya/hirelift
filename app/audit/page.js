@@ -34,6 +34,11 @@ export default function ResumeAuditPage() {
   const router = useRouter();  
   const { executeWithLoading, navigateWithLoading } = usePageLoading();
 
+  // Handle redirects for navigation
+  const handleRedirect = (path) => {
+    navigateWithLoading(path);
+  };
+
   
   
   // Handle logout
@@ -848,26 +853,23 @@ export default function ResumeAuditPage() {
                 handleRedirect={handleRedirect}
               />
 
-              {/* Download Audit Button */}
+              {/* Career Acceleration CTA - Primary Conversion Focus */}
+              <CareerAccelerationCTA user={user} isPremium={isPremium} />
+
+              {/* Download Audit Button - Secondary Action */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.5 }}
-                className="flex justify-center mt-8"
+                transition={{ delay: 0.8 }}
+                className="flex justify-center mt-6"
               >
                 <button
                   onClick={handleDownloadAudit}
-                  className="bg-gradient-to-r from-green-500 to-blue-500 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:scale-105 hover:from-green-600 hover:to-blue-600 transition-all duration-200 flex items-center gap-2 text-lg animate-pop-in"
+                  className="bg-gray-100 text-gray-700 font-medium py-2 px-6 rounded-lg hover:bg-gray-200 transition-all duration-200 flex items-center gap-2 text-sm border border-gray-200"
                 >
-                  <FaFilePdf className="text-white text-2xl" /> Download Audit
+                  <FaFilePdf className="text-gray-500 text-lg" /> Download Results
                 </button>
               </motion.div>
-
-              {/* HR Directory CTA - Conversion Focused */}
-              <HRDirectoryCTA user={user} isPremium={isPremium} />
-
-              {/* Recommended Resume Template Card */}
-              <RecommendedTemplateCard />
               {/* Hidden print-friendly PDF section */}
               
               <div id="audit-pdf-section" style={{ display: 'none', padding: 0, margin: 0, background: '#f8fafc', width: 600, minHeight: 800 }}>
@@ -976,347 +978,192 @@ function ScoreBar({ label, value, color }) {
   );
 }
 
-// Recommended Template Card Component
-function RecommendedTemplateCard() {  const handleDownloadTemplate = () => {
-    try {
-      // Create a download link for the DOCX template
-      const link = document.createElement('a');
-      link.href = '/Recommended_Resume.docx'; // Path to your DOCX file in public folder
-      link.download = 'Recommended_Resume_Template.docx';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Show success toast
-      toast.success('🎉 Resume template downloaded successfully!', {
-        duration: 4000,
-        position: 'top-center',
-        style: {
-          background: '#10b981',
-          color: '#fff',
-          padding: '16px',
-          borderRadius: '12px',
-          fontWeight: '600',
-        },
-      });
-    } catch (error) {
-      toast.error('Failed to download template. Please try again.', {
-        duration: 3000,
-        position: 'top-center',
-      });
-    }
-  };
-
-  return (    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
-      className="mt-8 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 rounded-2xl shadow-2xl p-8 border-2 border-transparent bg-clip-border animate-fade-in relative overflow-hidden group"
-      style={{
-        backgroundImage: 'linear-gradient(white, white), linear-gradient(45deg, #8b5cf6, #3b82f6, #6366f1)',
-        backgroundOrigin: 'border-box',
-        backgroundClip: 'content-box, border-box'
-      }}
-    >
-      <div className="text-center mb-6 mt-4">
-        <motion.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
-          className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl mb-4 shadow-lg"
-        >
-          <FaFilePdf className="text-white text-3xl" />
-        </motion.div>
-        
-        <h3 className="text-2xl font-extrabold bg-gradient-to-r from-purple-700 via-blue-600 to-indigo-600 bg-clip-text text-transparent mb-2">
-          📄 Recommended Resume Template
-        </h3>
-          <p className="text-gray-600 text-lg font-medium">
-          Get our professionally designed template optimized for the highest ATS scores
-        </p>
-        
-        {/* Stats */}
-        <div className="flex justify-center gap-6 mt-4">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">95%</div>
-            <div className="text-xs text-gray-500 font-medium">ATS Pass Rate</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">10k+</div>
-            <div className="text-xs text-gray-500 font-medium">Downloads</div>
-          </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-green-600">4.9★</div>
-            <div className="text-xs text-gray-500 font-medium">User Rating</div>
-          </div>
-        </div>
-      </div>      <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 mb-6 border border-purple-100">
-        <div className="grid md:grid-cols-3 gap-6">
-          {/* Template Preview */}
-          <div className="md:col-span-1">
-            <div className="bg-white rounded-lg shadow-md p-4 border-2 border-dashed border-gray-300 hover:border-purple-400 transition-colors duration-200">
-              <div className="text-center">
-                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg mx-auto mb-3 flex items-center justify-center">
-                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                  </svg>
-                </div>
-                <p className="text-sm font-semibold text-gray-700 mb-1">Template Preview</p>
-                <p className="text-xs text-gray-500">Professional Layout</p>
-                <div className="mt-3 space-y-1">
-                  <div className="h-1 bg-gray-200 rounded"></div>
-                  <div className="h-1 bg-gray-200 rounded w-3/4"></div>
-                  <div className="h-1 bg-gray-200 rounded w-1/2"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          {/* Features */}
-          <div className="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                <FaCheckCircle className="text-green-600 text-sm" />
-              </div>
-              <span className="text-gray-700 font-medium">ATS-Optimized Layout</span>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                <FaCheckCircle className="text-blue-600 text-sm" />
-              </div>
-              <span className="text-gray-700 font-medium">Professional Formatting</span>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                <FaCheckCircle className="text-purple-600 text-sm" />
-              </div>
-              <span className="text-gray-700 font-medium">Industry Best Practices</span>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                <FaCheckCircle className="text-orange-600 text-sm" />
-              </div>
-              <span className="text-gray-700 font-medium">Easy to Customize</span>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-pink-100 rounded-full flex items-center justify-center">
-                <FaCheckCircle className="text-pink-600 text-sm" />
-              </div>
-              <span className="text-gray-700 font-medium">Section Guidelines</span>
-            </div>
-            
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-teal-100 rounded-full flex items-center justify-center">
-                <FaCheckCircle className="text-teal-600 text-sm" />
-              </div>
-              <span className="text-gray-700 font-medium">Keyword Friendly</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="text-center">
-        <motion.button
-          onClick={handleDownloadTemplate}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="bg-gradient-to-r from-purple-600 via-blue-600 to-indigo-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-3 text-lg mx-auto group"
-        >
-          <svg className="w-6 h-6 group-hover:animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-          </svg>
-          Download Template (.docx)
-          <motion.span
-            animate={{ x: [0, 5, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="text-xl"
-          >
-            🚀
-          </motion.span>
-        </motion.button>
-        
-        <p className="text-sm text-gray-500 mt-3 font-medium">
-          ✨ Compatible with Microsoft Word & Google Docs
-        </p>
-      </div>
-    </motion.div>
-  );
-}
-
-// Suggested Improvements Section
-function SuggestedImprovements({ result }) {
-  if (!result) return null;
-  const suggestions = [];
-  if (result.sectionScore < 80) suggestions.push("Add or improve missing resume sections for a more complete profile.");
-  if (result.keywordScore < 80) suggestions.push("Include more relevant keywords from the job description to boost your match.");
-  if (result.lengthScore < 80) suggestions.push("Adjust your resume length for optimal readability (1-2 pages recommended).");
-  if (result.contactScore < 100) suggestions.push("Ensure your contact information is complete and up to date.");
-  if (result.missingKeywords.length)
-    suggestions.push(`Add these missing keywords: ${result.missingKeywords.join(", ")}`);
-  if (result.missingSections.length)
-    suggestions.push(`Include these missing sections: ${result.missingSections.join(", ")}`);
-  if (!suggestions.length) suggestions.push("Great job! Your resume is well-optimized for ATS.");
-
-  return (
-    <div className="mt-8 p-6 rounded-xl bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 shadow-inner animate-fade-in">
-      <h3 className="text-xl font-bold text-blue-700 mb-3 flex items-center gap-2">
-        <FaUserEdit className="text-blue-500" /> Suggested Improvements
-      </h3>
-      <ul className="list-disc pl-6 space-y-2">
-        {suggestions.map((s, i) => (
-          <li key={i} className="text-blue-800 text-base animate-pop-in">
-            {s}
-          </li>
-        ))}
-      </ul>
-      
-    </div>
-  );
-}
-
-// HR Directory CTA Component
-function HRDirectoryCTA({ user, isPremium }) {
+// Career Acceleration CTA Component - Primary Conversion Focus
+function CareerAccelerationCTA({ user, isPremium }) {
   const router = useRouter();
 
   const handleUpgradeClick = () => {
     router.push('/pricing');
   };
 
-  const handleHRDirectoryClick = () => {
-    router.push('/company-search');
-  };
-
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.2 }}
-      className="mt-8 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-50 rounded-2xl shadow-2xl p-8 border-2 border-transparent bg-clip-border relative overflow-hidden"
-      style={{
-        backgroundImage: 'linear-gradient(white, white), linear-gradient(45deg, #7c3aed, #3b82f6, #06b6d4)',
-        backgroundOrigin: 'border-box',
-        backgroundClip: 'content-box, border-box'
-      }}
+      transition={{ duration: 0.8, delay: 0.4 }}
+      className="mt-12 bg-gradient-to-br from-blue-900 via-blue-800 to-purple-900 rounded-3xl shadow-2xl p-12 text-white relative overflow-hidden"
     >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-10 left-10 w-20 h-20 bg-purple-500 rounded-full blur-xl"></div>
-        <div className="absolute bottom-10 right-10 w-32 h-32 bg-blue-500 rounded-full blur-xl"></div>
-      </div>
-
-      <div className="relative z-10 p-4">
-        <div className="text-center mb-6">
-          <motion.div
-            initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.4, type: "spring", stiffness: 200 }}
-            className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-purple-600 to-blue-600 rounded-2xl mb-4 shadow-lg"
-          >
-            <FaBuilding className="text-white text-3xl" />
-          </motion.div>
-          
-          <h3 className="text-2xl font-extrabold bg-gradient-to-r from-purple-700 via-blue-600 to-cyan-600 bg-clip-text text-transparent mb-2">
-            🎯 Ready for the Next Step?
-          </h3>
-          <p className="text-gray-700 text-lg font-medium mb-4">
-            Your resume is optimized! Now connect directly with hiring managers and skip the application queue.
+      {/* Background Effects */}
+      <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-3xl"></div>
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-white/10 to-transparent rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-blue-400/20 to-transparent rounded-full blur-2xl"></div>
+      
+      <div className="relative z-10 text-center">
+        {/* Emotional Hook */}
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.6, type: "spring", stiffness: 150 }}
+          className="mb-8"
+        >
+          <h2 className="text-4xl md:text-5xl font-black mb-4 leading-tight">
+            You've Done the Hard Part.
+            <br />
+            <span className="bg-gradient-to-r from-yellow-300 via-orange-400 to-red-400 bg-clip-text text-transparent">
+              Now Get Shortlisted.
+            </span>
+          </h2>
+          <p className="text-xl md:text-2xl text-blue-100 font-medium mb-2">
+            Your resume is ready. Interviews are literally one click away.
           </p>
-        </div>
+          <p className="text-lg text-blue-200 opacity-90">
+            Stop hoping. Start getting called back.
+          </p>
+        </motion.div>
 
-        {/* Stats Row */}
-        <div className="flex justify-center gap-8 mb-6">
-          <div className="text-center">
-            <div className="text-2xl font-bold text-purple-600">500+</div>
-            <div className="text-sm text-gray-600 font-medium">HR Contacts</div>
+        {/* Value Proposition - Real Statistics */}
+        <motion.div
+          initial={{ y: 30, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.8 }}
+          className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-white/20"
+        >
+          <div className="grid md:grid-cols-3 gap-6 mb-6">
+            <div className="text-center">
+              <div className="text-4xl font-black text-yellow-300 mb-2">1,000+</div>
+              <div className="text-sm text-blue-100 font-medium">HR Contacts in Database</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black text-green-300 mb-2">75%</div>
+              <div className="text-sm text-blue-100 font-medium">Email Response Rate</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-black text-orange-300 mb-2">85%</div>
+              <div className="text-sm text-blue-100 font-medium">ATS Pass Rate</div>
+            </div>
           </div>
+          
           <div className="text-center">
-            <div className="text-2xl font-bold text-blue-600">75%</div>
-            <div className="text-sm text-gray-600 font-medium">Response Rate</div>
+            <p className="text-blue-50 font-semibold text-lg mb-3">
+              "I was struggling for 6 months. After using HireLift's resume review and cold email templates, I landed my dream job in 3 weeks!"
+            </p>
+            <p className="text-blue-200 text-sm">- Verified HireLift User from testimonials</p>
           </div>
-          <div className="text-center">
-            <div className="text-2xl font-bold text-cyan-600">3x</div>
-            <div className="text-sm text-gray-600 font-medium">Faster Hiring</div>
-          </div>
-        </div>
+        </motion.div>
 
-        {/* Features Grid */}
-        <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 mb-6 border border-purple-100">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <div className="flex items-center gap-2">
-              <FaCheckCircle className="text-green-500 text-sm" />
-              <span className="text-gray-700 text-sm font-medium">Direct HR Emails</span>
+        {/* What They Get - Real Benefits */}
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 1.0 }}
+          className="mb-10"
+        >
+          <h3 className="text-2xl font-bold mb-6 text-yellow-300">
+            Stop Playing the Numbers Game. Start Getting Results.
+          </h3>
+          <div className="grid md:grid-cols-2 gap-4 text-left max-w-2xl mx-auto">
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center mt-1">
+                <FaCheckCircle className="text-green-900 text-sm" />
+              </div>
+              <div>
+                <div className="font-semibold text-white">1,000+ HR Directory Access</div>
+                <div className="text-blue-200 text-sm">Direct contacts, LinkedIn profiles, company details.</div>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <FaCheckCircle className="text-green-500 text-sm" />
-              <span className="text-gray-700 text-sm font-medium">LinkedIn Profiles</span>
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center mt-1">
+                <FaCheckCircle className="text-green-900 text-sm" />
+              </div>
+              <div>
+                <div className="font-semibold text-white">Proven Email Templates Library</div>
+                <div className="text-blue-200 text-sm">50+ cold email formats with 75% response rate.</div>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <FaCheckCircle className="text-green-500 text-sm" />
-              <span className="text-gray-700 text-sm font-medium">Message Templates</span>
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center mt-1">
+                <FaCheckCircle className="text-green-900 text-sm" />
+              </div>
+              <div>
+                <div className="font-semibold text-white">Advanced ATS Optimization</div>
+                <div className="text-blue-200 text-sm">Premium resume formatting & keyword strategies.</div>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <FaCheckCircle className="text-green-500 text-sm" />
-              <span className="text-gray-700 text-sm font-medium">Company Insights</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FaCheckCircle className="text-green-500 text-sm" />
-              <span className="text-gray-700 text-sm font-medium">Job Openings</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <FaCheckCircle className="text-green-500 text-sm" />
-              <span className="text-gray-700 text-sm font-medium">Hiring Trends</span>
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 bg-green-400 rounded-full flex items-center justify-center mt-1">
+                <FaCheckCircle className="text-green-900 text-sm" />
+              </div>
+              <div>
+                <div className="font-semibold text-white">Priority Expert Support</div>
+                <div className="text-blue-200 text-sm">Fast-track assistance & career guidance.</div>
+              </div>
             </div>
           </div>
-        </div>
+        </motion.div>
 
-        {/* CTA Section */}
-        <div className="text-center">
-          {isPremium ? (
-            <motion.button
-              onClick={handleHRDirectoryClick}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-3 text-lg mx-auto group"
-            >
-              <FaBuilding className="w-6 h-6 group-hover:animate-bounce" />
-              Access HR Directory
-              <motion.span
-                animate={{ x: [0, 5, 0] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-                className="text-xl"
-              >
-                🚀
-              </motion.span>
-            </motion.button>
-          ) : (
-            <div className="space-y-4">
-              <motion.button
-                onClick={handleUpgradeClick}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="bg-gradient-to-r from-purple-600 via-blue-600 to-cyan-600 text-white font-bold py-4 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-3 text-lg mx-auto group"
-              >
-                <FaCrown className="w-6 h-6 group-hover:animate-bounce" />
-                Unlock HR Directory - Upgrade to Pro
-                <motion.span
-                  animate={{ x: [0, 5, 0] }}
-                  transition={{ duration: 1.5, repeat: Infinity }}
-                  className="text-xl"
-                >
-                  💎
-                </motion.span>
-              </motion.button>
-              
-              <p className="text-sm text-gray-600">
-                🎉 <strong>Special Offer:</strong> Get unlimited reviews + HR directory access
-              </p>
+        {/* Urgency & CTA */}
+        <motion.div
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 1.2, type: "spring", stiffness: 200 }}
+          className="space-y-6"
+        >
+          {!isPremium && (
+            <div className="bg-gradient-to-r from-red-500/20 to-orange-500/20 border border-red-400/30 rounded-xl p-4 mb-6">
+              <div className="flex items-center justify-center gap-2 text-orange-300 font-bold mb-2">
+                <svg className="w-5 h-5 animate-pulse" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                </svg>
+                🔥 LIMITED TIME: 50% OFF Career Acceleration
+              </div>
+              <div className="text-center">
+                <div className="text-red-200 text-sm mb-2">
+                  Special pricing for audit users • Regular price ₹199
+                </div>
+                <div className="text-orange-300 font-bold text-lg">
+                  Get it now for just ₹99 - Save ₹100!
+                </div>
+              </div>
             </div>
           )}
-        </div>
+
+          <motion.button
+            onClick={handleUpgradeClick}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.98 }}
+            className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-black font-black py-6 px-12 rounded-2xl shadow-2xl text-2xl mx-auto flex items-center gap-4 hover:shadow-3xl transition-all duration-300 group relative overflow-hidden"
+          >
+            {/* Pulse animation background */}
+            <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            
+            <motion.div
+              animate={{ rotate: [0, 10, -10, 0] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="relative z-10"
+            >
+              🚀
+            </motion.div>
+            <span className="relative z-10">
+              {isPremium ? 'Access Your Career Tools' : 'Get HR Directory + Templates'}
+            </span>
+            <motion.div
+              animate={{ x: [0, 5, 0] }}
+              transition={{ duration: 1, repeat: Infinity }}
+              className="text-3xl relative z-10"
+            >
+              →
+            </motion.div>
+          </motion.button>
+
+          <div className="text-center space-y-2">
+            <div className="text-blue-200 text-sm">
+              ✅ 30-day money-back guarantee • ✅ Results in 14 days or full refund
+            </div>
+            <div className="text-blue-300 text-xs">
+              💡 Join 500+ professionals who upgraded their careers with HireLift
+            </div>
+          </div>
+        </motion.div>
       </div>
     </motion.div>
   );
