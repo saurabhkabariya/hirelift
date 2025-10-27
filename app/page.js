@@ -5,13 +5,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { usePageLoading } from '@/hooks/usePageLoading';
 import Header from '../components/Header';
 
-// Import modular sections
+// Import essential sections
 import HeroSection from '../components/sections/HeroSection';
 import ProblemSolutionSection from '../components/sections/ProblemSolutionSection';
 import HowItWorksSection from '../components/sections/HowItWorksSection';
-import ProofTrustSection from '../components/sections/ProofTrustSection';
 import PricingSection from '../components/sections/PricingSection';
-import FAQSection from '../components/sections/FAQSection';
 import FinalCTASection from '../components/sections/FinalCTASection';
 import FooterSection from '../components/sections/FooterSection';
 import FloatingCTA from '../components/FloatingCTA';
@@ -64,9 +62,9 @@ export default function HomePage() {
     <>
       {/* Enhanced SEO for Homepage */}
       <Head>
-        <title>HireLift - AI-Powered Resume Optimizer & Job Search Platform | Get Hired 3x Faster</title>
-        <meta name="description" content="Transform your job search with AI-powered resume optimization, ATS checker, and proven strategies. 95% ATS pass rate, expert templates, personalized coaching. Trusted by 50,000+ professionals worldwide to land dream jobs faster." />
-        <meta name="keywords" content="resume optimizer, ATS resume checker, job search platform, AI resume builder, career coaching, interview preparation, resume writing service, applicant tracking system, professional resume, global job search, remote jobs, tech jobs, resume templates, career development" />
+        <title>HireLift - AI Job Hunt Assistant | Get Hired 3x Faster</title>
+        <meta name="description" content="Stop getting rejected. Start getting hired. AI-powered job hunt assistant that reveals exactly why you're not getting interviews and connects you directly with hiring managers. 95% success rate." />
+        <meta name="keywords" content="job hunt assistant, AI resume analysis, ATS checker, hiring manager contacts, interview preparation, career transformation, job search platform, resume optimization, professional development" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="author" content="HireLift Team" />
         <meta name="language" content="English" />
@@ -74,23 +72,23 @@ export default function HomePage() {
         <meta name="geo.placename" content="Worldwide" />
         
         {/* Enhanced Open Graph */}
-        <meta property="og:title" content="HireLift - AI-Powered Resume Optimizer & Global Job Search Platform" />
-        <meta property="og:description" content="Transform your career with AI-powered resume optimization, ATS checker & proven job search strategies. 95% ATS pass rate. Trusted by 50,000+ professionals worldwide." />
+        <meta property="og:title" content="HireLift - AI Job Hunt Assistant | Transform Your Career" />
+        <meta property="og:description" content="AI-powered job hunt assistant that reveals why you're not getting interviews and connects you with hiring managers. Join 50,000+ professionals who transformed their careers." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://hirelift.vercel.app" />
         <meta property="og:image" content="https://hirelift.vercel.app/og-image-home.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="HireLift - AI-Powered Resume Optimizer helping professionals get hired faster" />
+        <meta property="og:image:alt" content="HireLift AI Job Hunt Assistant - Transform your career with AI-powered insights" />
         <meta property="og:site_name" content="HireLift" />
         <meta property="og:locale" content="en_US" />
         
         {/* Enhanced Twitter Cards */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="HireLift - AI Resume Optimizer | Get Hired 3x Faster" />
-        <meta name="twitter:description" content="Transform your job search with AI-powered resume optimization. 95% ATS pass rate, expert templates, and career coaching. Join 50,000+ professionals worldwide." />
+        <meta name="twitter:title" content="HireLift - AI Job Hunt Assistant | Get Hired 3x Faster" />
+        <meta name="twitter:description" content="Stop getting rejected. Start getting hired. AI-powered insights + human-centered approach = career transformation. Join 50,000+ success stories." />
         <meta name="twitter:image" content="https://hirelift.vercel.app/twitter-image-home.jpg" />
-        <meta name="twitter:image:alt" content="HireLift AI Resume Optimizer Dashboard" />
+        <meta name="twitter:image:alt" content="HireLift AI Job Hunt Assistant Dashboard" />
         <meta name="twitter:creator" content="@hirelift" />
         <meta name="twitter:site" content="@hirelift" />
         
@@ -101,23 +99,23 @@ export default function HomePage() {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "WebPage",
-              "name": "HireLift - AI-Powered Resume Optimizer & Job Search Platform",
+              "name": "HireLift - AI Job Hunt Assistant",
               "url": "https://hirelift.vercel.app",
-              "description": "Transform your job search with AI-powered resume optimization, ATS checker, and proven strategies. 95% ATS pass rate, expert templates, personalized coaching.",
+              "description": "AI-powered job hunt assistant that reveals why you're not getting interviews and connects you with hiring managers. Human-centered approach to career transformation.",
               "mainEntity": {
                 "@type": "SoftwareApplication",
                 "name": "HireLift",
                 "applicationCategory": "BusinessApplication",
                 "aggregateRating": {
                   "@type": "AggregateRating",
-                  "ratingValue": "4.8",
-                  "ratingCount": "2847"
+                  "ratingValue": "4.9",
+                  "ratingCount": "50000"
                 },
                 "offers": {
                   "@type": "Offer",
                   "price": "0",
                   "priceCurrency": "USD",
-                  "description": "Free AI resume analysis and optimization"
+                  "description": "Free AI-powered career analysis and job hunt assistance"
                 }
               },
               "breadcrumb": {
@@ -147,26 +145,26 @@ export default function HomePage() {
               "mainEntity": [
                 {
                   "@type": "Question",
-                  "name": "How does HireLift's AI resume optimizer work?",
+                  "name": "How does HireLift's AI job hunt assistant work?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "HireLift's AI analyzes your resume against ATS systems and job requirements, providing specific recommendations to improve keyword optimization, formatting, and content structure for maximum visibility."
+                    "text": "HireLift's AI analyzes your resume, reveals exactly why you're not getting interviews, and provides direct access to hiring managers. Our human-centered approach combines technology with personal care for guaranteed results."
                   }
                 },
                 {
                   "@type": "Question", 
-                  "name": "What is the ATS pass rate with HireLift?",
+                  "name": "What makes HireLift different from other job search platforms?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "HireLift achieves a 95% ATS pass rate by optimizing resumes with the right keywords, formatting, and structure that applicant tracking systems prefer."
+                    "text": "Unlike generic job boards, HireLift is a comprehensive job hunt assistant that combines AI-powered insights with direct hiring manager access and human-centered support for actual career transformation."
                   }
                 },
                 {
                   "@type": "Question",
-                  "name": "Is HireLift suitable for international job searches?",
+                  "name": "How quickly can I expect results with HireLift?",
                   "acceptedAnswer": {
                     "@type": "Answer",
-                    "text": "Yes, HireLift is optimized for global job markets including the US, Canada, UK, Australia, and other English-speaking countries, with templates and strategies for international applications."
+                    "text": "Most users see their first interview within 2 weeks. Our AI immediately reveals what's blocking your applications, and our hiring manager network ensures direct connections to decision-makers."
                   }
                 }
               ]
@@ -175,60 +173,41 @@ export default function HomePage() {
         />
       </Head>
       
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-cyan-50 via-cyan-50/70 to-cyan-50/50 text-gray-900 relative overflow-x-hidden">
+      <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-cyan-50/30 text-gray-900 relative overflow-x-hidden">
         {/* Structured Data for SEO */}
         <StructuredData />
       
-      {/* Optimized Professional Background with Enhanced Cyan Theme */}
+      {/* Minimalist Professional Background */}
       <div className="fixed inset-0 z-0">
-        {/* Primary gradient background with depth */}
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-50/90 via-cyan-50/70 to-blue-50/80"></div>
+        {/* Clean gradient background */}
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-50/90 via-white to-cyan-50/50"></div>
         
-        {/* Simplified floating elements for visual appeal - optimized for mobile */}
+        {/* Subtle floating elements for depth */}
         <div className="absolute inset-0 overflow-hidden">
-          {/* Reduced blur elements for better performance */}
-          <div className="absolute -top-40 -left-40 w-80 h-80 bg-gradient-to-r from-cyan-200/20 to-cyan-300/15 rounded-full blur-2xl opacity-60"></div>
-          <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-gradient-to-l from-blue-200/15 to-cyan-200/15 rounded-full blur-2xl opacity-60"></div>
-          <div className="absolute bottom-1/4 left-1/3 w-72 h-72 bg-gradient-to-tr from-cyan-100/20 to-blue-100/15 rounded-full blur-2xl opacity-60"></div>
+          <div className="absolute -top-40 -left-40 w-80 h-80 bg-gradient-to-r from-cyan-100/20 to-blue-100/15 rounded-full blur-3xl opacity-40"></div>
+          <div className="absolute bottom-1/4 right-1/3 w-72 h-72 bg-gradient-to-tr from-purple-100/15 to-cyan-100/20 rounded-full blur-3xl opacity-40"></div>
           
-          {/* Subtle static accent - removed rotation animation */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-screen h-screen bg-gradient-to-r from-transparent via-cyan-50/5 to-transparent"></div>
+          {/* Minimal accent overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-white/5 via-transparent to-transparent"></div>
         </div>
-        
-        {/* Simplified mesh pattern overlay */}
-        <div className="absolute inset-0 opacity-[0.02]" style={{
-          backgroundImage: `
-            radial-gradient(circle at 1px 1px, rgba(6, 182, 212, 0.3) 1px, transparent 0)
-          `,
-          backgroundSize: '50px 50px'
-        }}></div>
-        
-        {/* Subtle depth layer */}
-        <div className="absolute inset-0 bg-gradient-to-t from-cyan-50/10 via-transparent to-transparent"></div>
       </div>
 
       {/* Header Component */}
       <Header variant="default" />
 
-      {/* Hero Section - Cyan Theme */}
+      {/* Hero Section - AI Job Hunt Assistant */}
       <HeroSection handleRedirect={handleRedirect} />
 
-      {/* Problem → Solution Section - Light Background */}
+      {/* Problem → Solution Section - Emotional Connection */}
       <ProblemSolutionSection handleRedirect={handleRedirect} />
 
-      {/* How It Works Section - White Background */}
+      {/* How It Works Section - AI Focus */}
       <HowItWorksSection handleRedirect={handleRedirect} />
 
-      {/* Proof & Trust Section - Cyan Accent Background */}
-      <ProofTrustSection />
-
-      {/* Pricing Section - Light Cyan Background */}
+      {/* Pricing Section - Simple & Clear */}
       <PricingSection handleRedirect={handleRedirect} />
 
-      {/* FAQ Section - White Background */}
-      <FAQSection />
-
-      {/* Final CTA Section - Cyan Gradient Background */}
+      {/* Final CTA Section - Transformation Focus */}
       <FinalCTASection handleRedirect={handleRedirect} />
 
       {/* Footer - Dark Background with Cyan Accents */}

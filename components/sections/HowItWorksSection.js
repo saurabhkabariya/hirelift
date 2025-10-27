@@ -1,89 +1,99 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { FaUpload, FaChartLine, FaCrown } from 'react-icons/fa';
+import { FaUpload, FaBrain, FaRocket, FaArrowRight } from 'react-icons/fa';
 
 export default function HowItWorksSection({ handleRedirect }) {
   const steps = [
     {
-      step: "1",
-      title: "Upload Resume",
-      description: "Simply upload your current resume in PDF format. Our AI will analyze it instantly and identify all the issues.",
+      number: "01",
       icon: FaUpload,
-      color: "from-cyan-500 to-cyan-600"
+      title: "Upload Your Resume",
+      description: "Drag, drop, done. Our AI starts analyzing immediately.",
+      color: "from-cyan-400 to-cyan-500"
     },
     {
-      step: "2", 
-      title: "Get ATS Score + Fix Suggestions",
-      description: "Receive a detailed ATS compatibility score with specific suggestions on keywords, formatting, and content improvements.",
-      icon: FaChartLine,
-      color: "from-blue-500 to-blue-600"
+      number: "02", 
+      icon: FaBrain,
+      title: "AI Reveals the Truth",
+      description: "See exactly what's blocking you from interviews. No sugar-coating.",
+      color: "from-green-400 to-green-500"
     },
     {
-      step: "3",
-      title: "Upgrade for Unlimited Reviews & HR Directory", 
-      description: "Access unlimited resume Reviews, 500+ verified HR contacts, cold email templates, and job preparation tools.",
-      icon: FaCrown,
-      color: "from-cyan-600 to-blue-600"
+      number: "03",
+      icon: FaRocket,
+      title: "Transform & Get Hired",
+      description: "Fix the issues, connect with hiring managers, land interviews.",
+      color: "from-purple-400 to-purple-500"
     }
   ];
 
   return (
-    <section id="how-it-works" className="py-12 md:py-16 lg:py-20 px-4 md:px-6 relative overflow-hidden">
-      {/* Clean Background Pattern */}
-      <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-cyan-50/20 to-transparent"></div>
-      <div className="absolute top-1/3 right-0 w-72 h-72 bg-gradient-to-bl from-cyan-100/40 to-transparent rounded-full"></div>
-      <div className="relative max-w-6xl mx-auto">
+    <section id="how-it-works" className="py-20 lg:py-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-gray-100">
+      
+      <div className="max-w-6xl mx-auto">
+        
+        {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="text-center mb-8 md:mb-12 lg:mb-14"
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center max-w-4xl mx-auto mb-20"
         >
-          <div className="inline-flex items-center gap-2 bg-white/70 backdrop-blur-sm px-4 md:px-6 py-2 md:py-3 rounded-full mb-4 md:mb-6 border-2 border-cyan-200 shadow-lg">
-            <span className="text-cyan-700 font-bold text-sm md:text-base">🚀 Simple Process</span>
-          </div>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-800 mb-4 md:mb-6">
-            How It <span className="bg-gradient-to-r from-cyan-600 to-blue-600 bg-clip-text text-transparent">Works</span>
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black mb-8 leading-tight">
+            <span className="text-gray-900 drop-shadow-sm">From Rejection to</span>
+            <span className="block bg-gradient-to-r from-cyan-700 to-purple-700 bg-clip-text text-transparent mt-2 drop-shadow-sm">
+              Job Offer in 3 Steps
+            </span>
           </h2>
-          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">
-            Get from resume upload to interview calls in just 3 simple steps
+          
+          <p className="text-xl lg:text-2xl text-gray-800 font-semibold max-w-2xl mx-auto leading-relaxed drop-shadow-sm">
+            Simple. Fast. Effective. <br />
+            <span className="font-black text-gray-900">Start seeing results in minutes.</span>
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-12 lg:mb-14">
+        {/* Steps */}
+        <div className="space-y-12 lg:space-y-0 lg:grid lg:grid-cols-3 lg:gap-12 mb-16">
           {steps.map((step, index) => (
             <motion.div
               key={index}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-30px" }}
-              transition={{ duration: 0.4, delay: index * 0.05, ease: "easeOut" }}
-              className="relative group"
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, delay: index * 0.2 }}
+              className="relative group text-center lg:text-left flex flex-col"
             >
-              {/* Connecting Line */}
-              {index < steps.length - 1 && (
-                <div className="hidden md:block absolute top-12 lg:top-16 left-full w-full h-0.5 bg-gradient-to-r from-cyan-300 to-blue-300 z-0 transform translate-x-4"></div>
-              )}
+              {/* Step Number Background */}
+              <div className="text-6xl lg:text-7xl ml-auto font-black text-gray-500/80 mb-2 select-none leading-none drop-shadow-sm">
+                {step.number}
+              </div>
               
-              <div className="relative bg-white/80 backdrop-blur-sm p-6 md:p-8 rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 text-center border-t-4 border-cyan-400">
-                {/* Step Number */}
-                <div className="absolute -top-3 md:-top-4 left-1/2 transform -translate-x-1/2">
-                  <div className={`w-6 h-6 md:w-8 md:h-8 bg-gradient-to-r ${step.color} rounded-full flex items-center justify-center text-white font-bold text-xs md:text-sm`}>
-                    {step.step}
+              {/* Icon */}
+              <div className="relative mb-6 -mt-8 lg:-mt-10">
+                <div className={`w-18 h-18 lg:w-20 lg:h-20 bg-gradient-to-r ${step.color} rounded-3xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300 mx-auto lg:mx-0 shadow-lg`}>
+                  <step.icon className="text-white text-2xl lg:text-3xl" />
+                </div>
+                <div className={`absolute -inset-4 bg-gradient-to-r ${step.color} opacity-20 rounded-3xl blur-xl group-hover:opacity-40 transition-opacity duration-300`}></div>
+              </div>
+              
+              {/* Content */}
+              <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 mb-4 leading-tight">
+                {step.title}
+              </h3>
+              <p className="text-gray-600 leading-relaxed text-lg max-w-xs mx-auto lg:mx-0">
+                {step.description}
+              </p>
+              
+              {/* Arrow for desktop */}
+              {index < steps.length - 1 && (
+                <div className="hidden lg:block absolute top-25 -right-6 transform -translate-y-1/2 z-10">
+                  <div className="w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center">
+                    <FaArrowRight className="text-gray-400 text-lg" />
                   </div>
                 </div>
-
-                {/* Icon */}
-                <div className={`inline-flex p-3 md:p-4 bg-gradient-to-r ${step.color} rounded-2xl mb-4 md:mb-6 mt-3 md:mt-4`}>
-                  <step.icon className="w-6 h-6 md:w-8 md:h-8 text-white" />
-                </div>
-
-                {/* Content */}
-                <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-3 md:mb-4">{step.title}</h3>
-                <p className="text-sm md:text-base text-gray-600 leading-relaxed">{step.description}</p>
-              </div>
+              )}
             </motion.div>
           ))}
         </div>
@@ -93,17 +103,27 @@ export default function HowItWorksSection({ handleRedirect }) {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ delay: 0.8 }}
-          className="text-center"
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="text-center bg-white/60 backdrop-blur-sm rounded-3xl p-8 lg:p-12 shadow-xl border border-gray-200/50"
         >
-          <button 
+          <motion.button 
             onClick={() => handleRedirect('/audit')}
-            className="px-6 md:px-8 py-3 md:py-4 bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-lg md:text-xl rounded-xl shadow-xl hover:shadow-cyan-500/30 transition-all duration-300 hover:scale-105"
+            whileHover={{ scale: 1.05, y: -2 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-16 py-6 bg-gradient-to-r from-cyan-600 to-purple-600 text-white font-bold text-xl lg:text-2xl rounded-2xl shadow-2xl hover:shadow-cyan-500/40 transition-all duration-300 flex items-center gap-4 mx-auto hover:from-cyan-700 hover:to-purple-700"
           >
-            Try Your Free Review Now
-          </button>
-          <p className="text-sm md:text-base text-gray-500 mt-3 md:mt-4 px-4">No credit card required • Takes less than 2 minutes</p>
+            <FaBrain className="w-7 h-7" />
+            Start Your AI Analysis Now
+            <FaArrowRight className="w-6 h-6" />
+          </motion.button>
+          
+          <p className="text-gray-700 mt-6 text-lg font-medium">
+            <span className="text-green-600 font-bold">✨ Free forever</span> • 
+            <span className="text-blue-600 font-bold"> ⚡ Results in 30 seconds</span> • 
+            <span className="text-purple-600 font-bold"> 🎯 95% accuracy</span>
+          </p>
         </motion.div>
+
       </div>
     </section>
   );
