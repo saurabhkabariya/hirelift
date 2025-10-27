@@ -754,16 +754,16 @@ export default function ResumeAuditPage() {
                 className="hidden"
               />
               {file ? (
-                <div className="flex items-center gap-3 animate-fade-in">
-                  <FaFilePdf className="text-3xl text-blue-500" />
-                  <span className="font-medium text-blue-700 truncate max-w-[180px]">{file.name}</span>
+                <div className="flex items-center gap-3 animate-fade-in w-full">
+                  <FaFilePdf className="text-2xl sm:text-3xl text-blue-500 flex-shrink-0" />
+                  <span className="font-medium text-blue-700 truncate text-sm sm:text-base max-w-[120px] sm:max-w-[180px] md:max-w-[250px]">{file.name}</span>
                   <button
                     type="button"
-                    className="ml-2 text-red-400 hover:text-red-600 focus:outline-none"
+                    className="ml-auto text-red-400 hover:text-red-600 focus:outline-none flex-shrink-0"
                     onClick={e => { e.stopPropagation(); setFile(null); }}
                     aria-label="Remove file"
                   >
-                    <FaTimesCircle className="text-lg" />
+                    <FaTimesCircle className="text-lg sm:text-xl" />
                   </button>
                 </div>
               ) : (
@@ -1131,7 +1131,7 @@ function CareerAccelerationCTA({ user, isPremium }) {
             onClick={handleUpgradeClick}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
-            className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-black font-black py-6 px-12 rounded-2xl shadow-2xl text-2xl mx-auto flex items-center gap-4 hover:shadow-3xl transition-all duration-300 group relative overflow-hidden"
+            className="bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 text-black font-black py-4 sm:py-6 px-6 sm:px-12 rounded-2xl shadow-2xl text-lg sm:text-xl md:text-2xl mx-auto flex items-center justify-center gap-2 sm:gap-4 hover:shadow-3xl transition-all duration-300 group relative overflow-hidden w-full max-w-md sm:max-w-lg md:max-w-xl"
           >
             {/* Pulse animation background */}
             <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -1139,17 +1139,17 @@ function CareerAccelerationCTA({ user, isPremium }) {
             <motion.div
               animate={{ rotate: [0, 10, -10, 0] }}
               transition={{ duration: 2, repeat: Infinity }}
-              className="relative z-10"
+              className="relative z-10 text-xl sm:text-2xl flex-shrink-0"
             >
               🚀
             </motion.div>
-            <span className="relative z-10">
+            <span className="relative z-10 text-center leading-tight">
               {isPremium ? 'Access Your Career Tools' : 'Get HR Directory + Templates'}
             </span>
             <motion.div
               animate={{ x: [0, 5, 0] }}
               transition={{ duration: 1, repeat: Infinity }}
-              className="text-3xl relative z-10"
+              className="text-xl sm:text-2xl md:text-3xl relative z-10 flex-shrink-0"
             >
               →
             </motion.div>

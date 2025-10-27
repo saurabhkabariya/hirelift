@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { extractTextFromPDF } from '@/services/extractTextFromPDF';
 import { cleanText } from '@/services/cleanText';
 import { scoreResume } from '@/services/scoreResume';
+import aiResumeService from '@/services/aiResumeService';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
 import jwt from 'jsonwebtoken';
@@ -76,8 +77,16 @@ export async function POST(req) {
     // Clean text
     const text = cleanText(rawText);
 
-    // Score resume
-    const result = scoreResume({ text, pageCount, keywords });
+    // AI-powered resume audit with automatic fallback
+    console.log('🔍 Starting AI-powered resume audit...');
+    const result = await aiResumeService.auditResume({ text, pageCount, keywords });
+    
+    // Log audit method used
+    if (result.isAIGenerated) {
+      console.log(`✅ AI audit completed (Model: ${result.modelUsed}, Score: ${result.totalScore})`);
+    } else {
+      console.log(`🔄 Legacy audit used (Fallback: ${result.fallbackUsed}, Score: ${result.totalScore})`);
+    }
 
     // If user is authenticated, handle scoring and tracking
     if (user) {
