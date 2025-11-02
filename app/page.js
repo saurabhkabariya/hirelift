@@ -10,6 +10,7 @@ import HeroSection from '../components/sections/HeroSection';
 import ProblemSolutionSection from '../components/sections/ProblemSolutionSection';
 import HowItWorksSection from '../components/sections/HowItWorksSection';
 import PricingSection from '../components/sections/PricingSection';
+import TrialShowcase from '../components/trial/TrialShowcase';
 import FinalCTASection from '../components/sections/FinalCTASection';
 import FooterSection from '../components/sections/FooterSection';
 import FloatingCTA from '../components/FloatingCTA';
@@ -203,6 +204,9 @@ export default function HomePage() {
 
       {/* How It Works Section - AI Focus */}
       <HowItWorksSection handleRedirect={handleRedirect} />
+
+      {/* Trial Showcase - Special Offer */}
+      <TrialShowcase handleRedirect={handleRedirect} />
 
       {/* Pricing Section - Simple & Clear */}
       <PricingSection handleRedirect={handleRedirect} />

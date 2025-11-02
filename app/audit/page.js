@@ -703,7 +703,7 @@ export default function ResumeAuditPage() {
               <>
                 <span className="text-blue-700 font-semibold text-base">{isPremium ? "Premium User" : "Free User"}</span>
                 <span className="text-gray-600 text-sm">
-                  Reviews used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited)" : "/ 1 free"}
+                  Reviews used: {isPremium ? '' : auditCountDisplay} {isPremium ? "(Unlimited available)" : "/ 1 free"}
                 </span>
               </>
             ) : (

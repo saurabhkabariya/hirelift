@@ -5,9 +5,12 @@ import { useRouter } from 'next/navigation';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { usePageLoading } from '@/hooks/usePageLoading';
+import { useTrialStatus } from '@/hooks/useTrialStatus';
 import FeedbackButton from '../../components/feedback/FeedbackButton';
 import PaymentLoadingModal from '@/components/payment/PaymentLoadingModal';
 import PaymentErrorModal from '@/components/payment/PaymentErrorModal';
+import TrialExpiryPopup from '@/components/trial/TrialExpiryPopup';
+import TrialCountdown from '@/components/trial/TrialCountdown';
 import paymentService from '@/lib/payment';
 import oneTimePaymentService from '@/lib/oneTimePayment';
 import { isAuthError, handleAuthError } from '@/lib/authUtils';
@@ -22,7 +25,8 @@ import {
   Award,
   Sparkles,
   ArrowLeft,
-  Star
+  Star,
+  Gift
 } from 'lucide-react';
 import { getPricingForCountry } from '@/utils/getUserCountry';
 
@@ -39,6 +43,22 @@ export default function PricingPage() {
   const [loadingStage, setLoadingStage] = useState('preparing');
   const [paymentError, setPaymentError] = useState(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
+  
+  // Trial management
+  const { 
+    trialStatus, 
+    claimTrial, 
+    claimingTrial, 
+    shouldShowExpiryWarning,
+    trialDaysLeft,
+    canShowClaimButton
+  } = useTrialStatus();
+  const [showTrialExpiryPopup, setShowTrialExpiryPopup] = useState(false);
+  
+  // Handle trial status errors gracefully
+  const safeCanShowClaimButton = user && !trialStatus.loading && !trialStatus.error ? 
+    canShowClaimButton : 
+    (user && !user.hasClaimedTrial && !user.isPremium);
   
   // Location and pricing state
   const [countryData, setCountryData] = useState({ country: 'IN', currency: 'INR', symbol: '₹' });
@@ -94,6 +114,14 @@ export default function PricingPage() {
 
     detectLocation();
   }, []);
+
+  // Check for trial expiry and show popup
+  useEffect(() => {
+    if (shouldShowExpiryWarning && !showTrialExpiryPopup) {
+      // Show popup when trial is about to expire or has expired
+      setShowTrialExpiryPopup(true);
+    }
+  }, [shouldShowExpiryWarning, showTrialExpiryPopup]);
 
   // Handle Basic plan one-time upgrade (30 days)
   const handleBasicUpgrade = async () => {
@@ -222,6 +250,26 @@ export default function PricingPage() {
     }
   };
 
+  // Handle trial claiming
+  const handleTrialClaim = async () => {
+    if (!user) {
+      toast.error('Please sign in to claim your free trial');
+      router.push('/auth');
+      return;
+    }
+
+    if (claimingTrial) return;
+
+    const result = await claimTrial();
+    
+    if (result.success) {
+      toast.success('🎉 Trial activated! You now have 7 days of premium access.');
+      await refetchUser(); // Refresh user data
+    } else {
+      toast.error(result.error || 'Failed to activate trial. Please try again.');
+    }
+  };
+
   // Handle different plan upgrades
   const handlePlanUpgrade = async (plan) => {
     if (!user) {
@@ -239,6 +287,10 @@ export default function PricingPage() {
       switch (plan.paymentType) {
         case 'free':
           router.push('/audit');
+          break;
+          
+        case 'trial':
+          await handleTrialClaim();
           break;
           
         case 'onetime':
@@ -263,6 +315,30 @@ export default function PricingPage() {
   };
 
   const plans = [
+    // Special 7-day trial plan
+    ...(safeCanShowClaimButton ? [{
+      id: 'trial',
+      name: '7-Day FREE Trial',
+      price: `${pricingConfig.symbol}0`,
+      billing: '/7 days',
+      description: '🎁 Try Career Accelerator FREE for 7 days',
+      features: [
+        'Everything in Career Accelerator',
+        'Unlimited Resume Reviews',
+        '1,000+ HR Directory Access', 
+        'Advanced ATS Optimization',
+        'Proven Email Templates Library',
+        'Priority Expert Support',
+        'No Credit Card Required ✅',
+        'Cancel anytime - No strings attached'
+      ],
+      buttonText: claimingTrial ? 'Activating Trial...' : '🎁 Claim FREE 7-Day Trial',
+      popular: true,
+      icon: Gift,
+      paymentType: 'trial',
+      disabled: claimingTrial,
+      specialOffer: true
+    }] : []),
     {
       id: 'free',
       name: 'Free Trial',
@@ -562,6 +638,11 @@ export default function PricingPage() {
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
             Land Your Dream Job 3x Faster
           </h1>
+
+          {/* Trial Countdown */}
+          <div className="flex justify-center mb-6">
+            <TrialCountdown className="shadow-sm" />
+          </div>
 
           {/* Current Plan Status - Show Career Accelerator when isPremium is true */}
           {userPlanStatus.hasActivePlan && (
@@ -980,6 +1061,22 @@ export default function PricingPage() {
         onContactSupport={() => {
           window.open('mailto:hirelift01@gmail.com', '_blank');
         }}
+      />
+
+      {/* Trial Expiry Popup */}
+      <TrialExpiryPopup
+        isVisible={showTrialExpiryPopup}
+        onClose={() => setShowTrialExpiryPopup(false)}
+        onUpgrade={() => {
+          setShowTrialExpiryPopup(false);
+          // Scroll to Career Accelerator plan or navigate to specific plan
+          const careerAcceleratorElement = document.getElementById('basic-plan');
+          if (careerAcceleratorElement) {
+            careerAcceleratorElement.scrollIntoView({ behavior: 'smooth' });
+          }
+        }}
+        daysRemaining={trialDaysLeft}
+        trialEndDate={trialStatus.trialEndDate}
       />
 
       <FeedbackButton />

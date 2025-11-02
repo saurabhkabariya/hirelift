@@ -34,9 +34,26 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  // Free trial fields
+  hasClaimedTrial: {
+    type: Boolean,
+    default: false,
+  },
+  trialStartDate: {
+    type: Date,
+    default: null,
+  },
+  trialEndDate: {
+    type: Date,
+    default: null,
+  },
+  isTrialActive: {
+    type: Boolean,
+    default: false,
+  },
   proPlanType: {
     type: String,
-    enum: ['subscription', 'onetime', 'basic', 'resume-fix', 'professional', 'premium'],
+    enum: ['subscription', 'onetime', 'basic', 'resume-fix', 'professional', 'premium', 'trial'],
     default: null,
   },
   planDetails: {
@@ -106,6 +123,55 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', function(next) {
   this.updatedAt = new Date();
   next();
+});
+
+// Virtual method to check if user has active premium access (including trial)
+userSchema.virtual('hasActivePremium').get(function() {
+  // Check if user has paid premium plan that hasn't expired
+  if (this.isPremium && this.expiryDate && new Date() < this.expiryDate) {
+    return true;
+  }
+  
+  // Check if user has active trial
+  if (this.isTrialActive && this.trialEndDate && new Date() < this.trialEndDate) {
+    return true;
+  }
+  
+  return false;
+});
+
+// Virtual method to get current plan status
+userSchema.virtual('currentPlanStatus').get(function() {
+  const now = new Date();
+  
+  // Check trial first
+  if (this.isTrialActive && this.trialEndDate && now < this.trialEndDate) {
+    const daysLeft = Math.ceil((this.trialEndDate - now) / (1000 * 60 * 60 * 24));
+    return {
+      type: 'trial',
+      isActive: true,
+      daysLeft,
+      planType: 'Career Accelerator Trial'
+    };
+  }
+  
+  // Check paid plan
+  if (this.isPremium && this.expiryDate && now < this.expiryDate) {
+    const daysLeft = Math.ceil((this.expiryDate - now) / (1000 * 60 * 60 * 24));
+    return {
+      type: 'premium',
+      isActive: true,
+      daysLeft,
+      planType: this.planDetails?.type || this.proPlanType
+    };
+  }
+  
+  return {
+    type: 'free',
+    isActive: false,
+    daysLeft: 0,
+    planType: 'Free'
+  };
 });
 
 const User = mongoose.models.User || mongoose.model('User', userSchema);

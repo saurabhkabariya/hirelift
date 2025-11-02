@@ -10,6 +10,7 @@ import { useEffect, useState } from 'react';
 import FeedbackModal from '../../components/feedback/FeedbackModal';
 import FeedbackDisplay from '../../components/admin/FeedbackDisplay';
 import Head from 'next/head';
+import TrialCountdown from '@/components/trial/TrialCountdown';
 
 const ADMIN_EMAIL = "websiteads074@gmail.com";
 
@@ -340,7 +341,12 @@ export default function DashboardPage() {
             >
               <Mail className="w-5 h-5 text-[var(--primary)] mr-3" />
               <span className="text-[var(--foreground-light)]">{user.email}</span>
-            </motion.div>            <motion.div 
+            </motion.div>
+
+            {/* Trial Countdown */}
+            <TrialCountdown className="w-full justify-center" compact={true} />
+
+            <motion.div 
               className="flex items-center bg-[var(--background-light)] p-3 rounded-xl shadow-sm"
               whileHover={{ x: 5 }}
             >
@@ -384,7 +390,7 @@ export default function DashboardPage() {
 
             <div className="pt-4 border-t border-[var(--gray-300)] border-opacity-20">
               <p className="text-[var(--gray-600)]">
-                Review Count: <span className="font-semibold text-[var(--primary)]">{user.isPremium? '(unlimited)' : user.auditCount || 0}</span>
+                Review Count: <span className="font-semibold text-[var(--primary)]">{user.isPremium? '(unlimited available)' : user.auditCount || 0}</span>
               </p>
             </div>
           </div>
