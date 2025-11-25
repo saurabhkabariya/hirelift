@@ -9,10 +9,17 @@ import { useTrialStatus } from '@/hooks/useTrialStatus';
 export default function AuditExhaustedPopup({ isOpen, onClose, user }) {
   const [isVisible, setIsVisible] = useState(false);
   const router = useRouter();
-  const { trialStatus, claimTrial, claimingTrial } = useTrialStatus();
+  const trialData = useTrialStatus();
+  
+  // Safely destructure with defaults
+  const {
+    isTrialActive = false,
+    claimTrial,
+    claimingTrial = false
+  } = trialData || {};
   
   // Check if user can claim trial (hasn't claimed before and isn't premium)
-  const canClaimTrial = user && !user.hasClaimedTrial && !user.isPremium && !trialStatus.isTrialActive;
+  const canClaimTrial = user && !user.hasClaimedTrial && !user.isPremium && !isTrialActive;
 
   useEffect(() => {
     if (isOpen) {

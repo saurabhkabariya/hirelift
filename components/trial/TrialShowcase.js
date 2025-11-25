@@ -8,12 +8,7 @@ import { useTrialStatus } from '@/hooks/useTrialStatus';
 
 export default function TrialShowcase({ handleRedirect }) {
   const { user } = useAuth();
-  const { 
-    canShowClaimButton, 
-    claimTrial, 
-    claimingTrial, 
-    trialStatus 
-  } = useTrialStatus();
+  const trialData = useTrialStatus();
   
   const [mounted, setMounted] = useState(false);
 
@@ -21,10 +16,19 @@ export default function TrialShowcase({ handleRedirect }) {
     setMounted(true);
   }, []);
 
+  // Safely destructure with defaults
+  const {
+    canClaimTrial = false,
+    claimTrial,
+    claimingTrial = false,
+    loading = true,
+    error = null
+  } = trialData || {};
+
   // Handle trial status errors gracefully - show trial if user hasn't claimed and isn't premium
   const shouldShowTrial = mounted && user && (
-    (!trialStatus.loading && !trialStatus.error && canShowClaimButton) ||
-    (trialStatus.error && !user.hasClaimedTrial && !user.isPremium)
+    (!loading && !error && canClaimTrial) ||
+    (error && !user.hasClaimedTrial && !user.isPremium)
   );
 
   // Don't show if not mounted or user can't claim trial

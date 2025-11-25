@@ -59,12 +59,12 @@ const Header = ({ variant = 'default' }) => {
   const defaultNavLinks = [
     { name: "Home", href: "#home", description: "AI-powered resume optimization platform" },
     { name: "How it Works", href: "#how-it-works", description: "3-step process to optimize your job search" },
-    { name: "Testimonials", href: "#proof-trust", description: "Success stories and trust metrics" },
     { name: "Pricing", href: "#pricing", description: "Affordable plans for every job seeker" },
     { name: "Blog", href: "/blog", description: "Latest insights and tips for job seekers", isExternal: true },
     { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
     { name: "Resume Review", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
     { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
+    ...(user ? [{ name: "Referrals Hub", href: "/referrals", description: "Find referral opportunities and manage your network", isExternal: true, isSpecial: true }] : []),
   ];
 
   const blogNavLinks = [
@@ -74,6 +74,7 @@ const Header = ({ variant = 'default' }) => {
     { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
     { name: "Free Review", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
     { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
+    ...(user ? [{ name: "Referrals Hub", href: "/referrals", description: "Find referral opportunities and manage your network", isExternal: true, isSpecial: true }] : []),
   ];
 
   const playgroundNavLinks = [
@@ -83,6 +84,7 @@ const Header = ({ variant = 'default' }) => {
     { name: "Blog", href: "/blog", description: "Latest insights and tips for job seekers", isExternal: true },
     { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
     { name: "Free Review", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
+    ...(user ? [{ name: "Referrals Hub", href: "/referrals", description: "Find referral opportunities and manage your network", isExternal: true, isSpecial: true }] : []),
   ];
 
   // Determine which navigation links to use based on current pathname
@@ -104,6 +106,8 @@ const Header = ({ variant = 'default' }) => {
       setActiveLink('Templates');
     } else if (pathname === '/blog') {
       setActiveLink('Blog');
+    } else if (pathname === '/referrals') {
+      setActiveLink('Referrals Hub');
     } else if (pathname.includes('#pricing')) {
       setActiveLink('Pricing');
     }
@@ -220,7 +224,7 @@ const Header = ({ variant = 'default' }) => {
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
           {navLinks.map((link) => {
             const isActive = activeLink === link.name;
-            const isSpecialLink = link.name === 'Free Jobs' || link.name === 'Templates'|| link.name === 'Resume Review' || link.name === 'Free Review';
+            const isSpecialLink = link.name === 'Free Jobs' || link.name === 'Templates'|| link.name === 'Resume Review' || link.name === 'Free Review' || (link.isSpecial && user);
             return (
               <div key={link.name} className="relative">
                 <button

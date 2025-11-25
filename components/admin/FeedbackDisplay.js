@@ -129,23 +129,23 @@ export default function FeedbackDisplay() {
       className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
     >
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
             <FaComments className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-xl font-bold text-gray-900">User Feedback</h3>
-            <p className="text-sm text-gray-600">{feedbacks.length} total submissions</p>
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900">User Feedback</h3>
+            <p className="text-xs sm:text-sm text-gray-600">{feedbacks.length} total submissions</p>
           </div>
         </div>
 
         {/* Filter & Sort Controls */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-2 xs:gap-3">
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-gray-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-0 flex-1 xs:flex-initial"
           >
             <option value="all">All Feedback</option>
             <option value="pending">Pending</option>
@@ -161,7 +161,7 @@ export default function FeedbackDisplay() {
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value)}
-            className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-3 py-2 border border-gray-200 rounded-lg text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 min-w-0 flex-1 xs:flex-initial"
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>

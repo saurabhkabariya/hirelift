@@ -25,15 +25,11 @@ import {
   Award,
   Sparkles,
   ArrowLeft,
-  Star,
   Gift
 } from 'lucide-react';
 import { getPricingForCountry } from '@/utils/getUserCountry';
 
 import Head from 'next/head';
-import CountdownTimer from '../../components/conversion/CountdownTimer';
-import UrgencyBanner from '../../components/conversion/UrgencyBanner';
-import ValueStack from '../../components/conversion/ValueStack';
 
 export default function PricingPage() {
   const { user, refetchUser } = useAuth();
@@ -45,20 +41,37 @@ export default function PricingPage() {
   const [showErrorModal, setShowErrorModal] = useState(false);
   
   // Trial management
-  const { 
-    trialStatus, 
-    claimTrial, 
-    claimingTrial, 
-    shouldShowExpiryWarning,
-    trialDaysLeft,
-    canShowClaimButton
-  } = useTrialStatus();
+  const trialData = useTrialStatus();
   const [showTrialExpiryPopup, setShowTrialExpiryPopup] = useState(false);
   
-  // Handle trial status errors gracefully
-  const safeCanShowClaimButton = user && !trialStatus.loading && !trialStatus.error ? 
-    canShowClaimButton : 
-    (user && !user.hasClaimedTrial && !user.isPremium);
+  // Safely destructure with defaults
+  const {
+    trialEndDate = null,
+    claimTrial,
+    claimingTrial = false,
+    canClaimTrial = false,
+    loading = true,
+    error = null,
+    isTrialActive = false,
+    daysRemaining = 0
+  } = trialData || {};
+  
+  // Calculate helper values
+  const shouldShowExpiryWarning = isTrialActive && daysRemaining <= 2 && daysRemaining > 0;
+  const trialDaysLeft = Math.max(0, daysRemaining);
+  
+  // Handle trial status errors gracefully and ensure it updates after trial claiming
+  const safeCanShowClaimButton = useMemo(() => {
+    if (!user) return false;
+    if (loading || claimingTrial) return false; // Hide button while loading or claiming
+    if (error) return false;
+    
+    // Don't show if user already has premium or has claimed trial
+    if (user.isPremium || user.hasClaimedTrial) return false;
+    
+    // Show if trial data indicates user can claim trial
+    return canClaimTrial;
+  }, [user, loading, claimingTrial, error, canClaimTrial]);
   
   // Location and pricing state
   const [countryData, setCountryData] = useState({ country: 'IN', currency: 'INR', symbol: '₹' });
@@ -255,18 +268,33 @@ export default function PricingPage() {
     if (!user) {
       toast.error('Please sign in to claim your free trial');
       router.push('/auth');
-      return;
+      return { success: false, error: 'Not authenticated' };
     }
 
-    if (claimingTrial) return;
+    if (claimingTrial) {
+      return { success: false, error: 'Already claiming trial' };
+    }
 
-    const result = await claimTrial();
-    
-    if (result.success) {
-      toast.success('🎉 Trial activated! You now have 7 days of premium access.');
-      await refetchUser(); // Refresh user data
-    } else {
-      toast.error(result.error || 'Failed to activate trial. Please try again.');
+    try {
+      const result = await claimTrial();
+      
+      console.log('Trial claim result:', result); // Debug log
+      
+      if (result && result.success) {
+        toast.success('🎉 Trial activated! You now have 7 days of premium access.');
+        await refetchUser(); // Refresh user data immediately
+        return result;
+      } else {
+        const errorMessage = result?.error || 'Failed to activate trial. Please try again.';
+        console.error('Trial claim failed:', errorMessage);
+        toast.error(errorMessage);
+        return result || { success: false, error: errorMessage };
+      }
+    } catch (error) {
+      console.error('Trial claim error:', error);
+      const errorMessage = 'An unexpected error occurred. Please try again.';
+      toast.error(errorMessage);
+      return { success: false, error: errorMessage };
     }
   };
 
@@ -290,7 +318,29 @@ export default function PricingPage() {
           break;
           
         case 'trial':
-          await handleTrialClaim();
+          const result = await handleTrialClaim();
+          // Don't redirect if trial claiming was successful - stay on pricing page to show success
+          if (result && result.success) {
+            // Trial activated successfully, user stays on pricing page
+            // Show additional success feedback
+            setTimeout(() => {
+              toast.success(`🚀 You're now a premium user! Enjoy ${result.trialInfo?.daysRemaining || 7} days of full access.`);
+            }, 1500);
+            
+            // Force component re-render to update plan display
+            // The safeCanShowClaimButton will be recalculated and trial plan will be hidden
+            setTimeout(async () => {
+              await refetchUser(); // This will update the user state and trigger re-render
+            }, 500);
+            
+            // Optionally scroll to show the updated plan status
+            setTimeout(() => {
+              const planStatusElement = document.querySelector('.bg-gradient-to-r.from-green-50.to-emerald-50');
+              if (planStatusElement) {
+                planStatusElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }
+            }, 2000);
+          }
           break;
           
         case 'onetime':
@@ -639,11 +689,6 @@ export default function PricingPage() {
             Land Your Dream Job 3x Faster
           </h1>
 
-          {/* Trial Countdown */}
-          <div className="flex justify-center mb-6">
-            <TrialCountdown className="shadow-sm" />
-          </div>
-
           {/* Current Plan Status - Show Career Accelerator when isPremium is true */}
           {userPlanStatus.hasActivePlan && (
             <div className="bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-lg px-6 py-3 mb-6 inline-block">
@@ -658,50 +703,14 @@ export default function PricingPage() {
             </div>
           )}
 
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
             Join 5,000+ professionals who transformed their careers with our ATS resume optimization
           </p>
-          
-          {/* URGENCY + SCARCITY */}
-          <div className="bg-gradient-to-r from-orange-100 to-red-100 border border-orange-200 rounded-lg px-6 py-4 mb-6 inline-block">
-            <div className="flex flex-col sm:flex-row items-center gap-3">
-              <span className="text-orange-800 font-bold">
-                🔥 Limited Time: 50% OFF + Premium HRs access
-              </span>
-              <div className="flex items-center gap-2">
-                <span className="text-orange-700 text-sm">Expires in:</span>
-                <CountdownTimer 
-                  targetDate={new Date(Date.now() + 24 * 60 * 60 * 1000)} // 24 hours from now
-                  onExpiry={() => console.log('Offer expired!')}
-                />
-              </div>
-            </div>
-          </div>
 
-          {/* SOCIAL PROOF STATS */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto mb-6">
-            <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-lg p-4">
-              <div className="text-2xl font-bold text-cyan-600">5,000+</div>
-              <div className="text-sm text-gray-600">Success Stories</div>
-            </div>
-            <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-lg p-4">
-              <div className="text-2xl font-bold text-green-600">95%</div>
-              <div className="text-sm text-gray-600">ATS Pass Rate</div>
-            </div>
-            <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-lg p-4">
-              <div className="text-2xl font-bold text-blue-600">3x</div>
-              <div className="text-sm text-gray-600">Faster Results</div>
-            </div>
-            <div className="bg-white/70 backdrop-blur-sm border border-gray-200 rounded-lg p-4">
-              <div className="text-2xl font-bold text-purple-600">4.9/5</div>
-              <div className="text-sm text-gray-600">User Rating</div>
-            </div>
-          </div>
-
-          {/* MONEY-BACK GUARANTEE */}
-          <div className="bg-green-50 border border-green-200 rounded-lg px-6 py-3 mb-6 inline-block">
+          {/* Simple guarantee */}
+          <div className="bg-green-50 border border-green-200 rounded-lg px-6 py-3 mb-8 inline-block">
             <span className="text-green-800 font-medium">
-              🛡️ <strong>30-Day Job Interview</strong> • Get 3x more interviews or full refund
+              🛡️ <strong>30-Day Money-Back Guarantee</strong>
             </span>
           </div>
           
@@ -801,93 +810,19 @@ export default function PricingPage() {
           )}
         </motion.div>
 
-        <motion.section
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-white rounded-2xl shadow-lg p-8 mb-12"
-        >
-          <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
-            Detailed Feature Comparison
-          </h3>
-          
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b-2 border-gray-200">
-                  <th className="text-left py-4 px-2 font-semibold text-gray-900">Features</th>
-                  <th className="text-center py-4 px-2 font-semibold text-gray-600">Free</th>
-                  <th className="text-center py-4 px-2 font-semibold text-blue-600">Career Accelerator</th>
-                  <th className="text-center py-4 px-2 font-semibold text-gray-600">ATS Fix</th>
-                  <th className="text-center py-4 px-2 font-semibold text-gray-600">Professional</th>
-                  <th className="text-center py-4 px-2 font-semibold text-gray-600">Premium</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-100">
-                <tr>
-                  <td className="py-4 px-2 font-medium">ATS Checks</td>
-                  <td className="text-center py-4 px-2">1 check</td>
-                  <td className="text-center py-4 px-2">Unlimited (30 days)</td>
-                  <td className="text-center py-4 px-2">Unlimited (30 days)</td>
-                  <td className="text-center py-4 px-2">Unlimited (30 days)</td>
-                  <td className="text-center py-4 px-2">Unlimited (30 days)</td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-2 font-medium">Resume Optimization</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">ATS Fixes (1 revision)</td>
-                  <td className="text-center py-4 px-2">Complete Rewrite (2 revisions)</td>
-                  <td className="text-center py-4 px-2">Complete Rewrite (2 revisions)</td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-2 font-medium">LinkedIn Optimization</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-2 font-medium">Cover Letter</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">✓</td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-2 font-medium">HR Directory</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">✓ (30 days)</td>
-                  <td className="text-center py-4 px-2">✓ (30 days)</td>
-                  <td className="text-center py-4 px-2">✓ (30 days)</td>
-                  <td className="text-center py-4 px-2">✓ (30 days)</td>
-                </tr>
-                <tr>
-                  <td className="py-4 px-2 font-medium">Personal Consultation</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">-</td>
-                  <td className="text-center py-4 px-2">✓</td>
-                  <td className="text-center py-4 px-2">✓</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </motion.section>
+
 
         <motion.section
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="bg-gray-50 rounded-2xl p-8"
+          transition={{ delay: 0.3 }}
+          className="bg-gray-50 rounded-2xl p-8 mb-16"
         >
           <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
             Why Choose HireLift?
           </h3>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <div className="text-center">
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mx-auto mb-4">
                 <Zap className="w-6 h-6 text-blue-600" />
@@ -922,123 +857,9 @@ export default function PricingPage() {
           </div>
         </motion.section>
         
-        {/* VALUE STACK - SHOWS MONETARY VALUE OF FREE OFFERING */}
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="py-12"
-        >
-          <div className="max-w-3xl mx-auto">
-            <ValueStack 
-              title="🎁 What You Get FREE Today (Limited Time)"
-              totalValue={"Infinity"}
-            />
-          </div>
-        </motion.section>
+
         
-        {/* CONVERSION-BOOSTING TESTIMONIALS SECTION */}
-        <motion.section 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="py-16 mb-16"
-        >
-          <div className="text-center mb-12">
-            <h3 className="text-3xl font-bold text-gray-900 mb-4">
-              Success Stories That Speak Volumes
-            </h3>
-            <p className="text-lg text-gray-600">
-              Real results from real people who transformed their careers with HireLift
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {/* Testimonial 1 */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-gray-700 mb-4 italic">
-                "Got 5 interview calls in just 2 weeks! HireLift's ATS optimization is incredible. Best career investment I've ever made."
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                  S
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Sarah Chen</p>
-                  <p className="text-sm text-gray-600">Software Engineer at Google</p>
-                </div>
-              </div>
-            </div>
 
-            {/* Testimonial 2 */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-gray-700 mb-4 italic">
-                "Landed my dream job at Microsoft with 40% salary increase. The professional rewrite service is worth every penny!"
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold">
-                  R
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Rahul Sharma</p>
-                  <p className="text-sm text-gray-600">Product Manager at Microsoft</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                ))}
-              </div>
-              <p className="text-gray-700 mb-4 italic">
-                "After 6 months of job hunting with zero success, HireLift got me hired in 3 weeks. Changed my life completely!"
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center text-white font-bold">
-                  P
-                </div>
-                <div>
-                  <p className="font-semibold text-gray-900">Priya Patel</p>
-                  <p className="text-sm text-gray-600">Data Scientist at Amazon</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* FINAL CTA AFTER TESTIMONIALS */}
-          <div className="text-center mt-12">
-            <div className="bg-gradient-to-r from-cyan-50 to-blue-50 border border-cyan-200 rounded-2xl p-8 max-w-4xl mx-auto">
-              <h4 className="text-2xl font-bold text-gray-900 mb-4">
-                Ready to Join These Success Stories?
-              </h4>
-              <p className="text-lg text-gray-600 mb-6">
-                Don't let another opportunity slip away. Start your transformation today.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <button 
-                  onClick={() => router.push('/audit')}
-                  className="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white font-bold text-lg rounded-xl shadow-lg hover:shadow-cyan-500/30 transition-all duration-200"
-                >
-                  Start FREE Review Now
-                </button>
-                <p className="text-sm text-gray-600">⚡ Limited Time: 50% OFF</p>
-              </div>
-            </div>
-          </div>
-        </motion.section>
       </div>
 
       <PaymentLoadingModal
@@ -1076,13 +897,10 @@ export default function PricingPage() {
           }
         }}
         daysRemaining={trialDaysLeft}
-        trialEndDate={trialStatus.trialEndDate}
+        trialEndDate={trialEndDate}
       />
 
       <FeedbackButton />
-      
-      {/* Urgency Banner for Additional Conversion Boost */}
-      <UrgencyBanner onCTAClick={() => router.push('/audit')} />
       
       {/* Footer */}
       <FooterSection />

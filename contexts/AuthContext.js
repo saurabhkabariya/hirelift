@@ -258,28 +258,7 @@ export function AuthProvider({ children }) {
       const data = await res.json();
       
       if (data.user) {
-        // Also check trial status to ensure it's up-to-date
-        if (data.user.isTrialActive || data.user.hasClaimedTrial) {
-          try {
-            const trialResponse = await fetch('/api/trial/status', {
-              headers: { Authorization: `Bearer ${storedToken}` },
-            });
-            
-            if (trialResponse.ok) {
-              const trialData = await trialResponse.json();
-              // The trial API will have already updated the user if trial expired
-              // So we'll refetch user data again if needed
-              if (trialData.trialStatus.isExpired && data.user.isTrialActive) {
-                setTimeout(() => refetchUser(), 1000); // Refetch after 1 second
-                return;
-              }
-            }
-          } catch (trialError) {
-            // Silent fail for trial status check
-          }
-        }
-        
-        setToken(storedToken); // Ensure token state is current
+        setToken(storedToken);
         setUser(data.user);
         localStorage.setItem('user', JSON.stringify(data.user));
         

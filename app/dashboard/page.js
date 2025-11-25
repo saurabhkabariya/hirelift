@@ -1,8 +1,9 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { LogOut, User, Mail, Crown, Zap, BarChart, FileText, UserCheck, Settings, CreditCard } from 'lucide-react';
+import { LogOut, User, Mail, Crown, Zap, BarChart, FileText, UserCheck, Settings, CreditCard, Bell, Clock, CheckCircle, AlertCircle, Users, Send } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { NotificationProvider, useNotifications } from '@/contexts/NotificationContext';
 import { usePageLoading } from '@/hooks/usePageLoading';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
@@ -14,19 +15,31 @@ import TrialCountdown from '@/components/trial/TrialCountdown';
 
 const ADMIN_EMAIL = "websiteads074@gmail.com";
 
-export default function DashboardPage() {
+const DashboardContent = () => {
   const { user, signOutUser } = useAuth();
+  const { notifications, markAsViewed, hasDashboardNotifications, pendingActions, awaitingUpdates } = useNotifications();
   const { navigateWithLoading } = usePageLoading();
-  const router = useRouter();  const [activeTab, setActiveTab] = useState('overview');
-  const [isAdmin, setisAdmin] = useState(false);
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState('overview');
+  const [isAdmin, setIsAdmin] = useState(false);
   const [showFeedbackModal, setShowFeedbackModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     if(user.email === ADMIN_EMAIL){
-      setisAdmin(true);
+      setIsAdmin(true);
     }
   }, [])
+
+  useEffect(() => {
+    // Mark dashboard notifications as viewed when component mounts
+    if (hasDashboardNotifications) {
+      markAsViewed('dashboard');
+    }
+  }, []);
+
+// The DashboardContent component continues below. We'll export a small
+// wrapper at the end of the file to provide the NotificationProvider.
   
 
   // User will always be available because of the ProtectedRoute component
@@ -117,7 +130,7 @@ export default function DashboardPage() {
                 href="/jobs" 
                 className="flex items-center gap-2 px-3 xl:px-4 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium text-sm xl:text-base"
               >
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-4 h-4 mt-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
                 </svg>
                 <span className="hidden xl:inline">Jobs</span>
@@ -288,12 +301,12 @@ export default function DashboardPage() {
       </motion.div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="text-center mb-8"
+          className="text-center mb-6 sm:mb-8"
         >
           {/* <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -309,10 +322,10 @@ export default function DashboardPage() {
             Your personal dashboard
           </motion.div> */}
           
-          <h2 className="text-4xl font-extrabold mb-2 gradient-text py-2">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-extrabold mb-2 gradient-text py-2 px-2">
             Welcome, {user.email.split('@')[0]}!
           </h2>
-          <p className="text-[var(--gray-600)] text-lg">
+          <p className="text-[var(--gray-600)] text-base sm:text-lg px-4">
             Your hiring journey is taking off 🚀
           </p>
         </motion.div>
@@ -322,42 +335,42 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="max-w-md mx-auto glass rounded-2xl shadow-xl p-6 border border-opacity-20 border-[var(--gray-300)] mb-12"
+          className="max-w-xs sm:max-w-md mx-auto glass rounded-2xl shadow-xl p-4 sm:p-6 border border-opacity-20 border-[var(--gray-300)] mb-8 sm:mb-12"
         >
           <motion.div 
-            className="flex items-center justify-center mb-6"
+            className="flex items-center justify-center mb-4 sm:mb-6"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <div className="w-20 h-20 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] rounded-2xl flex items-center justify-center shadow-lg pulse">
-              <User className="w-10 h-10 text-white" />
+            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] rounded-2xl flex items-center justify-center shadow-lg pulse">
+              <User className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
             </div>
           </motion.div>
 
-          <div className="space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             <motion.div 
-              className="flex items-center bg-[var(--background-light)] p-3 rounded-xl shadow-sm"
+              className="flex items-center bg-[var(--background-light)] p-2 sm:p-3 rounded-xl shadow-sm"
               whileHover={{ x: 5 }}
             >
-              <Mail className="w-5 h-5 text-[var(--primary)] mr-3" />
-              <span className="text-[var(--foreground-light)]">{user.email}</span>
+              <Mail className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--primary)] mr-2 sm:mr-3 flex-shrink-0" />
+              <span className="text-[var(--foreground-light)] text-sm sm:text-base truncate">{user.email}</span>
             </motion.div>
 
             {/* Trial Countdown */}
             <TrialCountdown className="w-full justify-center" compact={true} />
 
             <motion.div 
-              className="flex items-center bg-[var(--background-light)] p-3 rounded-xl shadow-sm"
+              className="flex items-center bg-[var(--background-light)] p-2 sm:p-3 rounded-xl shadow-sm"
               whileHover={{ x: 5 }}
             >
-              <Crown className="w-5 h-5 text-[var(--secondary)] mr-3" />
-              <span className="text-[var(--foreground-light)]">
+              <Crown className="w-4 h-4 sm:w-5 sm:h-5 text-[var(--secondary)] mr-2 sm:mr-3 flex-shrink-0" />
+              <span className="text-[var(--foreground-light)] text-sm sm:text-base">
                 {user.isPremium ? 'Premium User' : 'Free User'}
                 {!user.isPremium && (
                   <motion.span 
                     whileHover={{ scale: 1.1 }}
                     onClick={()=>router.push('/pricing')}
-                    className="ml-2 text-xs px-2 py-1 bg-[var(--secondary-light)] text-white rounded-full cursor-pointer"
+                    className="ml-2 text-xs px-2 py-1 bg-[var(--secondary-light)] text-white rounded-full cursor-pointer whitespace-nowrap"
                   >
                     Upgrade
                   </motion.span>
@@ -371,16 +384,18 @@ export default function DashboardPage() {
                 <motion.div 
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex items-center bg-gradient-to-r from-red-50 to-orange-50 p-3 rounded-xl shadow-sm border border-red-200"
+                  className="flex flex-col sm:flex-row sm:items-center bg-gradient-to-r from-red-50 to-orange-50 p-2 sm:p-3 rounded-xl shadow-sm border border-red-200 gap-2 sm:gap-0"
                   whileHover={{ x: 5 }}
                 >
-                  <svg className="w-5 h-5 text-red-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5-6a2 2 0 012 2v1a8.967 8.967 0 01-4.728 7.975A8.967 8.967 0 0118 20H6a8.967 8.967 0 01-4.728-7.975A2 2 0 013 10V9a2 2 0 012-2h.5c.276 0 .5.224.5.5s.224.5.5.5h8c.276 0 .5-.224.5-.5s.224-.5.5-.5H15a2 2 0 012 2v1z" />
-                  </svg>
-                  <span className="text-red-700 font-semibold">Administrator</span>
+                  <div className="flex items-center">
+                    <svg className="w-4 h-4 sm:w-5 sm:h-5 text-red-600 mr-2 sm:mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m5-6a2 2 0 012 2v1a8.967 8.967 0 01-4.728 7.975A8.967 8.967 0 0118 20H6a8.967 8.967 0 01-4.728-7.975A2 2 0 013 10V9a2 2 0 012-2h.5c.276 0 .5.224.5.5s.224.5.5.5h8c.276 0 .5-.224.5-.5s.224-.5.5-.5H15a2 2 0 012 2v1z" />
+                    </svg>
+                    <span className="text-red-700 font-semibold text-sm sm:text-base">Administrator</span>
+                  </div>
                   <motion.span 
                     onClick={()=>router.push('/admin/company-manager')}
-                    className="ml-2 text-xs px-2 py-1 text-center bg-red-100 text-red-800 rounded-full hover:cursor-pointer"
+                    className="text-xs px-2 py-1 text-center bg-red-100 text-red-800 rounded-full hover:cursor-pointer sm:ml-2 w-full sm:w-auto"
                   >
                     Admin Panel Access
                   </motion.span>
@@ -388,13 +403,219 @@ export default function DashboardPage() {
               )}
             </AnimatePresence>
 
-            <div className="pt-4 border-t border-[var(--gray-300)] border-opacity-20">
-              <p className="text-[var(--gray-600)]">
+            <div className="pt-3 sm:pt-4 border-t border-[var(--gray-300)] border-opacity-20">
+              <p className="text-[var(--gray-600)] text-sm sm:text-base text-center sm:text-left">
                 Review Count: <span className="font-semibold text-[var(--primary)]">{user.isPremium? '(unlimited available)' : user.auditCount || 0}</span>
               </p>
             </div>
           </div>
-        </motion.div>        {/* Feature Cards */}
+        </motion.div>        
+
+                {/* Comprehensive Notifications Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7 }}
+          className="mt-8 sm:mt-12 max-w-6xl mx-auto px-2 sm:px-0"
+        >
+          <motion.div
+            className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+            whileHover={{ y: -2 }}
+            transition={{ duration: 0.2 }}
+          >
+            {/* Section Header */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 sm:px-6 py-4 border-b border-gray-100">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center flex-shrink-0">
+                    <Bell className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900">Referral Activity</h3>
+                    <p className="text-gray-600 text-xs sm:text-sm truncate">Stay updated on your referral requests and opportunities</p>
+                  </div>
+                </div>
+                {(pendingActions > 0 || awaitingUpdates > 0) && (
+                  <div className="flex items-center space-x-2 flex-shrink-0">
+                    <motion.div
+                      animate={{ scale: [1, 1.1, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="w-3 h-3 bg-red-500 rounded-full"
+                    />
+                    <span className="text-xs sm:text-sm font-medium text-gray-700">
+                      {pendingActions + awaitingUpdates} action{(pendingActions + awaitingUpdates) !== 1 ? 's' : ''} needed
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Notification Content */}
+            <div className="p-4 sm:p-6">
+              <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                
+                {/* Pending Actions Card */}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 sm:p-5 border border-orange-200 relative overflow-hidden"
+                >
+                  {pendingActions > 0 && (
+                    <motion.div
+                      animate={{ rotate: [0, 10, 0] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="absolute top-3 right-3 w-6 h-6 bg-orange-500 text-white rounded-full flex items-center justify-center text-xs font-bold"
+                    >
+                      {pendingActions}
+                    </motion.div>
+                  )}
+                  
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-8 h-8 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Clock className="h-4 w-4 text-orange-600" />
+                    </div>
+                    <h4 className="font-semibold text-gray-900 text-sm sm:text-base">Pending Actions</h4>
+                  </div>
+                  
+                  <p className="text-gray-600 text-xs sm:text-sm mb-4 leading-relaxed">
+                    {pendingActions > 0 
+                      ? `You have ${pendingActions} referral request${pendingActions !== 1 ? 's' : ''} waiting for your response`
+                      : "No pending actions - you're all caught up!"
+                    }
+                  </p>
+                  
+                  <motion.button
+                    whileHover={{ x: 5 }}
+                    onClick={() => router.push('/referrals?tab=requests')}
+                    className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 font-medium text-xs sm:text-sm"
+                  >
+                    <span>View Requests</span>
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </motion.button>
+                </motion.div>
+
+                {/* Awaiting Updates Card */}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-5 border border-blue-200 relative overflow-hidden"
+                >
+                  {awaitingUpdates > 0 && (
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className="absolute top-3 right-3 w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold"
+                    >
+                      {awaitingUpdates}
+                    </motion.div>
+                  )}
+                  
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <Users className="h-4 w-4 text-blue-600" />
+                    </div>
+                    <h4 className="font-semibold text-gray-900 text-sm sm:text-base">Awaiting Updates</h4>
+                  </div>
+                  
+                  <p className="text-gray-600 text-xs sm:text-sm mb-4 leading-relaxed">
+                    {awaitingUpdates > 0 
+                      ? `${awaitingUpdates} candidate${awaitingUpdates !== 1 ? 's' : ''} haven't updated their status yet`
+                      : "All your requests have been processed!"
+                    }
+                  </p>
+                  
+                  <motion.button
+                    whileHover={{ x: 5 }}
+                    onClick={() => {
+                      markAsViewed('dashboard');
+                      router.push('/referrals?tab=requests&subtab=sent');
+                    }}
+                    className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium text-xs sm:text-sm"
+                  >
+                    <span>Check Status</span>
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </motion.button>
+                </motion.div>
+
+                {/* Activity Summary Card */}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 border border-green-200 relative overflow-hidden sm:col-span-1 md:col-span-2 lg:col-span-1"
+                >
+                  <div className="absolute top-3 right-3 text-2xl">
+                    {notifications.activity.weeklyTotal > 5 ? '🔥' : notifications.activity.weeklyTotal > 0 ? '📈' : '🌱'}
+                  </div>
+                  
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-8 h-8 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <BarChart className="h-4 w-4 text-green-600" />
+                    </div>
+                    <h4 className="font-semibold text-gray-900 text-sm sm:text-base">This Week</h4>
+                  </div>
+                  
+                  <div className="space-y-2 mb-4">
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-gray-600">Requests Received:</span>
+                      <span className="font-medium text-gray-900">{notifications.activity.recentReceived}</span>
+                    </div>
+                    <div className="flex justify-between text-xs sm:text-sm">
+                      <span className="text-gray-600">Requests Sent:</span>
+                      <span className="font-medium text-gray-900">{notifications.activity.recentSent}</span>
+                    </div>
+                  </div>
+                  
+                  <motion.button
+                    whileHover={{ x: 5 }}
+                    onClick={() => router.push('/referrals')}
+                    className="flex items-center space-x-2 text-green-600 hover:text-green-700 font-medium text-xs sm:text-sm"
+                  >
+                    <span>Visit Referrals Hub</span>
+                    <svg className="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </motion.button>
+                </motion.div>
+
+              </div>
+
+              {/* Quick Action Buttons */}
+              {(pendingActions > 0 || awaitingUpdates > 0) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 }}
+                  className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-100"
+                >
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => router.push('/referrals?tab=requests')}
+                      className="w-full sm:w-auto flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base"
+                    >
+                      <FileText className="h-4 w-4" />
+                      <span className="whitespace-nowrap">Manage All Requests</span>
+                    </motion.button>
+                    
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => router.push('/referrals?tab=browse')}
+                      className="w-full sm:w-auto flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base"
+                    >
+                      <Send className="h-4 w-4" />
+                      <span className="whitespace-nowrap">Send New Request</span>
+                    </motion.button>
+                  </div>
+                </motion.div>
+              )}
+            </div>
+          </motion.div>
+        </motion.div>
+        
+        {/* Feature Cards */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -523,6 +744,36 @@ export default function DashboardPage() {
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Cold Outreach Playground</h3>
             <p className="text-gray-600">Design and customize email & LinkedIn templates</p>
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => router.push('/referrals')}
+            className="bg-white rounded-xl p-6 shadow-lg border border-indigo-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
+          >
+            {/* Popular Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, x: 20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ delay: 0.3, type: "spring", stiffness: 300 }}
+              className="absolute top-3 right-3"
+            >
+              <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-indigo-400 to-purple-500 text-white rounded-full text-xs font-bold shadow-lg">
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clipRule="evenodd" />
+                </svg>
+                Popular
+              </div>
+            </motion.div>
+
+            <div className="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4">
+              <svg className="w-6 h-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Referrals Hub</h3>
+            <p className="text-gray-600">Connect with professionals and earn rewards</p>
           </motion.button>
 
           
@@ -717,7 +968,10 @@ export default function DashboardPage() {
                 </div>
               </motion.button>
             )}
-          </AnimatePresence></motion.div>
+          </AnimatePresence>
+        </motion.div>
+
+
 
         {/* Admin-only Feedback Display */}
         <AnimatePresence>
@@ -762,6 +1016,7 @@ export default function DashboardPage() {
               <h4 className="font-semibold text-gray-800 mb-4">Quick Actions</h4>
               <div className="space-y-2">
                 <Link href="/audit" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Resume Review</Link>
+                <Link href="/referrals" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Referrals Hub 🤝</Link>
                 <Link href={user?.isPremium ? "/company-search" : "/pricing"} className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">
                   Company Search {!user?.isPremium && "👑"}
                 </Link>
@@ -933,5 +1188,13 @@ export default function DashboardPage() {
         onClose={() => setShowFeedbackModal(false)} 
       />
     </div>
+  );
+};
+
+export default function DashboardPage() {
+  return (
+    <NotificationProvider>
+      <DashboardContent />
+    </NotificationProvider>
   );
 }

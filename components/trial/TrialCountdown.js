@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import { Clock, AlertTriangle, AlertCircle } from 'lucide-react';
 
 export default function TrialCountdown({ className = '', compact = false, showIcon = true }) {
-  const { trialStatus, loading } = useTrialStatus();
+  const trialData = useTrialStatus();
   const [timeRemaining, setTimeRemaining] = useState({
     days: 0,
     hours: 0,
@@ -14,15 +14,23 @@ export default function TrialCountdown({ className = '', compact = false, showIc
     seconds: 0
   });
 
+  // Safely destructure with defaults
+  const {
+    isTrialActive = false,
+    trialEndDate = null,
+    isExpired = false,
+    loading = true
+  } = trialData || {};
+
   // Calculate time remaining
   useEffect(() => {
-    if (!trialStatus.isTrialActive || !trialStatus.trialEndDate) {
+    if (!isTrialActive || !trialEndDate) {
       return;
     }
 
     const updateCountdown = () => {
       const now = new Date().getTime();
-      const endTime = new Date(trialStatus.trialEndDate).getTime();
+      const endTime = new Date(trialEndDate).getTime();
       const timeDiff = endTime - now;
 
       if (timeDiff <= 0) {
@@ -45,10 +53,10 @@ export default function TrialCountdown({ className = '', compact = false, showIc
     const interval = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(interval);
-  }, [trialStatus.trialEndDate, trialStatus.isTrialActive]);
+  }, [trialEndDate, isTrialActive]);
 
-  // Don't show if not loading, not on trial, or trial is expired
-  if (loading || !trialStatus.isTrialActive || trialStatus.isExpired) {
+  // Don't show if loading, not on trial, or trial is expired
+  if (loading || !isTrialActive || isExpired) {
     return null;
   }
 
