@@ -6,19 +6,25 @@ import ReferralRequest from '@/models/ReferralRequest';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Verify JWT token and get user
-async function verifyToken(request) {
+// Verify JWT token and get user (optional for leaderboard)
+async function verifyToken(request, required = true) {
   const token = request.headers.get('Authorization')?.replace('Bearer ', '');
   
   if (!token) {
-    throw new Error('No token provided');
+    if (required) {
+      throw new Error('No token provided');
+    }
+    return null;
   }
   
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     return decoded.userId;
   } catch (error) {
-    throw new Error('Invalid token');
+    if (required) {
+      throw new Error('Invalid token');
+    }
+    return null;
   }
 }
 
@@ -27,12 +33,11 @@ export async function GET(request) {
   try {
     await dbConnect();
     
-    const currentUserId = await verifyToken(request);
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type'); // 'balance' or 'history' or 'leaderboard'
     
     if (type === 'leaderboard') {
-      // Get top users by points
+      // Leaderboard is public - no authentication required
       const topUsers = await User.find({
         referralPoints: { $gt: 0 }
       })
@@ -52,6 +57,9 @@ export async function GET(request) {
         }))
       });
     }
+    
+    // For other types, authentication is required
+    const currentUserId = await verifyToken(request, true);
     
     // Get user details
     const user = await User.findById(currentUserId)

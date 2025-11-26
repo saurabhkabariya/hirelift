@@ -6,24 +6,25 @@ import { PointsLeaderboard } from '@/components/PointsComponents';
 import { Trophy, Medal, Award, Star, TrendingUp, Users, Crown } from 'lucide-react';
 
 const Leaderboard = () => {
-  const { token } = useAuth();
+  const { token, user } = useAuth();
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [timeFilter, setTimeFilter] = useState('all');
 
   useEffect(() => {
     fetchLeaderboard();
-  }, [token, timeFilter]);
+  }, [timeFilter]);
 
   const fetchLeaderboard = async () => {
-    if (!token) return;
-    
     setLoading(true);
     try {
+      const headers = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       const response = await fetch('/api/referrals/points?type=leaderboard', {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        headers
       });
 
       if (response.ok) {
@@ -104,6 +105,28 @@ const Leaderboard = () => {
           </select>
         </div>
       </div>
+
+      {/* Authentication Banner for Unauthenticated Users */}
+      {!user && (
+        <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <Trophy className="h-5 w-5 text-yellow-600" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-yellow-800">
+                Want to join the leaderboard? Start referring candidates and earn points!
+                <button 
+                  onClick={() => window.location.href = '/auth?redirect=' + encodeURIComponent(window.location.pathname)}
+                  className="ml-2 font-medium text-yellow-600 hover:text-yellow-800 underline"
+                >
+                  Sign Up Now
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Top 3 Podium */}
       {leaderboardData.length >= 3 && (

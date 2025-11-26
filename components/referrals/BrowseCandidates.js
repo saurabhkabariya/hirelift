@@ -23,8 +23,8 @@ import {
   Loader
 } from 'lucide-react';
 
-const BrowseCandidates = () => {
-  const { token } = useAuth();
+const BrowseCandidates = ({ onAuthRequired }) => {
+  const { token, user } = useAuth();
   const [candidates, setCandidates] = useState([]);
   const [loading, setLoading] = useState(false);
   const [filters, setFilters] = useState({
@@ -68,11 +68,11 @@ const BrowseCandidates = () => {
   });
   const [requestErrors, setRequestErrors] = useState({});
   const [requestSuccess, setRequestSuccess] = useState(false);
+  const [authMessage, setAuthMessage] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   // Fetch candidates
   const fetchCandidates = async (page = 1) => {
-    if (!token) return;
-    
     setLoading(true);
     try {
       const searchParams = new URLSearchParams();
@@ -87,10 +87,13 @@ const BrowseCandidates = () => {
       searchParams.append('page', page);
       searchParams.append('limit', '12');
       
+      const headers = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
       const response = await fetch(`/api/referrals/search?${searchParams}`, {
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
+        headers
       });
 
       if (response.ok) {
@@ -98,6 +101,8 @@ const BrowseCandidates = () => {
         setCandidates(data.profiles || []);
         setPagination(data.pagination || { current: 1, pages: 1, total: 0 });
         setAvailableFilters(data.filters || { skills: [], locations: [], roles: [] });
+        setIsAuthenticated(data.authenticated || false);
+        setAuthMessage(data.message || null);
       } else {
         console.error('Failed to fetch candidates');
       }
@@ -110,7 +115,14 @@ const BrowseCandidates = () => {
 
   useEffect(() => {
     fetchCandidates();
-  }, [token]);
+  }, []); // Run on mount regardless of token
+
+  // Also fetch when user authentication status changes
+  useEffect(() => {
+    if (user !== undefined) { // Only run when user state is determined (not initial undefined)
+      fetchCandidates();
+    }
+  }, [user]);
 
   const handleSearch = () => {
     fetchCandidates(1);
@@ -143,6 +155,14 @@ const BrowseCandidates = () => {
 
   // Send Request Functions
   const openSendRequestModal = (candidate) => {
+    // Check if user is authenticated
+    if (!user || !token) {
+      if (onAuthRequired) {
+        onAuthRequired();
+      }
+      return;
+    }
+    
     setRequestForm({
       candidateId: candidate._id,
       message: `Hi ${candidate.fullName.split(' ')[0]},\n\nI came across your profile and I'm impressed by your background in ${candidate.skills.slice(0, 2).join(' and ')}. I have an exciting opportunity that might be a great fit for your experience.\n\nWould you be interested in learning more?\n\nBest regards,`,
@@ -153,7 +173,7 @@ const BrowseCandidates = () => {
       expectedSalaryRange: '',
       workLocation: candidate.location || '',
       workType: 'hybrid',
-      contactEmail: '',
+      contactEmail: user?.email || '',
       contactPhone: '',
       referralBonus: '',
       additionalNotes: ''
@@ -322,6 +342,28 @@ const BrowseCandidates = () => {
         <h1 className="text-2xl xs:text-3xl font-bold text-gray-900 mb-2">Browse Candidates</h1>
         <p className="text-gray-600 text-sm xs:text-base">Find and connect with talented professionals</p>
       </div>
+
+      {/* Authentication Banner for Unauthenticated Users */}
+      {authMessage && !isAuthenticated && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 xs:mb-8">
+          <div className="flex items-center">
+            <div className="flex-shrink-0">
+              <AlertCircle className="h-5 w-5 text-blue-600" />
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-blue-800">
+                {authMessage}
+                <button 
+                  onClick={() => window.location.href = '/auth?redirect=' + encodeURIComponent(window.location.pathname)}
+                  className="ml-2 font-medium text-blue-600 hover:text-blue-800 underline"
+                >
+                  Sign In
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Search and Filters */}
       <div className="bg-white rounded-lg xs:rounded-xl shadow-sm border border-gray-200 p-4 xs:p-6 mb-6 xs:mb-8">

@@ -5,19 +5,19 @@ import ReferralProfile from '@/models/ReferralProfile';
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-// Verify JWT token and get user
+// Verify JWT token and get user (optional)
 async function verifyToken(request) {
   const token = request.headers.get('Authorization')?.replace('Bearer ', '');
   
   if (!token) {
-    throw new Error('No token provided');
+    return null; // Return null for unauthenticated users instead of throwing error
   }
   
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     return decoded.userId;
   } catch (error) {
-    throw new Error('Invalid token');
+    return null; // Return null for invalid tokens instead of throwing error
   }
 }
 
@@ -26,7 +26,8 @@ export async function GET(request) {
   try {
     await connectDB();
     
-    await verifyToken(request); // Ensure user is authenticated
+    const userId = await verifyToken(request); // Get user ID if authenticated
+    const isAuthenticated = !!userId;
     
     const { searchParams } = new URL(request.url);
     
@@ -104,7 +105,9 @@ export async function GET(request) {
     }
     
     // Pagination
-    const skip = (page - 1) * limit;
+    // Limit results for unauthenticated users
+    const actualLimit = isAuthenticated ? limit : Math.min(limit, 6); // Max 6 results for unauthenticated users
+    const skip = (page - 1) * actualLimit;
     
     // Build sort object
     let sortObject = {};
@@ -140,7 +143,7 @@ export async function GET(request) {
         })()
       },
       { $skip: skip },
-      { $limit: limit },
+      { $limit: actualLimit },
       {
         $project: {
           fullName: 1,
@@ -216,9 +219,9 @@ export async function GET(request) {
       profiles: formattedProfiles,
       pagination: {
         current: page,
-        pages: Math.ceil(total / limit),
+        pages: Math.ceil(total / actualLimit),
         total,
-        hasNext: page * limit < total,
+        hasNext: page * actualLimit < total,
         hasPrev: page > 1
       },
       filters: {
@@ -236,8 +239,12 @@ export async function GET(request) {
           roles: roles?.split(',') || [],
           availability,
           salary: { min: minSalary, max: maxSalary }
-        }
-      }
+        },
+        sortBy,
+        sortOrder
+      },
+      authenticated: isAuthenticated,
+      message: isAuthenticated ? null : 'Sign in to see more candidates and send referral requests'
     });
     
   } catch (error) {

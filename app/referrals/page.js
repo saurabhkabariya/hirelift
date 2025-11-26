@@ -88,6 +88,10 @@ const ReferralsPageContent = () => {
       description: 'Request a referral from network',
       icon: UserPlus,
       action: () => {
+        if (!user) {
+          showAuthPrompt('send-request');
+          return;
+        }
         setActiveTab('requests');
         setShowQuickActions(false);
         // Additional logic for creating request modal can be added
@@ -99,6 +103,10 @@ const ReferralsPageContent = () => {
       description: 'Update your profile information',
       icon: Upload,
       action: () => {
+        if (!user) {
+          showAuthPrompt('create-profile');
+          return;
+        }
         setActiveTab('profile');
         setShowQuickActions(false);
         // Additional logic for file upload can be added
@@ -110,6 +118,10 @@ const ReferralsPageContent = () => {
       description: 'Check your referral performance',
       icon: BarChart3,
       action: () => {
+        if (!user) {
+          showAuthPrompt('view-rewards');
+          return;
+        }
         setActiveTab('leaderboard');
         setShowQuickActions(false);
       }
@@ -130,6 +142,10 @@ const ReferralsPageContent = () => {
       description: 'View points and rewards',
       icon: Gift,
       action: () => {
+        if (!user) {
+          showAuthPrompt('view-rewards');
+          return;
+        }
         setActiveTab('rewards');
         setShowQuickActions(false);
       }
@@ -161,16 +177,38 @@ const ReferralsPageContent = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  // Update loading state when points data is available
+  // Update loading state when points data is available or when user is not authenticated
   useEffect(() => {
-    if (pointsData) {
+    if (!user) {
+      // If user is not authenticated, we can immediately stop loading
+      setLoading(false);
+    } else if (pointsData || !pointsLoading) {
+      // If user is authenticated, wait for points data or points loading to complete
       setLoading(false);
     }
-  }, [pointsData]);
+  }, [pointsData, pointsLoading, user]);
+
+  // Fallback: Ensure loading doesn't persist indefinitely
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 3000); // Max 3 seconds loading time
+
+    return () => clearTimeout(timeout);
+  }, []);
   
   // Handle tab change and mark notifications as viewed if needed
   const handleTabChange = (tabId) => {
-    if (tabId === 'requests' && hasNewRequests) {
+    // Check if the tab requires authentication
+    const protectedTabs = ['profile', 'requests', 'rewards'];
+    
+    if (protectedTabs.includes(tabId) && !user) {
+      // Redirect to auth with return URL
+      router.push(`/auth?redirect=${encodeURIComponent(`/referrals?tab=${tabId}`)}`);
+      return;
+    }
+    
+    if (user && tabId === 'requests' && hasNewRequests) {
       markAsViewed('requests');
     }
     setActiveTab(tabId);
@@ -180,23 +218,20 @@ const ReferralsPageContent = () => {
     router.replace(newUrl);
   };
   
-  if (!user) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-800 mb-4">Login Required</h2>
-          <p className="text-gray-600 mb-6">Please log in to access the referrals hub.</p>
-          <a 
-            href="/auth" 
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Go to Login
-          </a>
-        </div>
-      </div>
-    );
-  }
-  if (loading || pointsLoading) {
+  // Show login prompt for protected actions
+  const showAuthPrompt = (action) => {
+    const actionMessages = {
+      'send-request': 'Please log in to send referral requests',
+      'create-profile': 'Please log in to create your profile',
+      'view-requests': 'Please log in to view your requests',
+      'view-rewards': 'Please log in to view your rewards'
+    };
+    
+    if (confirm(actionMessages[action] || 'Please log in to continue')) {
+      router.push(`/auth?redirect=${encodeURIComponent(window.location.pathname + window.location.search)}`);
+    }
+  };
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
@@ -526,7 +561,7 @@ const ReferralsPageContent = () => {
         </div>
       </div>
       {/* Stats Overview */}
-      {pointsData && (
+      {user && pointsData && (
         <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 py-4 xs:py-6">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 xs:gap-4 lg:gap-6 mb-6 xs:mb-8">
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-3 xs:p-4 lg:p-6">
@@ -583,10 +618,64 @@ const ReferralsPageContent = () => {
       {/* Tab Content */}
       <div className="max-w-7xl mx-auto px-3 xs:px-4 sm:px-6 lg:px-8 pb-8 xs:pb-12">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          {activeTab === 'browse' && <BrowseCandidates />}
-          {activeTab === 'profile' && <MyProfile />}
-          {activeTab === 'requests' && <MyRequests initialSubTab={searchParams.get('subtab')} />}
-          {activeTab === 'rewards' && <PointsRewards />}
+          {activeTab === 'browse' && <BrowseCandidates onAuthRequired={() => showAuthPrompt('send-request')} />}
+          {activeTab === 'profile' && (
+            user ? (
+              <MyProfile />
+            ) : (
+              <div className="p-8 text-center">
+                <div className="max-w-md mx-auto">
+                  <Users className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Create Your Profile</h3>
+                  <p className="text-gray-600 mb-6">Sign in to create and manage your candidate profile.</p>
+                  <button
+                    onClick={() => showAuthPrompt('create-profile')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Sign In to Continue
+                  </button>
+                </div>
+              </div>
+            )
+          )}
+          {activeTab === 'requests' && (
+            user ? (
+              <MyRequests initialSubTab={searchParams.get('subtab')} />
+            ) : (
+              <div className="p-8 text-center">
+                <div className="max-w-md mx-auto">
+                  <FileText className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">View Your Requests</h3>
+                  <p className="text-gray-600 mb-6">Sign in to track your sent and received referral requests.</p>
+                  <button
+                    onClick={() => showAuthPrompt('view-requests')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Sign In to Continue
+                  </button>
+                </div>
+              </div>
+            )
+          )}
+          {activeTab === 'rewards' && (
+            user ? (
+              <PointsRewards />
+            ) : (
+              <div className="p-8 text-center">
+                <div className="max-w-md mx-auto">
+                  <Gift className="h-16 w-16 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Earn Rewards</h3>
+                  <p className="text-gray-600 mb-6">Sign in to view your points, rewards, and referral history.</p>
+                  <button
+                    onClick={() => showAuthPrompt('view-rewards')}
+                    className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+                  >
+                    Sign In to Continue
+                  </button>
+                </div>
+              </div>
+            )
+          )}
           {activeTab === 'leaderboard' && <Leaderboard />}
         </div>
       </div>
