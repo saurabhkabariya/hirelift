@@ -123,6 +123,8 @@ export async function POST(request) {
     const userResponse = {
       id: user._id,
       email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
       auditCount: user.auditCount,
       isPremium: user.isPremium,
       emailVerified: user.emailVerified,

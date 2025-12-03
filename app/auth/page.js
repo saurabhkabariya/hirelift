@@ -36,7 +36,18 @@ export default function AuthPage() {
       if (redirectUrl) {
         navigateWithLoading(redirectUrl, 'Redirecting...');
       } else {
-        navigateWithLoading('/dashboard', 'Loading dashboard...');
+        // Check if user has completed onboarding
+        const onboardingCompleted = typeof window !== 'undefined' 
+          ? localStorage.getItem('hireLiftOnboardingCompleted') === 'true'
+          : false;
+        
+        if (!onboardingCompleted) {
+          // Redirect new users to onboarding
+          navigateWithLoading('/onboarding', 'Setting up your profile...');
+        } else {
+          // Existing users go to dashboard
+          navigateWithLoading('/dashboard', 'Loading dashboard...');
+        }
       }
     }
   }, [user, loading, navigateWithLoading]);

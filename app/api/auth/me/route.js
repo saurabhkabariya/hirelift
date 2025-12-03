@@ -23,6 +23,8 @@ export async function GET(req) {
     }    const userResponse = {
       id: user._id,
       email: user.email,
+      firstName: user.firstName,
+      lastName: user.lastName,
       auditCount: user.auditCount,
       isPremium: user.isPremium,
       emailVerified: user.emailVerified,
