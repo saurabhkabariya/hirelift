@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import { isAuthError, handleAuthError } from '@/lib/authUtils';
 import { 
   Crown, 
@@ -19,6 +20,7 @@ import {
 
 export default function UpgradeCTA({ totalScore, user }) {
   const router = useRouter();
+  const { navigateWithLoading } = usePageLoading();
 
   const getUpgradeMessage = () => {
     if (totalScore >= 85) {
@@ -114,7 +116,7 @@ export default function UpgradeCTA({ totalScore, user }) {
 
   const handleUpgrade = (planType = null) => {
     if (!user) {
-      router.push('/auth?redirect=' + encodeURIComponent('/pricing'));
+      navigateWithLoading('/auth?redirect=' + encodeURIComponent('/pricing'), 'Redirecting to sign in...');
       return;
     }
     
@@ -126,7 +128,7 @@ export default function UpgradeCTA({ totalScore, user }) {
     }
     
     const targetPlan = planType || upgradeInfo.recommendedPlan;
-    router.push(`/pricing?plan=${targetPlan}`);
+    navigateWithLoading(`/pricing?plan=${targetPlan}`, 'Loading pricing plans...');
   };
 
   const getUrgencyIcon = () => {

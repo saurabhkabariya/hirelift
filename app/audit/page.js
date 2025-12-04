@@ -12,12 +12,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { useRouter } from "next/navigation";
+import { usePageLoading } from "@/hooks/usePageLoading";
 import Link from "next/link";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { LogOut, User, CreditCard, Home, BarChart } from "lucide-react";
 import Head from "next/head";
-import { usePageLoading } from "@/hooks/usePageLoading";
 
 export default function ResumeAuditPage() {
   const [file, setFile] = useState(null);
@@ -980,10 +980,10 @@ function ScoreBar({ label, value, color }) {
 
 // Career Acceleration CTA Component - Primary Conversion Focus
 function CareerAccelerationCTA({ user, isPremium }) {
-  const router = useRouter();
+  const { navigateWithLoading } = usePageLoading();
 
   const handleUpgradeClick = () => {
-    router.push('/pricing');
+    navigateWithLoading('/pricing', 'Loading pricing plans...');
   };
 
   return (

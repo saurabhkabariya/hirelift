@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import { useAuth } from '@/contexts/AuthContext';
 import { useOnboarding, OnboardingProvider } from '@/contexts/OnboardingContext';
 import UserInfoStep from './UserInfoStep';
@@ -183,10 +184,11 @@ const WelcomeStep = ({ onComplete, user }) => {
 // Completion step component
 const CompletionStep = ({ userInfo, auditResult }) => {
   const router = useRouter();
+  const { navigateWithLoading } = usePageLoading();
   const { user } = useAuth();
 
   const handleGoToDashboard = () => {
-    router.push('/dashboard');
+    navigateWithLoading('/dashboard', 'Welcome to your dashboard!');
   };
 
   return (
@@ -347,6 +349,7 @@ const OnboardingFlowContent = () => {
   } = useOnboarding();
   const { user } = useAuth();
   const router = useRouter();
+  const { navigateWithLoading } = usePageLoading();
 
   const currentStepInfo = getCurrentStepInfo();
 
@@ -364,7 +367,7 @@ const OnboardingFlowContent = () => {
       
       // Redirect to dashboard after a short delay
       setTimeout(() => {
-        router.push('/dashboard');
+        navigateWithLoading('/dashboard', 'Welcome to your dashboard!');
       }, 3000);
     }
   };

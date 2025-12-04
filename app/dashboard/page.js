@@ -369,7 +369,7 @@ const DashboardContent = () => {
                 {!user.isPremium && (
                   <motion.span 
                     whileHover={{ scale: 1.1 }}
-                    onClick={()=>router.push('/pricing')}
+                    onClick={()=>navigateWithLoading('/pricing', 'Loading pricing plans...')}
                     className="ml-2 text-xs px-2 py-1 bg-[var(--secondary-light)] text-white rounded-full cursor-pointer whitespace-nowrap"
                   >
                     Upgrade
@@ -394,7 +394,7 @@ const DashboardContent = () => {
                     <span className="text-red-700 font-semibold text-sm sm:text-base">Administrator</span>
                   </div>
                   <motion.span 
-                    onClick={()=>router.push('/admin/company-manager')}
+                    onClick={()=>navigateWithLoading('/admin/company-manager', 'Loading admin panel...')}
                     className="text-xs px-2 py-1 text-center bg-red-100 text-red-800 rounded-full hover:cursor-pointer sm:ml-2 w-full sm:w-auto"
                   >
                     Admin Panel Access
@@ -485,7 +485,7 @@ const DashboardContent = () => {
                   
                   <motion.button
                     whileHover={{ x: 5 }}
-                    onClick={() => router.push('/referrals?tab=requests')}
+                    onClick={() => navigateWithLoading('/referrals?tab=requests', 'Loading referral requests...')}
                     className="flex items-center space-x-2 text-orange-600 hover:text-orange-700 font-medium text-xs sm:text-sm"
                   >
                     <span>View Requests</span>
@@ -528,7 +528,7 @@ const DashboardContent = () => {
                     whileHover={{ x: 5 }}
                     onClick={() => {
                       markAsViewed('dashboard');
-                      router.push('/referrals?tab=requests&subtab=sent');
+                      navigateWithLoading('/referrals?tab=requests&subtab=sent', 'Loading sent requests...');
                     }}
                     className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium text-xs sm:text-sm"
                   >
@@ -568,7 +568,7 @@ const DashboardContent = () => {
                   
                   <motion.button
                     whileHover={{ x: 5 }}
-                    onClick={() => router.push('/referrals')}
+                    onClick={() => navigateWithLoading('/referrals', 'Loading referrals...')}
                     className="flex items-center space-x-2 text-green-600 hover:text-green-700 font-medium text-xs sm:text-sm"
                   >
                     <span>Visit Referrals Hub</span>
@@ -592,7 +592,7 @@ const DashboardContent = () => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => router.push('/referrals?tab=requests')}
+                      onClick={() => navigateWithLoading('/referrals?tab=requests', 'Loading referral requests...')}
                       className="w-full sm:w-auto flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base"
                     >
                       <FileText className="h-4 w-4" />
@@ -602,7 +602,7 @@ const DashboardContent = () => {
                     <motion.button
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => router.push('/referrals?tab=browse')}
+                      onClick={() => navigateWithLoading('/referrals?tab=browse', 'Loading referral candidates...')}
                       className="w-full sm:w-auto flex items-center justify-center space-x-2 px-4 sm:px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-200 text-sm sm:text-base"
                     >
                       <Send className="h-4 w-4" />
@@ -626,7 +626,7 @@ const DashboardContent = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => router.push('/jobs')}
+            onClick={() => navigateWithLoading('/jobs', 'Loading job opportunities...')}
             className="bg-white rounded-xl p-6 shadow-lg border border-emerald-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
           >
             {/* New Badge */}
@@ -656,7 +656,7 @@ const DashboardContent = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => router.push('/audit')}            className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
+            onClick={() => navigateWithLoading('/audit', 'Loading resume analysis...')}            className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
           >
             {/* First Audit Free Badge */}
             <motion.div
@@ -687,9 +687,9 @@ const DashboardContent = () => {
             whileTap={{ scale: 0.95 }}
             onClick={() => {
               if (user?.isPremium) {
-                router.push('/company-search');
+                navigateWithLoading('/company-search', 'Loading company directory...');
               } else {
-                router.push('/pricing');
+                navigateWithLoading('/pricing', 'Loading pricing plans...');
               }
             }}            className="bg-white rounded-xl p-6 shadow-lg border border-blue-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
           >
@@ -721,7 +721,7 @@ const DashboardContent = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => router.push('/playground')}            className="bg-white rounded-xl p-6 shadow-lg border border-purple-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
+            onClick={() => navigateWithLoading('/playground', 'Loading AI playground...')}            className="bg-white rounded-xl p-6 shadow-lg border border-purple-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
           >
             {/* Free Badge */}
             <motion.div
@@ -749,7 +749,7 @@ const DashboardContent = () => {
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => router.push('/referrals')}
+            onClick={() => navigateWithLoading('/referrals', 'Loading referrals...')}
             className="bg-white rounded-xl p-6 shadow-lg border border-indigo-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
           >
             {/* Popular Badge */}
@@ -787,7 +787,7 @@ const DashboardContent = () => {
                 exit={{ opacity: 0, scale: 0.8 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => router.push('/admin/company-manager')}
+                onClick={() => navigateWithLoading('/admin/company-manager', 'Loading admin panel...')}
                 className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-6 shadow-lg border border-orange-200 hover:shadow-xl transition-all duration-200 text-left relative overflow-hidden cursor-pointer"
               >
                 <div className="absolute top-2 right-2">
@@ -848,7 +848,7 @@ const DashboardContent = () => {
                 exit={{ opacity: 0, scale: 0.8 }}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => router.push('/pricing')}
+                onClick={() => navigateWithLoading('/pricing', 'Loading pricing plans...')}
                 className="bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 rounded-xl p-6 shadow-2xl border-0 hover:shadow-3xl transition-all duration-300 text-left relative overflow-hidden cursor-pointer group"
               >
                 {/* Animated Background Gradient */}
@@ -924,7 +924,7 @@ const DashboardContent = () => {
                 exit={{ opacity: 0, scale: 0.8 }}
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
-                onClick={() => router.push('/pricing')}
+                onClick={() => navigateWithLoading('/pricing', 'Loading pricing plans...')}
                 className="bg-white rounded-xl p-6 shadow-lg border border-emerald-200 hover:shadow-xl hover:border-emerald-300 transition-all duration-200 text-left relative overflow-hidden cursor-pointer group"
               >
                 {/* Premium Glow Effect */}

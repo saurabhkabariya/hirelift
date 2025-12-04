@@ -3,6 +3,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
+import { usePageLoading } from '@/hooks/usePageLoading';
 import { motion } from 'framer-motion';
 import OnboardingFlow from '@/components/onboarding/OnboardingFlow';
 import Head from 'next/head';
@@ -10,6 +11,7 @@ import Head from 'next/head';
 export default function OnboardingPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const { navigateWithLoading } = usePageLoading();
 
   // Check onboarding completion and handle redirects
   useEffect(() => {
@@ -20,7 +22,7 @@ export default function OnboardingPage() {
     if (!user && !loading) {
       // Add a small delay to prevent immediate redirects that might conflict
       const redirectTimer = setTimeout(() => {
-        router.push('/auth');
+        navigateWithLoading('/auth', 'Redirecting to sign in...');
       }, 50);
       return () => clearTimeout(redirectTimer);
     }
@@ -33,7 +35,7 @@ export default function OnboardingPage() {
       
       if (onboardingCompleted) {
         // Redirect to dashboard if already completed
-        router.push('/dashboard');
+        navigateWithLoading('/dashboard', 'Redirecting to dashboard...');
       }
     }
   }, [user, loading, router]);

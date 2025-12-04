@@ -34,6 +34,7 @@ import Head from 'next/head';
 export default function PricingPage() {
   const { user, refetchUser } = useAuth();
   const router = useRouter();
+  const { navigateWithLoading } = usePageLoading();
   const [paymentLoading, setPaymentLoading] = useState(false);
   const [oneTimePaymentLoading, setOneTimePaymentLoading] = useState(false);
   const [loadingStage, setLoadingStage] = useState('preparing');
@@ -166,7 +167,7 @@ export default function PricingPage() {
           await refetchUser();
           setPaymentLoading(false);
           toast.success('Successfully upgraded to Basic plan!');
-          router.push('/dashboard');
+          navigateWithLoading('/dashboard', 'Redirecting to dashboard...');
         },
         onPaymentError: (error) => {
           // Check for JWT expiration or auth errors
@@ -267,7 +268,7 @@ export default function PricingPage() {
   const handleTrialClaim = async () => {
     if (!user) {
       toast.error('Please sign in to claim your free trial');
-      router.push('/auth');
+      navigateWithLoading('/auth', 'Redirecting to sign in...');
       return { success: false, error: 'Not authenticated' };
     }
 

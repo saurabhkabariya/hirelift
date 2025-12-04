@@ -3,15 +3,17 @@
 import { motion } from 'framer-motion';
 import { FaBriefcase, FaMapMarkerAlt, FaMoneyBillWave, FaArrowRight, FaClock, FaGlobe } from 'react-icons/fa';
 import { useRouter } from 'next/navigation';
+import { usePageLoading } from '@/hooks/usePageLoading';
 
 export default function FreeJobsSection({ handleRedirect }) {
   const router = useRouter();
+  const { navigateWithLoading } = usePageLoading();
 
   const handleViewAllJobs = () => {
     if (handleRedirect) {
       handleRedirect('/jobs');
     } else {
-      router.push('/jobs');
+      navigateWithLoading('/jobs', 'Loading job opportunities...');
     }
   };
 

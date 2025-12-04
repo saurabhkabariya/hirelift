@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLoading } from '@/contexts/LoadingContext';
@@ -11,23 +11,70 @@ const UniversalLoadingBar = () => {
   const { isLoading: contextLoading } = useLoading();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const progressTimeoutRef = useRef(null);
+  const forceCompleteTimeoutRef = useRef(null);
 
   // Track route changes
   useEffect(() => {
     setIsRouteLoading(true);
     setProgress(0);
 
-    const timer = setTimeout(() => {
+    // Set a maximum timeout to prevent hanging
+    const maxTimeout = setTimeout(() => {
       setIsRouteLoading(false);
-    }, 500); // Simulate route loading time
+    }, 2000); // Maximum 2 seconds for route loading
 
-    return () => clearTimeout(timer);
+    const loadingTimer = setTimeout(() => {
+      setIsRouteLoading(false);
+    }, 600); // Normal route loading time
+
+    return () => {
+      clearTimeout(maxTimeout);
+      clearTimeout(loadingTimer);
+    };
   }, [pathname, searchParams]);
 
   // Combined loading state
   const isLoading = isRouteLoading || contextLoading;
 
+  // Safety mechanism: force complete after maximum time
   useEffect(() => {
+    if (isLoading) {
+      // Clear any existing force complete timeout
+      if (forceCompleteTimeoutRef.current) {
+        clearTimeout(forceCompleteTimeoutRef.current);
+      }
+      
+      // Force complete after 3 seconds to prevent hanging
+      forceCompleteTimeoutRef.current = setTimeout(() => {
+        console.warn('Loading bar force completed due to timeout');
+        setIsRouteLoading(false);
+        setProgress(100);
+        setTimeout(() => setProgress(0), 400);
+      }, 3000);
+    } else {
+      // Clear force complete timeout when loading finishes normally
+      if (forceCompleteTimeoutRef.current) {
+        clearTimeout(forceCompleteTimeoutRef.current);
+        forceCompleteTimeoutRef.current = null;
+      }
+    }
+
+    return () => {
+      if (forceCompleteTimeoutRef.current) {
+        clearTimeout(forceCompleteTimeoutRef.current);
+        forceCompleteTimeoutRef.current = null;
+      }
+    };
+  }, [isLoading]);
+
+  useEffect(() => {
+    // Clear any existing timeouts
+    if (progressTimeoutRef.current) {
+      clearTimeout(progressTimeoutRef.current);
+      progressTimeoutRef.current = null;
+    }
+
     if (isLoading) {
       setProgress(0);
       
@@ -38,24 +85,44 @@ const UniversalLoadingBar = () => {
             return prev + Math.random() * 15 + 8;
           } else if (prev < 90) {
             return prev + Math.random() * 5 + 2;
-          } else if (prev < 98) {
+          } else if (prev < 95) {
             return prev + Math.random() * 2 + 0.5;
           }
-          return prev;
+          // Stop at 95% and wait for completion
+          return Math.min(prev, 95);
         });
-      }, 80);
+      }, 120);
 
       return () => clearInterval(progressInterval);
     } else {
-      // Complete the loading bar
+      // Force complete the loading bar immediately
       setProgress(100);
-      const completeTimeout = setTimeout(() => {
-        setProgress(0);
-      }, 300);
       
-      return () => clearTimeout(completeTimeout);
+      // Reset after a short delay
+      progressTimeoutRef.current = setTimeout(() => {
+        setProgress(0);
+      }, 400);
+      
+      return () => {
+        if (progressTimeoutRef.current) {
+          clearTimeout(progressTimeoutRef.current);
+          progressTimeoutRef.current = null;
+        }
+      };
     }
   }, [isLoading]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (progressTimeoutRef.current) {
+        clearTimeout(progressTimeoutRef.current);
+      }
+      if (forceCompleteTimeoutRef.current) {
+        clearTimeout(forceCompleteTimeoutRef.current);
+      }
+    };
+  }, []);
 
   return (
     <AnimatePresence>
