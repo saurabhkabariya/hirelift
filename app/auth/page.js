@@ -34,23 +34,24 @@ export default function AuthPage() {
       const redirectUrl = urlParams.get('redirect');
       
       if (redirectUrl) {
-        navigateWithLoading(redirectUrl, 'Redirecting...');
+        router.push(redirectUrl);
+        return;
+      }
+      
+      // Check if user has completed onboarding
+      const onboardingCompleted = typeof window !== 'undefined' 
+        ? localStorage.getItem('hireLiftOnboardingCompleted') === 'true'
+        : false;
+      
+      if (!onboardingCompleted) {
+        // Redirect new users to onboarding
+        window.location.href = '/onboarding';
       } else {
-        // Check if user has completed onboarding
-        const onboardingCompleted = typeof window !== 'undefined' 
-          ? localStorage.getItem('hireLiftOnboardingCompleted') === 'true'
-          : false;
-        
-        if (!onboardingCompleted) {
-          // Redirect new users to onboarding
-          navigateWithLoading('/onboarding', 'Setting up your profile...');
-        } else {
-          // Existing users go to dashboard
-          navigateWithLoading('/dashboard', 'Loading dashboard...');
-        }
+        // Existing users go to dashboard
+        router.push('/dashboard');
       }
     }
-  }, [user, loading, navigateWithLoading]);
+  }, [user, loading, router]);
 
   // Show loading screen while checking auth state
   if (loading) {

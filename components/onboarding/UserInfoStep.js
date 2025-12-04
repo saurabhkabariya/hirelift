@@ -40,6 +40,7 @@ const UserInfoStep = ({ onComplete, user }) => {
   const [errors, setErrors] = useState({});
   const [showEmotionalMessage, setShowEmotionalMessage] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [completing, setCompleting] = useState(false);
 
   // Form sections for better UX
   const sections = [
@@ -152,12 +153,15 @@ const UserInfoStep = ({ onComplete, user }) => {
   };
 
   const saveProfileData = async (profileData) => {
-    if (!user) return false;
+    if (!user) {
+      toast.error('User authentication required');
+      return false;
+    }
     
     try {
       const token = localStorage.getItem('token');
       if (!token) {
-        toast.error('Authentication required');
+        toast.error('Authentication token not found');
         return false;
       }
 
@@ -173,7 +177,7 @@ const UserInfoStep = ({ onComplete, user }) => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to save profile');
+        throw new Error(data.error || `HTTP ${response.status}: Failed to save profile`);
       }
 
       // Refresh user data
@@ -181,7 +185,16 @@ const UserInfoStep = ({ onComplete, user }) => {
       return true;
     } catch (error) {
       console.error('Profile save error:', error);
-      toast.error('Failed to save profile. Please try again.');
+      
+      // More specific error messages based on error type
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        toast.error('Network error. Please check your connection.');
+      } else if (error.message.includes('401') || error.message.includes('authentication')) {
+        toast.error('Session expired. Please log in again.');
+      } else {
+        toast.error(error.message || 'Failed to save profile. Please try again.');
+      }
+      
       return false;
     }
   };
@@ -190,14 +203,30 @@ const UserInfoStep = ({ onComplete, user }) => {
     if (validateSection(currentSection)) {
       setSaving(true);
       
-      // Save profile data to backend
-      const saved = await saveProfileData(formData);
-      
-      setSaving(false);
-      
-      if (saved) {
-        toast.success('Profile saved successfully!');
-        onComplete(formData);
+      try {
+        // Save profile data to backend
+        const saved = await saveProfileData(formData);
+        
+        setSaving(false);
+        
+        if (saved) {
+          setCompleting(true);
+          toast.success('Profile saved successfully!');
+          
+          // Add a small delay to show the toast and then proceed
+          setTimeout(() => {
+            setCompleting(false); // Reset completing state
+            onComplete(formData);
+          }, 1500); // 1.5 second delay to show success message
+        } else {
+          // Reset completing state if save failed
+          setCompleting(false);
+        }
+      } catch (error) {
+        console.error('Profile completion error:', error);
+        setSaving(false);
+        setCompleting(false);
+        toast.error('Failed to save profile. Please try again.');
       }
     }
   };
@@ -509,7 +538,7 @@ const UserInfoStep = ({ onComplete, user }) => {
 
             <button
               onClick={handleNextSection}
-              disabled={saving}
+              disabled={saving || completing}
               className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? (
@@ -520,6 +549,15 @@ const UserInfoStep = ({ onComplete, user }) => {
                     transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                   />
                   Saving...
+                </>
+              ) : completing ? (
+                <>
+                  <motion.div
+                    className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                  />
+                  Completing...
                 </>
               ) : (
                 <>

@@ -11,17 +11,22 @@ export default function OnboardingPage() {
   const { user, loading } = useAuth();
   const router = useRouter();
 
-  // Redirect to auth if not logged in
+  // Check onboarding completion and handle redirects
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/auth?redirect=/onboarding');
+    // Always wait for auth loading to complete before making any decisions
+    if (loading) return;
+    
+    // Only redirect to auth if we're certain there's no user and not loading
+    if (!user && !loading) {
+      // Add a small delay to prevent immediate redirects that might conflict
+      const redirectTimer = setTimeout(() => {
+        router.push('/auth');
+      }, 50);
+      return () => clearTimeout(redirectTimer);
     }
-  }, [user, loading, router]);
-
-  // Check if user has already completed onboarding
-  useEffect(() => {
-    if (user && !loading) {
-      // Check if onboarding was already completed
+    
+    // If user exists, check onboarding completion
+    if (user) {
       const onboardingCompleted = typeof window !== 'undefined' 
         ? localStorage.getItem('hireLiftOnboardingCompleted') === 'true'
         : false;
@@ -33,8 +38,10 @@ export default function OnboardingPage() {
     }
   }, [user, loading, router]);
 
-  // Show loading state
-  if (loading) {
+  // Show loading state while auth is being checked OR during redirects
+  if (loading || (!user && !loading)) {
+    const isRedirecting = !loading && !user;
+    
     return (
       <>
         <Head>
@@ -56,10 +63,10 @@ export default function OnboardingPage() {
               />
             </div>
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Preparing Your Career Transformation
+              {isRedirecting ? 'Redirecting to Login...' : 'Preparing Your Career Transformation'}
             </h2>
             <p className="text-gray-600">
-              Setting up your personalized HireLift experience...
+              {isRedirecting ? 'Please wait while we redirect you to the login page' : 'Setting up your personalized HireLift experience...'}
             </p>
           </motion.div>
         </div>
@@ -67,7 +74,7 @@ export default function OnboardingPage() {
     );
   }
 
-  // Don't render if no user (will redirect)
+  // Only render onboarding flow if user is authenticated and loading is complete
   if (!user) {
     return null;
   }

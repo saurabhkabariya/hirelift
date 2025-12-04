@@ -18,12 +18,15 @@ import {
 } from 'lucide-react';
 import JOB_ROLES from '@/data/jobRoles';
 import { useAuth } from '@/contexts/AuthContext';
+import { useOnboarding } from '@/contexts/OnboardingContext';
 import EnhancedATSReport from '@/components/ui/EnhancedATSReport';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import toast from 'react-hot-toast';
 
 const AuditStep = ({ onComplete, userInfo }) => {
+  const { user, refetchUser } = useAuth();
+  const { updateAuditResult } = useOnboarding();
   const [file, setFile] = useState(null);
   const [role, setRole] = useState('');
   const [loading, setLoading] = useState(false);
@@ -31,8 +34,9 @@ const AuditStep = ({ onComplete, userInfo }) => {
   const [error, setError] = useState('');
   const [dragActive, setDragActive] = useState(false);
   const [showMotivation, setShowMotivation] = useState(false);
+  const [completing, setCompleting] = useState(false);
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const inputRef = useRef();
-  const { user, refetchUser } = useAuth();
 
   // Set default role based on user info
   useEffect(() => {
@@ -138,6 +142,11 @@ const AuditStep = ({ onComplete, userInfo }) => {
       const data = await res.json();
 
       if (!res.ok) {
+        // Handle free review exhausted with conversion-focused modal
+        if (data.error && data.error.toLowerCase().includes('free review exhausted')) {
+          setShowUpgradeModal(true);
+          return;
+        }
         throw new Error(data.error || "Audit failed");
       }
 
@@ -221,8 +230,183 @@ const AuditStep = ({ onComplete, userInfo }) => {
   };
 
   const handleComplete = () => {
-    onComplete({ auditResult: result });
+    if (!result) {
+      toast.error('Please complete your resume analysis first');
+      return;
+    }
+    
+    if (completing) return; // Prevent double-clicks
+    
+    setCompleting(true);
+    
+    // Prepare the complete audit data structure
+    const auditData = {
+      ...result,
+      // Ensure all important fields are present for PricingShowcaseStep
+      totalScore: result.totalScore || 0,
+      sectionScore: result.sectionScore || 0,
+      keywordScore: result.keywordScore || 0,
+      lengthScore: result.lengthScore || 0,
+      contactScore: result.contactScore || 0,
+      foundKeywords: result.foundKeywords || [],
+      missingKeywords: result.missingKeywords || [],
+      suggestions: result.suggestions || [],
+      // Add file info for reference
+      fileName: file?.name || 'resume.pdf',
+      analysisDate: new Date().toISOString()
+    };
+    
+    // First, update the audit result in context
+    updateAuditResult(auditData);
+    
+    // Then complete the step with proper delay for UI feedback
+    setTimeout(() => {
+      onComplete(auditData);
+      setCompleting(false);
+    }, 1500); // Longer delay to match UserInfoStep
   };
+
+  // Upgrade Modal Component
+  const UpgradeModal = () => (
+    <AnimatePresence>
+      {showUpgradeModal && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-3 sm:p-4 lg:p-6"
+          onClick={() => setShowUpgradeModal(false)}
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0, y: 50 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.8, opacity: 0, y: 50 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-sm sm:max-w-md lg:max-w-lg w-full max-h-[90vh] overflow-hidden overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Header with gradient */}
+            <div className="bg-gradient-to-r from-purple-600 to-blue-600 text-white p-4 sm:p-6 lg:p-8 text-center relative">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.2 }}
+                className="w-12 h-12 sm:w-16 sm:h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4"
+              >
+                <Sparkles className="w-6 h-6 sm:w-8 sm:h-8" />
+              </motion.div>
+              <h3 className="text-xl sm:text-2xl font-bold mb-1 sm:mb-2">You're On Fire! 🔥</h3>
+              <p className="text-white/90 text-sm sm:text-base">You've used your free resume review</p>
+            </div>
+
+            {/* Content */}
+            <div className="p-4 sm:p-6 lg:p-8">
+              <div className="text-center mb-4 sm:mb-6">
+                <h4 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-3">
+                  Ready to Unlock More Opportunities?
+                </h4>
+                <p className="text-gray-600 leading-relaxed mb-3 text-sm sm:text-base">
+                  You're clearly committed to improving your career prospects. 
+                  Join thousands who've already transformed their job search with our premium features.
+                </p>
+                
+                {/* Social proof badge */}
+                <div className="inline-flex items-center gap-1 sm:gap-2 bg-blue-50 border border-blue-200 px-3 sm:px-4 py-1 sm:py-2 rounded-full text-xs sm:text-sm">
+                  <div className="flex -space-x-1">
+                    {[1,2,3,4].map((i) => (
+                      <div key={i} className="w-4 h-4 sm:w-6 sm:h-6 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full border-2 border-white" />
+                    ))}
+                  </div>
+                  <span className="text-blue-800 font-medium hidden sm:inline">2,847+ users upgraded this month</span>
+                  <span className="text-blue-800 font-medium sm:hidden">2,847+ upgraded</span>
+                </div>
+              </div>
+
+              {/* Benefits */}
+              <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8">
+                {[
+                  { icon: Star, text: "Unlimited resume reviews" },
+                  { icon: Zap, text: "AI-powered optimization suggestions" },
+                  { icon: TrendingUp, text: "Industry-specific keyword targeting" },
+                  { icon: CheckCircle, text: "Professional resume rewriting service" }
+                ].map((benefit, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + index * 0.1 }}
+                    className="flex items-center gap-2 sm:gap-3"
+                  >
+                    <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                      <benefit.icon className="w-3 h-3 sm:w-4 sm:h-4 text-green-600" />
+                    </div>
+                    <span className="text-gray-700 text-sm sm:text-base">{benefit.text}</span>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* Action buttons */}
+              <div className="space-y-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => {
+                    setShowUpgradeModal(false);
+                    // Navigate to pricing
+                    window.location.href = '/pricing';
+                  }}
+                  className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white py-3 sm:py-4 px-4 sm:px-6 rounded-lg sm:rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-2 relative overflow-hidden"
+                >
+                  {/* Shine effect */}
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                    initial={{ x: '-100%' }}
+                    animate={{ x: '100%' }}
+                    transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
+                  />
+                  <Star className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <span className="hidden sm:inline">Upgrade Now</span>
+                  <span className="sm:hidden">Upgrade</span>
+                  <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
+                </motion.button>
+                
+                {/* Limited time offer */}
+                <div className="text-center">
+                  <span className="inline-flex items-center gap-1 sm:gap-2 text-xs sm:text-sm text-orange-600 font-medium bg-orange-50 border border-orange-200 px-2 sm:px-3 py-1 rounded-full">
+                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                    <span className="hidden sm:inline">Limited time: 50% off first month</span>
+                    <span className="sm:hidden">50% off first month</span>
+                  </span>
+                </div>
+                
+                <button
+                  onClick={() => setShowUpgradeModal(false)}
+                  className="w-full py-2 sm:py-3 px-4 sm:px-6 text-gray-600 hover:text-gray-800 transition-colors font-medium text-sm sm:text-base"
+                >
+                  Maybe Later
+                </button>
+              </div>
+
+              {/* Trust indicators */}
+              <div className="mt-4 sm:mt-6 pt-4 sm:pt-6 border-t border-gray-100">
+                <div className="flex items-center justify-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500">
+                  <div className="flex items-center gap-1">
+                    <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-500" />
+                    <span className="hidden sm:inline">30-day money back</span>
+                    <span className="sm:hidden">Money back</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <Clock className="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" />
+                    <span>Cancel anytime</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 relative overflow-hidden">
@@ -498,12 +682,26 @@ const AuditStep = ({ onComplete, userInfo }) => {
 
                 <motion.button
                   onClick={handleComplete}
-                  className="flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-semibold text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  disabled={completing}
+                  className="flex items-center gap-3 px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-lg font-semibold text-lg hover:from-green-600 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                  whileHover={{ scale: completing ? 1 : 1.05 }}
+                  whileTap={{ scale: completing ? 1 : 0.95 }}
                 >
-                  Continue to Upgrade Options
-                  <ArrowRight className="w-5 h-5" />
+                  {completing ? (
+                    <>
+                      <motion.div
+                        className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      />
+                      Proceeding...
+                    </>
+                  ) : (
+                    <>
+                      Continue to Upgrade Options
+                      <ArrowRight className="w-5 h-5" />
+                    </>
+                  )}
                 </motion.button>
               </motion.div>
             </motion.div>
@@ -563,6 +761,9 @@ const AuditStep = ({ onComplete, userInfo }) => {
             </div>
           )}
         </div>
+
+        {/* Upgrade Modal */}
+        <UpgradeModal />
       </div>
     </div>
   );

@@ -365,33 +365,9 @@ export default function PricingPage() {
   };
 
   const plans = [
-    // Special 7-day trial plan
-    ...(safeCanShowClaimButton ? [{
-      id: 'trial',
-      name: '7-Day FREE Trial',
-      price: `${pricingConfig.symbol}0`,
-      billing: '/7 days',
-      description: '🎁 Try Career Accelerator FREE for 7 days',
-      features: [
-        'Everything in Career Accelerator',
-        'Unlimited Resume Reviews',
-        '1,000+ HR Directory Access', 
-        'Advanced ATS Optimization',
-        'Proven Email Templates Library',
-        'Priority Expert Support',
-        'No Credit Card Required ✅',
-        'Cancel anytime - No strings attached'
-      ],
-      buttonText: claimingTrial ? 'Activating Trial...' : '🎁 Claim FREE 7-Day Trial',
-      popular: true,
-      icon: Gift,
-      paymentType: 'trial',
-      disabled: claimingTrial,
-      specialOffer: true
-    }] : []),
     {
       id: 'free',
-      name: 'Free Trial',
+      name: 'Free Plan',
       price: `${pricingConfig.symbol}0`,
       billing: '',
       description: 'Test our Auditor power before you buy',
@@ -401,9 +377,9 @@ export default function PricingPage() {
         'Professional Email Templates Access',
         'Job Board Access (100+ jobs)',
         'Community Support',
-        'No Credit Card Required ✅'
+        'No Credit Card Required'
       ],
-      buttonText: 'Start Free Trial',
+      buttonText: 'Explore For Free',
       popular: false,
       icon: Users,
       paymentType: 'free'
@@ -416,12 +392,13 @@ export default function PricingPage() {
       billing: '/30 days',
       description: '🔥 Most Popular - Get hired 3x faster',
       features: [
-        'Unlimited Resume Reviews (Worth $20+)',
-        '1,000+ HR Directory Access',
+        'Unlimited Resume Reviews (Worth $10+)',
+        '100+ HR Directory Access',
         'Advanced ATS Optimization',
         'Proven Email Templates Library',
         'Priority Expert Support',
-        'Access to Beta features'
+        'Access to Beta features',
+        '+ more'
       ],
       buttonText: userPlanStatus.hasActivePlan
         ? 'Career Accelerator - Current Plan'
@@ -455,56 +432,6 @@ export default function PricingPage() {
       icon: Shield,
       paymentType: 'onetime',
       disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'resume-fix',
-      expertInvolved: true
-    },
-    {
-      id: 'professional',
-      name: 'Professional',
-      price: `${pricingConfig.symbol}${pricingConfig.amounts.professional}`,
-      billing: '/one-time',
-      description: '🚀 Expert-Crafted Professional Resume',
-      features: [
-        'Everything in Career Accelerator (30 days)',
-        'Senior expert complete rewrite OR new resume',
-        'Industry-specific premium optimization',
-        '2 expert revisions included',
-        'ATS + human recruiter optimization',
-        'Personal 1-on-1 consultation call',
-        'High-quality premium templates & resources',
-        'Priority expert support'
-      ],
-      buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'professional'
-        ? 'Current Plan'
-        : 'Get Professional Resume',
-      popular: false,
-      icon: Award,
-      paymentType: 'onetime',
-      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'professional',
-      expertInvolved: true
-    },
-    {
-      id: 'premium',
-      name: 'Premium',
-      price: `${pricingConfig.symbol}${pricingConfig.amounts.premium}`,
-      billing: '/one-time',
-      description: '👑 Ultimate Career Transformation Package',
-      features: [
-        'Everything in Professional',
-        'Expert LinkedIn profile optimization',
-        'Custom cover letter by expert writer',
-        'Personal interview coaching resources',
-        'Job search strategy by career consultant',
-        'Exclusive access to premium career resources',
-        'VIP priority support & fastest turnaround',
-        'Guaranteed career advancement guidance'
-      ],
-      buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'premium'
-        ? 'Current Plan'
-        : 'Complete Career Upgrade',
-      popular: false,
-      icon: Sparkles,
-      paymentType: 'onetime',
-      disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'premium',
       expertInvolved: true
     }
   ];

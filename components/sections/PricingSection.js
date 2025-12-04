@@ -37,29 +37,29 @@ export default function PricingSection({ handleRedirect }) {
 
   const plans = [
     {
-      name: "Free Discovery",
+      name: "Free Plan",
       price: `${pricingConfig.symbol}0`,
       period: "",
-      description: "See exactly why you're getting rejected",
+      description: "Test our Auditor power before you buy",
       icon: FaUsers,
       bgColor: "bg-gray-100",
       iconColor: "text-gray-600",
       buttonColor: "bg-gray-600 hover:bg-gray-700",
       popular: false,
       features: [
-        'See which words are killing your applications',
-        'Get your rejection probability score',
-        'Access proven email templates that get replies',
-        'Browse 100+ fresh job opportunities',
-        'Join our community of job seekers',
+        '1 Resume Review (Worth $10)',
+        'Basic ATS Score & Feedback',
+        'Professional Email Templates Access',
+        'Job Board Access (100+ jobs)',
+        'Community Support',
         'No Credit Card Required'
       ],
     },
     {
-      name: "Career Breakthrough",
+      name: "Career Accelerator",
       price: `${pricingConfig.symbol}${pricingConfig.amounts.basic}`,
       period: "/30 days",
-      description: "Get interviews in the next 2 weeks",
+      description: "🔥 Most Popular - Get hired 3x faster",
       icon: FaStar,
       bgColor: "bg-gradient-to-r from-orange-100 to-red-100",
       iconColor: "text-orange-600",
@@ -67,32 +67,33 @@ export default function PricingSection({ handleRedirect }) {
       popular: true,
       badge: "MOST POPULAR",
       features: [
-        'See exactly which lines cause instant rejection - unlimited',
-        'Get 50 HR emails + copy-paste messages that get replies',
-        'Fix every application-killing mistake in your resume',
-        'Templates that landed 1000+ interviews',
-        'Priority support when you need guidance',
-        'Early access to new breakthrough features'
+        'Unlimited Resume Reviews (Worth $10+)',
+        '100+ HR Directory Access',
+        'Advanced ATS Optimization',
+        'Proven Email Templates Library',
+        'Priority Expert Support',
+        'Access to Beta features',
+        '+ more'
       ],
     },
     {
-      name: "Done-For-You Rewrite",
-      price: `${pricingConfig.symbol}${pricingConfig.amounts.professional}`,
-      period: "one-time",
-      description: "We rewrite your resume FOR YOU using recruiter psychology",
+      name: "Resume ATS Fix",
+      price: `${pricingConfig.symbol}${pricingConfig.amounts['resume-fix'] || pricingConfig.amounts.professional}`,
+      period: "/one-time",
+      description: "👨‍💼 Human Expert Resume Optimization",
       icon: FaAward,
       bgColor: "bg-gradient-to-r from-cyan-100 to-blue-100",
       iconColor: "text-cyan-600",
       buttonColor: "bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700",
       popular: false,
       features: [
-        'Everything in Career Breakthrough (30 days included)',
-        'Senior expert rewrites your resume from scratch',
-        'Optimized specifically for your industry and role',
-        '2 rounds of expert revisions until perfect',
-        'Recruiter psychology formulas that get callbacks',
-        'Premium templates and resources library',
-        'White-glove priority expert support'
+        'Everything in Career Accelerator (30 days)',
+        'Professional human expert review',
+        'Premium ATS optimization techniques',
+        '1 expert revision included',
+        'Personalized recommendations',
+        'Guaranteed ATS score improvement',
+        'High-quality premium resources'
       ],
     }
   ];
@@ -195,7 +196,7 @@ export default function PricingSection({ handleRedirect }) {
                 onClick={() => handleRedirect('/pricing')}
                 className={`w-full py-3 px-6 rounded-lg text-white font-bold text-center block transition-all duration-300 ${plan.buttonColor}`}
               >
-                {plan.name === 'Free' ? 'Get Started' : 'Choose Plan'}
+                {plan.name === 'Free Plan' ? 'Explore For Free' : 'Choose Plan'}
               </button>
             </motion.div>
             ))
@@ -213,7 +214,7 @@ export default function PricingSection({ handleRedirect }) {
             onClick={() => handleRedirect('/pricing')}
             className="inline-flex items-center gap-2 cursor-pointer text-cyan-600 hover:text-cyan-700 font-semibold text-lg underline hover:no-underline transition-all duration-200"
           >
-            View All 5 Plans & Pricing Details
+            View All Plans & Pricing Details
             <FaChartLine className="w-4 h-4" />
           </button>
         </motion.div>
