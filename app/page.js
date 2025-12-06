@@ -205,9 +205,6 @@ export default function HomePage() {
       {/* How It Works Section - AI Focus */}
       <HowItWorksSection handleRedirect={handleRedirect} />
 
-      {/* Trial Showcase - Special Offer */}
-      <TrialShowcase handleRedirect={handleRedirect} />
-
       {/* Pricing Section - Simple & Clear */}
       <PricingSection handleRedirect={handleRedirect} />
 

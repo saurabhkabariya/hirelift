@@ -119,16 +119,28 @@ export default function ExitIntentPopup({ onCTAClick }) {
             <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex items-center gap-2 mb-2 sm:mb-3">
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
-                <span className="font-bold text-sm sm:text-base text-orange-800">Before You Apply…</span>
+                <span className="font-bold text-sm sm:text-base text-orange-800">Limited Time Offer!</span>
               </div>
               <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-2">
-                87% of job seekers get ignored because their resume fails ATS or never reaches HR inboxes.
+                Get Everything You Need to Land Your Dream Job - Absolutely FREE
               </h3>
-              <ul className="text-xs sm:text-sm text-gray-700 space-y-1">
-                <li>• First ATS Resume Score with Breakdown & Fix Suggestions (Worth $10)</li>
-                <li>• Access to Verified Job listings (Worth $20)</li>
-                <li>• Premium Templates Bundle (Worth $20)</li>
-                <li>• Premium HR Contact List (Worth Infinity)</li>
+              <ul className="text-xs sm:text-sm text-gray-700 space-y-1.5 sm:space-y-2">
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>1 Resume Review with ATS Score & Detailed Feedback (Worth $10)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>Professional Email Templates Access</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>Job Board Access with 100+ Fresh Opportunities</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <span className="text-green-600 font-bold">✓</span>
+                  <span>Community Support from Job Seekers Like You</span>
+                </li>
               </ul>
             </div>
 

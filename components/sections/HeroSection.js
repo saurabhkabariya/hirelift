@@ -98,7 +98,7 @@ export default function HeroSection({ handleRedirect }) {
             </motion.button>
             
             <p className="text-sm text-gray-500">
-              Free AI analysis • No signup required • Instant results
+              Free AI analysis • No credit card required • Instant results
             </p>
           </motion.div>
 

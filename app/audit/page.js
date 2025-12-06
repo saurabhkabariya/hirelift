@@ -1118,10 +1118,10 @@ function CareerAccelerationCTA({ user, isPremium }) {
               </div>
               <div className="text-center">
                 <div className="text-red-200 text-sm mb-2">
-                  Special pricing for audit users • Regular price ₹199
+                  Special pricing for audit users • Regular price 20$
                 </div>
                 <div className="text-orange-300 font-bold text-lg">
-                  Get it now for just ₹99 - Save ₹100!
+                  Get it now for just 10$ - Save 10$!
                 </div>
               </div>
             </div>
@@ -1156,9 +1156,6 @@ function CareerAccelerationCTA({ user, isPremium }) {
           </motion.button>
 
           <div className="text-center space-y-2">
-            <div className="text-blue-200 text-sm">
-              ✅ 30-day money-back guarantee • ✅ Results in 14 days or full refund
-            </div>
             <div className="text-blue-300 text-xs">
               💡 Join 500+ professionals who upgraded their careers with HireLift
             </div>

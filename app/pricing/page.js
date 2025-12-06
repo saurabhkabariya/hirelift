@@ -636,11 +636,11 @@ export default function PricingPage() {
           </p>
 
           {/* Simple guarantee */}
-          <div className="bg-green-50 border border-green-200 rounded-lg px-6 py-3 mb-8 inline-block">
+          {/* <div className="bg-green-50 border border-green-200 rounded-lg px-6 py-3 mb-8 inline-block">
             <span className="text-green-800 font-medium">
               🛡️ <strong>30-Day Money-Back Guarantee</strong>
             </span>
-          </div>
+          </div> */}
           
           {/* Location and Currency Indicator */}
           <div className="flex items-center justify-center gap-2 text-sm text-gray-500">
