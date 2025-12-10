@@ -74,9 +74,14 @@ export function AuthProvider({ children }) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       
+      // Store isNewUser flag in sessionStorage for onboarding decision
+      if (data.isNewUser) {
+        sessionStorage.setItem('isNewSignup', 'true');
+      }
+      
       setToken(data.token);
       setUser(data.user);
-      return { success: true, user: data.user };    } catch (error) {
+      return { success: true, user: data.user, isNewUser: data.isNewUser };    } catch (error) {
       console.error('Google sign-in error:', error);
       setError(typeof error === 'string' ? error : (error.message || 'Google sign-in failed'));
       return { success: false, error: typeof error === 'string' ? error : (error.message || 'Google sign-in failed') };
@@ -105,9 +110,12 @@ export function AuthProvider({ children }) {
       localStorage.setItem('token', data.token);
       localStorage.setItem('user', JSON.stringify(data.user));
       
+      // For login, ensure isNewSignup flag is cleared
+      sessionStorage.removeItem('isNewSignup');
+      
       setToken(data.token);
       setUser(data.user);
-      return { success: true, user: data.user };    } catch (error) {
+      return { success: true, user: data.user, isNewUser: false };    } catch (error) {
       console.error('Email sign-in error:', error);
       setError(typeof error === 'string' ? error : (error.message || 'Login failed'));
       return { success: false, error: typeof error === 'string' ? error : (error.message || 'Login failed') };
@@ -136,7 +144,14 @@ export function AuthProvider({ children }) {
       if (!response.ok) {
         throw new Error(data.error || 'Signup failed');
       }      // Auto-login after successful signup
-      return await signInWithEmail(email, password);
+      const loginResult = await signInWithEmail(email, password);
+      // Add isNewUser flag since this is a signup
+      if (loginResult.success) {
+        loginResult.isNewUser = true;
+        // Store flag for onboarding decision
+        sessionStorage.setItem('isNewSignup', 'true');
+      }
+      return loginResult;
       
     } catch (error) {
       console.error('Email signup error:', error);

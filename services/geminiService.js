@@ -125,48 +125,75 @@ class GeminiService {
 
       // Create comprehensive prompt for resume analysis
       const prompt = `
-Analyze the following resume for ATS (Applicant Tracking System) compatibility and provide a detailed assessment.
+You are an expert ATS (Applicant Tracking System) analyzer. Analyze the following resume text that has been extracted from a PDF document.
+
+IMPORTANT CONTEXT:
+- This text was extracted from a PDF, so formatting may be imperfect (e.g., tables become plain text, columns merge, spacing changes)
+- Focus on CONTENT and INFORMATION rather than visual formatting
+- ATS systems parse text, not visual layout, so evaluate based on what an ATS would actually see
+- Do NOT penalize for formatting artifacts caused by PDF-to-text conversion (like misaligned text, weird spacing, or merged columns)
+- Evaluate based on: keywords present, section completeness, information quality, and content structure
 
 ${keywordsContext}
 
-RESUME CONTENT:
+RESUME CONTENT (PDF-extracted text):
 ${resumeText}
 
-Please provide a JSON response with the following structure:
+Provide a JSON response analyzing ATS compatibility:
 {
-  "atsScore": <number between 0-100>,
+  "atsScore": <number 0-100 based on ATS readability and keyword match>,
   "keywordAnalysis": {
-    "foundKeywords": [<array of keywords found in resume>],
-    "missingKeywords": [<array of important keywords missing from resume>],
-    "keywordDensity": <percentage of target keywords found>
+    "foundKeywords": [<keywords from target list that appear in resume>],
+    "missingKeywords": [<keywords from target list missing from resume>],
+    "keywordDensity": <percentage 0-100 of target keywords found>
   },
   "suggestions": [
-    <array of 3-5 specific, actionable improvement suggestions>
+    <3-5 specific, actionable improvements focusing on CONTENT not PDF formatting>
   ],
   "strengths": [
-    <array of 2-3 resume strengths>
+    <2-3 resume content strengths>
   ],
   "weaknesses": [
-    <array of 2-3 areas for improvement>
+    <2-3 content areas for improvement - NOT formatting issues>
   ],
   "sectionAnalysis": {
-    "contactInfo": <score 0-10>,
-    "summary": <score 0-10>,
-    "experience": <score 0-10>,
-    "skills": <score 0-10>,
-    "education": <score 0-10>,
-    "formatting": <score 0-10>
+    "contactInfo": <score 0-10: email, phone, LinkedIn presence>,
+    "summary": <score 0-10: professional summary/objective quality>,
+    "experience": <score 0-10: work experience completeness and relevance>,
+    "skills": <score 0-10: technical and soft skills presence>,
+    "education": <score 0-10: educational background completeness>,
+    "formatting": <score 0-10: ATS-friendly structure - ignore PDF artifacts>
   },
-  "overallAssessment": "<brief 2-3 sentence overall assessment>"
+  "overallAssessment": "<2-3 sentences on ATS compatibility and content quality>"
 }
 
-Scoring criteria:
-- ATS Score should reflect readability by applicant tracking systems
-- Consider keyword relevance, formatting, structure, and completeness
-- Provide specific, actionable suggestions for improvement
-- Focus on Indian job market context when relevant
+SCORING GUIDELINES:
+1. ATS Score (0-100):
+   - 80-100: Excellent keyword match, all sections present, ATS-friendly
+   - 60-79: Good content, minor keyword gaps
+   - 40-59: Moderate issues, missing some keywords or sections
+   - 0-39: Major gaps in keywords or critical sections
 
-IMPORTANT: Respond with ONLY valid JSON. Do not wrap the response in markdown code blocks or add any additional text before or after the JSON.`;
+2. Section Scores (0-10 each):
+   - 9-10: Comprehensive and well-optimized
+   - 7-8: Good, minor improvements possible
+   - 5-6: Adequate, needs enhancement
+   - 3-4: Weak or incomplete
+   - 0-2: Missing or severely lacking
+
+3. Keyword Analysis:
+   - Focus on semantic matches (e.g., "JavaScript" matches "JS", "React.js" matches "React")
+   - Consider synonyms and variations
+   - Don't penalize for case differences
+
+4. Important Reminders:
+   - PDF formatting issues are NOT content issues
+   - An ATS extracts text, not visual layout
+   - Evaluate the information present, not how it looks
+   - Weird spacing or alignment does NOT affect ATS score
+   - Focus on: keywords, sections, experience details, skills listed
+
+Return ONLY valid JSON without markdown formatting or additional text.`;
 
       console.log('🤖 Sending request to Gemini API...');
       

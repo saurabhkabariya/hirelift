@@ -135,7 +135,8 @@ export async function POST(request) {
     return NextResponse.json(
       { 
         message: 'User registered successfully',
-        user: userResponse
+        user: userResponse,
+        isNewUser: true
       },
       { status: 201 }
     );

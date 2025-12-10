@@ -6,18 +6,19 @@ import { usePageLoading } from '@/hooks/usePageLoading';
 import Header from '../components/Header';
 
 // Import essential sections
-import HeroSection from '../components/sections/HeroSection';
-import ProblemSolutionSection from '../components/sections/ProblemSolutionSection';
-import HowItWorksSection from '../components/sections/HowItWorksSection';
-import PricingSection from '../components/sections/PricingSection';
-import TrialShowcase from '../components/trial/TrialShowcase';
-import FinalCTASection from '../components/sections/FinalCTASection';
+import NewHeroSection from '../components/sections/NewHeroSection';
+import ToolkitSection from '../components/sections/ToolkitSection';
+import PainPointsSection from '../components/sections/PainPointsSection';
+import TestimonialShowcase from '../components/sections/TestimonialShowcase';
+import FeatureCardsSection from '../components/sections/FeatureCardsSection';
+import FinalCTABlue from '../components/sections/FinalCTABlue';
 import FooterSection from '../components/sections/FooterSection';
 import FloatingCTA from '../components/FloatingCTA';
 import StructuredData from '../components/StructuredData';
 import UrgencyBanner from '../components/conversion/UrgencyBanner';
 import ExitIntentPopup from '../components/conversion/ExitIntentPopup';
 import Head from 'next/head';
+import PricingSection from '@/components/sections/PricingSection';
 
 const navLinks = [
   { name: "Home", href: "#home", description: "AI-powered resume optimization platform" },
@@ -174,42 +175,37 @@ export default function HomePage() {
         />
       </Head>
       
-      <div className="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 via-white to-cyan-50/30 text-gray-900 relative overflow-x-hidden">
+      <div className="min-h-screen flex flex-col bg-white text-gray-900 relative overflow-x-hidden">
         {/* Structured Data for SEO */}
         <StructuredData />
       
-      {/* Minimalist Professional Background */}
-      <div className="fixed inset-0 z-0">
-        {/* Clean gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50/90 via-white to-cyan-50/50"></div>
-        
-        {/* Subtle floating elements for depth */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -left-40 w-80 h-80 bg-gradient-to-r from-cyan-100/20 to-blue-100/15 rounded-full blur-3xl opacity-40"></div>
-          <div className="absolute bottom-1/4 right-1/3 w-72 h-72 bg-gradient-to-tr from-purple-100/15 to-cyan-100/20 rounded-full blur-3xl opacity-40"></div>
-          
-          {/* Minimal accent overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-white/5 via-transparent to-transparent"></div>
-        </div>
-      </div>
+      {/* Minimalist Professional Background - Removed for cleaner look matching design */}
+      {/* <div className="fixed inset-0 z-0">
+        <div className="absolute inset-0 bg-white"></div>
+      </div> */}
 
       {/* Header Component */}
       <Header variant="default" />
 
-      {/* Hero Section - AI Job Hunt Assistant */}
-      <HeroSection handleRedirect={handleRedirect} />
+      {/* Hero Section - Break the No Experience Cycle */}
+      <NewHeroSection handleRedirect={handleRedirect} />
 
-      {/* Problem → Solution Section - Emotional Connection */}
-      <ProblemSolutionSection handleRedirect={handleRedirect} />
+      {/* Toolkit Section - Your Complete Toolkit */}
+      <ToolkitSection />
 
-      {/* How It Works Section - AI Focus */}
-      <HowItWorksSection handleRedirect={handleRedirect} />
+      {/* Pain Points Section - We Know It Feels Hopeless */}
+      <PainPointsSection />
 
-      {/* Pricing Section - Simple & Clear */}
-      <PricingSection handleRedirect={handleRedirect} />
+      {/* Testimonials - From Rejected to Offer Letter */}
+      <TestimonialShowcase />
 
-      {/* Final CTA Section - Transformation Focus */}
-      <FinalCTASection handleRedirect={handleRedirect} />
+      {/* Feature Cards - Everything You Need */}
+      <FeatureCardsSection handleRedirect={handleRedirect} />
+
+      <PricingSection  handleRedirect={handleRedirect} />
+
+      {/* Final CTA - Your First Paycheck is Waiting */}
+      <FinalCTABlue handleRedirect={handleRedirect} />
 
       {/* Footer - Dark Background with Cyan Accents */}
       <FooterSection />

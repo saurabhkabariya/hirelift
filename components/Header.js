@@ -34,43 +34,51 @@ const Header = ({ variant = 'default' }) => {
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      setIsScrolled(scrollY > 50);
+      const windowHeight = window.innerHeight;
       
       // Only apply dark theme detection on homepage
       if (pathname === '/') {
-        // Detect dark sections (FinalCTA section and Footer)
-        const windowHeight = window.innerHeight;
+        // Header should be light/transparent on hero section (first screen)
+        // and dark on FinalCTA/Footer sections (last 2-3 screens)
         const documentHeight = document.documentElement.scrollHeight;
         
-        // Check if we're in the last ~40% of the page (where dark sections are)
+        // Use light theme on hero (top ~100vh) and dark theme on bottom sections
+        const isInHeroSection = scrollY < windowHeight * 0.8;
         const isInDarkSection = scrollY > documentHeight - (windowHeight * 2.5);
-        setIsDarkTheme(isInDarkSection);
+        
+        // Set scrolled state for backdrop blur
+        setIsScrolled(scrollY > 50);
+        
+        // Set theme: white on hero, light in middle, dark at bottom
+        setIsDarkTheme(isInDarkSection && !isInHeroSection);
       } else {
-        // For other pages (playground, blog, etc.), use light theme
+        // For other pages, use light theme with scroll detection
+        setIsScrolled(scrollY > 50);
         setIsDarkTheme(false);
       }
     };
 
+    // Run on mount to set initial state
+    handleScroll();
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [pathname]);
 
   // Different navigation links for different pages
   const defaultNavLinks = [
-    { name: "Home", href: "#home", description: "AI-powered resume optimization platform" },
-    { name: "How it Works", href: "#how-it-works", description: "3-step process to optimize your job search" },
+    { name: "Home", href: "#home", description: "Break the no experience cycle" },
+    { name: "Testimonials", href: "#testimonials", description: "Success stories from job seekers" },
+    { name: "Features", href: "#features", description: "Everything you need to get hired" },
     { name: "Pricing", href: "#pricing", description: "Affordable plans for every job seeker" },
-    { name: "Blog", href: "/blog", description: "Latest insights and tips for job seekers", isExternal: true },
     { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
-    { name: "Resume Review", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
-    { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
-    { name: "Referrals Hub", href: "/referrals", description: "Find referral opportunities and manage your network", isExternal: true, isSpecial: true }
+    { name: "Resume Review", href: "/audit", description: "Get your resume's ATS score", isExternal: true },
+    { name: "Referrals Hub", href: "/referrals", description: "Find referral opportunities and manage your network", isExternal: true },
+    { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true }
   ];
 
   const blogNavLinks = [
     { name: "Home", href: "/", description: "Back to homepage", isExternal: true },
-    { name: "How it Works", href: "/#how-it-works", description: "3-step process to optimize your job search", isExternal: true },
-    { name: "Pricing", href: "/#pricing", description: "Affordable plans for every job seeker", isExternal: true },
+    { name: "Pricing", href: "/pricing", description: "Affordable plans for every job seeker", isExternal: true },
     { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
     { name: "Free Review", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
     { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
@@ -79,8 +87,7 @@ const Header = ({ variant = 'default' }) => {
 
   const playgroundNavLinks = [
     { name: "Home", href: "/", description: "Back to homepage", isExternal: true },
-    { name: "How it Works", href: "/#how-it-works", description: "3-step process to optimize your job search", isExternal: true },
-    { name: "Pricing", href: "/#pricing", description: "Affordable plans for every job seeker", isExternal: true },
+    { name: "Pricing", href: "/pricing", description: "Affordable plans for every job seeker", isExternal: true },
     { name: "Blog", href: "/blog", description: "Latest insights and tips for job seekers", isExternal: true },
     { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
     { name: "Free Review", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
@@ -99,40 +106,50 @@ const Header = ({ variant = 'default' }) => {
   // Update active link based on pathname and scroll position
   useEffect(() => {
     if (pathname === '/') {
-      setActiveLink('Home');
+      // For homepage, detect active section based on scroll position
+      const handleScroll = () => {
+        const sections = ['#home', '#toolkit', '#testimonials', '#features', '#pricing'];
+        let currentSection = null;
+        
+        for (const sectionId of sections) {
+          const element = document.querySelector(sectionId);
+          if (element) {
+            const rect = element.getBoundingClientRect();
+            // Check if section is in viewport (with header offset)
+            if (rect.top <= 150 && rect.bottom >= 150) {
+              currentSection = sectionId;
+              break;
+            }
+          }
+        }
+        
+        if (currentSection === '#home') {
+          setActiveLink('Home');
+        } else if (currentSection === '#testimonials') {
+          setActiveLink('Testimonials');
+        } else if (currentSection === '#features') {
+          setActiveLink('Features');
+        } else if (currentSection === '#pricing') {
+          setActiveLink('Pricing');
+        } else if (window.scrollY < 100) {
+          // At very top of page, highlight Home
+          setActiveLink('Home');
+        }
+      };
+      
+      handleScroll();
+      window.addEventListener('scroll', handleScroll);
+      return () => window.removeEventListener('scroll', handleScroll);
     } else if (pathname === '/jobs') {
       setActiveLink('Free Jobs');
     } else if (pathname === '/playground') {
       setActiveLink('Templates');
     } else if (pathname === '/blog') {
       setActiveLink('Blog');
+    } else if (pathname === '/audit') {
+      setActiveLink('Resume Review');
     } else if (pathname === '/referrals') {
       setActiveLink('Referrals Hub');
-    } else if (pathname.includes('#pricing')) {
-      setActiveLink('Pricing');
-    }
-
-    // Handle scroll-based section detection for homepage
-    if (pathname === '/') {
-      const handleScroll = () => {
-        const sections = ['#home', '#how-it-works', '#proof-trust', '#pricing'];
-        const currentSection = sections.find(section => {
-          const element = document.querySelector(section);
-          if (element) {
-            const rect = element.getBoundingClientRect();
-            return rect.top <= 100 && rect.bottom >= 100;
-          }
-          return false;
-        });
-
-        if (currentSection === '#home') setActiveLink('Home');
-        else if (currentSection === '#how-it-works') setActiveLink('How it Works');
-        else if (currentSection === '#proof-trust') setActiveLink('Testimonials');
-        else if (currentSection === '#pricing') setActiveLink('Pricing');
-      };
-
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
     }
   }, [pathname]);
 
@@ -192,15 +209,19 @@ const Header = ({ variant = 'default' }) => {
         className={`fixed top-0 z-50 w-full flex items-center justify-between px-4 sm:px-6 lg:px-8 xl:px-12 py-3 lg:py-4 transition-all duration-500 ${
           mobileMenuOpen 
             ? isDarkTheme
-              ? 'bg-gray-900/95 backdrop-blur-3xl shadow-2xl border-b border-cyan-400/60 shadow-cyan-500/20'
-              : 'bg-white/70 backdrop-blur-3xl shadow-2xl border-b border-cyan-300/60 shadow-cyan-200/30'
+              ? 'bg-gray-900/95 backdrop-blur-3xl shadow-2xl border-b border-white/20'
+              : 'bg-white/95 backdrop-blur-3xl shadow-2xl border-b border-white/20'
             : isDarkTheme
               ? isScrolled 
-                ? 'bg-gray-900/90 backdrop-blur-2xl shadow-xl border-b border-cyan-400/50 shadow-cyan-500/15'
-                : 'bg-gray-900/80 backdrop-blur-xl shadow-lg border-b border-cyan-400/40 shadow-cyan-500/10'
-              : isScrolled 
-                ? 'bg-white/60 backdrop-blur-2xl shadow-xl border-b border-cyan-200/50 shadow-cyan-200/20'
-                : 'bg-gradient-to-r from-white/50 via-cyan-50/20 to-white/50 backdrop-blur-xl shadow-lg border-b border-cyan-200/40 shadow-cyan-100/25'
+                ? 'bg-gray-900/90 backdrop-blur-2xl shadow-xl border-b border-white/20'
+                : 'bg-gray-900/80 backdrop-blur-xl border-b border-white/10'
+              : pathname === '/'
+                ? isScrolled
+                  ? 'bg-white/10 backdrop-blur-md border-b border-white/20'
+                  : 'bg-white/5 backdrop-blur-sm border-b border-white/10'
+                : isScrolled 
+                  ? 'bg-white/90 backdrop-blur-2xl shadow-xl border-b border-gray-200/50'
+                  : 'bg-white/50 backdrop-blur-xl border-b border-gray-200/30'
         }`}
       >
         {/* Logo */}
@@ -213,7 +234,7 @@ const Header = ({ variant = 'default' }) => {
               H
             </div>
             <span className={`text-2xl font-bold tracking-tight transition-colors duration-500 ${
-              isDarkTheme ? 'text-white' : 'text-gray-800'
+              isDarkTheme || (pathname === '/' && !isScrolled) ? 'text-white' : 'text-gray-800'
             }`}>
               HireLift
             </span>
@@ -224,7 +245,7 @@ const Header = ({ variant = 'default' }) => {
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
           {navLinks.map((link) => {
             const isActive = activeLink === link.name;
-            const isSpecialLink = link.name === 'Free Jobs' || link.name === 'Templates'|| link.name === 'Resume Review' || link.name === 'Free Review' || link.name === 'Referrals Hub';
+            const isSpecialLink = link.name === 'Free Jobs' || link.name === 'Templates'|| link.name === 'Resume Review' || link.name === 'Free Review' || link.name === 'Referrals Hub' || link.name === 'Pricing';
             return (
               <div key={link.name} className="relative">
                 <button
@@ -235,15 +256,15 @@ const Header = ({ variant = 'default' }) => {
                   className={`font-medium transition-all duration-300 cursor-pointer relative pb-2 whitespace-nowrap ${
                     isSpecialLink
                       ? isActive
-                        ? isDarkTheme
-                          ? 'text-cyan-300 font-semibold bg-cyan-900/50 px-3 py-1.5 rounded-lg border border-cyan-400/50 hover:bg-cyan-800/50'
-                          : 'text-cyan-700 font-semibold bg-cyan-100 px-3 py-1.5 rounded-lg border border-cyan-300 hover:bg-cyan-200'
-                        : isDarkTheme
-                          ? 'text-cyan-400 hover:text-cyan-300 font-semibold bg-cyan-900/30 px-3 py-1.5 rounded-lg border border-cyan-500/30 hover:bg-cyan-800/40'
-                          : 'text-cyan-600 hover:text-cyan-700 font-semibold bg-cyan-50 px-3 py-1.5 rounded-lg border border-cyan-200 hover:bg-cyan-100'
+                        ? (isDarkTheme || (pathname === '/' && !isScrolled))
+                          ? 'text-white font-semibold bg-white/20 px-3 py-1.5 rounded-lg border border-white/30 hover:bg-white/30'
+                          : 'text-blue-700 font-semibold bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-300 hover:bg-blue-200'
+                        : (isDarkTheme || (pathname === '/' && !isScrolled))
+                          ? 'text-white/90 hover:text-white font-semibold bg-white/10 px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/20'
+                          : 'text-blue-600 hover:text-blue-700 font-semibold bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 hover:bg-blue-100'
                       : isActive
-                        ? isDarkTheme ? 'text-white font-semibold px-1' : 'text-gray-800 font-semibold px-1'
-                        : isDarkTheme ? 'text-gray-300 hover:text-cyan-300 px-1' : 'text-gray-600 hover:text-cyan-600 px-1'
+                        ? (isDarkTheme || (pathname === '/' && !isScrolled)) ? 'text-white font-semibold px-1' : 'text-gray-800 font-semibold px-1'
+                        : (isDarkTheme || (pathname === '/' && !isScrolled)) ? 'text-white/90 hover:text-white px-1' : 'text-gray-600 hover:text-blue-600 px-1'
                   }`}
                 >
                   {link.name}
@@ -252,7 +273,11 @@ const Header = ({ variant = 'default' }) => {
                 {/* Animated underline for regular navigation links */}
                 {!isSpecialLink && (
                   <motion.div
-                    className="absolute bottom-0 left-1 right-1 h-0.5 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full"
+                    className={`absolute bottom-0 left-1 right-1 h-0.5 rounded-full ${
+                      (isDarkTheme || (pathname === '/' && !isScrolled)) 
+                        ? 'bg-white' 
+                        : 'bg-gradient-to-r from-blue-500 to-indigo-500'
+                    }`}
                     initial={{ width: 0 }}
                     animate={{ width: isActive ? 'calc(100% - 8px)' : 0 }}
                     transition={{ duration: 0.3, ease: "easeInOut" }}
@@ -269,16 +294,20 @@ const Header = ({ variant = 'default' }) => {
             <>
               <button 
                 onClick={() => handleRedirect('/dashboard')}
-                className="px-4 xl:px-6 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-cyan-500/25 whitespace-nowrap"
+                className={`px-4 xl:px-6 py-2 rounded-lg font-semibold transition-all duration-300 shadow-lg whitespace-nowrap ${
+                  (isDarkTheme || (pathname === '/' && !isScrolled))
+                    ? 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
+                    : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white'
+                }`}
               >
                 Dashboard
               </button>
               <button 
                 onClick={handleLogout}
                 className={`px-4 xl:px-6 py-2 rounded-lg transition-all duration-300 whitespace-nowrap ${
-                  isDarkTheme 
-                    ? 'text-gray-300 hover:text-white border border-gray-600 hover:border-cyan-400'
-                    : 'text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-cyan-400'
+                  (isDarkTheme || (pathname === '/' && !isScrolled))
+                    ? 'text-white/90 hover:text-white border border-white/30 hover:border-white/50'
+                    : 'text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-blue-400'
                 }`}
               >
                 Logout
@@ -289,16 +318,20 @@ const Header = ({ variant = 'default' }) => {
               <button 
                 onClick={() => handleRedirect('/auth')}
                 className={`px-4 xl:px-6 py-2 rounded-lg transition-all duration-300 whitespace-nowrap ${
-                  isDarkTheme 
-                    ? 'text-gray-300 hover:text-white border border-gray-600 hover:border-cyan-400'
-                    : 'text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-cyan-400'
+                  (isDarkTheme || (pathname === '/' && !isScrolled))
+                    ? 'text-white/90 hover:text-white border border-white/30 hover:border-white/50'
+                    : 'text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-blue-400'
                 }`}
               >
                 Login
               </button>
               <button 
                 onClick={() => handleRedirect('/auth?mode=signup')}
-                className="px-4 xl:px-6 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-cyan-500/25 whitespace-nowrap"
+                className={`px-4 xl:px-6 py-2 rounded-lg font-semibold transition-all duration-300 shadow-lg whitespace-nowrap ${
+                  (isDarkTheme || (pathname === '/' && !isScrolled))
+                    ? 'bg-yellow-400 hover:bg-yellow-500 text-gray-900'
+                    : 'bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white'
+                }`}
               >
                 Get Started
               </button>
@@ -310,7 +343,7 @@ const Header = ({ variant = 'default' }) => {
         <button
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           className={`lg:hidden p-2 transition-colors duration-300 ${
-            isDarkTheme ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-800'
+            (isDarkTheme || (pathname === '/' && !isScrolled)) ? 'text-white hover:text-white' : 'text-gray-600 hover:text-gray-800'
           }`}
         >
           {mobileMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -342,8 +375,8 @@ const Header = ({ variant = 'default' }) => {
               exit={{ opacity: 0, y: -20 }}
               className={`relative backdrop-blur-3xl border-b max-h-screen overflow-y-auto shadow-2xl transition-colors duration-500 ${
                 isDarkTheme 
-                  ? 'bg-gray-900/95 border-cyan-400/50'
-                  : 'bg-white/80 border-cyan-200/50'
+                  ? 'bg-gray-900/95 border-white/20'
+                  : 'bg-white/95 border-gray-200/50'
               }`}
               style={{ 
                 paddingTop: '84px', // Match header height exactly
@@ -365,18 +398,18 @@ const Header = ({ variant = 'default' }) => {
                         isSpecialLink
                           ? isActive
                             ? isDarkTheme
-                              ? 'text-cyan-300 bg-cyan-900/50 border border-cyan-400/50 font-semibold'
-                              : 'text-cyan-700 bg-cyan-100 border border-cyan-300 font-semibold'
+                              ? 'text-white bg-white/20 border border-white/30 font-semibold'
+                              : 'text-blue-700 bg-blue-100 border border-blue-300 font-semibold'
                             : isDarkTheme
-                              ? 'text-cyan-400 hover:text-cyan-300 bg-cyan-900/30 border border-cyan-500/30 font-semibold hover:bg-cyan-800/40'
-                              : 'text-cyan-600 hover:text-cyan-700 bg-cyan-50 border border-cyan-200 font-semibold hover:bg-cyan-100'
+                              ? 'text-white/90 hover:text-white bg-white/10 border border-white/20 font-semibold hover:bg-white/20'
+                              : 'text-blue-600 hover:text-blue-700 bg-blue-50 border border-blue-200 font-semibold hover:bg-blue-100'
                           : isActive
                             ? isDarkTheme
-                              ? 'text-white bg-cyan-900/30 border border-cyan-400/30 font-semibold'
-                              : 'text-gray-800 bg-cyan-50 border border-cyan-200 font-semibold'
+                              ? 'text-white bg-white/10 border border-white/20 font-semibold'
+                              : 'text-gray-800 bg-blue-50 border border-blue-200 font-semibold'
                             : isDarkTheme
-                              ? 'text-gray-300 hover:text-cyan-300 hover:bg-cyan-900/20'
-                              : 'text-gray-600 hover:text-cyan-600 hover:bg-cyan-50'
+                              ? 'text-gray-200 hover:text-white hover:bg-white/10'
+                              : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                       }`}
                       whileHover={{ x: 8 }}
                       whileTap={{ scale: 0.98 }}
@@ -385,17 +418,19 @@ const Header = ({ variant = 'default' }) => {
                       <div className={`text-sm mt-1 transition-colors duration-300 ${
                         isSpecialLink
                           ? isActive 
-                            ? isDarkTheme ? 'text-cyan-200' : 'text-cyan-600'
-                            : isDarkTheme ? 'text-cyan-300' : 'text-cyan-500'
+                            ? isDarkTheme ? 'text-white/80' : 'text-blue-600'
+                            : isDarkTheme ? 'text-white/70' : 'text-blue-500'
                           : isActive 
-                            ? isDarkTheme ? 'text-cyan-200' : 'text-cyan-600'
+                            ? isDarkTheme ? 'text-gray-300' : 'text-blue-600'
                             : isDarkTheme ? 'text-gray-400' : 'text-gray-500'
                       }`}>{link.description}</div>
                       
                       {/* Active indicator for mobile */}
                       {isActive && !isSpecialLink && (
                         <motion.div
-                          className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-cyan-500 to-blue-500 rounded-r-full"
+                          className={`absolute left-0 top-0 bottom-0 w-1 rounded-r-full ${
+                            isDarkTheme ? 'bg-white' : 'bg-gradient-to-b from-blue-500 to-indigo-500'
+                          }`}
                           initial={{ height: 0 }}
                           animate={{ height: '100%' }}
                           transition={{ duration: 0.3 }}
@@ -406,7 +441,7 @@ const Header = ({ variant = 'default' }) => {
                 })}
                 
                 <div className={`pt-6 space-y-3 border-t mt-4 transition-colors duration-300 ${
-                  isDarkTheme ? 'border-cyan-400/30' : 'border-cyan-200/30'
+                  isDarkTheme ? 'border-white/20' : 'border-gray-200'
                 }`}>
                   {user ? (
                     <>
@@ -415,7 +450,7 @@ const Header = ({ variant = 'default' }) => {
                       </div> */}
                       <button 
                         onClick={() => handleRedirect('/dashboard')}
-                        className="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 text-center"
+                        className="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 text-center"
                       >
                         Go to Dashboard
                       </button>
@@ -423,8 +458,8 @@ const Header = ({ variant = 'default' }) => {
                         onClick={handleLogout}
                         className={`block w-full py-3 px-4 rounded-lg transition-all duration-300 text-center ${
                           isDarkTheme 
-                            ? 'text-gray-300 hover:text-white border border-gray-600 hover:border-cyan-400'
-                            : 'text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-cyan-400'
+                            ? 'text-white border border-white/30 hover:border-white/50'
+                            : 'text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-blue-400'
                         }`}
                       >
                         Logout
@@ -436,15 +471,15 @@ const Header = ({ variant = 'default' }) => {
                         onClick={() => handleRedirect('/auth')}
                         className={`block w-full py-3 px-4 rounded-lg transition-all duration-300 text-center ${
                           isDarkTheme 
-                            ? 'text-gray-300 hover:text-white border border-gray-600 hover:border-cyan-400'
-                            : 'text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-cyan-400'
+                            ? 'text-white border border-white/30 hover:border-white/50'
+                            : 'text-gray-600 hover:text-gray-800 border border-gray-300 hover:border-blue-400'
                         }`}
                       >
                         Login
                       </button>
                       <button 
                         onClick={() => handleRedirect('/auth?mode=signup')}
-                        className="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-semibold hover:from-cyan-700 hover:to-blue-700 transition-all duration-300 text-center"
+                        className="block w-full py-3 px-4 rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 text-center"
                       >
                         Get Started
                       </button>

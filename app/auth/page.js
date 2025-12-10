@@ -43,8 +43,14 @@ export default function AuthPage() {
         ? localStorage.getItem('hireLiftOnboardingCompleted') === 'true'
         : false;
       
-      if (!onboardingCompleted) {
-        // Redirect new users to onboarding
+      // Check if this was a new signup (flag set by AuthFlowManager)
+      const isNewSignup = typeof window !== 'undefined'
+        ? sessionStorage.getItem('isNewSignup') === 'true'
+        : false;
+      
+      if (isNewSignup && !onboardingCompleted) {
+        // Clear the flag and redirect new users to onboarding
+        sessionStorage.removeItem('isNewSignup');
         window.location.href = '/onboarding';
       } else {
         // Existing users go to dashboard

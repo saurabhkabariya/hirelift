@@ -147,7 +147,9 @@ export default function AuthForm({ mode = 'login', onAuthSubmit }) {  const [for
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     try {
-      await signInWithGoogle();
+      const result = await signInWithGoogle();
+      // isNewUser flag is already handled in signInWithGoogle context method
+      // The parent component will handle redirect based on sessionStorage
     } catch (error) {
       console.error('Google sign-in error:', error);
     } finally {

@@ -137,7 +137,8 @@ export async function POST(request) {
       { 
         message: 'Google authentication successful',
         user: userResponse,
-        token
+        token,
+        isNewUser
       },
       { status: 200 }
     );
