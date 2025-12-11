@@ -16,11 +16,11 @@ export const metadata = {
   openGraph: {
     title: "Pricing Plans - HireLift Resume Optimization & Job Search Platform",
     description: "Choose the perfect plan for your job search journey. Get unlimited resume ATS optimization, direct HR contacts, interview templates, and expert support.",
-    url: "https://hirelift.vercel.app/pricing",
+    url: `${'https://www.hirelift.tech'}/pricing`,
     type: "website",
     images: [
       {
-        url: "https://hirelift.vercel.app/pricing-og.jpg",
+        url: `${'https://www.hirelift.tech'}/pricing-og.jpg`,
         width: 1200,
         height: 630,
         alt: "HireLift Pricing Plans"
@@ -31,9 +31,9 @@ export const metadata = {
     card: "summary_large_image",
     title: "Pricing Plans - HireLift Resume Optimization & Job Search Platform",
     description: "Choose the perfect plan for your job search journey. Get unlimited resume ATS optimization, direct HR contacts, and expert support.",
-    images: ["https://hirelift.vercel.app/pricing-twitter.jpg"]
+    images: [`${'https://www.hirelift.tech'}/pricing-twitter.jpg`]
   },
   alternates: {
-    canonical: "https://hirelift.vercel.app/pricing"
+    canonical: `${'https://www.hirelift.tech'}/pricing`
   }
 };

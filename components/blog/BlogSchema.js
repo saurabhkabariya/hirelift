@@ -1,7 +1,7 @@
 'use client';
 
 export default function BlogSchema({ post }) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://hirelift.vercel.app';
+  const baseUrl = 'https://www.hirelift.tech';
   
   const schema = {
     "@context": "https://schema.org",

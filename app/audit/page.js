@@ -310,8 +310,8 @@ export default function ResumeAuditPage() {
         <meta property="og:title" content="Free AI Resume Checker & ATS Scanner - HireLift" />
         <meta property="og:description" content="Get instant AI-powered resume analysis with our free ATS scanner. Check compatibility, keywords, and formatting to improve your job application success rate." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hirelift.vercel.app/audit" />
-        <meta property="og:image" content="https://hirelift.vercel.app/og-audit.jpg" />
+        <meta property="og:url" content={("https://www.hirelift.tech") + "/audit"} />
+        <meta property="og:image" content={("https://www.hirelift.tech") + "/og-audit.jpg"} />
         
         {/* Tool Schema */}
         <script
@@ -321,7 +321,7 @@ export default function ResumeAuditPage() {
               "@context": "https://schema.org",
               "@type": "WebApplication",
               "name": "HireLift Resume Checker",
-              "url": "https://hirelift.vercel.app/audit",
+              "url": ("https://www.hirelift.tech") + "/audit",
               "description": "Free AI-powered resume analysis and ATS compatibility checker",
               "applicationCategory": "BusinessApplication",
               "operatingSystem": "Web Browser",
@@ -346,7 +346,7 @@ export default function ResumeAuditPage() {
               },
               "potentialAction": {
                 "@type": "UseAction",
-                "target": "https://hirelift.vercel.app/audit",
+                "target": ("https://www.hirelift.tech") + "/audit",
                 "object": {
                   "@type": "DigitalDocument",
                   "name": "Resume Document"
@@ -935,7 +935,7 @@ export default function ResumeAuditPage() {
                     </ul>
                   </div>
                   <div style={{ marginTop: 32, textAlign: 'center', color: '#aaa', fontSize: 13 }}>
-                    Powered by HireLift | https://hirelift.vercel.app
+                    Powered by HireLift | {process.env.NEXT_PUBLIC_BASE_URL || 'https://www.hirelift.tech'}
                   </div>
                 </div>
               </div>

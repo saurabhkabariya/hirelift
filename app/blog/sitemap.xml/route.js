@@ -2,7 +2,7 @@ import { getAllBlogPosts } from '../../../data/blogPosts';
 
 export async function GET() {
   const posts = getAllBlogPosts();
-  const baseUrl = 'https://hirelift.vercel.app';
+  const baseUrl = 'https://www.hirelift.tech';
   
   const blogUrls = posts.map(post => `
   <url>

@@ -30,12 +30,12 @@ export const metadata = {
     title: "Global Career Blog - Expert Job Search & Professional Development | HireLift",
     description: "Master your career with expert advice from global industry leaders. AI resume optimization, US & UK job market insights, remote work strategies, and proven career development techniques.",
     type: "website",
-    url: "https://hirelift.vercel.app/blog",
+    url: `${ 'https://www.hirelift.tech'}/blog`,
     siteName: "HireLift",
     locale: "en_US",
     images: [
       {
-        url: "https://hirelift.vercel.app/og-blog-global.jpg",
+        url: `${ 'https://www.hirelift.tech'}/og-blog-global.jpg`,
         width: 1200,
         height: 630,
         alt: "HireLift Global Career Blog - Expert Job Search and Professional Development Tips"
@@ -46,7 +46,7 @@ export const metadata = {
     card: "summary_large_image",
     title: "Global Career Blog - Expert Job Search & Professional Tips | HireLift",
     description: "Master your career with expert advice from global industry leaders. AI resume optimization, US & UK job market insights, and proven career development techniques.",
-    images: ["https://hirelift.vercel.app/twitter-blog-global.jpg"],
+    images: [`${ 'https://www.hirelift.tech'}/twitter-blog-global.jpg`],
     creator: "@hirelift",
     site: "@hirelift"
   },
@@ -64,10 +64,10 @@ export const metadata = {
     },
   },
   alternates: {
-    canonical: "https://hirelift.vercel.app/blog",
+    canonical: `${ 'https://www.hirelift.tech'}/blog`,
     types: {
       'application/rss+xml': [
-        { url: 'https://hirelift.vercel.app/blog/feed.xml', title: 'HireLift Career Blog RSS Feed' }
+        { url: `${ 'https://www.hirelift.tech'}/blog/feed.xml`, title: 'HireLift Career Blog RSS Feed' }
       ]
     }
   },

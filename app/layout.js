@@ -19,42 +19,52 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL('https://hirelift.vercel.app'),
-  title: {
-    default: "HireLift - AI-Powered Resume Optimizer & Job Search Platform | Get Hired 3x Faster",
-    template: "%s | HireLift - Global Job Search & Resume Optimization Platform"
+  metadataBase: new URL( 'https://www.hirelift.tech'),
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en-US': '/en-US',
+      'en-GB': '/en-GB'
+    }
   },
-  description: "Transform your job search with AI-powered resume optimization, ATS checker, and proven job search strategies. 95% ATS pass rate, expert-crafted templates, and personalized coaching. Trusted by 50,000+ professionals worldwide to land dream jobs faster.",
+  title: {
+    default: "HireLift - Top Job Assistance and Resume Reviewer for Freshers & Graduates in US & UK",
+    template: "%s | HireLift - Resume Reviewer for Freshers"
+  },
+  description: "Land your dream job in the US & UK with AI-powered resume optimization. Free ATS resume checker for fresh graduates, college students, and entry-level job seekers. Get hired 3x faster with expert templates. Trusted by 50,000+ freshers.",
   keywords: [
-    // Core Job Search & Career Keywords (25 keywords)
-    "resume optimizer", "ATS resume checker", "job search platform", "resume builder", "career coaching",
-    "job application tracker", "interview preparation", "resume writing service", "career advice", "job hunting tips",
-    "professional resume", "CV optimizer", "applicant tracking system", "resume keywords", "job search tools",
-    "career development", "employment opportunities", "job seeker", "recruitment platform", "hiring platform",
-    "job portal", "career services", "resume audit", "resume review", "job matching", "talent acquisition",
+    // Fresher & Graduate Keywords (30 keywords)
+    "resume builder for freshers", "entry level resume", "fresh graduate resume", "college student resume", "first job resume",
+    "internship resume", "graduate job search", "entry level jobs US", "graduate jobs UK", "fresher jobs",
+    "new grad resume", "recent graduate jobs", "student resume builder", "career starter", "junior position resume",
+    "no experience resume", "entry level resume template", "graduate resume template", "fresher resume format", "college grad resume",
+    "first time job seeker", "beginner resume builder", "graduate trainee resume", "entry level career", "fresh graduate jobs US",
+    "UK graduate schemes", "graduate recruitment", "campus hiring", "college placement", "university graduate jobs",
     
-    // Global Job Market Keywords (20 keywords)
-    "remote jobs", "work from home", "international jobs", "global careers", "freelance jobs",
-    "tech jobs", "software engineer jobs", "data analyst jobs", "marketing jobs", "sales jobs",
-    "customer service jobs", "project manager jobs", "business analyst jobs", "product manager jobs", "designer jobs",
-    "developer jobs", "startup jobs", "corporate jobs", "entry level jobs", "senior level jobs",
+    // ATS & Resume Optimization (25 keywords)
+    "ATS resume checker free", "free resume checker", "ATS friendly resume", "resume scanner", "ATS optimization",
+    "ATS compliant resume", "applicant tracking system", "resume keywords", "ATS score", "resume audit",
+    "resume review free", "CV checker", "resume analyzer", "ATS test", "resume rating",
+    "AI resume optimizer", "resume scoring", "resume feedback", "resume improvement", "resume enhancement",
+    "professional resume builder", "modern resume template", "ATS approved resume", "resume formatting", "resume optimization tool",
     
-    // ATS & Resume Optimization (20 keywords)
-    "ATS friendly resume", "resume scanner", "resume optimization", "ATS compliant", "resume format",
-    "resume template", "professional resume template", "executive resume", "modern resume", "creative resume",
-    "resume review", "resume critique", "resume makeover", "resume upgrade", "resume enhancement",
-    "resume analysis", "resume scoring", "resume rating", "resume feedback", "resume improvement",
+    // US Job Market Keywords (20 keywords)
+    "entry level jobs USA", "graduate jobs America", "US job search", "jobs in United States", "American companies hiring",
+    "Fortune 500 entry level", "tech jobs US freshers", "startup jobs USA", "internships USA", "US career opportunities",
+    "New York jobs freshers", "San Francisco jobs graduates", "Boston entry level", "Austin tech jobs", "Seattle careers",
+    "Chicago jobs freshers", "Los Angeles opportunities", "US remote jobs freshers", "American job market", "USA employment freshers",
     
-    // AI & Technology Keywords (15 keywords)
-    "AI resume optimizer", "artificial intelligence resume", "machine learning resume", "AI job matching",
-    "automated resume screening", "smart resume builder", "AI career coaching", "intelligent job search",
-    "AI-powered hiring", "resume AI", "job search AI", "career AI", "recruitment AI", "hiring AI", "talent AI",
+    // UK Job Market Keywords (20 keywords)
+    "graduate jobs UK", "entry level jobs Britain", "UK job search", "jobs in United Kingdom", "British companies hiring",
+    "FTSE 100 graduate schemes", "London jobs graduates", "UK graduate recruitment", "graduate trainee UK", "UK career opportunities",
+    "Manchester jobs freshers", "Birmingham graduate jobs", "Edinburgh careers", "Bristol opportunities", "Leeds jobs graduates",
+    "Glasgow jobs freshers", "UK remote jobs", "British job market", "UK employment graduates", "graduate scheme applications",
     
-    // Industry & Location Keywords (20 keywords)
-    "technology jobs", "healthcare jobs", "finance jobs", "education jobs", "retail jobs",
-    "manufacturing jobs", "consulting jobs", "non-profit jobs", "government jobs", "legal jobs",
-    "USA jobs", "Canada jobs", "UK jobs", "Australia jobs", "Europe jobs",
-    "Asia jobs", "Middle East jobs", "Africa jobs", "Latin America jobs", "worldwide jobs"
+    // Job Search & Career Keywords (20 keywords)
+    "job search platform", "career coaching", "interview preparation", "job application tips", "resume writing service",
+    "career advice freshers", "job hunting tips", "employment guidance", "career development", "professional growth",
+    "job matching", "career resources", "job seeker tools", "recruitment platform", "hiring platform",
+    "job portal freshers", "career services students", "placement assistance", "career counseling", "job search strategy"
   ],
   authors: [{ name: "HireLift Team" }],
   creator: "HireLift",
@@ -70,30 +80,30 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    alternateLocale: ["en_GB", "en_CA", "en_AU", "en_IN"],
-    url: "https://hirelift.vercel.app",
-    title: "HireLift - AI-Powered Resume Optimizer & Global Job Search Platform",
-    description: "Transform your job search with AI-powered resume optimization, ATS checker, and proven strategies. 95% ATS pass rate, expert templates, personalized coaching. Trusted by 50,000+ professionals worldwide.",
+    alternateLocale: ["en_GB", "en_CA", "en_AU"],
+    url: process.env.NEXT_PUBLIC_BASE_URL || "https://www.hirelift.tech",
+    title: "HireLift - Top Job Assistance and Resume Reviewer for Freshers & Graduates in US & UK",
+    description: "Land your dream job in the US & UK with AI-powered resume optimization. Free ATS resume checker for fresh graduates and college students. Get hired 3x faster.",
     siteName: "HireLift",
     images: [
       {
-        url: "https://hirelift.vercel.app/og-image.jpg",
+        url: ("https://www.hirelift.tech") + "/og-image.jpg",
         width: 1200,
         height: 630,
-        alt: "HireLift - AI-Powered Resume Optimizer & Global Job Search Platform",
+        alt: "HireLift - Job Assistance and Resume Reviewer for Freshers in US & UK",
         type: "image/jpeg"
       }
     ]
   },
   twitter: {
     card: "summary_large_image",
-    title: "HireLift - AI-Powered Resume Optimizer & Job Search Platform | Get Hired 3x Faster",
-    description: "Transform your career with AI-powered resume optimization, ATS checker & proven job search strategies. 95% ATS pass rate. Trusted by 50,000+ professionals worldwide.",
+    title: "HireLift - Top Job Assistance and Resume Reviewer for Freshers & Graduates in US & UK",
+    description: "Free ATS resume checker for fresh graduates. Land your first job in US & UK with AI-powered optimization. Get hired 3x faster.",
     creator: "@hirelift",
     site: "@hirelift",
     images: {
-      url: "https://hirelift.vercel.app/twitter-image.jpg",
-      alt: "HireLift - AI-Powered Global Job Search Platform"
+      url: ( "https://www.hirelift.tech") + "/twitter-image.jpg",
+      alt: "HireLift - Job Assistance and Resume Reviewer for Freshers"
     }
   },
   robots: {
@@ -117,14 +127,21 @@ export const metadata = {
       bing: "your-bing-verification-code"
     }
   },
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'default',
+    'format-detection': 'telephone=no',
+    'geo.region': 'US;GB;CA',
+    'geo.placename': 'United States;United Kingdom;Canada',
+    'DC.title': 'HireLift - Resume Builder for Freshers',
+    'DC.subject': 'Resume Building, Job Search, Career Development',
+    'DC.description': 'AI-powered resume builder for fresh graduates in US & UK'
+  },
   alternates: {
-    canonical: "https://hirelift.vercel.app",
+    canonical: process.env.NEXT_PUBLIC_BASE_URL || "https://www.hirelift.tech",
     languages: {
-      'en-US': 'https://hirelift.vercel.app',
-      'en-GB': 'https://hirelift.vercel.app/en-gb',
-      'en-CA': 'https://hirelift.vercel.app/en-ca',
-      'en-AU': 'https://hirelift.vercel.app/en-au',
-      'en-IN': 'https://hirelift.vercel.app/en-in'
+      'en-US': `${ 'https://www.hirelift.tech'}`,
+      'en-GB': `${'https://www.hirelift.tech'}/en-gb`
     }
   },
   category: "Technology",
@@ -147,8 +164,8 @@ export default function RootLayout({ children }) {
         <meta name="google-site-verification" content="HKgvrxQDwRgmswOq7p_GoG2yId-fcWZkSjyAEGC_ASw" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#2563eb" />
-        <link rel="canonical" href="https://hirelift.vercel.app" />
-        <link rel="alternate" type="application/rss+xml" title="HireLift Blog RSS Feed" href="https://hirelift.vercel.app/feed.xml" />
+        <link rel="canonical" href={"https://www.hirelift.tech"} />
+        <link rel="alternate" type="application/rss+xml" title="HireLift Blog RSS Feed" href={`${'https://www.hirelift.tech'}/feed.xml`} />
         
         <script
           type="application/ld+json"
@@ -158,10 +175,10 @@ export default function RootLayout({ children }) {
               "@type": "Organization",
               "name": "HireLift",
               "alternateName": "HireLift Global",
-              "url": "https://hirelift.vercel.app",
+              "url": "https://www.hirelift.tech",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://hirelift.vercel.app/logo.png",
+                "url": `${'https://www.hirelift.tech'}/logo.png`,
                 "width": 512,
                 "height": 512
               },
@@ -238,13 +255,13 @@ export default function RootLayout({ children }) {
               "@context": "https://schema.org",
               "@type": "WebSite",
               "name": "HireLift",
-              "url": "https://hirelift.vercel.app",
+              "url": "https://www.hirelift.tech",
               "description": "AI-powered resume optimizer and global job search platform",
               "potentialAction": {
                 "@type": "SearchAction",
                 "target": {
                   "@type": "EntryPoint",
-                  "urlTemplate": "https://hirelift.vercel.app/jobs?q={search_term_string}"
+                  "urlTemplate": `${'https://www.hirelift.tech'}/jobs?q={search_term_string}`
                 },
                 "query-input": "required name=search_term_string"
               },
@@ -270,9 +287,9 @@ export default function RootLayout({ children }) {
               "applicationSubCategory": "Career & Job Search Platform",
               "operatingSystem": ["Web", "Android", "iOS", "Windows", "macOS"],
               "description": "AI-powered resume optimization and global job search platform helping professionals worldwide get hired faster with ATS-compliant resumes and expert career coaching",
-              "url": "https://hirelift.vercel.app",
-              "downloadUrl": "https://hirelift.vercel.app",
-              "screenshot": "https://hirelift.vercel.app/screenshot.jpg",
+              "url": "https://www.hirelift.tech",
+              "downloadUrl": "https://www.hirelift.tech",
+              "screenshot": `${'https://www.hirelift.tech'}/screenshot.jpg`,
               "featureList": [
                 "AI Resume Optimization",
                 "ATS Compatibility Checker",
@@ -353,19 +370,19 @@ export default function RootLayout({ children }) {
                   "@type": "ListItem",
                   "position": 1,
                   "name": "Home",
-                  "item": "https://hirelift.vercel.app"
+                  "item": "https://www.hirelift.tech"
                 },
                 {
                   "@type": "ListItem", 
                   "position": 2,
                   "name": "ATS Resume Review",
-                  "item": "https://hirelift.vercel.app/audit"
+                  "item": `${'https://www.hirelift.tech'}/audit`
                 },
                 {
                   "@type": "ListItem",
                   "position": 3,
                   "name": "Cold Email Templates",
-                  "item": "https://hirelift.vercel.app/playground"
+                  "item": `${'https://www.hirelift.tech'}/playground`
                 }
               ]
             })

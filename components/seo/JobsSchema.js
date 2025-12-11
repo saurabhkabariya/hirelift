@@ -2,13 +2,13 @@ export default function JobsSchema() {
   const jobPostingSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Jobs in India | HireLift",
-    "description": "Browse thousands of free job opportunities across India. Find your dream job in IT, Marketing, Sales, Finance and more.",
-    "url": "https://hirelift.vercel.app/jobs",
+    "name": "Jobs all around World | HireLift",
+    "description": "Browse thousands of free job opportunities across World. Find your dream job in IT, Marketing, Sales, Finance and more.",
+    "url": `${'https://www.hirelift.tech'}/jobs`,
     "mainEntity": {
       "@type": "ItemList",
       "name": "Job Listings",
-      "description": "Latest job openings in India",
+      "description": "Latest job openings around world",
       "numberOfItems": "1000+"
     },
     "breadcrumb": {
@@ -18,23 +18,23 @@ export default function JobsSchema() {
           "@type": "ListItem",
           "position": 1,
           "name": "Home",
-          "item": "https://hirelift.vercel.app"
+          "item": "https://www.hirelift.tech"
         },
         {
           "@type": "ListItem",
           "position": 2,
           "name": "Jobs",
-          "item": "https://hirelift.vercel.app/jobs"
+          "item": `${'https://www.hirelift.tech'}/jobs`
         }
       ]
     },
     "publisher": {
       "@type": "Organization",
       "name": "HireLift",
-      "url": "https://hirelift.vercel.app",
+      "url": "https://www.hirelift.tech",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://hirelift.vercel.app/logo.png"
+        "url": `${'https://www.hirelift.tech'}/logo.png`
       }
     }
   };

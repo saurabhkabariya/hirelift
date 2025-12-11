@@ -93,8 +93,8 @@ export default function AuthPage() {
         <meta property="og:title" content="Join HireLift - AI-Powered Career Transformation Platform" />
         <meta property="og:description" content="Sign up for free and transform your job search with AI resume optimization, ATS checking, and expert coaching. Join 50,000+ professionals worldwide." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hirelift.vercel.app/auth" />
-        <meta property="og:image" content="https://hirelift.vercel.app/og-auth.jpg" />
+        <meta property="og:url" content={("https://www.hirelift.tech") + "/auth"} />
+        <meta property="og:image" content={("https://www.hirelift.tech") + "/og-auth.jpg"} />
         
         {/* Registration Schema */}
         <script
@@ -104,7 +104,7 @@ export default function AuthPage() {
               "@context": "https://schema.org",
               "@type": "WebPage",
               "name": "HireLift Registration - Career Platform Signup",
-              "url": "https://hirelift.vercel.app/auth",
+              "url": ("https://www.hirelift.tech") + "/auth",
               "description": "Join HireLift's AI-powered career transformation platform. Free registration for job seekers worldwide.",
               "breadcrumb": {
                 "@type": "BreadcrumbList",
@@ -113,19 +113,19 @@ export default function AuthPage() {
                     "@type": "ListItem",
                     "position": 1,
                     "name": "Home",
-                    "item": "https://hirelift.vercel.app"
+                    "item": "https://www.hirelift.tech"
                   },
                   {
                     "@type": "ListItem",
                     "position": 2,
                     "name": "Sign Up",
-                    "item": "https://hirelift.vercel.app/auth"
+                    "item": ("https://www.hirelift.tech") + "/auth"
                   }
                 ]
               },
               "potentialAction": {
                 "@type": "RegisterAction",
-                "target": "https://hirelift.vercel.app/auth",
+                "target": ("https://www.hirelift.tech") + "/auth",
                 "result": {
                   "@type": "UserAccount",
                   "description": "Free HireLift account for career optimization"

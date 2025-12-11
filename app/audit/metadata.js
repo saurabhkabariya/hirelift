@@ -12,11 +12,11 @@ export const metadata = {
   openGraph: {
     title: "Free ATS Resume Checker & Optimizer - Global Resume Analysis | HireLift",
     description: "Get your ATS score instantly! Professional resume review tool for global job markets. Analyzes resume compatibility and suggests improvements. Trusted by 50,000+ professionals worldwide.",
-    url: "https://hirelift.vercel.app/audit",
+    url: `${'https://www.hirelift.tech'}/audit`,
     type: "website",
     images: [
       {
-        url: "https://hirelift.vercel.app/og-audit.jpg",
+        url: `${'https://www.hirelift.tech'}/og-audit.jpg`,
         width: 1200,
         height: 630,
         alt: "HireLift Free ATS Resume Checker - Global Resume Analysis Tool"
@@ -27,9 +27,9 @@ export const metadata = {
     card: "summary_large_image",
     title: "Free ATS Resume Checker - Global Resume Analysis | HireLift",
     description: "Check your resume's ATS compatibility for free! Professional analysis for US, UK & global job markets. Get instant feedback and optimization tips.",
-    images: ["https://hirelift.vercel.app/twitter-audit.jpg"]
+    images: [`${'https://www.hirelift.tech'}/twitter-audit.jpg`]
   },
   alternates: {
-    canonical: "https://hirelift.vercel.app/audit"
+    canonical: `${'https://www.hirelift.tech'}/audit`
   }
 };

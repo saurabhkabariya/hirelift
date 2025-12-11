@@ -15,7 +15,7 @@ export default function BlogSEO({
   tags = []
 }) {
   const pathname = usePathname();
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'https://hirelift.vercel.app';
+  const baseUrl = 'https://www.hirelift.tech';
   const fullUrl = `${baseUrl}${pathname}`;
   
   const structuredData = {

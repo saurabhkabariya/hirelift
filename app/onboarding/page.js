@@ -92,7 +92,7 @@ export default function OnboardingPage() {
         <meta property="og:title" content="Welcome to HireLift - Complete Your Setup" />
         <meta property="og:description" content="Personalize your career acceleration experience with HireLift's onboarding flow." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hirelift.vercel.app/onboarding" />
+        <meta property="og:url" content={("https://www.hirelift.tech") + "/onboarding"} />
       </Head>
       
       <div className="min-h-screen">

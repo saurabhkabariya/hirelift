@@ -11,11 +11,11 @@ export const metadata = {
   openGraph: {
     title: "Free Cold Email Templates for Job Applications - 50+ Proven Templates | HireLift",
     description: "Access 50+ professional cold email templates designed for Indian job market. Includes job inquiry emails, follow-ups, and LinkedIn messages with proven success rates.",
-    url: "https://hirelift.vercel.app/playground",
+    url: `${'https://www.hirelift.tech'}/playground`,
     type: "website",
     images: [
       {
-        url: "https://hirelift.vercel.app/og-playground.jpg",
+        url: `${'https://www.hirelift.tech'}/og-playground.jpg`,
         width: 1200,
         height: 630,
         alt: "HireLift Cold Email Templates Playground - Free Professional Email Templates"
@@ -26,9 +26,9 @@ export const metadata = {
     card: "summary_large_image",
     title: "Free Cold Email Templates for Job Applications | HireLift",
     description: "50+ proven email templates for job seekers in India. Get professional templates with high response rates for your job search.",
-    images: ["https://hirelift.vercel.app/twitter-playground.jpg"]
+    images: [`${'https://www.hirelift.tech'}/twitter-playground.jpg`]
   },
   alternates: {
-    canonical: "https://hirelift.vercel.app/playground"
+    canonical: `${'https://www.hirelift.tech'}/playground`
   }
 };

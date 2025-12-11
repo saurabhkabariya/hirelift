@@ -1,6 +1,8 @@
 export function GET() {
-  const robotsContent = `# Robots.txt for HireLift - Global AI-Powered Resume Optimizer & Job Search Platform
-# Optimized for search engines and AI crawlers worldwide
+  const baseUrl = 'https://www.hirelift.tech';
+  
+  const robotsContent = `# Robots.txt for HireLift - Top AI Job Assistance and Resume Reviewer for Freshers & Graduates
+# Optimized for US & UK job seekers and search engines
 
 User-agent: *
 Allow: /
@@ -43,7 +45,10 @@ Allow: *.jpeg
 Allow: *.webp
 Allow: *.svg
 
-# Sitemap location
+# Sitemap locations (multiple domains)
+Sitemap: ${baseUrl}/sitemap.xml
+Sitemap: https://www.hirelift.tech/sitemap.xml
+Sitemap: https://www.hirelift.dev/sitemap.xml
 Sitemap: https://hirelift.vercel.app/sitemap.xml
 
 # Crawl delay for polite crawling

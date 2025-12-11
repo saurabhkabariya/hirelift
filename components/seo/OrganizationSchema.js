@@ -4,10 +4,10 @@ export default function OrganizationSchema() {
     "@type": "Organization",
     "name": "HireLift",
     "alternateName": "HireLift India",
-    "url": "https://hirelift.vercel.app",
+    "url": "https://www.hirelift.tech",
     "logo": {
       "@type": "ImageObject",
-      "url": "https://hirelift.vercel.app/logo.png",
+      "url": `${'https://www.hirelift.tech'}/logo.png`,
       "width": 200,
       "height": 200
     },
@@ -27,8 +27,8 @@ export default function OrganizationSchema() {
     "contactPoint": {
       "@type": "ContactPoint",
       "contactType": "customer service",
-      "email": "support@hirelift.vercel.app",
-      "url": "https://hirelift.vercel.app/contact"
+      "email": "hirelift01@gmail.com",
+      "url": `${'https://www.hirelift.tech'}/contact`
     },
     "sameAs": [
       "https://twitter.com/hirelift",

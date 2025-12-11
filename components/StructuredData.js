@@ -88,7 +88,7 @@ export default function StructuredData() {
       "@context": "https://schema.org",
       "@type": "Product",
       "name": "HireLift Job Search Platform",
-      "image": "https://hirelift.vercel.app/logo.png",
+      "image": `${'https://www.hirelift.tech'}/logo.png`,
       "description": "AI-powered job search platform with resume optimization, ATS score analysis, and HR contacts database",
       "brand": {
         "@type": "Brand",
@@ -96,7 +96,7 @@ export default function StructuredData() {
       },
       "offers": {
         "@type": "Offer",
-        "url": "https://hirelift.vercel.app/pricing",
+        "url": `${'https://www.hirelift.tech'}/pricing`,
         "priceCurrency": "USD",
         "price": "0",
         "priceValidUntil": "2025-12-31",

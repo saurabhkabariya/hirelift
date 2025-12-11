@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  const baseUrl = 'https://hirelift.vercel.app';
+  const baseUrl = 'https://www.hirelift.tech';
   const currentDate = new Date().toISOString();
   
   // Sample job data - in a real application, you'd fetch this from your database

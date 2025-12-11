@@ -314,14 +314,14 @@ export default function BlogPostPage({ post }) {
               "name": "HireLift",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://hirelift.vercel.app/logo.png"
+                "url": `${'https://www.hirelift.tech'}/logo.png`
               }
             },
             "datePublished": post.publishDate,
             "dateModified": post.publishDate,
             "mainEntityOfPage": {
               "@type": "WebPage",
-              "@id": `https://hirelift.vercel.app/blog/${post.slug}`
+              "@id": `${'https://www.hirelift.tech'}/blog/${post.slug}`
             },
             "keywords": post.keywords?.join(", "),
             "articleSection": post.category

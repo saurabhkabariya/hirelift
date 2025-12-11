@@ -460,8 +460,8 @@ export default function PricingPage() {
         <meta property="og:title" content="HireLift Pricing - AI Resume Optimizer & Career Coaching Plans" />
         <meta property="og:description" content="Affordable pricing for AI-powered resume optimization, ATS checking, and expert career coaching. Free plan available. Start your career transformation today." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hirelift.vercel.app/pricing" />
-        <meta property="og:image" content="https://hirelift.vercel.app/og-pricing.jpg" />
+        <meta property="og:url" content={("https://www.hirelift.tech") + "/pricing"} />
+        <meta property="og:image" content={("https://www.hirelift.tech") + "/og-pricing.jpg"} />
         
         {/* Pricing Schema */}
         <script
@@ -535,13 +535,13 @@ export default function PricingPage() {
                   "@type": "ListItem",
                   "position": 1,
                   "name": "Home",
-                  "item": "https://hirelift.vercel.app"
+                  "item": "https://www.hirelift.tech"
                 },
                 {
                   "@type": "ListItem", 
                   "position": 2,
                   "name": "Pricing",
-                  "item": "https://hirelift.vercel.app/pricing"
+                  "item": ("https://www.hirelift.tech") + "/pricing"
                 }
               ]
             })

@@ -74,11 +74,11 @@ export default function HomePage() {
         <meta name="geo.placename" content="Worldwide" />
         
         {/* Enhanced Open Graph */}
-        <meta property="og:title" content="HireLift - AI Job Hunt Assistant | Transform Your Career" />
-        <meta property="og:description" content="AI-powered job hunt assistant that reveals why you're not getting interviews and connects you with hiring managers. Join 50,000+ professionals who transformed their careers." />
+        <meta property="og:title" content="HireLift - Top Job Assistance and Resume Reviewer for Freshers & Graduates in US & UK" />
+        <meta property="og:description" content="Free ATS resume checker for fresh graduates. Land your first job in US & UK with AI-powered optimization. Join 50,000+ freshers who got hired 3x faster." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://hirelift.vercel.app" />
-        <meta property="og:image" content="https://hirelift.vercel.app/og-image-home.jpg" />
+        <meta property="og:url" content={("https://www.hirelift.tech")} />
+        <meta property="og:image" content={("https://www.hirelift.tech") + "/og-image-home.jpg"} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
         <meta property="og:image:alt" content="HireLift AI Job Hunt Assistant - Transform your career with AI-powered insights" />
@@ -87,9 +87,9 @@ export default function HomePage() {
         
         {/* Enhanced Twitter Cards */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="HireLift - AI Job Hunt Assistant | Get Hired 3x Faster" />
-        <meta name="twitter:description" content="Stop getting rejected. Start getting hired. AI-powered insights + human-centered approach = career transformation. Join 50,000+ success stories." />
-        <meta name="twitter:image" content="https://hirelift.vercel.app/twitter-image-home.jpg" />
+        <meta name="twitter:title" content="HireLift - Job Assistance and Resume Reviewer for Freshers in US & UK | Get Hired 3x Faster" />
+        <meta name="twitter:description" content="Free ATS resume checker for fresh graduates. Land your dream job with AI-powered optimization. Join 50,000+ success stories." />
+        <meta name="twitter:image" content={("https://www.hirelift.tech") + "/twitter-image-home.jpg"} />
         <meta name="twitter:image:alt" content="HireLift AI Job Hunt Assistant Dashboard" />
         <meta name="twitter:creator" content="@hirelift" />
         <meta name="twitter:site" content="@hirelift" />
@@ -102,7 +102,7 @@ export default function HomePage() {
               "@context": "https://schema.org",
               "@type": "WebPage",
               "name": "HireLift - AI Job Hunt Assistant",
-              "url": "https://hirelift.vercel.app",
+              "url": "https://www.hirelift.tech",
               "description": "AI-powered job hunt assistant that reveals why you're not getting interviews and connects you with hiring managers. Human-centered approach to career transformation.",
               "mainEntity": {
                 "@type": "SoftwareApplication",
@@ -126,7 +126,7 @@ export default function HomePage() {
                   "@type": "ListItem",
                   "position": 1,
                   "name": "Home",
-                  "item": "https://hirelift.vercel.app"
+                  "item": "https://www.hirelift.tech"
                 }]
               },
               "speakable": {

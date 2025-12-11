@@ -14,7 +14,7 @@ export const metadata = {
   openGraph: {
     title: "Login & Sign Up - HireLift Job Search Platform",
     description: "Join thousands of professionals who've transformed their job search with HireLift. Sign up for free resume ATS analysis and HR contacts access.",
-    url: "https://hirelift.vercel.app/auth",
+    url: `${'https://www.hirelift.tech'}/auth`,
     type: "website"
   },
   robots: {
@@ -22,6 +22,6 @@ export const metadata = {
     follow: true
   },
   alternates: {
-    canonical: "https://hirelift.vercel.app/auth"
+    canonical: `${'https://www.hirelift.tech'}/auth`
   }
 };

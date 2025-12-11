@@ -16,11 +16,11 @@ export const metadata = {
   openGraph: {
     title: "Company Search & HR Contacts Database | HireLift",
     description: "Access curated HR contacts and hiring manager information from top companies. Search by industry, location, and experience level.",
-    url: "https://hirelift.vercel.app/company-search",
+    url: `${ 'https://www.hirelift.tech'}/company-search`,
     type: "website",
     images: [
       {
-        url: "https://hirelift.vercel.app/company-search-og.jpg",
+        url: `${ 'https://www.hirelift.tech'}/company-search-og.jpg`,
         width: 1200,
         height: 630,
         alt: "HireLift Company Search & HR Contacts"
@@ -28,6 +28,6 @@ export const metadata = {
     ]
   },
   alternates: {
-    canonical: "https://hirelift.vercel.app/company-search"
+    canonical: `${ 'https://www.hirelift.tech'}/company-search`
   }
 };

@@ -12,12 +12,12 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://hirelift.vercel.app/post-job",
+    url: `${'https://www.hirelift.tech'}/post-job`,
     title: "Submit Your Job Posting | Post Jobs for Free | HireLift",
     description: "Post your job openings on HireLift for free. Reach thousands of qualified job seekers in India.",
     images: [
       {
-        url: "https://hirelift.vercel.app/og-post-job.jpg",
+        url: `${'https://www.hirelift.tech'}/og-post-job.jpg`,
         width: 1200,
         height: 630,
         alt: "Post Jobs for Free - HireLift Employer Portal"

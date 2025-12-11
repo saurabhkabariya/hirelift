@@ -2,7 +2,7 @@ import { getAllBlogPosts } from '../../data/blogPosts';
 
 export async function GET() {
   const posts = getAllBlogPosts();
-  const baseUrl = 'https://hirelift.vercel.app';
+  const baseUrl = 'https://www.hirelift.tech';
   const currentDate = new Date().toISOString();
 
   const rss = `<?xml version="1.0" encoding="UTF-8"?>

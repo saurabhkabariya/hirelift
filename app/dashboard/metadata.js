@@ -6,6 +6,6 @@ export const metadata = {
     follow: false
   },
   alternates: {
-    canonical: "https://hirelift.vercel.app/dashboard"
+    canonical: `${ 'https://www.hirelift.tech'}/dashboard`
   }
 };

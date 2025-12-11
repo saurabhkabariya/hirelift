@@ -30,13 +30,13 @@ export const metadata = {
   openGraph: {
     type: "website",
     locale: "en_IN",
-    url: "https://hirelift.vercel.app/jobs",
+    url: `${ 'https://www.hirelift.tech'}/jobs`,
     title: "Free Jobs in India | Browse Latest Job Openings | HireLift",
     description: "Discover thousands of free job opportunities in India. Browse latest jobs across all industries, locations & experience levels. Apply directly with ATS-optimized resumes.",
     siteName: "HireLift",
     images: [
       {
-        url: "https://hirelift.vercel.app/og-jobs.jpg",
+        url: `${ 'https://www.hirelift.tech'}/og-jobs.jpg`,
         width: 1200,
         height: 630,
         alt: "Free Jobs in India - HireLift Job Portal",
@@ -49,12 +49,12 @@ export const metadata = {
     title: "Free Jobs in India | Browse Latest Job Openings | HireLift",
     description: "Discover thousands of free job opportunities in India. Browse latest jobs across all industries, locations & experience levels.",
     images: {
-      url: "https://hirelift.vercel.app/twitter-jobs.jpg",
+      url: `${ 'https://www.hirelift.tech'}/twitter-jobs.jpg`,
       alt: "Free Jobs in India - HireLift Job Portal"
     }
   },
   alternates: {
-    canonical: "https://hirelift.vercel.app/jobs"
+    canonical: `${ 'https://www.hirelift.tech'}/jobs`
   },
   robots: {
     index: true,

@@ -37,7 +37,7 @@ export async function generateMetadata({ params }) {
       description: post.metaDescription || post.excerpt,
     },
     alternates: {
-      canonical: `https://hirelift.vercel.app/blog/${params.slug}`
+      canonical: `${'https://www.hirelift.tech'}/blog/${params.slug}`
     }
   };
 }

@@ -186,7 +186,7 @@ export default function BlogPage() {
             "@type": "Blog",
             "name": "HireLift Global Career Blog",
             "description": "Expert career advice and job search strategies for global professionals, with focus on US, UK, and international job markets",
-            "url": "https://hirelift.vercel.app/blog",
+            "url": `${ 'https://www.hirelift.tech'}/blog`,
             "inLanguage": ["en-US", "en-GB"],
             "audience": {
               "@type": "Audience",
@@ -195,10 +195,10 @@ export default function BlogPage() {
             "publisher": {
               "@type": "Organization",
               "name": "HireLift",
-              "url": "https://hirelift.vercel.app",
+              "url": "https://www.hirelift.tech",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://hirelift.vercel.app/logo.png",
+                "url": `${ 'https://www.hirelift.tech'}/logo.png`,
                 "width": 512,
                 "height": 512
               },
@@ -209,11 +209,11 @@ export default function BlogPage() {
             },
             "mainEntityOfPage": {
               "@type": "WebPage",
-              "@id": "https://hirelift.vercel.app/blog"
+              "@id": `${ 'https://www.hirelift.tech'}/blog`
             },
             "potentialAction": {
               "@type": "SearchAction",
-              "target": "https://hirelift.vercel.app/blog?search={search_term_string}",
+              "target": `${ 'https://www.hirelift.tech'}/blog?search={search_term_string}`,
               "query-input": "required name=search_term_string"
             }
           })
@@ -232,13 +232,13 @@ export default function BlogPage() {
                 "@type": "ListItem",
                 "position": 1,
                 "name": "Home",
-                "item": "https://hirelift.vercel.app"
+                "item": "https://www.hirelift.tech"
               },
               {
                 "@type": "ListItem",
                 "position": 2,
                 "name": "Global Career Blog",
-                "item": "https://hirelift.vercel.app/blog"
+                "item": `${ 'https://www.hirelift.tech'}/blog`
               }
             ]
           })
