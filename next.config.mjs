@@ -1,5 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // External packages configuration for Turbopack
+  serverExternalPackages: ['pdf-parse', 'canvas'],
+  
+  // Turbopack configuration
+  turbopack: {},
+
   // Performance optimizations
   experimental: {
     optimizePackageImports: ['react-icons', 'framer-motion'],

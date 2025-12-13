@@ -7,6 +7,7 @@ import { LoadingProvider } from "@/contexts/LoadingContext";
 import { Toaster } from "react-hot-toast";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import UniversalLoadingBar from "@/components/ui/UniversalLoadingBar";
+import AdSense from "@/components/AdSense";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -418,6 +419,9 @@ export default function RootLayout({ children }) {
         
         <LoadingProvider>
           <AuthProvider>
+            {/* Google AdSense - Only for non-premium users */}
+            <AdSense />
+            
             <Suspense fallback={null}>
               <UniversalLoadingBar />
             </Suspense>
