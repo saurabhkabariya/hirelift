@@ -7,7 +7,6 @@ import { LoadingProvider } from "@/contexts/LoadingContext";
 import { Toaster } from "react-hot-toast";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import UniversalLoadingBar from "@/components/ui/UniversalLoadingBar";
-import AdSense from "@/components/AdSense";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -167,6 +166,13 @@ export default function RootLayout({ children }) {
         <meta name="theme-color" content="#2563eb" />
         <link rel="canonical" href={"https://www.hirelift.tech"} />
         <link rel="alternate" type="application/rss+xml" title="HireLift Blog RSS Feed" href={`${'https://www.hirelift.tech'}/feed.xml`} />
+        
+        {/* Google AdSense - Required for verification */}
+        <script 
+          async 
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7941545613699675"
+          crossOrigin="anonymous"
+        />
         
         <script
           type="application/ld+json"
@@ -419,9 +425,6 @@ export default function RootLayout({ children }) {
         
         <LoadingProvider>
           <AuthProvider>
-            {/* Google AdSense - Only for non-premium users */}
-            <AdSense />
-            
             <Suspense fallback={null}>
               <UniversalLoadingBar />
             </Suspense>
