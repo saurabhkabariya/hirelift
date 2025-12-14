@@ -35,10 +35,10 @@ export default function FooterSection() {
               Your career acceleration partner. Get noticed by recruiters with optimized resumes.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-cyan-600 transition-colors">
+              <a href="https://www.linkedin.com/company/hirelifttech" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-cyan-600 transition-colors">
                 <FaLinkedin className="w-5 h-5" />
               </a>
-              <a href="#" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-cyan-400 transition-colors">
+              <a href="https://twitter.com/hirelifttech" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-cyan-400 transition-colors">
                 <FaSquareXTwitter className="w-5 h-5" />
               </a>
               <a href="mailto:hirelift01@gmail.com" className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-cyan-600 transition-colors">
