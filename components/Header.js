@@ -1,10 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaBars, FaTimes } from 'react-icons/fa';
+import { FaBars, FaTimes, FaChevronDown, FaFileAlt, FaUsers, FaBriefcase, FaBuilding, FaEnvelope, FaStar } from 'react-icons/fa';
 import { useAuth } from '@/contexts/AuthContext';
 
 const Header = ({ variant = 'default' }) => {
@@ -12,9 +12,65 @@ const Header = ({ variant = 'default' }) => {
   const [activeLink, setActiveLink] = useState('Home');
   const [isScrolled, setIsScrolled] = useState(false);
   const [isDarkTheme, setIsDarkTheme] = useState(false);
+  const [toolsDropdownOpen, setToolsDropdownOpen] = useState(false);
+  const [mobileToolsOpen, setMobileToolsOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
   const { user, signOutUser } = useAuth();
+
+  // Tools menu items with icons
+  const toolsMenuItems = [
+    { 
+      name: "Resume Review", 
+      href: "/audit", 
+      description: "Free ATS score & optimization tips",
+      icon: FaFileAlt,
+      color: "from-blue-500 to-cyan-500",
+      badge: "Popular"
+    },
+    { 
+      name: "Referrals Hub", 
+      href: "/referrals", 
+      description: "Get employee referrals",
+      icon: FaUsers,
+      color: "from-purple-500 to-pink-500",
+      badge: "Popular"
+    },
+    { 
+      name: "Free Jobs", 
+      href: "/jobs", 
+      description: "1000+ remote opportunities",
+      icon: FaBriefcase,
+      color: "from-green-500 to-emerald-500"
+    },
+    { 
+      name: "HR Directory", 
+      href: "/company-search", 
+      description: "Connect with hiring managers",
+      icon: FaBuilding,
+      color: "from-orange-500 to-red-500"
+    },
+    { 
+      name: "Email Templates", 
+      href: "/playground", 
+      description: "Cold email & LinkedIn templates",
+      icon: FaEnvelope,
+      color: "from-indigo-500 to-blue-500"
+    }
+  ];
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setToolsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -67,38 +123,30 @@ const Header = ({ variant = 'default' }) => {
   // Different navigation links for different pages
   const defaultNavLinks = [
     { name: "Home", href: "#home", description: "Break the no experience cycle" },
-    { name: "Testimonials", href: "#testimonials", description: "Success stories from job seekers" },
     { name: "Features", href: "#features", description: "Everything you need to get hired" },
+    { name: "Testimonials", href: "#testimonials", description: "Success stories from job seekers" },
     { name: "Pricing", href: "#pricing", description: "Affordable plans for every job seeker" },
-    { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
-    { name: "Resume Review", href: "/audit", description: "Get your resume's ATS score", isExternal: true },
-    { name: "Referrals Hub", href: "/referrals", description: "Find referral opportunities and manage your network", isExternal: true },
-    { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true }
+    { name: "Blog", href: "/blog", description: "Career tips & guides", isExternal: true }
   ];
 
   const blogNavLinks = [
     { name: "Home", href: "/", description: "Back to homepage", isExternal: true },
-    { name: "Pricing", href: "/pricing", description: "Affordable plans for every job seeker", isExternal: true },
-    { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
-    { name: "Free Review", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
-    { name: "Templates", href: "/playground", description: "Free email and LinkedIn templates", isExternal: true },
-    { name: "Referrals Hub", href: "/referrals", description: "Find referral opportunities and manage your network", isExternal: true, isSpecial: true }
+    { name: "Blog", href: "/blog", description: "All articles", isExternal: true },
+    { name: "Pricing", href: "/pricing", description: "View plans", isExternal: true }
   ];
 
-  const playgroundNavLinks = [
+  const otherPagesNavLinks = [
     { name: "Home", href: "/", description: "Back to homepage", isExternal: true },
-    { name: "Pricing", href: "/pricing", description: "Affordable plans for every job seeker", isExternal: true },
-    { name: "Blog", href: "/blog", description: "Latest insights and tips for job seekers", isExternal: true },
-    { name: "Free Jobs", href: "/jobs", description: "Browse 1000+ free remote job opportunities", isExternal: true },
-    { name: "Free Review", href: "/audit", description: "Get your resume's ATS score and suggestions for improvement.", isExternal: true },
-    { name: "Referrals Hub", href: "/referrals", description: "Find referral opportunities and manage your network", isExternal: true, isSpecial: true }
+    { name: "Features", href: "/#features", description: "See features", isExternal: true },
+    { name: "Pricing", href: "/pricing", description: "View plans", isExternal: true },
+    { name: "Blog", href: "/blog", description: "Career insights", isExternal: true }
   ];
 
   // Determine which navigation links to use based on current pathname
   const getNavLinks = () => {
-    if (variant === 'blog' || pathname === '/blog') return blogNavLinks;
-    if (pathname === '/playground') return playgroundNavLinks;
-    return defaultNavLinks;
+    if (variant === 'blog' || pathname.startsWith('/blog')) return blogNavLinks;
+    if (pathname === '/') return defaultNavLinks;
+    return otherPagesNavLinks;
   };
 
   const navLinks = getNavLinks();
@@ -140,18 +188,18 @@ const Header = ({ variant = 'default' }) => {
       handleScroll();
       window.addEventListener('scroll', handleScroll);
       return () => window.removeEventListener('scroll', handleScroll);
-    } else if (pathname === '/jobs') {
-      setActiveLink('Free Jobs');
-    } else if (pathname === '/playground') {
-      setActiveLink('Templates');
-    } else if (pathname === '/blog') {
+    } else if (pathname.startsWith('/blog')) {
       setActiveLink('Blog');
-    } else if (pathname === '/audit') {
-      setActiveLink('Resume Review');
-    } else if (pathname === '/referrals') {
-      setActiveLink('Referrals Hub');
+    } else if (pathname === '/pricing') {
+      setActiveLink('Pricing');
+    } else {
+      // Check if current path matches any tool item
+      const currentTool = toolsMenuItems.find(item => item.href === pathname);
+      if (currentTool) {
+        setActiveLink('Tools');
+      }
     }
-  }, [pathname]);
+  }, [pathname, toolsMenuItems]);
 
   const handleRedirect = (href) => {
     setMobileMenuOpen(false);
@@ -245,7 +293,6 @@ const Header = ({ variant = 'default' }) => {
         <nav className="hidden lg:flex items-center gap-6 xl:gap-8">
           {navLinks.map((link) => {
             const isActive = activeLink === link.name;
-            const isSpecialLink = link.name === 'Free Jobs' || link.name === 'Templates'|| link.name === 'Resume Review' || link.name === 'Free Review' || link.name === 'Referrals Hub' || link.name === 'Pricing';
             return (
               <div key={link.name} className="relative">
                 <button
@@ -254,38 +301,123 @@ const Header = ({ variant = 'default' }) => {
                     handleNavClick(link);
                   }}
                   className={`font-medium transition-all duration-300 cursor-pointer relative pb-2 whitespace-nowrap ${
-                    isSpecialLink
-                      ? isActive
-                        ? (isDarkTheme || (pathname === '/' && !isScrolled))
-                          ? 'text-white font-semibold bg-white/20 px-3 py-1.5 rounded-lg border border-white/30 hover:bg-white/30'
-                          : 'text-blue-700 font-semibold bg-blue-100 px-3 py-1.5 rounded-lg border border-blue-300 hover:bg-blue-200'
-                        : (isDarkTheme || (pathname === '/' && !isScrolled))
-                          ? 'text-white/90 hover:text-white font-semibold bg-white/10 px-3 py-1.5 rounded-lg border border-white/20 hover:bg-white/20'
-                          : 'text-blue-600 hover:text-blue-700 font-semibold bg-blue-50 px-3 py-1.5 rounded-lg border border-blue-200 hover:bg-blue-100'
-                      : isActive
-                        ? (isDarkTheme || (pathname === '/' && !isScrolled)) ? 'text-white font-semibold px-1' : 'text-gray-800 font-semibold px-1'
-                        : (isDarkTheme || (pathname === '/' && !isScrolled)) ? 'text-white/90 hover:text-white px-1' : 'text-gray-600 hover:text-blue-600 px-1'
+                    isActive
+                      ? (isDarkTheme || (pathname === '/' && !isScrolled)) ? 'text-white font-semibold px-1' : 'text-gray-800 font-semibold px-1'
+                      : (isDarkTheme || (pathname === '/' && !isScrolled)) ? 'text-white/90 hover:text-white px-1' : 'text-gray-600 hover:text-blue-600 px-1'
                   }`}
                 >
                   {link.name}
                 </button>
                 
-                {/* Animated underline for regular navigation links */}
-                {!isSpecialLink && (
-                  <motion.div
-                    className={`absolute bottom-0 left-1 right-1 h-0.5 rounded-full ${
-                      (isDarkTheme || (pathname === '/' && !isScrolled)) 
-                        ? 'bg-white' 
-                        : 'bg-gradient-to-r from-blue-500 to-indigo-500'
-                    }`}
-                    initial={{ width: 0 }}
-                    animate={{ width: isActive ? 'calc(100% - 8px)' : 0 }}
-                    transition={{ duration: 0.3, ease: "easeInOut" }}
-                  />
-                )}
+                {/* Animated underline */}
+                <motion.div
+                  className={`absolute bottom-0 left-1 right-1 h-0.5 rounded-full ${
+                    (isDarkTheme || (pathname === '/' && !isScrolled)) 
+                      ? 'bg-white' 
+                      : 'bg-gradient-to-r from-blue-500 to-indigo-500'
+                  }`}
+                  initial={{ width: 0 }}
+                  animate={{ width: isActive ? 'calc(100% - 8px)' : 0 }}
+                  transition={{ duration: 0.3, ease: "easeInOut" }}
+                />
               </div>
             );
           })}
+
+          {/* Tools Dropdown */}
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={() => setToolsDropdownOpen(!toolsDropdownOpen)}
+              onMouseEnter={() => setToolsDropdownOpen(true)}
+              className={`font-medium transition-all duration-300 cursor-pointer relative pb-2 whitespace-nowrap flex items-center gap-1.5 ${
+                activeLink === 'Tools'
+                  ? (isDarkTheme || (pathname === '/' && !isScrolled)) ? 'text-white font-semibold px-1' : 'text-gray-800 font-semibold px-1'
+                  : (isDarkTheme || (pathname === '/' && !isScrolled)) ? 'text-white/90 hover:text-white px-1' : 'text-gray-600 hover:text-blue-600 px-1'
+              }`}
+            >
+              Tools
+              <motion.div
+                animate={{ rotate: toolsDropdownOpen ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                <FaChevronDown className="w-3 h-3" />
+              </motion.div>
+            </button>
+
+            {/* Animated underline */}
+            <motion.div
+              className={`absolute bottom-0 left-1 right-1 h-0.5 rounded-full ${
+                (isDarkTheme || (pathname === '/' && !isScrolled)) 
+                  ? 'bg-white' 
+                  : 'bg-gradient-to-r from-blue-500 to-indigo-500'
+              }`}
+              initial={{ width: 0 }}
+              animate={{ width: (activeLink === 'Tools' || toolsDropdownOpen) ? 'calc(100% - 8px)' : 0 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+            />
+
+            {/* Dropdown Menu */}
+            <AnimatePresence>
+              {toolsDropdownOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                  transition={{ duration: 0.2 }}
+                  onMouseLeave={() => setToolsDropdownOpen(false)}
+                  className="absolute top-full right-0 mt-2 w-80 bg-white/95 backdrop-blur-xl rounded-2xl shadow-2xl border border-gray-200/50 overflow-hidden z-50"
+                >
+                  <div className="p-2">
+                    {toolsMenuItems.map((item, index) => {
+                      const Icon = item.icon;
+                      return (
+                        <motion.button
+                          key={item.name}
+                          onClick={() => {
+                            handleRedirect(item.href);
+                            setToolsDropdownOpen(false);
+                            setActiveLink('Tools');
+                          }}
+                          className="w-full text-left p-3 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 group relative overflow-hidden"
+                          whileHover={{ x: 4 }}
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: index * 0.05 }}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center text-white shadow-lg group-hover:shadow-xl transition-shadow`}>
+                              <Icon className="w-5 h-5" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2">
+                                <span className="font-semibold text-gray-800 group-hover:text-blue-600 transition-colors">
+                                  {item.name}
+                                </span>
+                                {item.badge && (
+                                  <span className="px-2 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full">
+                                    {item.badge}
+                                  </span>
+                                )}
+                              </div>
+                              <p className="text-sm text-gray-600 mt-0.5">{item.description}</p>
+                            </div>
+                          </div>
+                        </motion.button>
+                      );
+                    })}
+                  </div>
+                  
+                  {/* Premium footer */}
+                  <div className="bg-gradient-to-r from-blue-600 to-indigo-600 p-3 text-center">
+                    <p className="text-white text-sm font-medium flex items-center justify-center gap-2">
+                      <FaStar className="w-4 h-4 text-yellow-300" />
+                      All tools designed to get you a job faster!
+                    </p>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </nav>
         
         {/* Desktop Auth Buttons */}
@@ -386,7 +518,6 @@ const Header = ({ variant = 'default' }) => {
               <div className="px-4 sm:px-6 py-6 space-y-3 pb-20">
                 {navLinks.map((link) => {
                   const isActive = activeLink === link.name;
-                  const isSpecialLink = link.name === 'Free Jobs' || link.name === 'Templates';
                   return (
                     <motion.button
                       key={link.name}
@@ -395,38 +526,26 @@ const Header = ({ variant = 'default' }) => {
                         handleNavClick(link);
                       }}
                       className={`block w-full text-left py-3 px-4 rounded-lg transition-all duration-300 relative ${
-                        isSpecialLink
-                          ? isActive
-                            ? isDarkTheme
-                              ? 'text-white bg-white/20 border border-white/30 font-semibold'
-                              : 'text-blue-700 bg-blue-100 border border-blue-300 font-semibold'
-                            : isDarkTheme
-                              ? 'text-white/90 hover:text-white bg-white/10 border border-white/20 font-semibold hover:bg-white/20'
-                              : 'text-blue-600 hover:text-blue-700 bg-blue-50 border border-blue-200 font-semibold hover:bg-blue-100'
-                          : isActive
-                            ? isDarkTheme
-                              ? 'text-white bg-white/10 border border-white/20 font-semibold'
-                              : 'text-gray-800 bg-blue-50 border border-blue-200 font-semibold'
-                            : isDarkTheme
-                              ? 'text-gray-200 hover:text-white hover:bg-white/10'
-                              : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
+                        isActive
+                          ? isDarkTheme
+                            ? 'text-white bg-white/10 border border-white/20 font-semibold'
+                            : 'text-gray-800 bg-blue-50 border border-blue-200 font-semibold'
+                          : isDarkTheme
+                            ? 'text-gray-200 hover:text-white hover:bg-white/10'
+                            : 'text-gray-600 hover:text-blue-600 hover:bg-blue-50'
                       }`}
                       whileHover={{ x: 8 }}
                       whileTap={{ scale: 0.98 }}
                     >
                       <div className="font-medium">{link.name}</div>
                       <div className={`text-sm mt-1 transition-colors duration-300 ${
-                        isSpecialLink
-                          ? isActive 
-                            ? isDarkTheme ? 'text-white/80' : 'text-blue-600'
-                            : isDarkTheme ? 'text-white/70' : 'text-blue-500'
-                          : isActive 
-                            ? isDarkTheme ? 'text-gray-300' : 'text-blue-600'
-                            : isDarkTheme ? 'text-gray-400' : 'text-gray-500'
+                        isActive 
+                          ? isDarkTheme ? 'text-gray-300' : 'text-blue-600'
+                          : isDarkTheme ? 'text-gray-400' : 'text-gray-500'
                       }`}>{link.description}</div>
                       
                       {/* Active indicator for mobile */}
-                      {isActive && !isSpecialLink && (
+                      {isActive && (
                         <motion.div
                           className={`absolute left-0 top-0 bottom-0 w-1 rounded-r-full ${
                             isDarkTheme ? 'bg-white' : 'bg-gradient-to-b from-blue-500 to-indigo-500'
@@ -439,6 +558,87 @@ const Header = ({ variant = 'default' }) => {
                     </motion.button>
                   );
                 })}
+
+                {/* Mobile Tools Section */}
+                <div className={`pt-4 border-t ${isDarkTheme ? 'border-white/20' : 'border-gray-200'}`}>
+                  <button
+                    onClick={() => setMobileToolsOpen(!mobileToolsOpen)}
+                    className={`w-full text-left py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-between ${
+                      isDarkTheme
+                        ? 'text-white bg-white/10 border border-white/20 font-semibold'
+                        : 'text-gray-800 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 font-semibold'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <FaStar className={`w-4 h-4 ${isDarkTheme ? 'text-yellow-300' : 'text-blue-600'}`} />
+                      <span className="font-semibold">Best Tools</span>
+                    </div>
+                    <motion.div
+                      animate={{ rotate: mobileToolsOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <FaChevronDown className="w-4 h-4" />
+                    </motion.div>
+                  </button>
+
+                  <AnimatePresence>
+                    {mobileToolsOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="mt-2 space-y-2">
+                          {toolsMenuItems.map((item, index) => {
+                            const Icon = item.icon;
+                            return (
+                              <motion.button
+                                key={item.name}
+                                onClick={() => {
+                                  handleRedirect(item.href);
+                                  setMobileMenuOpen(false);
+                                  setMobileToolsOpen(false);
+                                }}
+                                className={`w-full text-left p-3 rounded-lg transition-all duration-300 ${
+                                  isDarkTheme
+                                    ? 'bg-white/5 hover:bg-white/10 border border-white/10'
+                                    : 'bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 border border-gray-200'
+                                }`}
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                                whileTap={{ scale: 0.98 }}
+                              >
+                                <div className="flex items-start gap-3">
+                                  <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${item.color} flex items-center justify-center text-white shadow-lg flex-shrink-0`}>
+                                    <Icon className="w-5 h-5" />
+                                  </div>
+                                  <div className="flex-1 min-w-0">
+                                    <div className="flex items-center gap-2">
+                                      <span className={`font-semibold ${isDarkTheme ? 'text-white' : 'text-gray-800'}`}>
+                                        {item.name}
+                                      </span>
+                                      {item.badge && (
+                                        <span className="px-2 py-0.5 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full">
+                                          {item.badge}
+                                        </span>
+                                      )}
+                                    </div>
+                                    <p className={`text-sm mt-0.5 ${isDarkTheme ? 'text-gray-400' : 'text-gray-600'}`}>
+                                      {item.description}
+                                    </p>
+                                  </div>
+                                </div>
+                              </motion.button>
+                            );
+                          })}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
                 
                 <div className={`pt-6 space-y-3 border-t mt-4 transition-colors duration-300 ${
                   isDarkTheme ? 'border-white/20' : 'border-gray-200'

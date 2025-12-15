@@ -47,7 +47,7 @@ export default function ATSResumeGuide() {
           </div>
           
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-            Complete ATS Resume Optimization Guide for India 2024
+            Complete ATS Resume Optimization Guide for India 2025
           </h1>
           
           <p className="text-xl text-gray-600 mb-8 leading-relaxed">
@@ -65,7 +65,7 @@ export default function ATSResumeGuide() {
                 <FaClock className="w-4 h-4" />
                 12 min read
               </span>
-              <span>August 25, 2024</span>
+              <span>August 25, 2025</span>
             </div>
             <div className="flex items-center gap-3">
               <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
@@ -301,7 +301,7 @@ export default function ATSResumeGuide() {
       </article>
 
       {/* Related Articles Section */}
-      <RelatedArticles currentSlug="ats-resume-optimization-guide-india-2024" category="ATS Resume" />
+      <RelatedArticles currentSlug="ats-resume-optimization-guide-india-2025" category="ATS Resume" />
     </div>
   );
 }

@@ -35,41 +35,33 @@ export default function BlogPage() {
   }, [stopLoading]);
   
   const POSTS_PER_PAGE = 9;
-  const allPosts = getAllBlogPosts();
   
-  // Enhanced categories with global focus and better mapping
-  const categoryMap = {
-    "All": "All Articles",
-    "Resume Optimization": "AI Resume Optimization", 
-    "Remote Work": "Remote Work Mastery",
-    "AI Career Tools": "AI Career Tools",
-    "Global Job Search": "Global Job Search", 
-    "Interview Mastery": "Interview Excellence",
-    "Salary Negotiation": "Salary Negotiation",
-    "Career Development": "Career Development",
-    "Tech Careers": "Tech Careers",
-    "Leadership": "Executive Leadership",
-    "Networking": "Professional Networking"
-  };
+  // Only show blogs that have actual pages created
+  const availableSlugs = [
+    'software-engineer-interview-questions-2025',
+    'entry-level-software-engineer-jobs-2025',
+    'remote-developer-jobs-2025',
+    'tech-resume-us-uk-2025',
+    'ai-ml-engineer-career-guide-2025',
+    'ats-resume-optimization-guide-india-2025',
+  ];
+  
+  const allPosts = getAllBlogPosts().filter(post => availableSlugs.includes(post.slug));
+  
+  // Get unique categories from available posts
+  const availableCategories = ['All', ...new Set(allPosts.map(post => post.category))];
+  
+  const categories = availableCategories;
 
-  const categories = Object.keys(categoryMap);
-
-  // Advanced filtering and search with better category mapping
+  // Advanced filtering and search
   const filteredPosts = useMemo(() => {
     let filtered = [];
     
     if (selectedCategory === 'All') {
       filtered = allPosts;
     } else {
-      // Map display category to actual category in data
-      const actualCategory = selectedCategory === 'AI Resume Optimization' ? 'Resume Optimization' :
-                           selectedCategory === 'Remote Work Mastery' ? 'Remote Work' :
-                           selectedCategory === 'Interview Excellence' ? 'Interview Mastery' :
-                           selectedCategory === 'Executive Leadership' ? 'Leadership' :
-                           selectedCategory === 'Professional Networking' ? 'Networking' :
-                           selectedCategory;
-      
-      filtered = getPostsByCategory(actualCategory);
+      // Filter by selected category
+      filtered = allPosts.filter(post => post.category === selectedCategory);
     }
     
     if (searchQuery.trim()) {
@@ -160,15 +152,12 @@ export default function BlogPage() {
     navigateWithLoading('/auth');
   };
 
-  // Pagination
+  // Show all posts in a single grid (no separation between featured and non-featured)
   const totalPages = Math.ceil(filteredPosts.length / POSTS_PER_PAGE);
-  const paginatedPosts = filteredPosts.slice(
+  const displayedPosts = filteredPosts.slice(
     (currentPage - 1) * POSTS_PER_PAGE,
     currentPage * POSTS_PER_PAGE
   );
-
-  const featuredPosts = filteredPosts.filter(post => post.featured);
-  const regularPosts = paginatedPosts.filter(post => !post.featured);
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -266,7 +255,7 @@ export default function BlogPage() {
               {/* Global Professional Badge */}
               <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-6 py-2 rounded-full text-sm font-semibold mb-6">
                 <FaGlobe className="w-4 h-4" />
-                Trusted by 50,000+ Global Professionals
+                Trusted by 5,000+ Global Professionals
               </div>
               
               <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent mb-8 leading-tight">
@@ -360,7 +349,7 @@ export default function BlogPage() {
 
               {/* Results Info */}
               <div className="mt-4 text-slate-600">
-                Found <strong>{filteredPosts.length}</strong> articles
+                Showing <strong>{filteredPosts.length}</strong> of <strong>{allPosts.length}</strong> articles
                 {searchQuery && (
                   <span> for "<strong>{searchQuery}</strong>"</span>
                 )}
@@ -458,11 +447,11 @@ export default function BlogPage() {
           className="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-16"
         >
           <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 text-center shadow-lg border border-white/20">
-            <div className="text-3xl font-bold text-blue-600 mb-2">500+</div>
-            <div className="text-slate-600 font-medium">Career Articles</div>
+            <div className="text-3xl font-bold text-blue-600 mb-2">{allPosts.length}</div>
+            <div className="text-slate-600 font-medium">Expert Guides</div>
           </div>
           <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 text-center shadow-lg border border-white/20">
-            <div className="text-3xl font-bold text-green-600 mb-2">50K+</div>
+            <div className="text-3xl font-bold text-green-600 mb-2">5K+</div>
             <div className="text-slate-600 font-medium">Success Stories</div>
           </div>
           <div className="bg-white/90 backdrop-blur-sm rounded-xl p-6 text-center shadow-lg border border-white/20">
@@ -475,101 +464,7 @@ export default function BlogPage() {
           </div>
         </motion.div>
 
-            {/* Enhanced Featured Posts */}
-            {featuredPosts.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="mb-20"
-              >
-                <div className="flex items-center gap-3 mb-8">
-                  <FaChartLine className="w-6 h-6 text-orange-500" />
-                  <h2 className="text-3xl font-bold text-slate-800">Featured Career Insights</h2>
-                </div>
-                
-                <div className="grid lg:grid-cols-3 gap-8">
-                  {featuredPosts.slice(0, 3).map((post, index) => (
-                    <motion.article
-                      key={post.slug}
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.1 * index }}
-                      className="group relative bg-white rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden border border-white/20 hover:scale-105"
-                    >
-                      {/* Featured Badge */}
-                      <div className="absolute top-4 right-4 z-10">
-                        <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide">
-                          Featured
-                        </span>
-                      </div>
-
-                      {/* Content */}
-                      <div className="p-8">
-                        <div className="flex items-center gap-3 mb-4">
-                          <span className="bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold">
-                            {post.category}
-                          </span>
-                          <span className="text-slate-500 text-sm flex items-center gap-1">
-                            <FaClock className="w-3 h-3" />
-                            {post.readTime}
-                          </span>
-                        </div>
-                        
-                        <h3 className="text-2xl font-bold text-slate-800 mb-4 group-hover:text-blue-600 transition-colors leading-tight">
-                          {post.title}
-                        </h3>
-                        
-                        <p className="text-slate-600 mb-6 leading-relaxed line-clamp-3">
-                          {post.excerpt}
-                        </p>
-                        
-                        <div className="flex items-center justify-between mb-6">
-                          <div className="flex items-center gap-3">
-                            <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-full flex items-center justify-center">
-                              <FaUser className="w-4 h-4 text-white" />
-                            </div>
-                            <div>
-                              <p className="font-semibold text-slate-800 text-sm">{post.author}</p>
-                              <p className="text-slate-500 text-xs">{post.publishDate}</p>
-                            </div>
-                          </div>
-                          
-                          <div className="flex items-center gap-2">
-                            <button 
-                              onClick={() => toggleBookmark(post.slug)}
-                              className={`p-2 transition-colors ${
-                                bookmarkedPosts.has(post.slug) 
-                                  ? 'text-red-500 hover:text-red-600' 
-                                  : 'text-slate-400 hover:text-red-500'
-                              }`}
-                            >
-                              <FaBookmark className="w-4 h-4" />
-                            </button>
-                            <button 
-                              onClick={() => sharePost(post)}
-                              className="p-2 text-slate-400 hover:text-blue-500 transition-colors"
-                            >
-                              <FaShare className="w-4 h-4" />
-                            </button>
-                          </div>
-                        </div>
-                        
-                        <Link
-                          href={`/blog/${post.slug}`}
-                          className="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-semibold px-6 py-3 rounded-xl hover:shadow-lg transition-all duration-300 group-hover:scale-105"
-                        >
-                          Read Expert Analysis
-                          <FaArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                      </div>
-                    </motion.article>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {/* Enhanced Blog Grid */}
+            {/* Expert Career Guides Grid */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
@@ -578,11 +473,13 @@ export default function BlogPage() {
             >
               <div className="flex items-center justify-between mb-8">
                 <h2 className="text-3xl font-bold text-slate-800">
-                  Latest Career Strategies
+                  Expert Career Guides
                 </h2>
-                <div className="text-slate-600">
-                  Page {currentPage} of {totalPages}
-                </div>
+                {totalPages > 1 && (
+                  <div className="text-slate-600">
+                    Page {currentPage} of {totalPages}
+                  </div>
+                )}
               </div>
               
               <AnimatePresence mode="wait">
@@ -594,15 +491,22 @@ export default function BlogPage() {
                   transition={{ duration: 0.3 }}
                   className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
                 >
-                  {regularPosts.map((post, index) => (
+                  {displayedPosts.map((post, index) => (
                     <motion.article
                       key={post.slug}
                       initial={{ opacity: 0, y: 30 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1 }}
-                      className="group bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-100 hover:border-blue-200"
+                      className="group relative bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-slate-100 hover:border-blue-200"
                     >
-                      <div className="p-6">
+                      {post.featured && (
+                        <div className="absolute top-4 right-4 z-10">
+                          <span className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wide shadow-lg">
+                            Featured
+                          </span>
+                        </div>
+                      )}
+                      <div className={`p-6 ${post.featured ? 'pt-12' : ''}`}>
                         <div className="flex items-center justify-between mb-4">
                           <span className="bg-slate-100 text-slate-700 px-3 py-1 rounded-full text-sm font-semibold">
                             {post.category}

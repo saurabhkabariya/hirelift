@@ -7,47 +7,89 @@ import { FaArrowRight, FaBookOpen, FaLightbulb } from 'react-icons/fa';
 export default function RelatedArticles({ currentSlug, category }) {
   const allArticles = [
     {
-      slug: "ats-resume-optimization-guide-india-2024",
-      title: "Complete ATS Resume Optimization Guide for India 2024",
-      category: "ATS Resume",
-      readTime: "12 min read",
-      description: "Master ATS resume optimization with 95% success rate"
+      slug: "software-engineer-interview-questions-2025",
+      title: "Software Engineer Interview Questions 2025: Complete FAANG Guide",
+      category: "Interview Prep",
+      readTime: "22 min read",
+      description: "150+ questions, system design patterns, and insider tips for $200K+ offers"
     },
     {
-      slug: "cold-email-templates-job-applications-india",
-      title: "50+ Cold Email Templates for Job Applications in India",
-      category: "Cold Email",
-      readTime: "10 min read", 
-      description: "Proven email templates with 75% response rate"
-    },
-    {
-      slug: "hr-contacts-directory-guide-direct-hiring-managers",
-      title: "How to Find HR Contacts in Indian Companies",
-      category: "HR Networking",
-      readTime: "8 min read",
-      description: "Direct access to hiring managers and recruiters"
-    },
-    {
-      slug: "job-search-strategy-mumbai-delhi-bangalore",
-      title: "City-Wise Job Search Strategy for Indian Markets",
-      category: "Location Guide", 
-      readTime: "15 min read",
-      description: "Tailored strategies for Mumbai, Delhi, and Bangalore"
-    },
-    {
-      slug: "fresher-job-search-guide-india-2024",
-      title: "Complete Fresher Job Search Guide for India",
-      category: "Freshers",
+      slug: "entry-level-software-engineer-jobs-2025",
+      title: "Entry-Level Software Engineer Jobs 2025: Fresh Graduate Guide",
+      category: "Entry-Level Jobs",
       readTime: "18 min read",
-      description: "Land your first job with proven strategies"
+      description: "Land your first tech job with proven strategies and salary insights"
     },
     {
-      slug: "linkedin-optimization-indian-job-seekers",
-      title: "LinkedIn Profile Optimization for Indian Job Seekers",
-      category: "LinkedIn",
-      readTime: "14 min read",
-      description: "Attract recruiters with optimized LinkedIn profile"
-    }
+      slug: "remote-developer-jobs-2025",
+      title: "Remote Developer Jobs 2025: $100K-$200K Opportunities",
+      category: "Remote Work",
+      readTime: "20 min read",
+      description: "Discover 500+ companies hiring remote developers worldwide"
+    },
+    {
+      slug: "tech-resume-us-uk-2025",
+      title: "Tech Resume for US & UK Markets 2025: ATS-Optimized Format",
+      category: "Resume Optimization",
+      readTime: "16 min read",
+      description: "Perfect resume format with keywords that get interviews"
+    },
+    {
+      slug: "ai-ml-engineer-career-guide-2025",
+      title: "AI/ML Engineer Career Guide 2025: $150K-$350K Salaries",
+      category: "AI/ML Careers",
+      readTime: "19 min read",
+      description: "Complete guide to AI careers, skills roadmap, and top companies"
+    },
+    // {
+    //   slug: "ai-resume-optimization-global-markets-2024",
+    //   title: "AI Resume Optimization for Global Markets",
+    //   category: "Resume Optimization",
+    //   readTime: "12 min read",
+    //   description: "Master AI-powered resume optimization for international jobs"
+    // },
+    // {
+    //   slug: "remote-work-mastery-global-professionals-2024",
+    //   title: "Remote Work Mastery: Landing High-Paying Global Remote Jobs",
+    //   category: "Remote Work",
+    //   readTime: "15 min read",
+    //   description: "Advanced strategies for landing global remote positions"
+    // },
+    // {
+    //   slug: "global-networking-strategies-international-professionals",
+    //   title: "Global Networking Strategies for International Career Growth",
+    //   category: "Networking",
+    //   readTime: "11 min read",
+    //   description: "Cross-cultural networking and relationship building worldwide"
+    // },
+    // {
+    //   slug: "salary-negotiation-international-markets-2024",
+    //   title: "Salary Negotiation Across International Markets",
+    //   category: "Salary Negotiation",
+    //   readTime: "13 min read",
+    //   description: "Compensation benchmarks and negotiation tactics by region"
+    // },
+    // {
+    //   slug: "tech-career-trends-global-markets-2024",
+    //   title: "Global Tech Career Trends 2024: Where High-Paying Jobs Are",
+    //   category: "Tech Careers",
+    //   readTime: "10 min read",
+    //   description: "Explore hottest tech trends and emerging roles worldwide"
+    // },
+    // {
+    //   slug: "interview-mastery-global-companies-2024",
+    //   title: "Interview Mastery for Global Companies",
+    //   category: "Interview Prep",
+    //   readTime: "14 min read",
+    //   description: "Cultural interview styles and preparation for global success"
+    // },
+    // {
+    //   slug: "linkedin-global-networking-professionals-2024",
+    //   title: "LinkedIn Global Networking: Building International Connections",
+    //   category: "Networking",
+    //   readTime: "9 min read",
+    //   description: "Transform LinkedIn into global networking powerhouse"
+    // }
   ];
 
   // Filter out current article and show related articles
@@ -79,13 +121,13 @@ export default function RelatedArticles({ currentSlug, category }) {
         >
           <div className="inline-flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-full mb-6">
             <FaLightbulb className="w-4 h-4 text-blue-600" />
-            <span className="text-blue-700 font-semibold">Keep Learning</span>
+            <span className="text-blue-700 font-semibold">Continue Reading</span>
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Related Job Search Articles
+            Related Career Guides
           </h2>
           <p className="text-gray-600">
-            Continue your job search education with these expert guides
+            Explore more expert insights to accelerate your tech career
           </p>
         </motion.div>
 
@@ -137,23 +179,23 @@ export default function RelatedArticles({ currentSlug, category }) {
           className="mt-12 text-center p-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-2xl text-white"
         >
           <h3 className="text-2xl font-bold mb-4">
-            Ready to Put Learning into Action?
+            Ready to Accelerate Your Career?
           </h3>
           <p className="text-lg mb-6 opacity-90">
-            Start optimizing your job search with HireLift's free tools
+            Use HireLift's free tools to optimize your job search and land interviews faster
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/audit"
-              className="px-8 py-3 bg-white text-green-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-8 py-3 bg-white text-green-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors shadow-lg"
             >
-              Free Resume Review
+              Free ATS Resume Check
             </Link>
             <Link
-              href="/playground"
+              href="/referrals"
               className="px-8 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors"
             >
-              Browse Email Templates
+              Get Employee Referrals
             </Link>
           </div>
         </motion.div>

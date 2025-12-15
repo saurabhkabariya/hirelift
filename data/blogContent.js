@@ -1,6 +1,6 @@
 // Detailed blog content for individual posts
 export const blogContent = {
-  "ats-resume-optimization-guide-india-2024": `# Complete ATS Resume Optimization Guide for India 2024
+  "ats-resume-optimization-guide-india-2025": `# Complete ATS Resume Optimization Guide for India 2024
 
 Are you struggling to get interview calls despite having great qualifications? The problem might be that your resume isn't passing through Applicant Tracking Systems (ATS) used by 95% of Indian companies including TCS, Infosys, Wipro, HCL, and emerging startups.
 
