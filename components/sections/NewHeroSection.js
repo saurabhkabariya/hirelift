@@ -24,7 +24,7 @@ export default function NewHeroSection({ handleRedirect }) {
             className="text-white space-y-4 sm:space-y-6 text-center lg:text-left"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
-              Break free of the <br className="hidden sm:block"/> "No Experience"<br />
+              Break free of the <br className="hidden sm:block"/> "No Responses"<br />
               Cycle. Get Hired Fast.
             </h1>
             
