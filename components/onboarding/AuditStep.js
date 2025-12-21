@@ -77,18 +77,22 @@ const AuditStep = ({ onComplete, userInfo }) => {
       setFile(e.dataTransfer.files[0]);
       setResult(null);
       setError("");
+      setShowMotivation(false);
     }
   }, []);
 
   const handleFileChange = (e) => {
+    e.stopPropagation();
     if (e.target.files && e.target.files[0]) {
       setFile(e.target.files[0]);
       setResult(null);
       setError("");
+      setShowMotivation(false);
     }
   };
 
-  const handleFileZoneClick = () => {
+  const handleFileZoneClick = (e) => {
+    e.stopPropagation();
     inputRef.current?.click();
   };
 
@@ -103,7 +107,10 @@ const AuditStep = ({ onComplete, userInfo }) => {
 
   // Handle audit submission
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     
     if (!file) {
       setError("Please upload your resume to continue");
@@ -229,7 +236,12 @@ const AuditStep = ({ onComplete, userInfo }) => {
     }
   };
 
-  const handleComplete = () => {
+  const handleComplete = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    
     if (!result) {
       toast.error('Please complete your resume analysis first');
       return;
@@ -481,7 +493,7 @@ const AuditStep = ({ onComplete, userInfo }) => {
           transition={{ delay: 0.3 }}
           className="bg-white rounded-2xl shadow-2xl p-8 border border-gray-100 mb-8"
         >
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-6">
             {/* File upload section */}
             <div>
               <label className="text-lg font-semibold text-gray-700 mb-4 flex items-center gap-2">
@@ -574,7 +586,8 @@ const AuditStep = ({ onComplete, userInfo }) => {
 
             {/* Submit button */}
             <motion.button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               disabled={loading || !file || !role}
               className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 px-6 rounded-xl text-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               whileHover={{ scale: 1.02 }}
@@ -607,7 +620,7 @@ const AuditStep = ({ onComplete, userInfo }) => {
                 {error}
               </motion.div>
             )}
-          </form>
+          </div>
 
           {/* Motivational message */}
           <AnimatePresence>

@@ -220,7 +220,7 @@ export default function AuthPage() {
                     className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 backdrop-blur-sm border border-emerald-500/30 rounded-full px-3 py-1.5"
                   >
                     <FiStar className="text-yellow-400 w-4 h-4" />
-                    <span className="text-emerald-300 text-xs xl:text-sm font-medium">Trusted by 50,000+ Professionals</span>
+                    <span className="text-emerald-300 text-xs xl:text-sm font-medium">Trusted by 5,000+ Professionals</span>
                   </motion.div>
                 </motion.div>
 
@@ -314,7 +314,7 @@ export default function AuthPage() {
                     ))}
                   </div>
                   <p className="text-xs text-gray-300">
-                    <span className="font-semibold text-white">4.9/5</span> from 12,000+ reviews
+                    <span className="font-semibold text-white">4.9/5</span> from 1,200+ reviews
                   </p>
                 </div>
               </motion.div>

@@ -1141,9 +1141,8 @@ function CareerAccelerationCTA({ user, isPremium }) {
               transition={{ duration: 2, repeat: Infinity }}
               className="relative z-10 text-xl sm:text-2xl flex-shrink-0"
             >
-              🚀
             </motion.div>
-            <span className="relative z-10 text-center leading-tight">
+            <span className="relative z-10 text-center leading-tight text-white">
               {isPremium ? 'Access Your Career Tools' : 'Get HR Directory + Templates'}
             </span>
             <motion.div

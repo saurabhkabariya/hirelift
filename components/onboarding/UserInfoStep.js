@@ -74,13 +74,36 @@ const UserInfoStep = ({ onComplete, user }) => {
   ];
 
   const industryOptions = [
-    'Technology', 'Healthcare', 'Finance', 'Education', 'Manufacturing', 
-    'Retail', 'Consulting', 'Marketing', 'Sales', 'Human Resources',
-    'Engineering', 'Design', 'Media', 'Real Estate', 'Government',
-    'Non-Profit', 'Legal', 'Hospitality', 'Transportation', 'Other'
+    'Software Development',
+    'Web Development', 
+    'Mobile App Development',
+    'Cloud Computing & DevOps',
+    'Artificial Intelligence & Machine Learning',
+    'Data Science & Analytics',
+    'Cybersecurity',
+    'Game Development',
+    'Blockchain & Cryptocurrency',
+    'Internet of Things (IoT)',
+    'Enterprise Software',
+    'SaaS (Software as a Service)',
+    'E-commerce & Digital Platforms',
+    'Financial Technology (FinTech)',
+    'Healthcare Technology (HealthTech)',
+    'Education Technology (EdTech)',
+    'IT Consulting & Services',
+    'Database Administration',
+    'Network Engineering',
+    'Quality Assurance & Testing',
+    'Product Management (Tech)',
+    'Technical Support & IT Services',
+    'Research & Development',
+    'Startups & Innovation',
+    'Other'
   ];
 
   const careerGoalOptions = [
+    { value: 'start-career', label: '🎓 Start My Career', description: 'Land my first full-time job as a fresher' },
+    { value: 'find-internship', label: '📚 Find an Internship', description: 'Secure an internship to gain experience' },
     { value: 'promotion', label: '📈 Get Promoted', description: 'Advance to a higher role in my current company' },
     { value: 'switch', label: '🔄 Switch Companies', description: 'Find a better opportunity elsewhere' },
     { value: 'career-change', label: '🎯 Career Change', description: 'Transition to a different field or role' },
@@ -529,6 +552,7 @@ const UserInfoStep = ({ onComplete, user }) => {
           {/* Navigation buttons */}
           <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
             <button
+              type="button"
               onClick={handlePrevSection}
               disabled={currentSection === 0}
               className="px-6 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
@@ -537,6 +561,7 @@ const UserInfoStep = ({ onComplete, user }) => {
             </button>
 
             <button
+              type="button"
               onClick={handleNextSection}
               disabled={saving || completing}
               className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"

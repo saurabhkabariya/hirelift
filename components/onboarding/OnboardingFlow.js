@@ -353,6 +353,15 @@ const OnboardingFlowContent = () => {
 
   const currentStepInfo = getCurrentStepInfo();
 
+  // Scroll to top whenever step changes
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth'
+    });
+  }, [currentStep]);
+
   // Handle step completion
   const handleStepComplete = (stepData) => {
     completeCurrentStep(stepData);

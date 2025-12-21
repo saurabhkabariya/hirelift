@@ -173,9 +173,39 @@ export default function RootLayout({ children }) {
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7941545613699675"
           crossOrigin="anonymous"
         />
+      </head>
+      
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        {/* Google Analytics */}
+        <Script 
+          src="https://www.googletagmanager.com/gtag/js?id=G-1K3S00G7VG"
+          strategy="afterInteractive"
+        />
+        <Script 
+          id="google-analytics"
+          strategy="afterInteractive"
+        >
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-1K3S00G7VG');
+          `}
+        </Script>
         
-        <script
+        {/* Razorpay Script */}
+        <Script 
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          strategy="lazyOnload"
+        />
+        
+        {/* Structured Data - Organization Schema */}
+        <Script
+          id="organization-schema"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -185,7 +215,7 @@ export default function RootLayout({ children }) {
               "url": "https://www.hirelift.tech",
               "logo": {
                 "@type": "ImageObject",
-                "url": `${'https://www.hirelift.tech'}/logo.png`,
+                "url": "https://www.hirelift.tech/logo.png",
                 "width": 512,
                 "height": 512
               },
@@ -255,8 +285,10 @@ export default function RootLayout({ children }) {
         />
         
         {/* WebSite Schema */}
-        <script
+        <Script
+          id="website-schema"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -268,7 +300,7 @@ export default function RootLayout({ children }) {
                 "@type": "SearchAction",
                 "target": {
                   "@type": "EntryPoint",
-                  "urlTemplate": `${'https://www.hirelift.tech'}/jobs?q={search_term_string}`
+                  "urlTemplate": "https://www.hirelift.tech/jobs?q={search_term_string}"
                 },
                 "query-input": "required name=search_term_string"
               },
@@ -281,9 +313,11 @@ export default function RootLayout({ children }) {
           }}
         />
         
-        {/* Enhanced Structured Data for SoftwareApplication */}
-        <script
+        {/* SoftwareApplication Schema */}
+        <Script
+          id="software-schema"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -296,7 +330,7 @@ export default function RootLayout({ children }) {
               "description": "AI-powered resume optimization and global job search platform helping professionals worldwide get hired faster with ATS-compliant resumes and expert career coaching",
               "url": "https://www.hirelift.tech",
               "downloadUrl": "https://www.hirelift.tech",
-              "screenshot": `${'https://www.hirelift.tech'}/screenshot.jpg`,
+              "screenshot": "https://www.hirelift.tech/screenshot.jpg",
               "featureList": [
                 "AI Resume Optimization",
                 "ATS Compatibility Checker",
@@ -316,7 +350,7 @@ export default function RootLayout({ children }) {
               "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.8",
-                "ratingCount": "2847",
+                "reviewCount": "1250",
                 "bestRating": "5",
                 "worstRating": "1"
               },
@@ -349,13 +383,6 @@ export default function RootLayout({ children }) {
                   "availability": "https://schema.org/InStock"
                 }
               ],
-              "aggregateRating": {
-                "@type": "AggregateRating",
-                "ratingValue": "4.8",
-                "reviewCount": "1250",
-                "bestRating": "5",
-                "worstRating": "1"
-              },
               "author": {
                 "@type": "Organization",
                 "name": "HireLift"
@@ -363,11 +390,12 @@ export default function RootLayout({ children }) {
             })
           }}
         />
-
-
-        {/* Breadcrumb Structured Data */}
-        <script
+        
+        {/* Breadcrumb Schema */}
+        <Script
+          id="breadcrumb-schema"
           type="application/ld+json"
+          strategy="beforeInteractive"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
@@ -383,44 +411,17 @@ export default function RootLayout({ children }) {
                   "@type": "ListItem", 
                   "position": 2,
                   "name": "ATS Resume Review",
-                  "item": `${'https://www.hirelift.tech'}/audit`
+                  "item": "https://www.hirelift.tech/audit"
                 },
                 {
                   "@type": "ListItem",
                   "position": 3,
                   "name": "Cold Email Templates",
-                  "item": `${'https://www.hirelift.tech'}/playground`
+                  "item": "https://www.hirelift.tech/playground"
                 }
               ]
             })
           }}
-        />
-      </head>
-      
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {/* Google Analytics */}
-        <Script 
-          src="https://www.googletagmanager.com/gtag/js?id=G-1K3S00G7VG"
-          strategy="afterInteractive"
-        />
-        <Script 
-          id="google-analytics"
-          strategy="afterInteractive"
-        >
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
-            gtag('js', new Date());
-            gtag('config', 'G-1K3S00G7VG');
-          `}
-        </Script>
-        
-        {/* Razorpay Script */}
-        <Script 
-          src="https://checkout.razorpay.com/v1/checkout.js"
-          strategy="lazyOnload"
         />
         
         <LoadingProvider>
