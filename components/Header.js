@@ -123,8 +123,8 @@ const Header = ({ variant = 'default' }) => {
   // Different navigation links for different pages
   const defaultNavLinks = [
     { name: "Home", href: "#home", description: "Break the no experience cycle" },
-    { name: "Features", href: "#features", description: "Everything you need to get hired" },
     { name: "Testimonials", href: "#testimonials", description: "Success stories from job seekers" },
+    { name: "Features", href: "#features", description: "Everything you need to get hired" },
     { name: "Pricing", href: "#pricing", description: "Affordable plans for every job seeker" },
     { name: "Blog", href: "/blog", description: "Career tips & guides", isExternal: true }
   ];
