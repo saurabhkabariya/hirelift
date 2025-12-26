@@ -9,19 +9,19 @@ export const dynamic = 'force-dynamic';
 export async function PUT(req) {
   try {
     // Get token from Authorization header
-    const authHeader = req.headers.get('authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      return NextResponse.json({ error: 'Authorization token required' }, { status: 401 });
-    }
+    // const authHeader = req.headers.get('authorization');
+    // if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    //   return NextResponse.json({ error: 'Authorization token required' }, { status: 401 });
+    // }
 
-    const token = authHeader.substring(7);
-    let decoded;
+    // const token = authHeader.substring(7);
+    // let decoded;
     
-    try {
-      decoded = jwt.verify(token, process.env.JWT_SECRET);
-    } catch (err) {
-      return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
-    }
+    // try {
+    //   decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // } catch (err) {
+    //   return NextResponse.json({ error: 'Invalid token' }, { status: 401 });
+    // }
 
     await connectDB();
     
