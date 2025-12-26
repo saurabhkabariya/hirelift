@@ -19,14 +19,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  metadataBase: new URL( 'https://www.hirelift.tech'),
-  alternates: {
-    canonical: '/',
-    languages: {
-      'en-US': '/en-US',
-      'en-GB': '/en-GB'
-    }
-  },
+  metadataBase: new URL('https://www.hirelift.tech'),
   title: {
     default: "HireLift - Top Job Assistance and Resume Reviewer for Freshers & Graduates in US & UK",
     template: "%s | HireLift - Resume Reviewer for Freshers"
@@ -81,7 +74,7 @@ export const metadata = {
     type: "website",
     locale: "en_US",
     alternateLocale: ["en_GB", "en_CA", "en_AU"],
-    url: process.env.NEXT_PUBLIC_BASE_URL || "https://www.hirelift.tech",
+    url: "https://www.hirelift.tech",
     title: "HireLift - Top Job Assistance and Resume Reviewer for Freshers & Graduates in US & UK",
     description: "Land your dream job in the US & UK with AI-powered resume optimization. Free ATS resume checker for fresh graduates and college students. Get hired 3x faster.",
     siteName: "HireLift",
@@ -138,10 +131,10 @@ export const metadata = {
     'DC.description': 'AI-powered resume builder for fresh graduates in US & UK'
   },
   alternates: {
-    canonical: process.env.NEXT_PUBLIC_BASE_URL || "https://www.hirelift.tech",
+    canonical: 'https://www.hirelift.tech',
     languages: {
-      'en-US': `${ 'https://www.hirelift.tech'}`,
-      'en-GB': `${'https://www.hirelift.tech'}/en-gb`
+      'en-US': 'https://www.hirelift.tech/en-US',
+      'en-GB': 'https://www.hirelift.tech/en-GB'
     }
   },
   category: "Technology",
@@ -164,7 +157,6 @@ export default function RootLayout({ children }) {
         <meta name="google-site-verification" content="HKgvrxQDwRgmswOq7p_GoG2yId-fcWZkSjyAEGC_ASw" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="theme-color" content="#2563eb" />
-        <link rel="canonical" href={"https://www.hirelift.tech"} />
         <link rel="alternate" type="application/rss+xml" title="HireLift Blog RSS Feed" href={`${'https://www.hirelift.tech'}/feed.xml`} />
         
         {/* Google AdSense - Required for verification */}

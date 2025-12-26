@@ -61,6 +61,30 @@ const nextConfig = {
   // Redirects for SEO
   async redirects() {
     return [
+      // Redirect non-www to www for canonical URL
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'hirelift.tech',
+          },
+        ],
+        destination: 'https://www.hirelift.tech/:path*',
+        permanent: true,
+      },
+      // Redirect .dev domains to .tech
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: '(www\\.)?hirelift\\.dev',
+          },
+        ],
+        destination: 'https://www.hirelift.tech/:path*',
+        permanent: true,
+      },
       {
         source: '/home',
         destination: '/',

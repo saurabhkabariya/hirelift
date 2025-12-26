@@ -3,6 +3,7 @@ export function GET() {
   
   const robotsContent = `# Robots.txt for HireLift - Top AI Job Assistance and Resume Reviewer for Freshers & Graduates
 # Optimized for US & UK job seekers and search engines
+# Canonical domain: https://www.hirelift.tech
 
 User-agent: *
 Allow: /
@@ -45,9 +46,11 @@ Allow: *.jpeg
 Allow: *.webp
 Allow: *.svg
 
-# Sitemap locations (multiple domains)
+# Sitemap locations
 Sitemap: ${baseUrl}/sitemap.xml
-Sitemap: https://www.hirelift.tech/sitemap.xml
+
+# Crawl delay (optional, adjust as needed)
+Crawl-delay: 1
 Sitemap: https://www.hirelift.dev/sitemap.xml
 Sitemap: https://hirelift.vercel.app/sitemap.xml
 
