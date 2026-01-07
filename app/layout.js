@@ -132,10 +132,6 @@ export const metadata = {
   },
   alternates: {
     canonical: 'https://www.hirelift.tech',
-    languages: {
-      'en-US': 'https://www.hirelift.tech/en-US',
-      'en-GB': 'https://www.hirelift.tech/en-GB'
-    }
   },
   category: "Technology",
   classification: "Job Search Platform",

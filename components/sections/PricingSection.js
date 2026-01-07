@@ -58,6 +58,7 @@ export default function PricingSection({ handleRedirect }) {
     {
       name: "Career Accelerator",
       price: `${pricingConfig.symbol}${pricingConfig.amounts.basic}`,
+      originalPrice: `${pricingConfig.symbol}${pricingConfig.originalPrices.basic}`,
       period: "/30 days",
       description: "🔥 Most Popular - Get hired 3x faster",
       icon: FaStar,
@@ -65,6 +66,8 @@ export default function PricingSection({ handleRedirect }) {
       iconColor: "text-orange-600",
       buttonColor: "bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600",
       popular: true,
+      onSale: true,
+      salePercentage: 50,
       badge: "MOST POPULAR",
       features: [
         'Unlimited Resume Reviews (Worth $10+)',
@@ -171,12 +174,25 @@ export default function PricingSection({ handleRedirect }) {
                 </div>
               )}
               
+              {/* 50% OFF Badge */}
+              {plan.onSale && (
+                <div className="absolute top-2 right-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                  {plan.salePercentage}% OFF
+                </div>
+              )}
+              
               <div className={`text-center mb-8 ${plan.popular ? 'pt-8' : ''}`}>
                 <div className={`w-16 h-16 ${plan.bgColor} rounded-xl flex items-center justify-center mx-auto mb-6`}>
                   <plan.icon className={`w-8 h-8 ${plan.iconColor}`} />
                 </div>
                 <h3 className="text-2xl font-bold text-gray-800 mb-4">{plan.name}</h3>
                 <div className="mb-4">
+                  {plan.onSale && plan.originalPrice && (
+                    <div className="mb-2 line-through">
+                      <span className="text-lg text-gray-500">{plan.originalPrice}</span>
+                      {plan.period && <span className="text-gray-600 ml-1">{plan.period}</span>}
+                    </div>
+                  )}
                   <span className="text-4xl font-bold text-gray-800">{plan.price}</span>
                   {plan.period && <span className="text-gray-600 ml-1">{plan.period}</span>}
                 </div>

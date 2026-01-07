@@ -6,11 +6,20 @@ import Image from 'next/image';
 
 export default function NewHeroSection({ handleRedirect }) {
   return (
-    <section id="home" className="relative pt-6 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 min-h-screen flex items-center overflow-hidden">
-      {/* Decorative background elements */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-10 sm:top-20 right-1/4 w-48 h-48 sm:w-96 sm:h-96 bg-blue-500/20 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-10 sm:bottom-20 left-1/4 w-40 h-40 sm:w-80 sm:h-80 bg-indigo-500/20 rounded-full blur-3xl"></div>
+    <section id="home" className="relative pt-6 min-h-screen flex items-center overflow-hidden">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/hero-bg.webp"
+          alt="Hero Background"
+          fill
+          priority
+          quality={100}
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-blue-900/40"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 relative z-10">
@@ -24,26 +33,27 @@ export default function NewHeroSection({ handleRedirect }) {
             className="text-white space-y-4 sm:space-y-6 text-center lg:text-left"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
-              Break free of the <br className="hidden sm:block"/> "No Responses"<br />
-              Cycle. Get Hired Fast.
+              Break free of the <br className="hidden sm:block"/> <span className='text-red-300'> "No Responses" </span> Cycle. <br />
+               Start Getting Interview Calls.
             </h1>
             
-            <p className="text-base sm:text-lg lg:text-xl text-blue-100 leading-relaxed max-w-xl mx-auto lg:mx-0">
-              Feeling invisible to recruiters? HireLift's AI turns your potential into an undeniable profile, gives you unshakeable interview confidence, and connects you with companies eager to hire fresh talent.
+            <p className="text-base sm:text-lg lg:text-xl text-shadow-black text-shadow-xs text-white/95 leading-relaxed max-w-xl mx-auto lg:mx-0">
+              No replies doesn’t mean no talent.
+HireLift shows you exactly what’s wrong with your resume, helps you get best opportunities, and connects you with recruiters open to fresh candidates.
             </p>
 
             <motion.button
               onClick={() => handleRedirect('/audit')}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-3 sm:py-4 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-base sm:text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+              className="group inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-1 sm:py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-base sm:text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              <span className="whitespace-nowrap">Create My Winning Profile</span>
+              <span className="whitespace-nowrap">Fix My Resume</span>
               <FaArrowRight className="group-hover:translate-x-1 transition-transform flex-shrink-0" />
             </motion.button>
 
-            <p className="text-xs sm:text-sm text-blue-200">
-              Stop stress-scrolling. Start now.
+            <p className="text-xs sm:text-sm text-shadow-xs text-shadow-black text-white/95">
+              Stop stress-scrolling. Start now. Free resume review included.
             </p>
           </motion.div>
 
@@ -56,7 +66,7 @@ export default function NewHeroSection({ handleRedirect }) {
           >
             <div className="relative max-w-md mx-auto lg:max-w-none">
               {/* Green background card */}
-              <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl sm:rounded-3xl transform rotate-3"></div>
+              {/* <div className="absolute inset-0 bg-gradient-to-br from-green-400 to-emerald-600 rounded-2xl sm:rounded-3xl transform rotate-3"></div> */}
               
               {/* Laptop mockup */}
               {/* <div className="relative bg-blue-900 rounded-2xl p-4 shadow-2xl">
@@ -82,13 +92,13 @@ export default function NewHeroSection({ handleRedirect }) {
                   </div>
                 </div>
               </div> */}
-              <div className="relative rounded-xl sm:rounded-2xl p-3 sm:p-4 px-4 sm:px-8 shadow-2xl transform rotate-3">
+              <div className="relative rounded-xl sm:rounded-2xl p-3 sm:p-4 px-4 sm:px-8 shadow-2xs transform rotate-3">
               <Image 
-                src="/laptop-mobile.webp" 
-                alt="Laptop and Mobile Mockup" 
+                src="/hero-img.webp" 
+                alt="Resume Mockup" 
                 width={500} 
                 height={500}
-                className="w-full h-auto"
+                className="w-full h-auto rounded-lg sm:rounded-xl"
                 priority
               />
               </div>

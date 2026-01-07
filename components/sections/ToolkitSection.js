@@ -7,7 +7,7 @@ export default function ToolkitSection() {
   const tools = [
     {
       icon: FaFileAlt,
-      title: "AI Resume Builder",
+      title: "AI Resume Review",
       description: "Get instant ATS optimization with AI-powered analysis. Know exactly why recruiters ignore your resume and fix it in minutes.",
       color: "from-green-400 to-emerald-500",
       bgColor: "bg-green-50"

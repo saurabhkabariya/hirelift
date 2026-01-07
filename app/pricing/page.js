@@ -371,14 +371,15 @@ export default function PricingPage() {
       name: 'Free Plan',
       price: `${pricingConfig.symbol}0`,
       billing: '',
-      description: 'Test our Auditor power before you buy',
+      description: 'See why recruiters ignore your resume before you spend a rupee.',
       features: [
-        '1 Resume Review (Worth $10)',
-        'Basic ATS Score & Feedback',
-        'Professional Email Templates Access',
-        'Job Board Access (100+ jobs)',
-        'Community Support',
-        'No Credit Card Required'
+        'ATS Resume Review ($10+ value): Instantly find what is blocking your resume from getting shortlisted.',
+        'Basic ATS Score & Feedback: Know exactly what to fix to improve your chances of interview calls.',
+        'Professional Email Templates Access: Reach recruiters with proven, ready-to-use email formats.',
+        'Job Board Access (100+ jobs): Apply to real, fresh jobs—no fake posts, no ghosting.',
+        'Community Support, Learn, ask: and grow with other job seekers on the same journey.',
+        'No Credit Card Required',
+        'Takes less than 2 minutes to get started'
       ],
       buttonText: 'Explore For Free',
       popular: false,
@@ -393,17 +394,17 @@ export default function PricingPage() {
       billing: '/30 days',
       description: '🔥 Most Popular - Get hired 3x faster',
       features: [
-        'Unlimited Resume Reviews (Worth $10+)',
-        '100+ HR Directory Access',
-        'Advanced ATS Optimization',
-        'Proven Email Templates Library',
-        'Priority Expert Support',
-        'Access to Beta features',
+        'Unlimited ATS Resume Audits: Fix, test, and optimize until your resume is recruiter-ready',
+        '100+ HR Contacts Directory: Reach real hiring managers directly instead of applying blindly',
+        'Advanced ATS Optimization: Improve keyword match, structure, and visibility in hiring systems',
+        'Proven Email Templates Library: Send confident, high-response emails that actually get replies',
+        'Priority Expert Support: Get faster help when you’re stuck or unsure',
+        'Early Access to Beta Features: Use powerful tools before everyone else',
         '+ more'
       ],
       buttonText: userPlanStatus.hasActivePlan
         ? 'Career Accelerator - Current Plan'
-        : '🚀 Get 3x Faster Results',
+        : 'Get 3x Faster Results',
       popular: true,
       onSale: true,
       salePercentage: 50,
@@ -418,13 +419,12 @@ export default function PricingPage() {
       billing: '/one-time',
       description: '👨‍💼 Human Expert Resume Optimization',
       features: [
-        'Everything in Career Accelerator (30 days)',
-        'Professional human expert review',
-        'Premium ATS optimization techniques',
-        '1 expert revision included',
-        'Personalized recommendations',
-        'Guaranteed ATS score improvement',
-        'High-quality premium resources'
+        'Everything in Career Accelerator (30 days): Full access to all pro tools and HR reach',
+        'Human Expert Resume Review: Your resume is personally reviewed by a hiring expert',
+        'Premium ATS Optimization: Advanced keyword, structure, and formatting improvements',
+        '1 Expert Revision Included: Get changes refined until it is interview-ready',
+        'Personalized Improvement Recommendations: Clear guidance tailored to your role and experience',
+        'Guaranteed ATS Score Improvement: Measurable improvement you can see and trust',
       ],
       buttonText: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'resume-fix'
         ? 'Current Plan'
@@ -433,7 +433,6 @@ export default function PricingPage() {
       icon: Shield,
       paymentType: 'onetime',
       disabled: userPlanStatus.hasActivePlan && userPlanStatus.currentPlan === 'resume-fix',
-      expertInvolved: true
     }
   ];
 

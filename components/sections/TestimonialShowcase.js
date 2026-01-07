@@ -8,7 +8,7 @@ export default function TestimonialShowcase() {
     {
       name: "Ross Mayor",
       role: "Software Engineer - 1 month ago",
-      quote: "Freelance freshers used not working within resume and I needed help. HireLift transformed it completely—got my ATS score from 35% to 92%. Landed 5 interviews in 2 weeks!",
+      quote: "Freelance freshers used to not working within resume and I needed help. HireLift transformed it, completely got my ATS score from 35% to 92%. Landed 5 interviews in 2 weeks!",
       avatar: "RM"
     },
     {
@@ -42,7 +42,7 @@ export default function TestimonialShowcase() {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
-            From "Rejected" to "Offer Letter"
+            From <span className='text-red-400'> "Rejected" </span> to <span className='text-green-400'> "Offer Letter" </span>
           </h2>
           <p className="text-xl text-gray-600">
             Testimonials have more success stories

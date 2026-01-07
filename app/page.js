@@ -175,7 +175,7 @@ export default function HomePage() {
         />
       </Head>
       
-      <div className="min-h-screen flex flex-col bg-white text-gray-900 relative overflow-x-hidden">
+      <div className="min-h-screen flex flex-col relative overflow-x-hidden">
         {/* Structured Data for SEO */}
         <StructuredData />
       

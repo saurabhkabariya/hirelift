@@ -7,25 +7,25 @@ import { FaArrowRight } from 'react-icons/fa';
 export default function FeatureCardsSection({ handleRedirect }) {
   const features = [
     {
-      title: "Turn Your Potential into a Professional Resume",
+      title: "Turn Your Resume into an Interview Magnet",
       subtitle: "AI-powered ATS Resume Review",
-      description: "Get instant ATS score analysis that reveals exactly why recruiters ignore your resume. Our AI guides you step-by-step to optimize every section turning rejections into interview calls.",
+      description: "Get an instant ATS score and see exactly why recruiters are skipping your resume. HireLift guides you step-by-step to fix weak sections, missing keywords, and formatting issues - so your resume actually gets shortlisted, not ignored.",
       bgColor: "from-green-400 to-emerald-500",
       image: "/resume_review.webp",
       link: "/audit"
     },
     {
-      title: "Matches That Actually Want *You*",
-      subtitle: "Direct HR access + curated jobs",
-      description: "Stop applying to black holes. Access 100+ HR contacts and verified job listings. Connect directly with hiring managers who are actively looking for talent like you.",
+      title: "Reach Recruiters Who Are Actually Hiring",
+      subtitle: "Direct HR access",
+      description: "Stop applying into black holes. Get access to 100+ verified HR contacts and curated job openings. Connect directly with hiring managers who are actively looking for fresh talent - no middlemen, no guessing.",
       bgColor: "from-blue-600 to-indigo-700",
       image: "/hr_directory.webp",
       link: "/company-search"
     },
     {
-      title: "Fresh and verified Jobs. (Avoid ghosting)",
-      subtitle: "Free Jobs Listing",  
-      description: "Stop waiting for responses. Apply to our fresh and verified jobs to get responses. Get more replies, more interviews, and more offers.",
+      title: "Apply to Jobs That Don’t Ghost You",
+      subtitle: "Fresh Verified Job Listings",  
+      description: "Tired of waiting for replies? Apply to fresh, verified job listings updated regularly. More real opportunities, more responses, more interview calls without paying a rupee.",
       bgColor: "from-green-400 to-teal-500",
       image: "/free_jobs.webp",
       link: "/jobs"
@@ -43,7 +43,7 @@ export default function FeatureCardsSection({ handleRedirect }) {
           className="text-center mb-16"
         >
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
-            Everything You Need to Go From 'Applicant' to 'Hired'
+            Everything You Need to Go From <span className='text-red-400'> 'Applicant' </span> to <span className='text-green-400'> 'Hired' </span>
           </h2>
         </motion.div>
 
