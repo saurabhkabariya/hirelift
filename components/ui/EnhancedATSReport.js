@@ -395,6 +395,73 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
           </div>
         </div>
       )}
+
+      {/* Next Steps Section */}
+      <div className="p-6 bg-gradient-to-r from-indigo-50 to-purple-50 border-t-2 border-indigo-200">
+        <div className="text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full mb-4">
+            <HiSparkles className="text-white text-3xl" />
+          </div>
+          
+          <h3 className="text-2xl font-bold text-gray-800 mb-3">
+            Ready to Fix Your Resume?
+          </h3>
+          
+          <p className="text-gray-700 text-base mb-6 max-w-2xl mx-auto leading-relaxed">
+            Now that you know what's wrong, update your resume based on these suggestions. 
+            Then come back and check it again with our Resume Review to see your improved score 
+            and ensure you're getting those interview responses!
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-white rounded-lg p-4 shadow-md border-2 border-indigo-200 max-w-sm"
+            >
+              <div className="flex items-start gap-3 text-left">
+                <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-indigo-600 font-bold text-sm">1</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-1">Update Your Resume</h4>
+                  <p className="text-sm text-gray-600">Apply the suggestions above to fix critical issues</p>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="bg-white rounded-lg p-4 shadow-md border-2 border-purple-200 max-w-sm"
+            >
+              <div className="flex items-start gap-3 text-left">
+                <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-purple-600 font-bold text-sm">2</span>
+                </div>
+                <div>
+                  <h4 className="font-bold text-gray-800 mb-1">Review Again</h4>
+                  <p className="text-sm text-gray-600">Check your updated resume to verify improvements</p>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <motion.button
+            onClick={() => handleRedirect && handleRedirect('/audit')}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all duration-200 inline-flex items-center gap-2"
+          >
+            <FaRobot className="text-xl" />
+            Check Updated Resume
+          </motion.button>
+
+          <p className="text-xs text-gray-500 mt-4">
+            💡 Pro Tip: Keep reviewing until you reach 85+ score for maximum interview callbacks
+          </p>
+        </div>
+      </div>
     </motion.div>
   );
 };

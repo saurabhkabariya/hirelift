@@ -872,72 +872,144 @@ export default function ResumeAuditPage() {
               </motion.div>
               {/* Hidden print-friendly PDF section */}
               
-              <div id="audit-pdf-section" style={{ display: 'none', padding: 0, margin: 0, background: '#f8fafc', width: 600, minHeight: 800 }}>
-                <div style={{ padding: 32, fontFamily: 'sans-serif', color: '#222' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
-                    <div style={{ width: 48, height: 48, borderRadius: 12, background: 'linear-gradient(90deg,#2563eb,#60a5fa)', display: 'flex', alignItems: 'center', justifyContent: 'center', alignContent:'center', marginTop:'auto', marginBottom:'auto', color: '#fff', fontWeight: 700, fontSize: 28 }}>H</div>
-                    <span style={{ fontSize: 28, fontWeight: 800, color: '#2563eb', letterSpacing: -1 }}>HireLift</span>
-                  </div>
-                  <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8, color: '#2563eb' }}>Resume ATS Review Result</h2>
-                  <div style={{ fontSize: 16, color: '#555', marginBottom: 24 }}>Your personalized resume Review powered by HireLift</div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 24 }}>
-                    <div style={{ fontSize: 48, fontWeight: 900, color: '#2563eb', lineHeight: 1 }}>{result.totalScore} <span style={{ fontSize: 20, fontWeight: 500, color: '#888' }}>/ 100</span></div>
-                    <div style={{ fontSize: 16, color: '#666' }}>Overall Score</div>
-                  </div>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
-                    <div><b>Section Score:</b> {result.sectionScore}</div>
-                    <div><b>Keyword Score:</b> {result.keywordScore}</div>
-                    <div><b>Length Score:</b> {result.lengthScore}</div>
-                    <div><b>Contact Score:</b> {result.contactScore}</div>
-                  </div>
-                  <div style={{ marginBottom: 16 }}>
-                    <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 4 }}>Found Keywords:</div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                      {result.foundKeywords.length ? result.foundKeywords.map((kw) => (
-                        <span key={kw} style={{ background: '#bbf7d0', color: '#166534', padding: '4px 10px', borderRadius: 12, fontSize: 13, fontWeight: 600, alignContent:'center' }}>{kw}</span>
-                      )) : <span style={{ color: '#888' }}>None</span>}
+              <div 
+                id="audit-pdf-section" 
+                style={{ 
+                  // CHANGE 1: Use absolute positioning off-screen instead of display: none
+                  // html2canvas often ignores display: none elements. 
+                  // If you need it hidden, use fixed/absolute and move it away.
+                  position: 'fixed', 
+                  left: '-9999px',
+                  top: 0,
+                  
+                  // CHANGE 2: Flexbox for Vertical Centering
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center', // This centers content vertically
+                  alignItems: 'center',     // This centers content horizontally (optional, based on preference)
+                  
+                  padding: 0, 
+                  margin: 0, 
+                  background: '#f8fafc', 
+                  width: 600, 
+                  minHeight: 800,
+                  boxSizing: 'border-box' // Ensures padding doesn't break width
+                }}
+              >
+                  <div style={{ padding: 32, fontFamily: 'sans-serif', color: '#222', width: '100%', boxSizing: 'border-box' }}>
+                    
+                    {/* Header Section */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+                      <div style={{ 
+                        width: 48, 
+                        height: 48, 
+                        borderRadius: 12, 
+                        background: 'linear-gradient(90deg,#2563eb,#60a5fa)', 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        justifyContent: 'center', 
+                        color: '#fff', 
+                        fontWeight: 700, 
+                        fontSize: 28 
+                      }}>H</div>
+                      <span style={{ fontSize: 28, fontWeight: 800, color: '#2563eb', letterSpacing: -1 }}>HireLift</span>
+                    </div>
+
+                    <h2 style={{ fontSize: 24, fontWeight: 700, marginBottom: 8, color: '#2563eb' }}>Resume ATS Review Result</h2>
+                    <div style={{ fontSize: 16, color: '#555', marginBottom: 24 }}>Your personalized resume Review powered by HireLift</div>
+
+                    {/* Score Section */}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 24, marginBottom: 24 }}>
+                      <div style={{ fontSize: 48, fontWeight: 900, color: '#2563eb', lineHeight: 1 }}>
+                        {result.totalScore} <span style={{ fontSize: 20, fontWeight: 500, color: '#888' }}>/ 100</span>
+                      </div>
+                      <div style={{ fontSize: 16, color: '#666' }}>Overall Score</div>
+                    </div>
+
+                    {/* Grid Scores */}
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 24 }}>
+                      <div><b>Section Score:</b> {result.sectionScore}</div>
+                      <div><b>Keyword Score:</b> {result.keywordScore}</div>
+                      <div><b>Length Score:</b> {result.lengthScore}</div>
+                      <div><b>Contact Score:</b> {result.contactScore}</div>
+                    </div>
+
+                    {/* Found Keywords */}
+                    <div style={{ marginBottom: 16 }}>
+                      <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 4 }}>Found Keywords:</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        {result.foundKeywords.length ? result.foundKeywords.map((kw) => (
+                          <span key={kw} style={{ 
+                            background: '#bbf7d0', 
+                            color: '#166534', 
+                            padding: '4px 10px', 
+                            borderRadius: 12, 
+                            fontSize: 13, 
+                            fontWeight: 600, 
+                            // CHANGE 3: Better text alignment inside badges
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            lineHeight: 1
+                          }}>{kw}</span>
+                        )) : <span style={{ color: '#888' }}>None</span>}
+                      </div>
+                    </div>
+
+                    {/* Missing Keywords */}
+                    <div style={{ marginBottom: 16 }}>
+                      <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 4 }}>Missing Keywords:</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        {result.missingKeywords.length ? result.missingKeywords.map((kw) => (
+                          <span key={kw} style={{ 
+                            background: '#fecaca', 
+                            color: '#991b1b', 
+                            padding: '4px 10px', 
+                            borderRadius: 12, 
+                            fontSize: 13, 
+                            fontWeight: 600, 
+                            // CHANGE 3: Better text alignment inside badges
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            lineHeight: 1
+                          }}>{kw}</span>
+                        )) : <span style={{ color: '#888' }}>None</span>}
+                      </div>
+                    </div>
+
+                    {/* Missing Sections */}
+                    <div style={{ marginBottom: 16 }}>
+                      <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 4 }}>Missing Sections:</div>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                        {result.missingSections.length ? result.missingSections.map((sec) => (
+                          <span key={sec} style={{ background: '#fef08a', color: '#92400e', padding: '4px 10px', borderRadius: 12, fontSize: 13, fontWeight: 600 }}>{sec}</span>
+                        )) : <span style={{ color: '#888' }}>None</span>}
+                      </div>
+                    </div>
+
+                    {/* Suggestions */}
+                    <div style={{ marginTop: 24, padding: 16, background: '#f1f5f9', borderRadius: 12 }}>
+                      <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 6 }}>Suggested Improvements</div>
+                      <ul style={{ paddingLeft: 18, margin: 0 }}>
+                        {/* Logic kept same */}
+                        {(() => {
+                          const suggestions = [];
+                          if (result.sectionScore < 80) suggestions.push("Add or improve missing resume sections.");
+                          if (result.keywordScore < 80) suggestions.push("Include more relevant keywords.");
+                          if (result.lengthScore < 80) suggestions.push("Adjust resume length (1-2 pages).");
+                          if (result.contactScore < 100) suggestions.push("Ensure contact info is complete.");
+                          if (result.missingKeywords.length) suggestions.push(`Add keywords: ${result.missingKeywords.slice(0, 3).join(", ")}...`);
+                          if (!suggestions.length) suggestions.push("Great job! Your resume is well-optimized.");
+                          return suggestions.map((s, i) => (
+                            <li key={i} style={{ color: '#2563eb', fontSize: 15, marginBottom: 4 }}>{s}</li>
+                          ));
+                        })()}
+                      </ul>
+                    </div>
+
+                    <div style={{ marginTop: 32, textAlign: 'center', color: '#aaa', fontSize: 13 }}>
+                      Powered by HireLift | {process.env.NEXT_PUBLIC_BASE_URL || 'https://www.hirelift.tech'}
                     </div>
                   </div>
-                  <div style={{ marginBottom: 16 }}>
-                    <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 4 }}>Missing Keywords:</div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                      {result.missingKeywords.length ? result.missingKeywords.map((kw) => (
-                        <span key={kw} style={{ background: '#fecaca', color: '#991b1b', padding: '4px 10px', borderRadius: 12, fontSize: 13, fontWeight: 600, alignContent:'center' }}>{kw}</span>
-                      )) : <span style={{ color: '#888' }}>None</span>}
-                    </div>
-                  </div>
-                  <div style={{ marginBottom: 16 }}>
-                    <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 4 }}>Missing Sections:</div>
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                      {result.missingSections.length ? result.missingSections.map((sec) => (
-                        <span key={sec} style={{ background: '#fef08a', color: '#92400e', padding: '4px 10px', borderRadius: 12, fontSize: 13, fontWeight: 600 }}>{sec}</span>
-                      )) : <span style={{ color: '#888' }}>None</span>}
-                    </div>
-                  </div>
-                  <div style={{ marginTop: 24, padding: 16, background: '#f1f5f9', borderRadius: 12 }}>
-                    <div style={{ fontWeight: 700, color: '#2563eb', marginBottom: 6 }}>Suggested Improvements</div>
-                    <ul style={{ paddingLeft: 18, margin: 0 }}>
-                      {(() => {
-                        const suggestions = [];
-                        if (result.sectionScore < 80) suggestions.push("Add or improve missing resume sections for a more complete profile.");
-                        if (result.keywordScore < 80) suggestions.push("Include more relevant keywords from the job description to boost your match.");
-                        if (result.lengthScore < 80) suggestions.push("Adjust your resume length for optimal readability (1-2 pages recommended).");
-                        if (result.contactScore < 100) suggestions.push("Ensure your contact information is complete and up to date.");
-                        if (result.missingKeywords.length)
-                          suggestions.push(`Add these missing keywords: ${result.missingKeywords.join(", ")}`);
-                        if (result.missingSections.length)
-                          suggestions.push(`Include these missing sections: ${result.missingSections.join(", ")}`);
-                        if (!suggestions.length) suggestions.push("Great job! Your resume is well-optimized for ATS.");
-                        return suggestions.map((s, i) => (
-                          <li key={i} style={{ color: '#2563eb', fontSize: 15, marginBottom: 4 }}>{s}</li>
-                        ));
-                      })()}
-                    </ul>
-                  </div>
-                  <div style={{ marginTop: 32, textAlign: 'center', color: '#aaa', fontSize: 13 }}>
-                    Powered by HireLift | {process.env.NEXT_PUBLIC_BASE_URL || 'https://www.hirelift.tech'}
-                  </div>
-                </div>
               </div>
             </>
           )}        </AnimatePresence>

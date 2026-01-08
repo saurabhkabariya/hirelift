@@ -182,11 +182,11 @@ const UserInfoStep = ({ onComplete, user }) => {
     }
     
     try {
-      // const token = localStorage.getItem('token');
-      // if (!token) {
-      //   toast.error('Authentication token not found');
-      //   return false;
-      // }
+      const token = localStorage.getItem('token');
+      if (!token) {
+        toast.error('Authentication token not found');
+        return false;
+      }
 
       const response = await fetch('/api/user/profile', {
         method: 'PUT',
