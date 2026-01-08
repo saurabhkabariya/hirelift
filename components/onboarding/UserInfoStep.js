@@ -19,7 +19,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import toast from 'react-hot-toast';
 
 const UserInfoStep = ({ onComplete, user }) => {
-  const { refetchUser } = useAuth();
+  const { refetchUser, token: authToken } = useAuth();
   const [formData, setFormData] = useState({
     fullName: user?.firstName && user?.lastName 
       ? `${user.firstName} ${user.lastName}`.trim()
@@ -182,9 +182,10 @@ const UserInfoStep = ({ onComplete, user }) => {
     }
     
     try {
-      const token = localStorage.getItem('token');
+      // Get token from AuthContext state or fallback to localStorage
+      const token = authToken || localStorage.getItem('token');
       if (!token) {
-        toast.error('Authentication token not found');
+        toast.error('Authentication token not found. Please log in again.');
         return false;
       }
 
