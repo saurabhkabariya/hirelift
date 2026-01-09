@@ -87,7 +87,7 @@ const DashboardContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--background)]">
+    <div className="min-h-screen bg-[var(--background)] dark:bg-white">
       {/* Background elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10 opacity-40">
         <div className="absolute top-[10%] left-[15%] w-64 h-64 bg-[var(--primary-light)] rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
@@ -100,7 +100,7 @@ const DashboardContent = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white/95 backdrop-blur-md border-b border-gray-200 shadow-sm sticky top-0 z-50"
+        className="bg-white/95 dark:bg-gray-900/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm sticky top-0 z-50"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-3 sm:py-4">
@@ -109,7 +109,7 @@ const DashboardContent = () => {
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-200">
                 <span className="text-white font-bold text-base sm:text-lg">H</span>
               </div>
-              <span className="text-lg sm:text-xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors">
+              <span className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
                 HireLift
               </span>
             </Link>
@@ -128,7 +128,7 @@ const DashboardContent = () => {
             <div className="hidden lg:flex items-center gap-4 xl:gap-6">
               <Link 
                 href="/jobs" 
-                className="flex items-center gap-2 px-3 xl:px-4 py-2 text-gray-700 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-all duration-200 font-medium text-sm xl:text-base"
+                className="flex items-center gap-2 px-3 xl:px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 rounded-lg transition-all duration-200 font-medium text-sm xl:text-base"
               >
                 <svg className="w-4 h-4 mt-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
@@ -257,14 +257,14 @@ const DashboardContent = () => {
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-white/90 backdrop-blur-md border-b border-blue-100"
+        className="bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-blue-100 dark:border-gray-800"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between py-3">
             <nav className="flex items-center gap-2 text-sm">
               <span className="text-blue-700 font-semibold">Dashboard</span>
-              <span className="text-gray-400">•</span>
-              <span className="text-gray-600">Main Hub</span>
+              <span className="text-gray-400 dark:text-gray-600">•</span>
+              <span className="text-gray-600 dark:text-gray-400">Main Hub</span>
             </nav>
 
             {/* Quick Admin Access */}
@@ -419,7 +419,7 @@ const DashboardContent = () => {
           className="mt-8 sm:mt-12 max-w-6xl mx-auto px-2 sm:px-0"
         >
           <motion.div
-            className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+            className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-gray-100 dark:border-gray-700 overflow-hidden"
             whileHover={{ y: -2 }}
             transition={{ duration: 0.2 }}
           >
@@ -431,8 +431,8 @@ const DashboardContent = () => {
                     <Bell className="h-5 w-5 text-white" />
                   </div>
                   <div className="min-w-0">
-                    <h3 className="text-lg sm:text-xl font-bold text-gray-900">Referral Activity</h3>
-                    <p className="text-gray-600 text-xs sm:text-sm truncate">Stay updated on your referral requests and opportunities</p>
+                    <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">Referral Activity</h3>
+                    <p className="text-gray-600 dark:text-gray-400 text-xs sm:text-sm truncate">Stay updated on your referral requests and opportunities</p>
                   </div>
                 </div>
                 {(pendingActions > 0 || awaitingUpdates > 0) && (

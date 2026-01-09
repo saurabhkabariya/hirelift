@@ -22,7 +22,7 @@ export default function FinalCTABlue({ handleRedirect }) {
           className="space-y-8"
         >
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight">
-            Your First Paycheck is Waiting.
+            Your Dream Job is Waiting.
           </h2>
 
           <motion.button
@@ -31,7 +31,7 @@ export default function FinalCTABlue({ handleRedirect }) {
             whileTap={{ scale: 0.95 }}
             className="group inline-flex items-center gap-3 px-10 py-5 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-xl rounded-xl shadow-2xl hover:shadow-yellow-400/50 transition-all duration-300"
           >
-            <span>Start My Journey Today</span>
+            <span>Fix My Job Prep</span>
             <FaArrowRight className="group-hover:translate-x-1 transition-transform" />
           </motion.button>
         </motion.div>

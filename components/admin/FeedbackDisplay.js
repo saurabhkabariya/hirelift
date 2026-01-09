@@ -107,13 +107,13 @@ export default function FeedbackDisplay() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100"
+        className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-lg border border-gray-100 dark:border-gray-700"
       >
-        <div className="animate-pulse space-y-4">
-          <div className="h-6 bg-gray-200 rounded w-1/4"></div>
-          <div className="space-y-3">
+        <div className="animate-pulse">
+          <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+          <div className="mt-4 space-y-3">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-20 bg-gray-100 rounded-xl"></div>
+              <div key={i} className="h-20 bg-gray-100 dark:bg-gray-900 rounded-xl"></div>
             ))}
           </div>
         </div>
@@ -135,8 +135,8 @@ export default function FeedbackDisplay() {
             <FaComments className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900">User Feedback</h3>
-            <p className="text-xs sm:text-sm text-gray-600">{feedbacks.length} total submissions</p>
+            <h3 className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white">User Feedback</h3>
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">{feedbacks.length} total submissions</p>
           </div>
         </div>
 
@@ -180,7 +180,7 @@ export default function FeedbackDisplay() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 20 }}
               transition={{ delay: index * 0.1 }}
-              className="bg-gray-50 rounded-xl p-4 border border-gray-200 transition-all duration-200 cursor-pointer"
+              className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 transition-all duration-200 cursor-pointer"
               onClick={() => setSelectedFeedback(feedback)}
             >
               <div className="flex items-start justify-between mb-3">
@@ -189,7 +189,7 @@ export default function FeedbackDisplay() {
                     <FaUser className="w-3 h-3 text-blue-600" />
                   </div>
                   <div>
-                    <p className="font-medium text-gray-900 text-sm">{feedback.email}</p>
+                    <p className="font-medium text-gray-900 dark:text-white text-sm">{feedback.email}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <span className={`px-2 py-1 rounded-full text-xs font-medium border ${categoryColors[feedback.category] || categoryColors.general}`}>
                         {feedback.category}
@@ -201,7 +201,7 @@ export default function FeedbackDisplay() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                   {feedback.rating && (
                     <div className="flex items-center gap-1">
                       {renderStars(feedback.rating)}
@@ -212,7 +212,7 @@ export default function FeedbackDisplay() {
                 </div>
               </div>
 
-              <p className="text-gray-700 text-sm line-clamp-2 leading-relaxed">
+              <p className="text-gray-700 dark:text-gray-300 text-sm line-clamp-2 leading-relaxed">
                 {feedback.message}
               </p>
 
@@ -254,8 +254,8 @@ export default function FeedbackDisplay() {
             animate={{ opacity: 1 }}
             className="text-center py-8"
           >
-            <FaComments className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-gray-500">No feedback found for the selected filter.</p>
+            <FaComments className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+            <p className="text-gray-500 dark:text-gray-400">No feedback found for the selected filter.</p>
           </motion.div>
         )}
       </div>
@@ -274,16 +274,16 @@ export default function FeedbackDisplay() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
-              className="bg-white rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-2xl w-full max-h-[80vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex items-center justify-between mb-6">
-                <h3 className="text-xl font-bold text-gray-900">Feedback Details</h3>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white">Feedback Details</h3>
                 <button
                   onClick={() => setSelectedFeedback(null)}
-                  className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"
+                  className="w-8 h-8 bg-gray-100 dark:bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
                 >
-                  <FaTimes className="w-4 h-4 text-gray-600" />
+                  <FaTimes className="w-4 h-4 text-gray-600 dark:text-gray-300" />
                 </button>
               </div>
 
@@ -293,8 +293,8 @@ export default function FeedbackDisplay() {
                     <FaEnvelope className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">{selectedFeedback.email}</p>
-                    <p className="text-sm text-gray-600">{formatDate(selectedFeedback.createdAt)}</p>
+                    <p className="font-semibold text-gray-900 dark:text-white">{selectedFeedback.email}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">{formatDate(selectedFeedback.createdAt)}</p>
                   </div>
                 </div>
 
@@ -309,22 +309,22 @@ export default function FeedbackDisplay() {
                   {selectedFeedback.rating && (
                     <div className="flex items-center gap-1">
                       {renderStars(selectedFeedback.rating)}
-                      <span className="text-sm text-gray-600 ml-1">({selectedFeedback.rating}/5)</span>
+                      <span className="text-sm text-gray-600 dark:text-gray-400 ml-1">({selectedFeedback.rating}/5)</span>
                     </div>
                   )}
                 </div>
 
-                <div className="bg-gray-50 rounded-xl p-4">
-                  <h4 className="font-semibold text-gray-900 mb-2">Message</h4>
-                  <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+                <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4">
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Message</h4>
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">
                     {selectedFeedback.message}
                   </p>
                 </div>
 
                 {selectedFeedback.userAgent && (
-                  <div className="bg-gray-50 rounded-xl p-4">
-                    <h4 className="font-semibold text-gray-900 mb-2">Technical Info</h4>
-                    <p className="text-xs text-gray-600 font-mono">
+                  <div className="bg-gray-50 dark:bg-gray-900 rounded-xl p-4">
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Technical Info</h4>
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-mono">
                       {selectedFeedback.userAgent}
                     </p>
                   </div>

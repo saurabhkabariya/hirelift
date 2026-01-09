@@ -501,7 +501,7 @@ function JobsPageContent() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.6 }}
-          className="bg-white/90 backdrop-blur-md rounded-2xl shadow-xl p-6 mb-8 border border-blue-100 relative z-40"
+          className="bg-white/90 dark:bg-gray-800/90 backdrop-blur-md rounded-2xl shadow-xl p-6 mb-8 border border-blue-100 dark:border-gray-700 relative z-40"
         >
           {/* Search Bar */}
           <div className="mb-6">
@@ -514,7 +514,7 @@ function JobsPageContent() {
                 placeholder="Search jobs by title, company, or keywords..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-12 pr-4 py-4 border-2 border-blue-200 rounded-xl text-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white transition-all duration-200"
+                className="w-full pl-12 pr-4 py-4 border-2 border-blue-200 dark:border-gray-600 rounded-xl text-lg bg-white dark:bg-gray-900 text-gray-900 dark:text-white placeholder:text-gray-500 dark:placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 transition-all duration-200"
               />
             </div>
           </div>
@@ -532,7 +532,7 @@ function JobsPageContent() {
               <motion.button
                 whileHover={{ scale: 1.01 }}
                 onClick={() => setShowTagDropdown(!showTagDropdown)}
-                className="w-full border-2 border-blue-200 rounded-xl px-4 py-3 text-left focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 bg-white flex items-center justify-between transition-all duration-200 hover:border-blue-300"
+                className="w-full border-2 border-blue-200 dark:border-gray-600 rounded-xl px-4 py-3 text-left bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-400 flex items-center justify-between transition-all duration-200 hover:border-blue-300"
               >
                 <span className="text-gray-500">
                   {selectedTags.length > 0 ? `${selectedTags.length} selected` : "Select skills..."}
@@ -548,7 +548,7 @@ function JobsPageContent() {
                     initial={{ opacity: 0, y: -10, scale: 0.95 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -10, scale: 0.95 }}
-                    className="absolute z-50 w-72 mt-2 bg-white border border-gray-200 rounded-xl shadow-2xl max-h-80 overflow-hidden"
+                    className="absolute z-50 w-72 mt-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-2xl max-h-80 overflow-hidden"
                   >
                     {/* Popular Tags */}
                     <div className="p-3 border-b border-gray-100">

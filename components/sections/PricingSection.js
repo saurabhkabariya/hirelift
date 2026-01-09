@@ -42,8 +42,8 @@ export default function PricingSection({ handleRedirect }) {
       period: "",
       description: "Test our Auditor power before you buy",
       icon: FaUsers,
-      bgColor: "bg-gray-100",
-      iconColor: "text-gray-600",
+      bgColor: "bg-gray-100 dark:bg-gray-800",
+      iconColor: "text-gray-600 dark:text-gray-400",
       buttonColor: "bg-gray-600 hover:bg-gray-700",
       popular: false,
       features: [
@@ -102,7 +102,7 @@ export default function PricingSection({ handleRedirect }) {
   ];
 
   return (
-    <section id="pricing" className="py-20 px-6 relative">
+    <section id="pricing" className="py-20 px-6 relative dark:bg-white">
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-cyan-50/40 to-transparent rounded-full"></div>
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div

@@ -157,9 +157,9 @@ export default function JobCard({ job }) {
   return (
     <motion.div 
       layout
-      className={`bg-white/90 backdrop-blur-sm rounded-2xl shadow-lg border ${
-        isFeatured ? 'border-yellow-300 ring-2 ring-yellow-200' : 'border-blue-100'
-      } p-6 transition-all duration-300 hover:shadow-2xl hover:border-blue-200 h-full w-full flex flex-col justify-between`}
+      className={`bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded-2xl shadow-lg border ${
+        isFeatured ? 'border-yellow-300 ring-2 ring-yellow-200' : 'border-blue-100 dark:border-gray-700'
+      } p-6 transition-all duration-300 hover:shadow-2xl hover:border-blue-200 dark:hover:border-blue-600 h-full w-full flex flex-col justify-between`}
       whileHover={{ 
         boxShadow: "0 25px 50px -12px rgba(59, 130, 246, 0.25)",
         borderColor: "rgba(59, 130, 246, 0.3)"
@@ -197,8 +197,8 @@ export default function JobCard({ job }) {
                 </div>
               )}
               <div>
-                <h4 className="font-semibold text-gray-800 text-sm">{company}</h4>
-                <div className="flex items-center gap-2 text-xs text-gray-500">
+                <h4 className="font-semibold text-gray-800 dark:text-gray-200 text-sm">{company}</h4>
+                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
                   <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -220,7 +220,7 @@ export default function JobCard({ job }) {
 
             {/* Job Description */}
             {shortDescription && (
-              <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
                 {shortDescription}
               </p>
             )}
@@ -279,7 +279,7 @@ export default function JobCard({ job }) {
         <div className="mb-4">
           <motion.div 
             whileHover={{ scale: 1.02 }}
-            className="inline-flex items-center gap-2 bg-gray-50 text-gray-700 px-3 py-2 rounded-lg text-sm font-medium border border-gray-200"
+            className="inline-flex items-center gap-2 bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300 px-3 py-2 rounded-lg text-sm font-medium border border-gray-200 dark:border-gray-600"
           >
             <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />

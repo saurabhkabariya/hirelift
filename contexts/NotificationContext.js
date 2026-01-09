@@ -31,7 +31,8 @@ export function NotificationProvider({ children }) {
 
   // Fetch notifications from API
   const fetchNotifications = async (force = false) => {
-    if (!token || (!force && loading)) return;
+    // Don't fetch if no token, no user, or already loading (unless forced)
+    if (!token || !user || (!force && loading)) return;
     
     try {
       setLoading(true);
@@ -49,12 +50,18 @@ export function NotificationProvider({ children }) {
           setNotifications(data.notifications);
         }
       } else {
-        console.error('Failed to fetch notifications:', response.statusText);
-        setError('Failed to fetch notifications');
+        // Only log errors for authenticated users, not 404s for guests
+        if (response.status !== 404) {
+          console.error('Failed to fetch notifications:', response.statusText);
+          setError('Failed to fetch notifications');
+        }
       }
     } catch (error) {
-      console.error('Error fetching notifications:', error);
-      setError(error.message);
+      // Silently handle errors for unauthenticated users
+      if (user) {
+        console.error('Error fetching notifications:', error);
+        setError(error.message);
+      }
     } finally {
       setLoading(false);
     }
@@ -62,7 +69,8 @@ export function NotificationProvider({ children }) {
 
   // Mark notifications as viewed
   const markAsViewed = async (type) => {
-    if (!token) return;
+    // Don't mark if no token or user
+    if (!token || !user) return;
     
     try {
       const response = await fetch('/api/notifications/mark-viewed', {
@@ -121,14 +129,15 @@ export function NotificationProvider({ children }) {
 
   // Periodic refresh every 30 seconds
   useEffect(() => {
-    if (!token) return;
+    // Only set up interval if user is authenticated
+    if (!token || !user) return;
     
     const interval = setInterval(() => {
       fetchNotifications();
     }, 30000); // 30 seconds
     
     return () => clearInterval(interval);
-  }, [token]);
+  }, [token, user]);
 
   // Refresh when tab becomes visible
   useEffect(() => {

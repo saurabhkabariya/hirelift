@@ -58,7 +58,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-100 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading job details...</p>
+          <p className="text-gray-600 dark:text-gray-400">Loading job details...</p>
         </div>
       </div>
     );
@@ -280,7 +280,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
       <motion.nav 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full bg-white/90 backdrop-blur-enhanced shadow-sm border-b border-blue-100 sticky top-0 z-50"
+        className="w-full bg-white/90 dark:bg-gray-900/90 backdrop-blur-enhanced shadow-sm border-b border-blue-100 dark:border-gray-800 sticky top-0 z-50"
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between py-3">
@@ -301,7 +301,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
 
               {/* Breadcrumb */}
               <nav className="hidden md:flex items-center gap-2 text-sm">
-                <span className="text-gray-400">•</span>
+                <span className="text-gray-400 dark:text-gray-600">•</span>
                 <Link
                   href="/jobs"
                   className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
@@ -311,7 +311,7 @@ export default function JobDetail({ job: initialJob, jobId }) {
                 <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
                 </svg>
-                <span className="text-blue-700 font-semibold truncate max-w-[150px] lg:max-w-[200px]">{title}</span>
+                <span className="text-blue-700 dark:text-blue-400 font-semibold truncate max-w-[150px] lg:max-w-[200px]">{title}</span>
               </nav>
             </div>
 

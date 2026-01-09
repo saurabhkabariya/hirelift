@@ -64,10 +64,10 @@ export default function FAQSection() {
             <FaQuestionCircle className="w-4 h-4 text-cyan-600" />
             <span className="text-cyan-700 font-semibold">Frequently Asked Questions</span>
           </div>
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-4">
             Everything You Need to Know About Job Search in India
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 dark:text-gray-300">
             Get answers to common questions about ATS optimization, HR contacts, and job hunting strategies
           </p>
         </motion.div>
@@ -80,14 +80,14 @@ export default function FAQSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100 overflow-hidden"
+              className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rounded-xl shadow-lg border border-gray-100 dark:border-gray-700 overflow-hidden"
             >
               <button
                 onClick={() => handleToggle(index)}
                 className="w-full p-6 text-left flex items-center justify-between hover:bg-cyan-50/30 transition-colors"
               >
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">
+                  <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
                     {faq.question}
                   </h3>
                   <span className="text-sm text-cyan-600 bg-cyan-50 px-3 py-1 rounded-full">
@@ -98,15 +98,15 @@ export default function FAQSection() {
                   {openIndex === index ? (
                     <FaChevronUp className="w-5 h-5 text-cyan-600" />
                   ) : (
-                    <FaChevronDown className="w-5 h-5 text-gray-500" />
+                    <FaChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                   )}
                 </div>
               </button>
               
               {/* Simple version without animation for testing */}
               {openIndex === index && (
-                <div className="px-6 pb-6 border-t border-gray-100">
-                  <p className="text-gray-700 leading-relaxed pt-4">
+                <div className="px-6 pb-6 border-t border-gray-100 dark:border-gray-700">
+                  <p className="text-gray-700 dark:text-gray-300 leading-relaxed pt-4">
                     {faq.answer}
                   </p>
                 </div>

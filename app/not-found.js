@@ -48,7 +48,7 @@ export default function NotFound() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center px-6">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:bg-gradient-to-br dark:from-gray-900 dark:to-gray-800 flex items-center justify-center px-6">
       <div className="max-w-4xl mx-auto text-center">
         {/* Error Message */}
         <motion.div
@@ -56,11 +56,11 @@ export default function NotFound() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <div className="text-8xl font-bold text-gray-400 mb-6">404</div>
-          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          <div className="text-8xl font-bold text-gray-400 dark:text-gray-600 mb-6">404</div>
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             Oops! Page Not Found
           </h1>
-          <p className="text-xl text-gray-600 mb-8">
+          <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">
             Don't worry! Let's get you back on track to land your dream job in India.
           </p>
         </motion.div>
@@ -82,13 +82,13 @@ export default function NotFound() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105"
+                className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 group-hover:scale-105"
               >
                 <div className={`w-12 h-12 rounded-lg bg-gradient-to-r ${suggestion.color} flex items-center justify-center mb-4 mx-auto`}>
                   <suggestion.icon className="w-6 h-6 text-white" />
                 </div>
-                <h3 className="font-bold text-gray-900 mb-2">{suggestion.title}</h3>
-                <p className="text-gray-600 text-sm mb-4">{suggestion.description}</p>
+                <h3 className="font-bold text-gray-900 dark:text-white mb-2">{suggestion.title}</h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">{suggestion.description}</p>
                 <div className="flex items-center justify-center text-blue-600 group-hover:text-blue-700">
                   <span className="text-sm font-medium">Get Started</span>
                   <FaArrowRight className="w-3 h-3 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -103,9 +103,9 @@ export default function NotFound() {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="bg-white rounded-2xl p-8 shadow-lg"
+          className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg"
         >
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
             Popular Job Search Resources
           </h2>
           <div className="flex flex-wrap justify-center gap-3">
@@ -137,11 +137,11 @@ export default function NotFound() {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/blog"
-              className="px-6 py-3 bg-white text-blue-600 font-semibold rounded-lg hover:bg-gray-50 transition-colors"
+              className="px-6 py-3 bg-white dark:bg-gray-900 text-blue-600 dark:text-blue-400 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
             >
               Browse Job Search Guides
             </Link>
-            <button className="px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 transition-colors">
+            <button className="px-6 py-3 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
               Contact Support
             </button>
           </div>

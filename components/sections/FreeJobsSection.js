@@ -39,15 +39,15 @@ export default function FreeJobsSection({ handleRedirect }) {
             <span>NEW: Free Job Portal</span>
           </div>
           
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 mb-6">
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black text-gray-900 dark:text-white mb-6">
             <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Free Access to 1000+
             </span>
             <br />
-            <span className="text-gray-900">Remote Job Opportunities</span>
+            <span className="text-gray-900 dark:text-white">Remote Job Opportunities</span>
           </h2>
           
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
             Browse curated remote jobs from top companies worldwide. No subscription required - 
             completely free for job seekers. Find your dream job today!
           </p>
@@ -63,19 +63,19 @@ export default function FreeJobsSection({ handleRedirect }) {
         >
           <div className="text-center">
             <div className="text-3xl font-bold text-blue-600 mb-2">1000+</div>
-            <div className="text-gray-600">Active Jobs</div>
+            <div className="text-gray-600 dark:text-gray-300">Active Jobs</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-indigo-600 mb-2">500+</div>
-            <div className="text-gray-600">Companies</div>
+            <div className="text-gray-600 dark:text-gray-300">Companies</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-green-600 mb-2">100%</div>
-            <div className="text-gray-600">Remote</div>
+            <div className="text-gray-600 dark:text-gray-300">Remote</div>
           </div>
           <div className="text-center">
             <div className="text-3xl font-bold text-purple-600 mb-2">Free</div>
-            <div className="text-gray-600">Forever</div>
+            <div className="text-gray-600 dark:text-gray-300">Forever</div>
           </div>
         </motion.div>
 

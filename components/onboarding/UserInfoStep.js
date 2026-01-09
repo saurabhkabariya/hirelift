@@ -276,14 +276,14 @@ const UserInfoStep = ({ onComplete, user }) => {
           className="mb-8"
         >
           <div className="flex items-center justify-between mb-4">
-            <span className="text-sm font-medium text-gray-600">
+            <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
               Step {currentSection + 1} of {sections.length}
             </span>
-            <span className="text-sm font-medium text-blue-600">
+            <span className="text-sm font-medium text-blue-600 dark:text-blue-400">
               {Math.round(((currentSection + 1) / sections.length) * 100)}% Complete
             </span>
           </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
             <motion.div
               className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full"
               initial={{ width: 0 }}
@@ -320,22 +320,22 @@ const UserInfoStep = ({ onComplete, user }) => {
             <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mx-auto mb-4">
               <currentSectionData.icon className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-2">
+            <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
               {currentSectionData.title}
             </h2>
-            <p className="text-lg text-gray-600">
+            <p className="text-lg text-gray-600 dark:text-gray-300">
               {currentSectionData.subtitle}
             </p>
           </div>
 
           {/* Form content */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 border border-gray-100 dark:border-gray-700">
           <div className="space-y-6">
             {/* Section 0: Personal Information */}
             {currentSection === 0 && (
               <>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -343,7 +343,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                     value={formData.fullName}
                     onChange={(e) => handleInputChange('fullName', e.target.value)}
                     placeholder="e.g. John Smith"
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors ${
                       errors.fullName ? 'border-red-500' : ''
                     }`}
                   />
@@ -351,7 +351,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Email Address <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -360,15 +360,15 @@ const UserInfoStep = ({ onComplete, user }) => {
                     onChange={(e) => handleInputChange('email', e.target.value)}
                     placeholder="john@example.com"
                     disabled={!!user?.email}
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
-                      user?.email ? 'bg-gray-50 cursor-not-allowed' : ''
+                    className={`w-full px-4 py-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors ${
+                      user?.email ? 'bg-gray-50 dark:bg-gray-800 cursor-not-allowed' : ''
                     } ${errors.email ? 'border-red-500' : ''}`}
                   />
                   {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Phone Number (Optional)
                   </label>
                   <input
@@ -376,7 +376,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                     value={formData.phone}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                     placeholder="+1 (555) 123-4567"
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors ${
                       errors.phone ? 'border-red-500' : ''
                     }`}
                   />
@@ -384,7 +384,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Location (Optional)
                   </label>
                   <input
@@ -392,7 +392,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                     value={formData.location}
                     onChange={(e) => handleInputChange('location', e.target.value)}
                     placeholder="e.g. New York, NY or Remote"
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors ${
                       errors.location ? 'border-red-500' : ''
                     }`}
                   />
@@ -405,7 +405,7 @@ const UserInfoStep = ({ onComplete, user }) => {
             {currentSection === 1 && (
               <>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Current Job Title (Optional)
                   </label>
                   <input
@@ -413,7 +413,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                     value={formData.currentRole}
                     onChange={(e) => handleInputChange('currentRole', e.target.value)}
                     placeholder="e.g. Software Engineer, Marketing Manager"
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors ${
                       errors.currentRole ? 'border-red-500' : ''
                     }`}
                   />
@@ -421,7 +421,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Current Company (Optional)
                   </label>
                   <input
@@ -429,7 +429,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                     value={formData.company}
                     onChange={(e) => handleInputChange('company', e.target.value)}
                     placeholder="e.g. Google, Unemployed, Freelancing"
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors ${
                       errors.company ? 'border-red-500' : ''
                     }`}
                   />
@@ -437,7 +437,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Years of Experience (Optional)
                   </label>
                   <div className="grid grid-cols-1 gap-3">
@@ -446,14 +446,14 @@ const UserInfoStep = ({ onComplete, user }) => {
                         key={option.value}
                         type="button"
                         onClick={() => handleInputChange('experience', option.value)}
-                        className={`text-left p-4 border border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all ${
+                        className={`text-left p-4 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800 transition-all ${
                           formData.experience === option.value 
-                            ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500' 
+                            ? 'border-blue-500 bg-blue-50 dark:bg-gray-800 ring-2 ring-blue-500' 
                             : ''
                         }`}
                       >
-                        <div className="font-semibold text-gray-900">{option.label}</div>
-                        <div className="text-sm text-gray-600">{option.description}</div>
+                        <div className="font-semibold text-gray-900 dark:text-white">{option.label}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{option.description}</div>
                       </button>
                     ))}
                   </div>
@@ -461,13 +461,13 @@ const UserInfoStep = ({ onComplete, user }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Industry <span className="text-red-500">*</span>
                   </label>
                   <select
                     value={formData.industry}
                     onChange={(e) => handleInputChange('industry', e.target.value)}
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
                       errors.industry ? 'border-red-500' : ''
                     }`}
                   >
@@ -487,7 +487,7 @@ const UserInfoStep = ({ onComplete, user }) => {
             {currentSection === 2 && (
               <>
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Target Role *
                   </label>
                   <input
@@ -495,7 +495,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                     value={formData.targetRole}
                     onChange={(e) => handleInputChange('targetRole', e.target.value)}
                     placeholder="e.g. Senior Software Engineer, Product Manager"
-                    className={`w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+                    className={`w-full px-4 py-3 bg-white dark:bg-gray-900 text-gray-900 dark:text-white border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 placeholder:text-gray-500 dark:placeholder:text-gray-400 transition-colors ${
                       errors.targetRole ? 'border-red-500' : ''
                     }`}
                   />
@@ -503,7 +503,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Career Goal *
                   </label>
                   <div className="grid grid-cols-1 gap-3">
@@ -512,14 +512,14 @@ const UserInfoStep = ({ onComplete, user }) => {
                         key={option.value}
                         type="button"
                         onClick={() => handleInputChange('careerGoal', option.value)}
-                        className={`text-left p-4 border border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all ${
+                        className={`text-left p-4 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800 transition-all ${
                           formData.careerGoal === option.value 
-                            ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500' 
+                            ? 'border-blue-500 bg-blue-50 dark:bg-gray-800 ring-2 ring-blue-500' 
                             : ''
                         }`}
                       >
-                        <div className="font-semibold text-gray-900">{option.label}</div>
-                        <div className="text-sm text-gray-600">{option.description}</div>
+                        <div className="font-semibold text-gray-900 dark:text-white">{option.label}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{option.description}</div>
                       </button>
                     ))}
                   </div>
@@ -527,7 +527,7 @@ const UserInfoStep = ({ onComplete, user }) => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-semibold text-gray-700 mb-2">
+                  <label className="block text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2">
                     Job Search Status *
                   </label>
                   <div className="grid grid-cols-1 gap-3">
@@ -536,14 +536,14 @@ const UserInfoStep = ({ onComplete, user }) => {
                         key={option.value}
                         type="button"
                         onClick={() => handleInputChange('jobSearchStatus', option.value)}
-                        className={`text-left p-4 border border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all ${
+                        className={`text-left p-4 bg-white dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-gray-800 transition-all ${
                           formData.jobSearchStatus === option.value 
-                            ? 'border-blue-500 bg-blue-50 ring-2 ring-blue-500' 
+                            ? 'border-blue-500 bg-blue-50 dark:bg-gray-800 ring-2 ring-blue-500' 
                             : ''
                         }`}
                       >
-                        <div className="font-semibold text-gray-900">{option.label}</div>
-                        <div className="text-sm text-gray-600">{option.description}</div>
+                        <div className="font-semibold text-gray-900 dark:text-white">{option.label}</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">{option.description}</div>
                       </button>
                     ))}
                   </div>
@@ -554,12 +554,12 @@ const UserInfoStep = ({ onComplete, user }) => {
           </div>
 
           {/* Navigation buttons */}
-          <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200">
+          <div className="flex justify-between items-center mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
             <button
               type="button"
               onClick={handlePrevSection}
               disabled={currentSection === 0}
-              className="px-6 py-2 text-gray-600 hover:text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-6 py-2 text-gray-600 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               Previous
             </button>
@@ -606,10 +606,10 @@ const UserInfoStep = ({ onComplete, user }) => {
           transition={{ delay: 0.5 }}
           className="text-center mt-8"
         >
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300">
             ✨ This information helps us personalize your HireLift experience
           </p>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
             We take your privacy seriously. Your data is secure and never shared.
           </p>
         </motion.div>

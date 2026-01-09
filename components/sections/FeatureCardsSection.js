@@ -33,7 +33,7 @@ export default function FeatureCardsSection({ handleRedirect }) {
   ];
 
   return (
-    <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+    <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-white dark:bg-gray-900">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -42,7 +42,7 @@ export default function FeatureCardsSection({ handleRedirect }) {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">
             Everything You Need to Go From <span className='text-red-400'> 'Applicant' </span> to <span className='text-green-400'> 'Hired' </span>
           </h2>
         </motion.div>
@@ -71,7 +71,7 @@ export default function FeatureCardsSection({ handleRedirect }) {
                   </p>
                   <button 
                     onClick={() => handleRedirect(feature.link)}
-                    className="inline-flex items-center gap-2 px-6 py-3 bg-white text-gray-900 font-bold rounded-xl hover:bg-gray-100 transition-colors"
+                    className="inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white font-bold rounded-xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
                   >
                     <span>Try it now</span>
                     <FaArrowRight />

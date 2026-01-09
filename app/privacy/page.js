@@ -59,20 +59,20 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
     <div
       className={`flex items-start gap-4 p-6 rounded-2xl border-2 transition-colors duration-300 ${
         collected 
-          ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200 hover:border-green-300' 
-          : 'bg-gradient-to-r from-red-50 to-pink-50 border-red-200 hover:border-red-300'
+          ? 'bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 border-green-200 dark:border-green-800 hover:border-green-300 dark:hover:border-green-700' 
+          : 'bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20 border-red-200 dark:border-red-800 hover:border-red-300 dark:hover:border-red-700'
       }`}
     >
       <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-        collected ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+        collected ? 'bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400' : 'bg-red-100 dark:bg-red-900/50 text-red-600 dark:text-red-400'
       }`}>
         <Icon className="w-5 h-5" />
       </div>
       <div className="flex-1">
-        <h4 className="font-semibold text-gray-800 mb-2">
+        <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">
           {title}
         </h4>
-        <p className="text-gray-600 leading-relaxed">
+        <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
           {description}
         </p>
       </div>
@@ -121,7 +121,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
       </header>      {/* Hero Section */}
       <motion.div
         {...fadeIn}
-        className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 py-20"
+        className="bg-gradient-to-r from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-20"
       >
         <div className="max-w-4xl mx-auto px-6 text-center">
           <div className="w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl">
@@ -132,7 +132,7 @@ export default function PrivacyPolicyPage() {// Simple fade-in animation for con
             Privacy Policy
           </h1>
           
-          <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto mb-8">
             Your privacy matters to us. Here&apos;s how we protect your personal information and what we do with the data you trust us with.
           </p>
           

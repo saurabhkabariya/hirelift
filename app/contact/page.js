@@ -69,7 +69,7 @@ export default function ContactPage() {
             {title}
           </h2>
         </div>
-        <div className="bg-white/60 backdrop-blur-lg rounded-3xl border border-white/20 shadow-xl p-8 md:p-10">
+        <div className="bg-white/60 dark:bg-gray-800/60 backdrop-blur-lg rounded-3xl border border-white/20 dark:border-gray-700/20 shadow-xl p-8 md:p-10">
           {children}
         </div>
       </motion.section>
@@ -272,7 +272,7 @@ export default function ContactPage() {
             Get in Touch
           </h1>
           
-          <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-8">
+          <p className="text-xl text-gray-600 dark:text-gray-400 leading-relaxed max-w-3xl mx-auto mb-8">
             Have questions about HireLift? Need support? We&apos;re here to help you elevate your hiring process and career journey.
           </p>
           
@@ -501,8 +501,8 @@ export default function ContactPage() {
                       />
                     </div>
                     <div className="flex-1">
-                      <h4 className="font-semibold text-gray-800 mb-2">{info.title}</h4>
-                      <p className="text-sm text-gray-600 mb-2">{info.description}</p>
+                      <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">{info.title}</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">{info.description}</p>
                       <p 
                         className="text-lg font-bold"
                         style={{ color: info.color }}

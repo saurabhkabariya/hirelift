@@ -59,7 +59,7 @@ export default function ApplyOverlay({ isOpen, onClose, job }) {
               damping: 30,
               duration: 0.4 
             }}
-            className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full mx-4 relative overflow-hidden max-h-[90vh]"
+            className="bg-white dark:bg-gray-800 rounded-3xl shadow-2xl max-w-2xl w-full mx-4 relative overflow-hidden max-h-[90vh]"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Scrollable Content Container */}
@@ -69,7 +69,7 @@ export default function ApplyOverlay({ isOpen, onClose, job }) {
                 onClick={onClose}
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
-                className="absolute top-6 right-6 w-10 h-10 bg-gray-100/90 hover:bg-red-100 rounded-full flex items-center justify-center text-gray-600 hover:text-red-600 transition-all duration-200 z-20 backdrop-blur-sm border border-gray-200"
+                className="absolute top-6 right-6 w-10 h-10 bg-gray-100/90 dark:bg-gray-700/90 hover:bg-red-100 dark:hover:bg-red-900 rounded-full flex items-center justify-center text-gray-600 dark:text-gray-300 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200 z-20 backdrop-blur-sm border border-gray-200 dark:border-gray-600"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -178,7 +178,7 @@ export default function ApplyOverlay({ isOpen, onClose, job }) {
                           Free ATS Optimization
                         </span>
                       </div>
-                      <p className="text-gray-700 text-lg leading-relaxed">
+                      <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed">
                         Run a free ATS check on your resume now, it only takes 30 seconds and can 
                         <strong className="text-emerald-700 font-bold"> increase your response rate by 300%</strong>.
                       </p>
@@ -199,7 +199,7 @@ export default function ApplyOverlay({ isOpen, onClose, job }) {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.6 + index * 0.1 }}
                         whileHover={{ scale: 1.02, y: -2 }}
-                        className="flex items-center gap-4 p-4 bg-white rounded-xl shadow-md hover:shadow-lg transition-all duration-200 border border-gray-100"
+                        className="flex items-center gap-4 p-4 bg-white dark:bg-gray-900 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 border border-gray-100 dark:border-gray-700"
                       >
                         <motion.div
                           whileHover={{ scale: 1.2, rotate: 10 }}
@@ -207,7 +207,7 @@ export default function ApplyOverlay({ isOpen, onClose, job }) {
                         >
                           {benefit.icon}
                         </motion.div>
-                        <span className="text-gray-700 font-semibold text-left flex-1">{benefit.text}</span>
+                        <span className="text-gray-700 dark:text-gray-300 font-semibold text-left flex-1">{benefit.text}</span>
                       </motion.div>
                     ))}
                   </div>
@@ -247,7 +247,7 @@ export default function ApplyOverlay({ isOpen, onClose, job }) {
                           animate={{ opacity: 1 }}
                           transition={{ delay: 3 }}
                           onClick={() => setShowSkipOption(true)}
-                          className="text-gray-500 text-sm hover:text-gray-700 transition-colors underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                          className="text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-200 transition-colors underline decoration-dotted underline-offset-4 hover:decoration-solid"
                         >
                           I'll skip the ATS check
                         </motion.button>
@@ -284,7 +284,7 @@ export default function ApplyOverlay({ isOpen, onClose, job }) {
                               onClick={handleSkipAndApply}
                               whileHover={{ scale: 1.02 }}
                               whileTap={{ scale: 0.98 }}
-                              className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
+                              className="flex-1 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200"
                             >
                               Skip & Apply
                             </motion.button>
@@ -302,7 +302,7 @@ export default function ApplyOverlay({ isOpen, onClose, job }) {
                   transition={{ delay: 0.7 }}
                   className="border-t-2 border-gray-100 pt-6 mt-8"
                 >
-                  <div className="flex items-center gap-4 text-sm text-gray-600 bg-white rounded-xl p-4 border border-gray-200 shadow-sm">
+                  <div className="flex items-center gap-4 text-sm text-gray-600 dark:text-gray-400 bg-white dark:bg-gray-900 rounded-xl p-4 border border-gray-200 dark:border-gray-700 shadow-sm">
                     <motion.div 
                       whileHover={{ scale: 1.1, rotate: 5 }}
                       className="w-12 h-12 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg shadow-lg"
@@ -310,8 +310,8 @@ export default function ApplyOverlay({ isOpen, onClose, job }) {
                       {job.company?.charAt(0).toUpperCase()}
                     </motion.div>
                     <div className="flex-1">
-                      <p className="font-bold text-gray-800 text-lg">{job.title}</p>
-                      <p className="text-gray-500 flex items-center gap-2">
+                      <p className="font-bold text-gray-800 dark:text-gray-100 text-lg">{job.title}</p>
+                      <p className="text-gray-500 dark:text-gray-400 flex items-center gap-2">
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
                         </svg>

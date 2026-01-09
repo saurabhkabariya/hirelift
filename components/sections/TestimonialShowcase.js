@@ -32,7 +32,7 @@ export default function TestimonialShowcase() {
   ];
 
   return (
-    <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+    <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -41,10 +41,10 @@ export default function TestimonialShowcase() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">
             From <span className='text-red-400'> "Rejected" </span> to <span className='text-green-400'> "Offer Letter" </span>
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-xl text-gray-600 dark:text-gray-300">
             Testimonials have more success stories
           </p>
         </motion.div>
@@ -58,23 +58,23 @@ export default function TestimonialShowcase() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow"
+              className="bg-white dark:bg-gray-800 rounded-2xl p-6 shadow-md hover:shadow-lg transition-shadow"
             >
               <FaQuoteLeft className="text-2xl text-blue-400 mb-4" />
               
-              <p className="text-gray-700 text-sm leading-relaxed mb-4">
+              <p className="text-gray-700 dark:text-gray-300 text-sm leading-relaxed mb-4">
                 {testimonial.quote}
               </p>
 
-              <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
                 <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                   {testimonial.avatar}
                 </div>
                 <div>
-                  <div className="font-semibold text-gray-900 text-sm">
+                  <div className="font-semibold text-gray-900 dark:text-white text-sm">
                     {testimonial.name}
                   </div>
-                  <div className="text-xs text-gray-500">
+                  <div className="text-xs text-gray-500 dark:text-gray-400">
                     {testimonial.role}
                   </div>
                 </div>

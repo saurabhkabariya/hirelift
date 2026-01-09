@@ -35,14 +35,14 @@ export default function PricingCard({
       whileHover={{ y: -8, transition: { duration: 0.2 } }}
       className={`relative rounded-2xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl ${
         plan.expertInvolved
-          ? 'bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200 hover:border-purple-300'
-          : 'bg-white'
+          ? 'bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 border-purple-200 dark:border-purple-700 hover:border-purple-300 dark:hover:border-purple-600'
+          : 'bg-white dark:bg-gray-800'
       } ${
         isPopular 
-          ? 'border-blue-500 ring-2 ring-blue-200' 
+          ? 'border-blue-500 ring-2 ring-blue-200 dark:ring-blue-800' 
           : plan.expertInvolved
           ? '' // Expert styling already applied above
-          : 'border-gray-200 hover:border-gray-300'
+          : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600'
       } ${plan.disabled ? 'opacity-75' : ''}`}
     >
       {/* Popular Badge */}
@@ -76,22 +76,22 @@ export default function PricingCard({
           <div className="flex justify-center mb-4">
             {plan.icon && (
               <div className={`w-12 h-12 rounded-full flex items-center justify-center ${
-                isPopular ? 'bg-blue-100' : 'bg-gray-100'
+                isPopular ? 'bg-blue-100 dark:bg-blue-900' : 'bg-gray-100 dark:bg-gray-700'
               }`}>
                 <plan.icon className={`w-6 h-6 ${
-                  isPopular ? 'text-blue-600' : 'text-gray-600'
+                  isPopular ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'
                 }`} />
               </div>
             )}
           </div>
           
-          <h3 className="text-xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">{plan.name}</h3>
           
           {/* Price Display */}
           <div className="mb-3">
             {plan.onSale && plan.originalPrice ? (
               <div className="space-y-1">
-                <div className="text-lg text-gray-500 line-through">
+                <div className="text-lg text-gray-500 dark:text-gray-400 line-through">
                   {plan.originalPrice}
                   {plan.originalPrice !== '₹0' && <span className="text-sm ml-1">{plan.billing}</span>}
                 </div>

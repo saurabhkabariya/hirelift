@@ -42,15 +42,15 @@ export default function HeroSection({ handleRedirect }) {
             className="space-y-6"
           >
             <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black leading-tight">
-              <span className="text-gray-900 block mb-2">Your Dream Job Is</span>
+              <span className="text-gray-900 dark:text-white block mb-2">Your Dream Job Is</span>
               <span className="bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 bg-clip-text text-transparent block">
                One Click Away
               </span>
             </h1>
             
-            <p className="text-xl sm:text-2xl lg:text-3xl text-gray-600 font-light max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl sm:text-2xl lg:text-3xl text-gray-600 dark:text-gray-300 font-light max-w-3xl mx-auto leading-relaxed">
               Stop hoping. Start knowing. <br />
-              <span className="font-semibold text-gray-800">AI-powered job hunt assistant</span> that gets you hired.
+              <span className="font-semibold text-gray-800 dark:text-gray-200">AI-powered job hunt assistant</span> that gets you hired.
             </p>
           </motion.div>
 
@@ -59,7 +59,7 @@ export default function HeroSection({ handleRedirect }) {
             initial={animConfig.initial}
             animate={animConfig.animate}
             transition={{ ...animConfig.transition, delay: 0.2 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-6 text-gray-600"
+            className="flex flex-col sm:flex-row items-center justify-center gap-6 text-gray-600 dark:text-gray-300"
           >
             <div className="flex items-center gap-2">
               <FaBrain className="text-cyan-500 text-xl" />
@@ -116,11 +116,11 @@ export default function HeroSection({ handleRedirect }) {
               </div>
               <div>
                 <div className="text-3xl font-black text-blue-600 mb-1">3x</div>
-                <div className="text-sm text-gray-600">Faster Hiring</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">Faster Hiring</div>
               </div>
               <div>
                 <div className="text-3xl font-black text-purple-600 mb-1">24hrs</div>
-                <div className="text-sm text-gray-600">First Interview</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">First Interview</div>
               </div>
             </div>
           </motion.div>

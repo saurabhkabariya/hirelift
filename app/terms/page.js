@@ -72,8 +72,8 @@ export default function TermsConditionsPage() {
         <Icon className="w-5 h-5 text-blue-600" />
       </div>
       <div className="flex-1">
-        <h4 className="font-semibold text-gray-800 mb-2">{title}</h4>
-        <p className="text-gray-600 leading-relaxed text-sm">{description}</p>
+        <h4 className="font-semibold text-gray-800 dark:text-gray-200 mb-2">{title}</h4>
+        <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">{description}</p>
       </div>
     </div>
   );
@@ -181,7 +181,7 @@ export default function TermsConditionsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto mb-8"
+            className="text-xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-3xl mx-auto mb-8"
           >
             Please read these terms carefully before using HireLift. By using our service, you agree to be bound by these terms and conditions.
           </motion.p>
