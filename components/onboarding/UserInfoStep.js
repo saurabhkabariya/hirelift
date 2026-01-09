@@ -182,9 +182,12 @@ const UserInfoStep = ({ onComplete, user }) => {
     }
     
     try {
-      // Get token from AuthContext state or fallback to localStorage
-      const token = authToken || localStorage.getItem('token');
+      // Get token from localStorage first (synchronously set), then fallback to AuthContext state
+      // This ensures we get the token even if React state hasn't updated yet after sign-in
+      const token = localStorage.getItem('token') || authToken;
+      
       if (!token) {
+        console.error('Token not found - localStorage:', localStorage.getItem('token'), 'authToken:', authToken);
         toast.error('Authentication token not found. Please log in again.');
         return false;
       }
