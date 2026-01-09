@@ -214,7 +214,7 @@ export default function HomePage() {
       <FloatingCTA handleRedirect={handleRedirect} />
 
       {/* Urgency Banner for Conversion Boost */}
-      <UrgencyBanner onCTAClick={() => handleRedirect('/pricing')} />
+      {/* <UrgencyBanner onCTAClick={() => handleRedirect('/pricing')} /> */}
 
       {/* Exit Intent Popup for Maximum Conversion */}
       <ExitIntentPopup onCTAClick={() => handleRedirect('/audit')} />

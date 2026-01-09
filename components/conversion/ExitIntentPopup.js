@@ -91,7 +91,7 @@ export default function ExitIntentPopup({ onCTAClick }) {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-white rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-6 relative overflow-y-auto custom-scrollbar"
+            className="bg-red-200 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-6 relative overflow-y-auto custom-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
@@ -116,7 +116,7 @@ export default function ExitIntentPopup({ onCTAClick }) {
             </div>
 
             {/* Offer details */}
-            <div className="bg-gradient-to-r from-orange-50 to-red-50 border border-orange-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+            <div className="bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex items-center gap-2 mb-2 sm:mb-3">
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
                 <span className="font-bold text-sm sm:text-base text-orange-800">Limited Time Offer!</span>
