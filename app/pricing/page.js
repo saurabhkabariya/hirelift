@@ -376,7 +376,7 @@ export default function PricingPage() {
         'ATS Resume Review ($10+ value): Instantly find what is blocking your resume from getting shortlisted.',
         'Basic ATS Score & Feedback: Know exactly what to fix to improve your chances of interview calls.',
         'Professional Email Templates Access: Reach recruiters with proven, ready-to-use email formats.',
-        'Job Board Access (100+ jobs): Apply to real, fresh jobs—no fake posts, no ghosting.',
+        'Job Board Access (100+ fresh jobs): Apply to real, fresh jobs—no fake posts, no ghosting.',
         'Community Support, Learn, ask: and grow with other job seekers on the same journey.',
         'No Credit Card Required',
         'Takes less than 2 minutes to get started'
@@ -516,7 +516,7 @@ export default function PricingPage() {
               "aggregateRating": {
                 "@type": "AggregateRating",
                 "ratingValue": "4.8",
-                "ratingCount": "2847"
+                "ratingCount": "100"
               }
             })
           }}
@@ -631,7 +631,7 @@ export default function PricingPage() {
           )}
 
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            Join 5,000+ professionals who transformed their careers with our ATS resume optimization
+            Join 100+ professionals who transformed their careers with our ATS resume optimization
           </p>
 
           {/* Simple guarantee */}

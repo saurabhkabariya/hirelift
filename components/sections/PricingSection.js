@@ -32,7 +32,7 @@ export default function PricingSection({ handleRedirect }) {
     { icon: FaChartLine, title: "Fast Analysis", desc: "Get your ATS score in seconds" },
     { icon: FaShieldAlt, title: "Secure & Private", desc: "Your data is protected" },
     { icon: FaInfinity, title: "Expert Support", desc: "Professional guidance included" },
-    { icon: FaUserTie, title: "Proven Results", desc: "Join 10k+ successful candidates" }
+    { icon: FaUserTie, title: "Proven Results", desc: "Join 100+ successful candidates" }
   ];
 
   const plans = [
@@ -50,7 +50,7 @@ export default function PricingSection({ handleRedirect }) {
         '1 Resume Review (Worth $10)',
         'Basic ATS Score & Feedback',
         'Professional Email Templates Access',
-        'Job Board Access (100+ jobs)',
+        'Job Board Access (100+ fresh jobs)',
         'Community Support',
         'No Credit Card Required'
       ],
@@ -115,7 +115,7 @@ export default function PricingSection({ handleRedirect }) {
             Stop Getting Rejected, Start Getting Hired
           </h2>
           <p className="text-xl text-gray-600 mb-6">
-            Join 5,000+ professionals who discovered what was killing their applications and turned it around
+            Join 100+ professionals who discovered what was killing their applications and turned it around
           </p>
           
           {/* URGENCY ELEMENT */}

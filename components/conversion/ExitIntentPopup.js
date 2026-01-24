@@ -91,13 +91,13 @@ export default function ExitIntentPopup({ onCTAClick }) {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-red-200 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-6 relative overflow-y-auto custom-scrollbar"
+            className="bg-red-400 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-6 relative overflow-y-auto custom-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
             <button
               onClick={handleClose}
-              className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 z-20"
+              className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-200 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 z-20"
             >
               <X className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
@@ -151,7 +151,7 @@ export default function ExitIntentPopup({ onCTAClick }) {
                   <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400" />
                 ))}
               </div>
-              <span>4.9/5 from 1,200+ users</span>
+              <span>Join 100+ registered users</span>
             </div>
 
             {/* CTA */}

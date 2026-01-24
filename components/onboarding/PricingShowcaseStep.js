@@ -122,7 +122,7 @@ const PricingShowcaseStep = ({ onComplete, userInfo, auditResult }) => {
       description: '🔥 Most Popular - Get hired 3x faster',
       features: [
         'Unlimited Resume Reviews',
-        '1,000+ HR Directory Access',
+        '100+ HR Directory Access',
         'Advanced ATS Optimization',
         'Proven Email Templates Library',
         'Priority Expert Support',
@@ -460,8 +460,8 @@ const PricingShowcaseStep = ({ onComplete, userInfo, auditResult }) => {
             
             <div className="grid md:grid-cols-3 gap-8 mb-8">
               <div className="text-center">
-                <div className="text-3xl font-bold text-yellow-400 mb-2">2,847+</div>
-                <div className="text-gray-300">People Hired</div>
+                <div className="text-3xl font-bold text-yellow-400 mb-2">100+</div>
+                <div className="text-gray-300">Registered Users</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-green-400 mb-2">75%</div>
@@ -483,24 +483,24 @@ const PricingShowcaseStep = ({ onComplete, userInfo, auditResult }) => {
             <div className="flex items-center justify-center gap-8 mt-8 text-sm text-gray-300">
               <div className="flex items-center gap-2">
                 <Shield className="w-4 h-4" />
-                30-Day Money Back Guarantee
+                Use proven methods to save time
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-4 h-4" />
-                Results in 14 Days or Refund
+                No credit card required
               </div>
             </div>
           </div>
 
           {/* Skip option */}
-          <div className="mt-8">
+          {/* <div className="mt-8">
             <button
               onClick={handleSkip}
               className="text-gray-400 hover:text-white underline transition-colors"
             >
               I'll upgrade later
             </button>
-          </div>
+          </div> */}
         </motion.div>
       </div>
     </div>
