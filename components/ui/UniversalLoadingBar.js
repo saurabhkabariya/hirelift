@@ -13,19 +13,45 @@ const UniversalLoadingBar = () => {
   const searchParams = useSearchParams();
   const progressTimeoutRef = useRef(null);
   const forceCompleteTimeoutRef = useRef(null);
+  const progressIntervalRef = useRef(null);
+  const isMountedRef = useRef(true);
+
+  // Track component mount status
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+      // Clean up all timers and intervals on unmount
+      if (progressTimeoutRef.current) {
+        clearTimeout(progressTimeoutRef.current);
+      }
+      if (forceCompleteTimeoutRef.current) {
+        clearTimeout(forceCompleteTimeoutRef.current);
+      }
+      if (progressIntervalRef.current) {
+        clearInterval(progressIntervalRef.current);
+      }
+    };
+  }, []);
 
   // Track route changes
   useEffect(() => {
+    if (!isMountedRef.current) return;
+
     setIsRouteLoading(true);
     setProgress(0);
 
     // Set a maximum timeout to prevent hanging
     const maxTimeout = setTimeout(() => {
-      setIsRouteLoading(false);
+      if (isMountedRef.current) {
+        setIsRouteLoading(false);
+      }
     }, 2000); // Maximum 2 seconds for route loading
 
     const loadingTimer = setTimeout(() => {
-      setIsRouteLoading(false);
+      if (isMountedRef.current) {
+        setIsRouteLoading(false);
+      }
     }, 600); // Normal route loading time
 
     return () => {
@@ -47,10 +73,16 @@ const UniversalLoadingBar = () => {
       
       // Force complete after 3 seconds to prevent hanging
       forceCompleteTimeoutRef.current = setTimeout(() => {
-        console.warn('Loading bar force completed due to timeout');
-        setIsRouteLoading(false);
-        setProgress(100);
-        setTimeout(() => setProgress(0), 400);
+        if (isMountedRef.current) {
+          console.warn('Loading bar force completed due to timeout');
+          setIsRouteLoading(false);
+          setProgress(100);
+          setTimeout(() => {
+            if (isMountedRef.current) {
+              setProgress(0);
+            }
+          }, 400);
+        }
       }, 3000);
     } else {
       // Clear force complete timeout when loading finishes normally
@@ -69,17 +101,30 @@ const UniversalLoadingBar = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    // Clear any existing timeouts
+    // Clear any existing timeouts and intervals
     if (progressTimeoutRef.current) {
       clearTimeout(progressTimeoutRef.current);
       progressTimeoutRef.current = null;
     }
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+      progressIntervalRef.current = null;
+    }
 
     if (isLoading) {
-      setProgress(0);
+      if (isMountedRef.current) {
+        setProgress(0);
+      }
       
       // Smooth progress animation
-      const progressInterval = setInterval(() => {
+      progressIntervalRef.current = setInterval(() => {
+        if (!isMountedRef.current) {
+          if (progressIntervalRef.current) {
+            clearInterval(progressIntervalRef.current);
+          }
+          return;
+        }
+
         setProgress(prev => {
           if (prev < 70) {
             return prev + Math.random() * 15 + 8;
@@ -93,14 +138,23 @@ const UniversalLoadingBar = () => {
         });
       }, 120);
 
-      return () => clearInterval(progressInterval);
+      return () => {
+        if (progressIntervalRef.current) {
+          clearInterval(progressIntervalRef.current);
+          progressIntervalRef.current = null;
+        }
+      };
     } else {
       // Force complete the loading bar immediately
-      setProgress(100);
+      if (isMountedRef.current) {
+        setProgress(100);
+      }
       
       // Reset after a short delay
       progressTimeoutRef.current = setTimeout(() => {
-        setProgress(0);
+        if (isMountedRef.current) {
+          setProgress(0);
+        }
       }, 400);
       
       return () => {
@@ -111,18 +165,6 @@ const UniversalLoadingBar = () => {
       };
     }
   }, [isLoading]);
-
-  // Cleanup on unmount
-  useEffect(() => {
-    return () => {
-      if (progressTimeoutRef.current) {
-        clearTimeout(progressTimeoutRef.current);
-      }
-      if (forceCompleteTimeoutRef.current) {
-        clearTimeout(forceCompleteTimeoutRef.current);
-      }
-    };
-  }, []);
 
   return (
     <AnimatePresence>

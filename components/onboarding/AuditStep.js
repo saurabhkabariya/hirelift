@@ -271,11 +271,13 @@ const AuditStep = ({ onComplete, userInfo }) => {
     // First, update the audit result in context
     updateAuditResult(auditData);
     
-    // Then complete the step with proper delay for UI feedback
+    // Call onComplete immediately - parent will handle step transition
+    onComplete(auditData);
+    
+    // Reset completing state after a short delay
     setTimeout(() => {
-      onComplete(auditData);
       setCompleting(false);
-    }, 1500); // Longer delay to match UserInfoStep
+    }, 500);
   };
 
   // Upgrade Modal Component

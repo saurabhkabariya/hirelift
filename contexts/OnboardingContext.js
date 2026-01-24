@@ -174,6 +174,7 @@ export const OnboardingProvider = ({ children }) => {
   const completeCurrentStep = (stepData = null) => {
     const currentStepInfo = getCurrentStepInfo();
     
+    // Update data first before checking if we can proceed
     switch (currentStepInfo.id) {
       case 'user-info':
         if (stepData) {
@@ -187,13 +188,12 @@ export const OnboardingProvider = ({ children }) => {
         break;
       case 'completion':
         completeOnboarding();
-        break;
+        return; // Don't advance from completion step
     }
     
-    // Auto-advance to next step
-    if (canProceedToNextStep()) {
-      nextStep();
-    }
+    // Always advance to next step after data is updated
+    // The step components handle their own validation before calling this
+    nextStep();
   };
 
   const value = {

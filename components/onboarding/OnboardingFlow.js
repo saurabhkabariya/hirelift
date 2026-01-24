@@ -27,7 +27,7 @@ const WelcomeStep = ({ onComplete, user }) => {
   const [showAnimation, setShowAnimation] = useState(false);
 
   useEffect(() => {
-    const timer = setTimeout(() => setShowAnimation(true), 1000);
+    const timer = setTimeout(() => setShowAnimation(true), 500);
     return () => clearTimeout(timer);
   }, []);
 

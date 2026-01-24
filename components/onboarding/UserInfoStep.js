@@ -228,6 +228,9 @@ const UserInfoStep = ({ onComplete, user }) => {
 
   const handleComplete = async () => {
     if (validateSection(currentSection)) {
+      // Prevent double clicks during save
+      if (saving || completing) return;
+      
       setSaving(true);
       
       try {
@@ -240,14 +243,14 @@ const UserInfoStep = ({ onComplete, user }) => {
           setCompleting(true);
           toast.success('Profile saved successfully!');
           
-          // Add a small delay to show the toast and then proceed
+          // Call onComplete immediately after toast
+          // The parent will handle the step transition
+          onComplete(formData);
+          
+          // Reset completing state after a short delay
           setTimeout(() => {
-            setCompleting(false); // Reset completing state
-            onComplete(formData);
-          }, 1500); // 1.5 second delay to show success message
-        } else {
-          // Reset completing state if save failed
-          setCompleting(false);
+            setCompleting(false);
+          }, 500);
         }
       } catch (error) {
         console.error('Profile completion error:', error);
