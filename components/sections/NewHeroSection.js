@@ -33,7 +33,7 @@ export default function NewHeroSection({ handleRedirect }) {
             className="text-white space-y-4 sm:space-y-6 text-center lg:text-left"
           >
             <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black leading-tight">
-              Break free of the <br className="hidden sm:block"/> <span className='text-red-300'> "No Responses" </span> Cycle. <br />
+              Break free of the <br className="hidden sm:block"/> <span className='text-red-400'> "No Responses" </span> Cycle. <br />
                Start Getting Interview Calls.
             </h1>
             
@@ -44,8 +44,8 @@ HireLift shows you exactly what’s wrong with your resume, helps you get best o
 
             <motion.button
               onClick={() => handleRedirect('/audit')}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.01 }}
+              whileTap={{ scale: 0.98 }}
               className="group inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 py-1 sm:py-2 bg-yellow-400 hover:bg-yellow-500 text-gray-900 font-bold text-base sm:text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <span className="whitespace-nowrap">Fix My Resume</span>

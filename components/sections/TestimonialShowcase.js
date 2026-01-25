@@ -32,7 +32,7 @@ export default function TestimonialShowcase() {
   ];
 
   return (
-    <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50 dark:bg-gray-900">
+    <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 dark:bg-gray-900">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -41,10 +41,10 @@ export default function TestimonialShowcase() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white dark:text-white mb-4">
             From <span className='text-red-400'> "Rejected" </span> to <span className='text-green-400'> "Offer Letter" </span>
           </h2>
-          <p className="text-xl text-gray-600 dark:text-gray-300">
+          <p className="text-xl text-white dark:text-gray-300">
             Testimonials have more success stories
           </p>
         </motion.div>

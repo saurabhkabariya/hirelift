@@ -145,7 +145,7 @@ export default function ExitIntentPopup({ onCTAClick }) {
             </div>
 
             {/* Social proof */}
-            <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6 text-xs sm:text-sm  text-white/90 dark:text-gray-400">
+            <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6 text-xs sm:text-sm  text-white/90 dark:text-white">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400" />
@@ -162,7 +162,7 @@ export default function ExitIntentPopup({ onCTAClick }) {
               >
                 Claim My FREE Package Now
               </button>
-              <p className="text-xs text-center  text-white/90 dark:text-gray-400">
+              <p className="text-xs text-center  text-white/90 dark:text-white">
                 <span className="text-green-300 font-bold">✓</span> No Credit Card Required • <span className="text-green-300 font-bold">✓</span> 100% Free • <span className="text-green-300 font-bold">✓</span> Instant Access
               </p>
             </div>

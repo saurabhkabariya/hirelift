@@ -175,7 +175,7 @@ export default function HomePage() {
         />
       </Head>
       
-      <div className="min-h-screen flex flex-col relative overflow-x-hidden">
+      <div className="min-h-screen flex flex-col relative overflow-x-hidden bg-gray-900">
         {/* Structured Data for SEO */}
         <StructuredData />
       
@@ -205,7 +205,7 @@ export default function HomePage() {
       <PricingSection  handleRedirect={handleRedirect} />
 
       {/* Final CTA - Your First Paycheck is Waiting */}
-      <FinalCTABlue handleRedirect={handleRedirect} />
+      <FinalCTABlue className="bg-gray-900 rounded-b-4xl" handleRedirect={handleRedirect} />
 
       {/* Footer - Dark Background with Cyan Accents */}
       <FooterSection />
@@ -217,7 +217,7 @@ export default function HomePage() {
       {/* <UrgencyBanner onCTAClick={() => handleRedirect('/pricing')} /> */}
 
       {/* Exit Intent Popup for Maximum Conversion */}
-      <ExitIntentPopup onCTAClick={() => handleRedirect('/audit')} />
+      {/* <ExitIntentPopup onCTAClick={() => handleRedirect('/audit')} /> */}
       </div>
     </>
   );

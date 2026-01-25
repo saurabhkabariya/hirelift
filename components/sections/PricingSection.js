@@ -102,7 +102,7 @@ export default function PricingSection({ handleRedirect }) {
   ];
 
   return (
-    <section id="pricing" className="py-20 px-6 relative dark:bg-white">
+    <section id="pricing" className="py-20 px-6 relative dark:bg-white bg-white">
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-cyan-50/40 to-transparent rounded-full"></div>
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
