@@ -91,7 +91,7 @@ export default function ExitIntentPopup({ onCTAClick }) {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
-            className="bg-red-400 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-6 relative overflow-y-auto custom-scrollbar"
+            className="bg-gradient-to-r from-red-500 to-red-400 rounded-2xl shadow-2xl max-w-md w-full max-h-[90vh] flex flex-col p-4 sm:p-6 relative overflow-y-auto custom-scrollbar"
             onClick={(e) => e.stopPropagation()}
           >
             {/* Close button */}
@@ -104,19 +104,19 @@ export default function ExitIntentPopup({ onCTAClick }) {
 
             {/* Header */}
             <div className="text-center mb-4 sm:mb-6">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center mx-auto mb-3 sm:mb-4  border-2 border-white">
                 <Gift className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+              <h2 className="text-xl sm:text-2xl font-bold text-white/90 mb-2">
                 Wait! Don't Miss Out!
               </h2>
-              <p className="text-sm sm:text-base text-gray-600">
+              <p className="text-sm sm:text-base text-white/90">
                 Before you go, claim your exclusive offer
               </p>
             </div>
 
             {/* Offer details */}
-            <div className="bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+            <div className="bg-gradient-to-r from-green-200 to-green-400 border border-green-200 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
               <div className="flex items-center gap-2 mb-2 sm:mb-3">
                 <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-orange-600" />
                 <span className="font-bold text-sm sm:text-base text-orange-800">Limited Time Offer!</span>
@@ -145,7 +145,7 @@ export default function ExitIntentPopup({ onCTAClick }) {
             </div>
 
             {/* Social proof */}
-            <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6 text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            <div className="flex items-center justify-center gap-2 mb-4 sm:mb-6 text-xs sm:text-sm  text-white/90 dark:text-gray-400">
               <div className="flex">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-3 h-3 sm:w-4 sm:h-4 fill-yellow-400 text-yellow-400" />
@@ -162,8 +162,8 @@ export default function ExitIntentPopup({ onCTAClick }) {
               >
                 Claim My FREE Package Now
               </button>
-              <p className="text-xs text-center text-gray-500 dark:text-gray-400">
-                ✅ No Credit Card Required • ✅ 100% Free • ✅ Instant Access
+              <p className="text-xs text-center  text-white/90 dark:text-gray-400">
+                <span className="text-green-300 font-bold">✓</span> No Credit Card Required • <span className="text-green-300 font-bold">✓</span> 100% Free • <span className="text-green-300 font-bold">✓</span> Instant Access
               </p>
             </div>
           </motion.div>

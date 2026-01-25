@@ -9,7 +9,7 @@ export default function NewHeroSection({ handleRedirect }) {
     <section id="home" className="relative pt-6 min-h-screen flex items-center overflow-hidden">
       {/* Background Image */}
       <div className="absolute inset-0 z-0">
-        <Image
+        {/* <Image
           src="/hero-bg.webp"
           alt="Hero Background"
           fill
@@ -17,9 +17,9 @@ export default function NewHeroSection({ handleRedirect }) {
           quality={100}
           className="object-cover object-center"
           sizes="100vw"
-        />
+        /> */}
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-blue-900/40"></div>
+        <div className="absolute inset-0 bg-blue-800"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 relative z-10">

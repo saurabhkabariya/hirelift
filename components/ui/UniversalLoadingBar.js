@@ -52,7 +52,7 @@ const UniversalLoadingBar = () => {
       if (isMountedRef.current) {
         setIsRouteLoading(false);
       }
-    }, 600); // Normal route loading time
+    }, 800); // Normal route loading time
 
     return () => {
       clearTimeout(maxTimeout);
@@ -71,7 +71,7 @@ const UniversalLoadingBar = () => {
         clearTimeout(forceCompleteTimeoutRef.current);
       }
       
-      // Force complete after 3 seconds to prevent hanging
+      // Force complete after 5 seconds to prevent hanging
       forceCompleteTimeoutRef.current = setTimeout(() => {
         if (isMountedRef.current) {
           console.warn('Loading bar force completed due to timeout');
@@ -83,7 +83,7 @@ const UniversalLoadingBar = () => {
             }
           }, 400);
         }
-      }, 3000);
+      }, 5000);
     } else {
       // Clear force complete timeout when loading finishes normally
       if (forceCompleteTimeoutRef.current) {
