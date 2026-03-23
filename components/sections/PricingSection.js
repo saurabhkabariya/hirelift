@@ -47,7 +47,8 @@ export default function PricingSection({ handleRedirect }) {
       buttonColor: "bg-gray-600 hover:bg-gray-700",
       popular: false,
       features: [
-        '1 Resume Review (Worth $10)',
+        '1 Free Resume Review (Worth $10)',
+        '1 Free Resume-Job Match Analysis',
         'Basic ATS Score & Feedback',
         'Professional Email Templates Access',
         'Job Board Access (100+ fresh jobs)',
@@ -71,6 +72,7 @@ export default function PricingSection({ handleRedirect }) {
       badge: "MOST POPULAR",
       features: [
         'Unlimited Resume Reviews (Worth $10+)',
+        'Unlimited Resume-Job Match Analysis',
         '100+ HR Directory Access',
         'Advanced ATS Optimization',
         'Proven Email Templates Library',

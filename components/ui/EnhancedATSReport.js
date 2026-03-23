@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FaRobot, FaCheckCircle, FaTimesCircle, FaExclamationTriangle, FaBrain, FaFire, FaLightbulb, FaShieldAlt, FaChartLine, FaStar, FaTrophy } from 'react-icons/fa';
+import { FaRobot, FaCheckCircle, FaTimesCircle, FaExclamationTriangle, FaBrain, FaFire, FaLightbulb, FaShieldAlt, FaChartLine, FaStar, FaTrophy, FaCrown, FaLock } from 'react-icons/fa';
 import { HiSparkles } from 'react-icons/hi';
 
 const EnhancedATSReport = ({ result, user, handleRedirect }) => {
   const [isAnalyzing, setIsAnalyzing] = useState(true);
   const [currentStep, setCurrentStep] = useState(0);
+  const isPremium = user?.isPremium || false;
 
   const analysisSteps = result?.isAIGenerated 
     ? [
@@ -269,12 +270,17 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
           <div className="p-6 grid md:grid-cols-2 gap-6 border-b">
             {/* Strengths */}
             {result.strengths && result.strengths.length > 0 && (
-              <div className="bg-green-50 rounded-2xl p-6 border border-green-200">
+              <div className="bg-green-50 rounded-2xl p-6 border border-green-200 relative">
+                {!isPremium && (
+                  <span className="ml-auto flex items-center gap-1.5 text-sm font-semibold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">
+                    <FaLock className="text-xs" /> Premium Only
+                  </span>
+                )}
                 <h4 className="text-lg font-bold text-green-800 mb-4 flex items-center gap-2">
                   <FaStar className="text-green-600" />
                   Resume Strengths
                 </h4>
-                <div className="space-y-3">
+                <div className={`space-y-3 ${!isPremium ? 'filter blur-sm pointer-events-none' : ''}`}>
                   {result.strengths.map((strength, index) => (
                     <motion.div
                       key={index}
@@ -288,17 +294,53 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
                     </motion.div>
                   ))}
                 </div>
+                {!isPremium && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[2px] rounded-lg">
+                  <div className="text-center max-w-md p-6">
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <FaCrown className="text-5xl text-yellow-500 mx-auto mb-4 drop-shadow-lg" />
+                      <h4 className="text-2xl font-bold text-gray-800 mb-2">
+                        Unlock AI Recommendations
+                      </h4>
+                      <p className="text-gray-600 mb-6">
+                        Get detailed, actionable AI-powered suggestions to improve your resume and increase your chances of getting shortlisted
+                      </p>
+                      <motion.button
+                        onClick={() => handleRedirect && handleRedirect('/pricing')}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 mx-auto"
+                      >
+                        <FaCrown className="text-lg" />
+                        Upgrade to Premium
+                      </motion.button>
+                      <p className="text-xs text-gray-500 mt-3">
+                        💡 50% OFF - Limited time offer
+                      </p>
+                    </motion.div>
+                  </div>
+                </div>
+              )}
               </div>
             )}
 
             {/* Weaknesses */}
             {result.weaknesses && result.weaknesses.length > 0 && (
-              <div className="bg-orange-50 rounded-2xl p-6 border border-orange-200">
+              <div className="bg-orange-50 rounded-2xl p-6 border border-orange-200 relative">
+                {!isPremium && (
+                  <span className="ml-auto flex items-center gap-1.5 text-sm font-semibold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">
+                    <FaLock className="text-xs" /> Premium Only
+                  </span>
+                )}
                 <h4 className="text-lg font-bold text-orange-800 mb-4 flex items-center gap-2">
                   <FaExclamationTriangle className="text-orange-600" />
                   Areas to Improve
                 </h4>
-                <div className="space-y-3">
+                <div className={`space-y-3 ${!isPremium ? 'filter blur-sm pointer-events-none' : ''}`}>
                   {result.weaknesses.map((weakness, index) => (
                     <motion.div
                       key={index}
@@ -312,6 +354,37 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
                     </motion.div>
                   ))}
                 </div>
+                {!isPremium && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[2px] rounded-lg">
+                  <div className="text-center max-w-md p-6">
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <FaCrown className="text-5xl text-yellow-500 mx-auto mb-4 drop-shadow-lg" />
+                      <h4 className="text-2xl font-bold text-gray-800 mb-2">
+                        Unlock AI Recommendations
+                      </h4>
+                      <p className="text-gray-600 mb-6">
+                        Get detailed, actionable AI-powered suggestions to improve your resume and increase your chances of getting shortlisted
+                      </p>
+                      <motion.button
+                        onClick={() => handleRedirect && handleRedirect('/pricing')}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 mx-auto"
+                      >
+                        <FaCrown className="text-lg" />
+                        Upgrade to Premium
+                      </motion.button>
+                      <p className="text-xs text-gray-500 mt-3">
+                        💡 50% OFF - Limited time offer
+                      </p>
+                    </motion.div>
+                  </div>
+                </div>
+              )}
               </div>
             )}
           </div>
@@ -358,12 +431,17 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
 
           {/* AI Suggestions */}
           {result.suggestions && result.suggestions.length > 0 && (
-            <div className="p-6 border-b">
+            <div className="p-6 border-b relative">
               <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
                 <FaLightbulb className="text-yellow-500" />
                 AI Recommendations
+                {!isPremium && (
+                  <span className="ml-auto flex items-center gap-1.5 text-sm font-semibold text-purple-600 bg-purple-50 px-3 py-1 rounded-full">
+                    <FaLock className="text-xs" /> Premium Only
+                  </span>
+                )}
               </h4>
-              <div className="space-y-3">
+              <div className={`space-y-3 ${!isPremium ? 'filter blur-sm pointer-events-none' : ''}`}>
                 {result.suggestions.map((suggestion, index) => (
                   <motion.div
                     key={index}
@@ -379,6 +457,39 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
                   </motion.div>
                 ))}
               </div>
+              
+              {/* Upgrade CTA Overlay for Free Users */}
+              {!isPremium && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[2px] rounded-lg">
+                  <div className="text-center max-w-md p-6">
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ delay: 0.2 }}
+                    >
+                      <FaCrown className="text-5xl text-yellow-500 mx-auto mb-4 drop-shadow-lg" />
+                      <h4 className="text-2xl font-bold text-gray-800 mb-2">
+                        Unlock AI Recommendations
+                      </h4>
+                      <p className="text-gray-600 mb-6">
+                        Get detailed, actionable AI-powered suggestions to improve your resume and increase your chances of getting shortlisted
+                      </p>
+                      <motion.button
+                        onClick={() => handleRedirect && handleRedirect('/pricing')}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-8 rounded-xl font-bold hover:from-blue-700 hover:to-purple-700 transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2 mx-auto"
+                      >
+                        <FaCrown className="text-lg" />
+                        Upgrade to Premium
+                      </motion.button>
+                      <p className="text-xs text-gray-500 mt-3">
+                        💡 50% OFF - Limited time offer
+                      </p>
+                    </motion.div>
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </>
@@ -447,7 +558,7 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
             </motion.div>
           </div>
 
-          <motion.button
+          {/* <motion.button
             onClick={() => handleRedirect && handleRedirect('/audit')}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -455,7 +566,7 @@ const EnhancedATSReport = ({ result, user, handleRedirect }) => {
           >
             <FaRobot className="text-xl" />
             Check Updated Resume
-          </motion.button>
+          </motion.button> */}
 
           <p className="text-xs text-gray-500 mt-4">
             💡 Pro Tip: Keep reviewing until you reach 85+ score for maximum interview callbacks

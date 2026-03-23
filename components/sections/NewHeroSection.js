@@ -19,7 +19,7 @@ export default function NewHeroSection({ handleRedirect }) {
           sizes="100vw"
         /> */}
         {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-blue-800"></div>
+        <div className="absolute inset-0 bg-blue-600/50"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20 relative z-10">

@@ -1,6 +1,22 @@
 // Global blog posts data for HireLift International Career Blog
 export const blogPosts = [
   {
+    slug: "resume-job-matcher-guide-2025",
+    title: "Resume Job Matcher: How to Match Your Resume with Job Descriptions in 2025",
+    metaTitle: "Resume Job Matcher Tool | Match Resume with Job Description Free",
+    metaDescription: "Learn how to use resume job matcher tools to analyze your resume against job descriptions. Free AI-powered matching, ATS optimization, and get hired faster in 2025.",
+    excerpt: "Discover how resume job matching tools can transform your job search. Learn to identify skill gaps, optimize for ATS, and increase your interview chances by 300% with AI-powered analysis.",
+    content: "Complete guide to resume-job matching covering AI tools, manual analysis techniques, ATS optimization, skill gap identification, and proven strategies to tailor your resume for every application.",
+    author: "Career Success Team",
+    publishDate: "Dec 15, 2025",
+    publishedAt: "2025-12-15T12:00:00Z",
+    readTime: "15 min read",
+    category: "Resume Tips",
+    featured: true,
+    keywords: ["resume job matcher", "match resume with job description", "resume scanner", "ATS checker", "job description matcher", "resume optimization tool", "AI resume matcher", "resume analysis tool"],
+    tags: ["Resume", "Job Search", "ATS", "AI Tools", "Career Tips", "Job Matching"]
+  },
+  {
     slug: "software-engineer-interview-questions-2025",
     title: "Software Engineer Interview Questions 2025: Complete FAANG Guide for US & UK",
     metaTitle: "Software Engineer Interview Questions 2025 | FAANG Interview Guide",

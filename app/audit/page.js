@@ -220,8 +220,7 @@ export default function ResumeAuditPage() {
     const isUserPremium = user?.isPremium || false;
     
     if (!isUserPremium && currentCount >= 1) {
-      setError("Your 1 free review is exhausted. Upgrade to premium to continue.");
-      setTimeout(() => navigateWithLoading("/pricing", "Redirecting to pricing..."), 2000);
+      setShowExhaustedPopup(true);
       return;
     }
     
@@ -243,8 +242,7 @@ export default function ResumeAuditPage() {
       const data = await res.json();
       if (!res.ok) {
         if (res.status === 403) {
-          setError("Your 1 free review is exhausted. Upgrade to premium to continue.");
-          setTimeout(() => navigateWithLoading("/pricing", "Redirecting to pricing..."), 2000);
+          setShowExhaustedPopup(true);
           return;
         }
         throw new Error(data.error || "Audit failed");      
@@ -257,36 +255,18 @@ export default function ResumeAuditPage() {
           // For logged-in users, update audit count from server
           await updateUserAuditCount();
           
-          // Check if this was their first audit (count was 0, now will be 1)
-          const wasFirstAudit = (user.auditCount || 0) === 0;
-          
           toast.success('Review completed! Count updated.', {
             duration: 2000,
             position: 'top-center',
           });
-          
-          // Show conversion popup after first audit completion
-          if (wasFirstAudit) {
-            setTimeout(() => {
-              setShowExhaustedPopup(true);
-            }, 2000); // Show popup 2 seconds after audit completion
-          }
         } else {
           // For non-logged-in users, increment local count
-          const wasFirstAudit = localAuditCount === 0;
           incrementLocalAuditCount();
           
           toast.success('Review completed! 1 free review used.', {
             duration: 2000,
             position: 'top-center',
           });
-          
-          // Show conversion popup after first audit completion
-          if (wasFirstAudit) {
-            setTimeout(() => {
-              setShowExhaustedPopup(true);
-            }, 2000); // Show popup 2 seconds after audit completion
-          }
         }
       } else {
         toast.success('Review completed successfully!', {

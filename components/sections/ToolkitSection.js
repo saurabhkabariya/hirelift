@@ -21,8 +21,8 @@ export default function ToolkitSection() {
     },
     {
       icon: FaBullseye,
-      title: "Smart Job Matching",
-      description: "Access 100+ curated jobs and connect directly with hiring managers. Skip the application black hole entirely.",
+      title: "AI Resume-Job Matcher",
+      description: "Upload your resume and paste any job description to get instant AI-powered match analysis. Discover gaps and get detailed suggestions!",
       color: "from-purple-500 to-pink-600",
       bgColor: "bg-purple-50"
     }

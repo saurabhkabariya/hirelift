@@ -7,6 +7,7 @@ import Header from '../components/Header';
 
 // Import essential sections
 import NewHeroSection from '../components/sections/NewHeroSection';
+import JobMatcherFocusSection from '../components/sections/JobMatcherFocusSection';
 import ToolkitSection from '../components/sections/ToolkitSection';
 import PainPointsSection from '../components/sections/PainPointsSection';
 import TestimonialShowcase from '../components/sections/TestimonialShowcase';
@@ -189,6 +190,9 @@ export default function HomePage() {
 
       {/* Hero Section - Break the No Experience Cycle */}
       <NewHeroSection handleRedirect={handleRedirect} />
+
+      {/* Resume-Job Match Focus */}
+      <JobMatcherFocusSection />
 
       {/* Toolkit Section - Your Complete Toolkit */}
       <ToolkitSection />

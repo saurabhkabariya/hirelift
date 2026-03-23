@@ -84,6 +84,7 @@ export default function FooterSection() {
             <div className="space-y-3">
               {[
                 { name: "Resume Review", href: "/audit", badge: "FIRST FREE" },
+                { name: "Job Matcher", href: "/job-matcher", badge: "1 FREE" },
                 { name: "Job Board", href: "/jobs", badge: "FREE" },
                 { name: "Templates", href: "/playground", badge: "FREE" },
                 { name: "HR Directory", href: "/company-search", badge: "PREMIUM" },

@@ -374,6 +374,7 @@ export default function PricingPage() {
       description: 'See why recruiters ignore your resume before you spend a rupee.',
       features: [
         'ATS Resume Review ($10+ value): Instantly find what is blocking your resume from getting shortlisted.',
+        '1 Free Resume-Job Match: AI-powered analysis to see how your resume matches any job description.',
         'Basic ATS Score & Feedback: Know exactly what to fix to improve your chances of interview calls.',
         'Professional Email Templates Access: Reach recruiters with proven, ready-to-use email formats.',
         'Job Board Access (100+ fresh jobs): Apply to real, fresh jobs—no fake posts, no ghosting.',
@@ -395,6 +396,7 @@ export default function PricingPage() {
       description: '🔥 Most Popular - Get hired 3x faster',
       features: [
         'Unlimited ATS Resume Audits: Fix, test, and optimize until your resume is recruiter-ready',
+        'Unlimited Resume-Job Match Analysis: Compare your resume with unlimited jobs and get AI-powered suggestions',
         '100+ HR Contacts Directory: Reach real hiring managers directly instead of applying blindly',
         'Advanced ATS Optimization: Improve keyword match, structure, and visibility in hiring systems',
         'Proven Email Templates Library: Send confident, high-response emails that actually get replies',

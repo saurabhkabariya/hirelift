@@ -29,6 +29,14 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  jobMatchCount: {
+    type: Number,
+    default: 0,
+  },
+  highestJobMatchScore: {
+    type: Number,
+    default: 0,
+  },
   isPremium: {
     type: Boolean,
     default: false,

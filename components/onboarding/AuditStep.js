@@ -677,7 +677,12 @@ const AuditStep = ({ onComplete, userInfo }) => {
               <EnhancedATSReport 
                 result={result} 
                 user={user}
-                handleRedirect={() => {}}
+                handleRedirect={(path) => {
+                  // Navigate to pricing page when upgrade is clicked
+                  if (path === '/pricing') {
+                    window.location.href = '/pricing';
+                  }
+                }}
               />
 
               {/* Action buttons */}

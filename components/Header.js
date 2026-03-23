@@ -30,6 +30,14 @@ const Header = ({ variant = 'default' }) => {
       badge: "Popular"
     },
     { 
+      name: "Job Matcher", 
+      href: "/job-matcher", 
+      description: "Match resume with job descriptions",
+      icon: FaStar,
+      color: "from-yellow-500 to-orange-500",
+      badge: "New"
+    },
+    { 
       name: "Referrals Hub", 
       href: "/referrals", 
       description: "Get employee referrals",
@@ -101,12 +109,20 @@ const Header = ({ variant = 'default' }) => {
         // Use light theme on hero (top ~100vh) and dark theme on bottom sections
         const isInHeroSection = scrollY < windowHeight * 0.8;
         const isInDarkSection = scrollY > documentHeight - (windowHeight * 2.5);
+
+        // Also use dark theme when the Job Matcher focus section is visible
+        const jobMatcherFocusSection = document.querySelector('#job-matcher-focus');
+        let isInJobMatcherFocusSection = false;
+        if (jobMatcherFocusSection) {
+          const rect = jobMatcherFocusSection.getBoundingClientRect();
+          isInJobMatcherFocusSection = rect.top <= 160 && rect.bottom >= 120;
+        }
         
         // Set scrolled state for backdrop blur
         setIsScrolled(scrollY > 50);
         
-        // Set theme: white on hero, light in middle, dark at bottom
-        setIsDarkTheme(isInDarkSection && !isInHeroSection);
+        // Set theme: white on hero, dark on job matcher focus + bottom dark sections
+        setIsDarkTheme((isInDarkSection || isInJobMatcherFocusSection) && !isInHeroSection);
       } else {
         // For other pages, use light theme with scroll detection
         setIsScrolled(scrollY > 50);

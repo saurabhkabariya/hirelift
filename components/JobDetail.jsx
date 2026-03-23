@@ -693,12 +693,109 @@ export default function JobDetail({ job: initialJob, jobId }) {
           </div>
         </div>
 
+        {/* Job Match Section */}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          className="mt-12"
+        >
+          <motion.div 
+            className="relative bg-gradient-to-br from-purple-600 via-blue-600 to-purple-700 rounded-2xl shadow-2xl border border-purple-300 p-6 sm:p-8 overflow-hidden"
+          >
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-10 pointer-events-none">
+              <div className="absolute inset-0" style={{
+                backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)',
+                backgroundSize: '32px 32px'
+              }}></div>
+            </div>
+
+            {/* Content */}
+            <div className="relative z-10">
+              <div className="flex flex-col items-center gap-6 text-center">
+                {/* Icon Section */}
+                <motion.div 
+                  animate={{ 
+                    rotate: [0, 5, -5, 0],
+                    scale: [1, 1.05, 1]
+                  }}
+                  transition={{ 
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatType: "reverse"
+                  }}
+                  className="w-16 h-16 sm:w-20 sm:h-20 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center border-2 border-white/30 shadow-lg"
+                >
+                  <svg className="w-8 h-8 sm:w-10 sm:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                  </svg>
+                </motion.div>
+
+                {/* Text Content */}
+                <div className="w-full max-w-3xl px-2">
+                  <h3 className="text-xl sm:text-2xl md:text-3xl font-bold text-white mb-3 break-words">
+                    See How Your Resume Matches This Job
+                  </h3>
+                  <p className="text-purple-100 text-sm sm:text-base md:text-lg mb-6 break-words">
+                    Get instant AI-powered analysis to see how well your resume aligns with this position.
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-3 sm:gap-4 justify-center mb-6">
+                    <div className="flex items-center gap-2 text-white/90">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Instant Analysis</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-white/90">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-xs sm:text-sm font-medium whitespace-nowrap">AI-Powered</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-white/90">
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-300 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                      <span className="text-xs sm:text-sm font-medium whitespace-nowrap">Try Free</span>
+                    </div>
+                  </div>
+
+                  {/* CTA Button */}
+                  <motion.a
+                    href="/job-matcher"
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="group relative inline-flex items-center gap-2 sm:gap-3 bg-white text-purple-700 px-6 sm:px-8 py-3 sm:py-4 rounded-xl text-base sm:text-lg font-bold shadow-2xl hover:shadow-3xl transition-all duration-300"
+                  >
+                    <span className="whitespace-nowrap">Check Match Score</span>
+                    <svg 
+                      className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform flex-shrink-0" 
+                      fill="none" 
+                      stroke="currentColor" 
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                    </svg>
+                    
+                    {/* Premium Badge */}
+                    <div className="absolute -top-2 -right-2 sm:-top-3 sm:-right-3 bg-gradient-to-r from-yellow-400 to-orange-400 text-white text-xs font-bold px-2 sm:px-3 py-1 rounded-full shadow-lg">
+                      FREE
+                    </div>
+                  </motion.a>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </motion.div>
+
         {/* Related Jobs */}
         {relatedJobs.length > 0 && (
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6 }}
+            transition={{ delay: 0.7 }}
             className="mt-12"
           >
             <h2 className="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-3">

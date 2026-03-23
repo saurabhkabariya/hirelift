@@ -623,35 +623,7 @@ const DashboardContent = () => {
           className={`mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ${isAdmin ? 'xl:grid-cols-4' : ''}`}
         >
 
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => navigateWithLoading('/jobs', 'Loading job opportunities...')}
-            className="bg-white rounded-xl p-6 shadow-lg border border-emerald-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
-          >
-            {/* New Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8, x: 20 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              transition={{ delay: 0.5, type: "spring", stiffness: 300 }}
-              className="absolute top-3 right-3"
-            >
-              <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-emerald-400 to-teal-500 text-white rounded-full text-xs font-bold shadow-lg">
-                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
-                </svg>
-                New
-              </div>
-            </motion.div>
 
-            <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">Job Board</h3>
-            <p className="text-gray-600">Browse remote jobs and career opportunities</p>
-          </motion.button>
 
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -680,6 +652,39 @@ const DashboardContent = () => {
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Resume Review</h3>
             <p className="text-gray-600">AI-powered ATS analysis and optimization</p>
+          </motion.button>
+
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigateWithLoading('/job-matcher', 'Loading job matcher...')}
+            className="bg-white rounded-xl p-6 shadow-lg border border-violet-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, x: 20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ delay: 0.35, type: "spring", stiffness: 300 }}
+              className="absolute top-3 right-3"
+            >
+              <div className={`flex items-center gap-1 px-3 py-1 text-white rounded-full text-xs font-bold shadow-lg ${
+                user?.isPremium
+                  ? 'bg-gradient-to-r from-violet-500 to-purple-600'
+                  : 'bg-gradient-to-r from-emerald-400 to-teal-500'
+              }`}>
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm4.95-9.05a1 1 0 10-1.414-1.414L9 12.07 6.464 9.536A1 1 0 105.05 10.95l3.243 3.243a1 1 0 001.414 0l5.243-5.243z" clipRule="evenodd" />
+                </svg>
+                {user?.isPremium ? 'Unlimited' : '1 Free'}
+              </div>
+            </motion.div>
+
+            <div className="w-12 h-12 bg-violet-100 rounded-lg flex items-center justify-center mb-4">
+              <svg className="w-6 h-6 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 15l2 2m0 0l-2 2m2-2H9m8-5a8 8 0 10-16 0 8 8 0 0016 0z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Resume Job Matcher</h3>
+            <p className="text-gray-600">Match your resume with any job description and get AI-powered fit insights</p>
           </motion.button>
 
           <motion.button
@@ -717,6 +722,35 @@ const DashboardContent = () => {
             <p className="text-gray-600">Browse companies, roles, and connect with HRs</p>
           </motion.button>     
           
+                    <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => navigateWithLoading('/jobs', 'Loading job opportunities...')}
+            className="bg-white rounded-xl p-6 shadow-lg border border-emerald-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
+          >
+            {/* New Badge */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8, x: 20 }}
+              animate={{ opacity: 1, scale: 1, x: 0 }}
+              transition={{ delay: 0.5, type: "spring", stiffness: 300 }}
+              className="absolute top-3 right-3"
+            >
+              <div className="flex items-center gap-1 px-3 py-1 bg-gradient-to-r from-emerald-400 to-teal-500 text-white rounded-full text-xs font-bold shadow-lg">
+                <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clipRule="evenodd" />
+                </svg>
+                New
+              </div>
+            </motion.div>
+
+            <div className="w-12 h-12 bg-emerald-100 rounded-lg flex items-center justify-center mb-4">
+              <svg className="w-6 h-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2-2v2m8 0H8m8 0v2a2 2 0 01-2 2H10a2 2 0 01-2-2V6m8 0H8m0 0v.5A3.5 3.5 0 0011.5 10h1A3.5 3.5 0 0016 6.5V6H8z" />
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-2">Job Board</h3>
+            <p className="text-gray-600">Browse remote jobs and career opportunities</p>
+          </motion.button>
 
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -806,7 +840,7 @@ const DashboardContent = () => {
             )}
           </AnimatePresence>
 
-          <motion.button
+          {/* <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-white relative rounded-xl p-6 shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer"
@@ -830,14 +864,14 @@ const DashboardContent = () => {
               </svg>
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2 flex items-center">AI Optimization
-              {/* <motion.span 
+              <motion.span 
                     className="ml-2 text-xs px-2 py-1 bg-[var(--secondary-light)] text-white rounded-full cursor-pointer"
                   >
                     Coming Soon
-             </motion.span> */}
+             </motion.span>
              </h3>
             <p className="text-gray-600">Comprehensive Job Description To Resume Optimization Providing AI Assistance</p>              </motion.button>
-             
+              */}
 
           {/* Upgrade to Pro Card - Show only for non-premium users */}
           <AnimatePresence>
@@ -1016,6 +1050,7 @@ const DashboardContent = () => {
               <h4 className="font-semibold text-gray-800 mb-4">Quick Actions</h4>
               <div className="space-y-2">
                 <Link href="/audit" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Resume Review</Link>
+                <Link href="/job-matcher" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Resume - Job Matcher</Link>
                 <Link href="/referrals" className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">Referrals Hub 🤝</Link>
                 <Link href={user?.isPremium ? "/company-search" : "/pricing"} className="block text-sm text-gray-600 hover:text-[var(--primary)] transition-colors">
                   Company Search {!user?.isPremium && "👑"}
