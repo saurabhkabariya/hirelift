@@ -41,6 +41,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "19 min read",
       description: "Complete guide to AI careers, skills roadmap, and top companies"
     },
+    {
+      slug: "why-resume-gets-rejected-in-6-seconds",
+      title: "Why Your Resume Gets Rejected in 6 Seconds (And How to Fix It)",
+      category: "Resume Optimization",
+      readTime: "8 min read",
+      description: "Learn why most resumes get rejected in seconds due to ATS filters and how to optimize your resume with the right keywords, formatting, and strategies to get more interview calls.",
+    },
     // {
     //   slug: "ai-resume-optimization-global-markets-2024",
     //   title: "AI Resume Optimization for Global Markets",

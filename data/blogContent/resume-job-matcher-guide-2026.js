@@ -12,7 +12,7 @@ export default function ResumeJobMatcherGuide() {
             <Target className="w-6 h-6 text-white" />
           </div>
           <h1 className="text-4xl font-bold text-gray-800 m-0">
-            Resume Job Matcher: Complete Guide for 2025
+            Resume Job Matcher: Complete Guide for 2026
           </h1>
         </div>
         <p className="text-xl text-gray-600 m-0">
@@ -56,7 +56,7 @@ export default function ResumeJobMatcherGuide() {
         </div>
       </div>
 
-      <h2>Why You Need a Resume Job Matcher in 2025</h2>
+      <h2>Why You Need a Resume Job Matcher in 2026</h2>
       
       <h3>1. Beat Applicant Tracking Systems (ATS)</h3>
       <p>
@@ -293,7 +293,7 @@ export default function ResumeJobMatcherGuide() {
 
       <h3>Is resume job matching really necessary?</h3>
       <p>
-        Yes, especially in 2025. With most companies using ATS and receiving hundreds of applications per job, 
+        Yes, especially in 2026. With most companies using ATS and receiving hundreds of applications per job, 
         tailoring your resume isn't optional—it's required to get noticed.
       </p>
 

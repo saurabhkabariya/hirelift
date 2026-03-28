@@ -8,7 +8,7 @@ export async function GET() {
   <url>
     <loc>${baseUrl}/blog/${post.slug}</loc>
     <lastmod>${new Date(post.publishDate).toISOString()}</lastmod>
-    <changefreq>monthly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>`).join('');
 
@@ -19,7 +19,7 @@ export async function GET() {
   <url>
     <loc>${baseUrl}/blog</loc>
     <lastmod>${new Date().toISOString()}</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>${blogUrls}
 </urlset>`;

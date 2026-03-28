@@ -11,7 +11,7 @@ import {
 } from 'react-icons/fa';
 import { usePageLoading } from '@/hooks/usePageLoading';
 import { useAuth } from '@/contexts/AuthContext';
-import { getAllBlogPosts, getPostsByCategory } from '../../data/blogPosts';
+import { getAllBlogPosts } from '../../data/blogPosts';
 import Header from '../../components/Header';
 
 export default function BlogPage() {
@@ -35,18 +35,9 @@ export default function BlogPage() {
   }, [stopLoading]);
   
   const POSTS_PER_PAGE = 9;
-  
-  // Only show blogs that have actual pages created
-  const availableSlugs = [
-    'software-engineer-interview-questions-2025',
-    'entry-level-software-engineer-jobs-2025',
-    'remote-developer-jobs-2025',
-    'tech-resume-us-uk-2025',
-    'ai-ml-engineer-career-guide-2025',
-    'ats-resume-optimization-guide-india-2025',
-  ];
-  
-  const allPosts = getAllBlogPosts().filter(post => availableSlugs.includes(post.slug));
+
+  // Auto-include every post defined in the central data source.
+  const allPosts = getAllBlogPosts();
   
   // Get unique categories from available posts
   const availableCategories = ['All', ...new Set(allPosts.map(post => post.category))];

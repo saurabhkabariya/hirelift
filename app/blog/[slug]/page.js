@@ -10,7 +10,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  const post = getBlogPostBySlug(params.slug);
+  const { slug } = await params;
+  const post = getBlogPostBySlug(slug);
   
   if (!post) {
     return {
@@ -37,13 +38,14 @@ export async function generateMetadata({ params }) {
       description: post.metaDescription || post.excerpt,
     },
     alternates: {
-      canonical: `${'https://www.hirelift.tech'}/blog/${params.slug}`
+      canonical: `${'https://www.hirelift.tech'}/blog/${slug}`
     }
   };
 }
 
-export default function BlogPost({ params }) {
-  const post = getBlogPostBySlug(params.slug);
+export default async function BlogPost({ params }) {
+  const { slug } = await params;
+  const post = getBlogPostBySlug(slug);
   
   if (!post) {
     notFound();
