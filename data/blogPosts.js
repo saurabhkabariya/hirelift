@@ -142,6 +142,36 @@ export const blogPosts = [
         "Career Advice"
       ]
     },
+    {
+      slug: "how-to-tailor-your-resume-to-a-job-description",
+      title: "How to Tailor Your Resume to a Job Description (Step-by-Step)",
+      metaTitle: "How to Tailor Resume to Job Description | ATS Resume Strategy",
+      metaDescription: "Learn how to tailor your resume to a job description step-by-step. Discover how to identify keywords, match skills, and optimize your resume to pass ATS systems and increase interview chances.",
+      excerpt: "Most job seekers send the same resume everywhere and wonder why they get no interviews. Learn how to tailor your resume to each job description to pass ATS filters and stand out to recruiters.",
+      content: "Guide explaining how to analyze job descriptions, identify important keywords, prioritize relevant skills, and tailor your resume effectively using ATS-friendly strategies.",
+      author: "HireLift Career Experts",
+      publishDate: "March 29, 2026",
+      publishedAt: "2026-03-29T10:00:00Z",
+      readTime: "8 min read",
+      category: "Resume Optimization",
+      featured: false,
+      keywords: [
+        "tailor resume to job description",
+        "resume keyword optimization",
+        "ATS resume tips",
+        "customizing resume for job application",
+        "resume tailoring guide",
+        "how to match resume with job description",
+        "ATS resume keywords"
+      ],
+      tags: [
+        "Resume",
+        "ATS",
+        "Resume Optimization",
+        "Job Search",
+        "Career Advice"
+      ]
+    },
 ];
 
 // Helper functions
