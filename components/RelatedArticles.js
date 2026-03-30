@@ -42,61 +42,27 @@ export default function RelatedArticles({ currentSlug, category }) {
       description: "Complete guide to AI careers, skills roadmap, and top companies"
     },
     {
-      slug: "why-resume-gets-rejected-in-6-seconds",
+      slug: "why-your-resume-gets-rejected-in-6-seconds",
       title: "Why Your Resume Gets Rejected in 6 Seconds (And How to Fix It)",
       category: "Resume Optimization",
       readTime: "8 min read",
       description: "Learn why most resumes get rejected in seconds due to ATS filters and how to optimize your resume with the right keywords, formatting, and strategies to get more interview calls.",
     },
-    // {
-    //   slug: "ai-resume-optimization-global-markets-2024",
-    //   title: "AI Resume Optimization for Global Markets",
-    //   category: "Resume Optimization",
-    //   readTime: "12 min read",
-    //   description: "Master AI-powered resume optimization for international jobs"
-    // },
-    // {
-    //   slug: "remote-work-mastery-global-professionals-2024",
-    //   title: "Remote Work Mastery: Landing High-Paying Global Remote Jobs",
-    //   category: "Remote Work",
-    //   readTime: "15 min read",
-    //   description: "Advanced strategies for landing global remote positions"
-    // },
-    // {
-    //   slug: "global-networking-strategies-international-professionals",
-    //   title: "Global Networking Strategies for International Career Growth",
-    //   category: "Networking",
-    //   readTime: "11 min read",
-    //   description: "Cross-cultural networking and relationship building worldwide"
-    // },
-    // {
-    //   slug: "salary-negotiation-international-markets-2024",
-    //   title: "Salary Negotiation Across International Markets",
-    //   category: "Salary Negotiation",
-    //   readTime: "13 min read",
-    //   description: "Compensation benchmarks and negotiation tactics by region"
-    // },
-    // {
-    //   slug: "tech-career-trends-global-markets-2024",
-    //   title: "Global Tech Career Trends 2024: Where High-Paying Jobs Are",
-    //   category: "Tech Careers",
-    //   readTime: "10 min read",
-    //   description: "Explore hottest tech trends and emerging roles worldwide"
-    // },
-    // {
-    //   slug: "interview-mastery-global-companies-2024",
-    //   title: "Interview Mastery for Global Companies",
-    //   category: "Interview Prep",
-    //   readTime: "14 min read",
-    //   description: "Cultural interview styles and preparation for global success"
-    // },
-    // {
-    //   slug: "linkedin-global-networking-professionals-2024",
-    //   title: "LinkedIn Global Networking: Building International Connections",
-    //   category: "Networking",
-    //   readTime: "9 min read",
-    //   description: "Transform LinkedIn into global networking powerhouse"
-    // }
+    {
+      slug: "how-to-tailor-your-resume-to-a-job-description",
+      title: "How to Tailor Your Resume to a Job Description (Step-by-Step)",
+      category: "Resume Optimization",
+      readTime: "8 min read",
+      description: "Learn how to tailor your resume to a job description step-by-step. Discover how to identify keywords, match skills, and optimize your resume to pass ATS systems and increase interview chances.",
+    },
+    {
+      slug: "10-resume-mistakes-freshers-make-that-kill-interview-chances",
+      title: "10 Resume Mistakes Freshers Make That Kill Interview Chances",
+      category: "Resume Optimization",
+      readTime: "9 min read",
+      description: "Discover the most common resume mistakes freshers make that prevent interview calls. Learn how ATS filters work, how to optimize resumes, and how to avoid job application mistakes.",
+    },
+
   ];
 
   // Filter out current article and show related articles

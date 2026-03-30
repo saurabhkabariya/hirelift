@@ -154,7 +154,7 @@ export const blogPosts = [
       publishedAt: "2026-03-29T10:00:00Z",
       readTime: "8 min read",
       category: "Resume Optimization",
-      featured: false,
+      featured: true,
       keywords: [
         "tailor resume to job description",
         "resume keyword optimization",
@@ -168,6 +168,36 @@ export const blogPosts = [
         "Resume",
         "ATS",
         "Resume Optimization",
+        "Job Search",
+        "Career Advice"
+      ]
+    },
+    {
+      slug: "10-resume-mistakes-freshers-make-that-kill-interview-chances",
+      title: "10 Resume Mistakes Freshers Make That Kill Interview Chances",
+      metaTitle: "10 Resume Mistakes Freshers Make | ATS Resume Tips for Job Seekers",
+      metaDescription: "Discover the most common resume mistakes freshers make that prevent interview calls. Learn how ATS filters work, how to optimize resumes, and how to avoid job application mistakes.",
+      excerpt: "Many fresh graduates apply to hundreds of jobs but receive no interview calls. Often the problem is not skills but resume mistakes that prevent ATS systems and recruiters from noticing your application.",
+      content: "Guide explaining the most common resume mistakes freshers make including ignoring keywords, poor ATS optimization, generic resumes, fake job posts, and ineffective job search strategies.",
+      author: "HireLift Career Experts",
+      publishDate: "March 30, 2026",
+      publishedAt: "2026-03-30T10:00:00Z",
+      readTime: "9 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "resume mistakes freshers",
+        "ATS resume mistakes",
+        "why freshers don't get interview calls",
+        "resume optimization tips",
+        "resume mistakes job seekers",
+        "common resume mistakes",
+        "ATS friendly resume tips"
+      ],
+      tags: [
+        "Resume",
+        "ATS",
+        "Freshers",
         "Job Search",
         "Career Advice"
       ]
