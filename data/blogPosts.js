@@ -202,6 +202,35 @@ export const blogPosts = [
         "Career Advice"
       ]
     },
+    {
+      slug: "how-to-make-resume-ats-friendly-2026",
+      title: "How to Make Your Resume ATS Friendly in 2026",
+      metaTitle: "How to Make Your Resume ATS Friendly in 2026 | ATS Resume Guide",
+      metaDescription: "Learn how to make your resume ATS friendly in 2026. Discover keyword optimization strategies, ATS-friendly formatting tips, and resume optimization techniques to pass applicant tracking systems.",
+      excerpt: "Most resumes never reach recruiters because they fail ATS screening. Learn how to optimize your resume with the right keywords, formatting, and job-specific strategies to pass ATS filters.",
+      content: "Guide explaining how ATS systems work and how job seekers can optimize resumes using keyword strategies, ATS-friendly formatting, job description analysis, and minimal resume sections.",
+      author: "HireLift Career Experts",
+      publishDate: "March 31, 2026",
+      publishedAt: "2026-03-31T10:00:00Z",
+      readTime: "8 min read",
+      category: "Resume Optimization",
+      featured: false,
+      keywords: [
+        "ATS friendly resume",
+        "how to make resume ATS friendly",
+        "resume ATS optimization",
+        "ATS resume format 2026",
+        "resume keyword optimization",
+        "applicant tracking system resume tips"
+      ],
+      tags: [
+        "ATS",
+        "Resume",
+        "Resume Optimization",
+        "Job Search",
+        "Career Advice"
+      ]
+    },
 ];
 
 // Helper functions

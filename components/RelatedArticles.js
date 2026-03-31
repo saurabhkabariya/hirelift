@@ -62,6 +62,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "9 min read",
       description: "Discover the most common resume mistakes freshers make that prevent interview calls. Learn how ATS filters work, how to optimize resumes, and how to avoid job application mistakes.",
     },
+    {
+      slug: "how-to-make-resume-ats-friendly-2026",
+      title: "How to Make Your Resume ATS Friendly in 2026",
+      category: "Resume Optimization",
+      readTime: "8 min read",
+      description: "Learn how to make your resume ATS friendly in 2026. Discover keyword optimization strategies, ATS-friendly formatting tips, and resume optimization techniques to pass applicant tracking systems.",
+    },
 
   ];
 
