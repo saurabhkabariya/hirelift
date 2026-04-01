@@ -214,7 +214,7 @@ export const blogPosts = [
       publishedAt: "2026-03-31T10:00:00Z",
       readTime: "8 min read",
       category: "Resume Optimization",
-      featured: false,
+      featured: true,
       keywords: [
         "ATS friendly resume",
         "how to make resume ATS friendly",
@@ -228,6 +228,35 @@ export const blogPosts = [
         "Resume",
         "Resume Optimization",
         "Job Search",
+        "Career Advice"
+      ]
+    },
+    {
+      slug: "resume-checklist-before-applying-to-any-job",
+      title: "Resume Checklist Before Applying to Any Job",
+      metaTitle: "Resume Checklist Before Applying to Any Job | ATS Resume Tips",
+      metaDescription: "Use this resume checklist before applying to any job. Learn how to optimize keywords, use ATS friendly formatting, tailor resumes for job descriptions, and apply early to increase interview chances.",
+      excerpt: "Before sending your resume to a job application, make sure it passes this essential checklist. Optimizing keywords, formatting, and timing your application can significantly improve interview chances.",
+      content: "Practical resume checklist helping job seekers optimize resumes for ATS systems, use proper formatting, match job description keywords, keep only necessary sections, and apply early to improve interview chances.",
+      author: "HireLift Career Experts",
+      publishDate: "April 01, 2026",
+      publishedAt: "2026-04-01T10:00:00Z",
+      readTime: "7 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "resume checklist before applying",
+        "ATS resume checklist",
+        "resume optimization checklist",
+        "resume tips job application",
+        "resume ATS friendly checklist",
+        "resume job application tips"
+      ],
+      tags: [
+        "Resume",
+        "ATS",
+        "Job Search",
+        "Resume Optimization",
         "Career Advice"
       ]
     },

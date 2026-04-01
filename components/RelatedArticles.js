@@ -69,6 +69,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "8 min read",
       description: "Learn how to make your resume ATS friendly in 2026. Discover keyword optimization strategies, ATS-friendly formatting tips, and resume optimization techniques to pass applicant tracking systems.",
     },
+    {
+      slug: "resume-checklist-before-applying-to-any-job",
+      title: "Resume Checklist Before Applying to Any Job",
+      category: "Resume Optimization",
+      readTime: "7 min read",
+      description: "Use this resume checklist before applying to any job. Learn how to optimize keywords, use ATS friendly formatting, tailor resumes for job descriptions, and apply early to increase interview chances.",
+    },
 
   ];
 
