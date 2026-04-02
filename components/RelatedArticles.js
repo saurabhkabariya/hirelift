@@ -76,6 +76,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Use this resume checklist before applying to any job. Learn how to optimize keywords, use ATS friendly formatting, tailor resumes for job descriptions, and apply early to increase interview chances.",
     },
+    {
+      slug: "how-to-improve-resume-score-quickly",
+      title: "How to Improve Your Resume Score Quickly",
+      category: "Resume Optimization",
+      readTime: "7 min read",
+      description: "Learn how to improve your resume score quickly by optimizing keywords, using ATS friendly formats, tailoring resumes to job descriptions, and using tools like HireLift to save time.",
+    },
 
   ];
 

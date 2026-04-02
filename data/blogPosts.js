@@ -260,6 +260,35 @@ export const blogPosts = [
         "Career Advice"
       ]
     },
+    {
+      slug: "how-to-improve-resume-score-quickly",
+      title: "How to Improve Your Resume Score Quickly",
+      metaTitle: "How to Improve Your Resume Score Quickly | ATS Resume Optimization Guide",
+      metaDescription: "Learn how to improve your resume score quickly by optimizing keywords, using ATS friendly formats, tailoring resumes to job descriptions, and using tools like HireLift to save time.",
+      excerpt: "Struggling with a low resume score? Learn practical strategies to improve your resume quickly by optimizing keywords, formatting for ATS systems, and tailoring your resume for specific job roles.",
+      content: "Guide explaining how job seekers can improve resume scores quickly by optimizing keywords, using ATS-friendly formatting, keeping only necessary sections, tailoring resumes to job descriptions, and using tools like HireLift.",
+      author: "HireLift Career Experts",
+      publishDate: "April 02, 2026",
+      publishedAt: "2026-04-02T10:00:00Z",
+      readTime: "7 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "improve resume score",
+        "increase ATS resume score",
+        "resume optimization tips",
+        "how to improve resume quickly",
+        "ATS friendly resume tips",
+        "resume keyword optimization"
+      ],
+      tags: [
+        "Resume",
+        "ATS",
+        "Resume Optimization",
+        "Job Search",
+        "Career Advice"
+      ]
+    },
 ];
 
 // Helper functions
