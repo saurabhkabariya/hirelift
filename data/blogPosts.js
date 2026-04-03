@@ -289,6 +289,36 @@ export const blogPosts = [
         "Career Advice"
       ]
     },
+    {
+      slug: "best-resume-format-software-developers-ats-friendly",
+      title: "Best Resume Format for Software Developers (ATS Friendly)",
+      metaTitle: "Best ATS Friendly Resume Format for Software Developers",
+      metaDescription: "Learn the best ATS friendly resume format for software developers. Discover keyword optimization tips, necessary resume sections, and how tools like HireLift can help improve your resume.",
+      excerpt: "Choosing the right resume format can significantly improve your chances of passing ATS systems. Learn the best resume format for software developers and how to optimize it for modern hiring systems.",
+      content: "Guide explaining the best ATS friendly resume format for software developers including Jake's resume format, keyword optimization strategies, necessary sections, and resume improvement tools.",
+      author: "HireLift Career Experts",
+      publishDate: "April 03, 2026",
+      publishedAt: "2026-04-03T10:00:00Z",
+      readTime: "8 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "software developer resume format",
+        "ATS friendly resume format",
+        "best resume format developers",
+        "Jake's resume format",
+        "developer resume ATS tips",
+        "resume optimization developers"
+      ],
+      tags: [
+        "Resume",
+        "ATS",
+        "Software Developer",
+        "Job Search",
+        "Career Advice"
+      ],
+      aiSummary: "Step-by-step guide explaining the best ATS friendly resume format for software developers including keyword optimization, essential sections, and formatting strategies."
+    },
 ];
 
 // Helper functions

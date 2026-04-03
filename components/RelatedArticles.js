@@ -83,6 +83,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn how to improve your resume score quickly by optimizing keywords, using ATS friendly formats, tailoring resumes to job descriptions, and using tools like HireLift to save time.",
     },
+    {
+      slug: "best-resume-format-software-developers-ats-friendly",
+      title: "Best Resume Format for Software Developers (ATS Friendly)",
+      category: "Resume Optimization",
+      readTime: "8 min read",
+      description: "Learn the best ATS friendly resume format for software developers. Discover keyword optimization tips, necessary resume sections, and how tools like HireLift can help improve your resume.",
+    },
 
   ];
 
