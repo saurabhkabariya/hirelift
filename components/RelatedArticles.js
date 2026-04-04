@@ -90,8 +90,15 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "8 min read",
       description: "Learn the best ATS friendly resume format for software developers. Discover keyword optimization tips, necessary resume sections, and how tools like HireLift can help improve your resume.",
     },
+    {
+      slug: "how-to-write-resume-with-no-experience",
+      title: "How to Write a Resume With No Experience",
+      category: "Resume Optimization",
+      readTime: "8 min read",
+      description: "Learn how to write a resume with no experience by highlighting relevant skills, showcasing projects, getting internships, and optimizing your resume for ATS systems.",
+    },
 
-  ];
+  ];  
 
   // Filter out current article and show related articles
   const relatedArticles = allArticles

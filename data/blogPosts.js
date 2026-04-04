@@ -319,6 +319,36 @@ export const blogPosts = [
       ],
       aiSummary: "Step-by-step guide explaining the best ATS friendly resume format for software developers including keyword optimization, essential sections, and formatting strategies."
     },
+    {
+      slug: "how-to-write-resume-with-no-experience",
+      title: "How to Write a Resume With No Experience",
+      metaTitle: "How to Write a Resume With No Experience | Fresher Resume Guide",
+      metaDescription: "Learn how to write a resume with no experience by highlighting relevant skills, showcasing projects, getting internships, and optimizing your resume for ATS systems.",
+      excerpt: "If you have no work experience, your resume can still stand out. Learn how to highlight skills, showcase projects, get internships, and build an ATS friendly resume.",
+      content: "Guide explaining how freshers can create strong resumes without work experience by highlighting relevant skills, building projects, gaining internships, and using ATS friendly formats.",
+      author: "HireLift Career Experts",
+      publishDate: "April 04, 2026",
+      publishedAt: "2026-04-04T10:00:00Z",
+      readTime: "8 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "resume with no experience",
+        "fresher resume guide",
+        "resume tips for fresh graduates",
+        "how to write resume without experience",
+        "ATS friendly resume for freshers",
+        "resume projects for developers"
+      ],
+      tags: [
+        "Resume",
+        "Freshers",
+        "Job Search",
+        "Career Advice",
+        "ATS"
+      ],
+      aiSummary: "Step-by-step guide explaining how to write a strong resume without work experience by highlighting skills, projects, internships, and using ATS friendly formatting."
+    },
 ];
 
 // Helper functions
