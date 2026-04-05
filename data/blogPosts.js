@@ -349,6 +349,36 @@ export const blogPosts = [
       ],
       aiSummary: "Step-by-step guide explaining how to write a strong resume without work experience by highlighting skills, projects, internships, and using ATS friendly formatting."
     },
+    {
+      slug: "resume-keywords-software-developer-jobs",
+      title: "Resume Keywords for Software Developer Jobs",
+      metaTitle: "Resume Keywords for Software Developer Jobs | ATS Resume Guide",
+      metaDescription: "Discover the most important resume keywords for software developer jobs. Learn how to use programming, tools, and skill keywords to optimize your resume for ATS systems.",
+      excerpt: "Using the right resume keywords can significantly increase your chances of passing ATS filters and getting interviews for software developer roles.",
+      content: "Guide explaining the most important resume keywords for software developers including programming languages, frameworks, tools, and how to strategically use them in resumes.",
+      author: "HireLift Career Experts",
+      publishDate: "April 05, 2026",
+      publishedAt: "2026-04-05T10:00:00Z",
+      readTime: "9 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "resume keywords software developer",
+        "ATS keywords developer resume",
+        "software engineer resume keywords",
+        "programming keywords resume",
+        "developer resume optimization",
+        "ATS friendly developer resume"
+      ],
+      tags: [
+        "Resume",
+        "Software Developer",
+        "ATS",
+        "Job Search",
+        "Career Advice"
+      ],
+      aiSummary: "Complete list of resume keywords for software developer jobs including programming languages, frameworks, developer tools, and tips for using them effectively."
+    },
 ];
 
 // Helper functions

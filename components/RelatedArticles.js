@@ -97,6 +97,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "8 min read",
       description: "Learn how to write a resume with no experience by highlighting relevant skills, showcasing projects, getting internships, and optimizing your resume for ATS systems.",
     },
+    {
+      slug: "resume-keywords-software-developer-jobs",
+      title: "Resume Keywords for Software Developer Jobs",
+      category: "Resume Optimization",
+      readTime: "9 min read",
+      description: "Discover the most important resume keywords for software developer jobs. Learn how to use programming, tools, and skill keywords to optimize your resume for ATS systems.",
+    },
 
   ];  
 
