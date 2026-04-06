@@ -379,6 +379,36 @@ export const blogPosts = [
       ],
       aiSummary: "Complete list of resume keywords for software developer jobs including programming languages, frameworks, developer tools, and tips for using them effectively."
     },
+    {
+      slug: "resume-skills-that-increase-interview-calls",
+      title: "Resume Skills That Increase Interview Calls",
+      metaTitle: "Resume Skills That Increase Interview Calls | Job Winning Skills Guide",
+      metaDescription: "Discover the most important resume skills that increase interview calls including technical skills, emerging AI skills, and essential soft skills recruiters look for.",
+      excerpt: "The right skills on your resume can significantly increase your chances of getting interview calls. Learn how to choose skills based on job descriptions and highlight both technical and soft skills effectively.",
+      content: "Guide explaining the most impactful resume skills including technical skills from job descriptions, emerging skills like AI, essential soft skills, and how to present them effectively in resumes.",
+      author: "HireLift Career Experts",
+      publishDate: "April 06, 2026",
+      publishedAt: "2026-04-06T10:00:00Z",
+      readTime: "8 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "resume skills for jobs",
+        "skills that increase interview calls",
+        "resume skills examples",
+        "technical skills resume",
+        "soft skills resume",
+        "AI skills resume"
+      ],
+      tags: [
+        "Resume",
+        "Skills",
+        "Job Search",
+        "Career Advice",
+        "ATS"
+      ],
+      aiSummary: "Guide explaining the most valuable resume skills including technical skills from job descriptions, emerging AI skills, and soft skills that help candidates get more interview calls."
+    },
 ];
 
 // Helper functions

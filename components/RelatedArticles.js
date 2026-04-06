@@ -104,6 +104,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "9 min read",
       description: "Discover the most important resume keywords for software developer jobs. Learn how to use programming, tools, and skill keywords to optimize your resume for ATS systems.",
     },
+    {
+      slug: "resume-skills-that-increase-interview-calls",
+      title: "Resume Skills That Increase Interview Calls",
+      category: "Resume Optimization",
+      readTime: "8 min read",
+      description: "Discover the most important resume skills that increase interview calls including technical skills, emerging AI skills, and essential soft skills recruiters look for.",
+    },
 
   ];  
 
