@@ -409,6 +409,35 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining the most valuable resume skills including technical skills from job descriptions, emerging AI skills, and soft skills that help candidates get more interview calls."
     },
+    {
+      slug: "applied-to-100-jobs-no-interviews-why",
+      title: "Applied to 100 Jobs but No Interviews? Here’s Why",
+      metaTitle: "Applied to 100 Jobs but No Interviews? Common Resume Mistakes",
+      metaDescription: "Applied to 100 jobs but received no interviews? Learn the most common mistakes including low ATS score, irrelevant skills, generic resumes, and applying too late.",
+      excerpt: "Many job seekers apply to dozens of jobs but receive no interview calls. Discover the common reasons behind this and how to fix your resume and job search strategy.",
+      content: "Guide explaining why candidates apply to many jobs but get no interviews including low ATS scores, generic resumes, irrelevant skills, late applications, and lack of optimization tools.",
+      author: "HireLift Career Experts",
+      publishDate: "April 07, 2026",
+      publishedAt: "2026-04-07T10:00:00Z",
+      readTime: "8 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "applied to 100 jobs no interviews",
+        "why resume not getting interviews",
+        "resume rejected reasons",
+        "ATS resume mistakes",
+        "why job applications fail"
+      ],
+      tags: [
+        "Resume",
+        "Job Search",
+        "Career Advice",
+        "ATS",
+        "Interview Preparation"
+      ],
+      aiSummary: "Explanation of why job seekers apply to many jobs but receive no interviews including ATS issues, generic resumes, irrelevant skills, and applying too late."
+    },
 ];
 
 // Helper functions

@@ -111,6 +111,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "8 min read",
       description: "Discover the most important resume skills that increase interview calls including technical skills, emerging AI skills, and essential soft skills recruiters look for.",
     },
+    {
+      slug: "applied-to-100-jobs-no-interviews-why",
+      title: "Applied to 100 Jobs but No Interviews? Here’s Why",
+      category: "Job Search Strategy",
+      readTime: "8 min read",
+      description: "Applied to 100 jobs but received no interviews? Learn the most common mistakes including low ATS score, irrelevant skills, generic resumes, and applying too late.",
+    },
 
   ];  
 
