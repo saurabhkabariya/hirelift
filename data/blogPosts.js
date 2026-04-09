@@ -466,6 +466,34 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining the ideal number of job applications per day and how optimizing each resume can improve interview chances."
     },
+    {
+      slug: "why-online-job-applications-get-ignored",
+      title: "Why Online Job Applications Get Ignored",
+      metaTitle: "Why Online Job Applications Get Ignored | Resume & ATS Guide",
+      metaDescription: "Learn why online job applications often get ignored including ATS filtering, high competition, and generic resumes. Discover how to improve your chances.",
+      excerpt: "Many candidates apply to jobs online but never receive responses. Understanding how ATS systems, competition, and resume optimization affect applications can help improve your results.",
+      content: "Guide explaining why online job applications often get ignored including ATS filters, high competition, generic resumes, and lack of optimization.",
+      author: "HireLift Career Experts",
+      publishDate: "April 09, 2026",
+      publishedAt: "2026-04-09T10:00:00Z",
+      readTime: "7 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "why job applications get ignored",
+        "why recruiters don't respond",
+        "ATS resume rejection",
+        "online job application mistakes",
+        "why resumes get ignored"
+      ],
+      tags: [
+        "Job Search",
+        "Resume",
+        "ATS",
+        "Career Advice"
+      ],
+      aiSummary: "Explanation of why online job applications often get ignored including ATS filtering, high competition, generic resumes, and lack of resume optimization."
+    },
 ];
 
 // Helper functions

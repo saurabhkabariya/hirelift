@@ -125,6 +125,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "6 min read",
       description: "Learn how many jobs you should apply to daily to maximize interview chances. Discover a smart job application strategy and how tools like HireLift can save time.",
     },
+    {
+      slug: "why-online-job-applications-get-ignored",
+      title: "Why Online Job Applications Get Ignored",
+      category: "Job Search Strategy",
+      readTime: "7 min read",
+      description: "Learn why online job applications often get ignored including ATS filtering, high competition, and generic resumes. Discover how to improve your chances.",
+    },
 
   ];  
 
