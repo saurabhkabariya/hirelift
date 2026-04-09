@@ -118,6 +118,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "8 min read",
       description: "Applied to 100 jobs but received no interviews? Learn the most common mistakes including low ATS score, irrelevant skills, generic resumes, and applying too late.",
     },
+    {
+      slug: "how-many-jobs-should-you-apply-daily",
+      title: "How Many Jobs Should You Apply to Daily?",
+      category: "Job Search Strategy",
+      readTime: "6 min read",
+      description: "Learn how many jobs you should apply to daily to maximize interview chances. Discover a smart job application strategy and how tools like HireLift can save time.",
+    },
 
   ];  
 

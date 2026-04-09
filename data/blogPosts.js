@@ -438,6 +438,34 @@ export const blogPosts = [
       ],
       aiSummary: "Explanation of why job seekers apply to many jobs but receive no interviews including ATS issues, generic resumes, irrelevant skills, and applying too late."
     },
+    {
+      slug: "how-many-jobs-should-you-apply-daily",
+      title: "How Many Jobs Should You Apply to Daily?",
+      metaTitle: "How Many Jobs Should You Apply to Daily? Job Search Strategy Guide",
+      metaDescription: "Learn how many jobs you should apply to daily to maximize interview chances. Discover a smart job application strategy and how tools like HireLift can save time.",
+      excerpt: "Applying to too many jobs randomly may not increase interview chances. Learn the ideal number of daily job applications and how to optimize your resume for each opportunity.",
+      content: "Guide explaining how many jobs candidates should apply to daily, why quality matters more than quantity, and how tools like HireLift can help optimize resumes faster.",
+      author: "HireLift Career Experts",
+      publishDate: "April 08, 2026",
+      publishedAt: "2026-04-08T10:00:00Z",
+      readTime: "6 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "how many jobs should I apply daily",
+        "daily job applications strategy",
+        "job search strategy",
+        "how many jobs apply per day",
+        "job application tips"
+      ],
+      tags: [
+        "Job Search",
+        "Career Advice",
+        "Resume",
+        "Productivity"
+      ],
+      aiSummary: "Guide explaining the ideal number of job applications per day and how optimizing each resume can improve interview chances."
+    },
 ];
 
 // Helper functions
