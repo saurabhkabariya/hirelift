@@ -494,6 +494,63 @@ export const blogPosts = [
       ],
       aiSummary: "Explanation of why online job applications often get ignored including ATS filtering, high competition, generic resumes, and lack of resume optimization."
     },
+    {
+      slug: "how-to-increase-interview-call-rate",
+      title: "How to Increase Your Interview Call Rate",
+      metaTitle: "How to Increase Your Interview Call Rate | Job Search Strategy Guide",
+      metaDescription: "Learn how to increase your interview call rate by improving ATS score, using job description keywords, applying early to low-competition jobs, and using outreach strategies.",
+      excerpt: "If you're applying to many jobs but receiving few interview calls, your resume strategy may need improvement. Learn practical ways to increase your interview call rate.",
+      content: "Guide explaining how job seekers can increase interview call rates by improving ATS scores, optimizing keywords, applying to low competition opportunities, and using cold outreach strategies.",
+      author: "HireLift Career Experts",
+      publishDate: "April 10, 2026",
+      publishedAt: "2026-04-10T10:00:00Z",
+      readTime: "7 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "increase interview call rate",
+        "how to get more interview calls",
+        "job search interview tips",
+        "ATS resume improvement",
+        "job application success tips"
+      ],
+      tags: [
+        "Job Search",
+        "Resume",
+        "Career Advice",
+        "ATS"
+      ],
+      aiSummary: "Guide explaining practical strategies to increase interview call rates including ATS optimization, targeted job applications, and recruiter outreach."
+    },
+    {
+      slug: "job-application-strategy-for-freshers",
+      title: "Job Application Strategy That Works for Freshers",
+      metaTitle: "Best Job Application Strategy for Freshers | Resume & ATS Tips",
+      metaDescription: "Learn the best job application strategy for freshers including ATS-friendly resumes, keyword optimization, applying early, and improving interview chances.",
+      excerpt: "Fresh graduates often struggle to get interview calls despite applying to many jobs. Learn a practical job application strategy that improves your chances.",
+      content: "Guide explaining effective job application strategies for freshers including keyword optimization, ATS friendly resumes, targeted job applications, and resume optimization tools.",
+      author: "HireLift Career Experts",
+      publishDate: "April 11, 2026",
+      publishedAt: "2026-04-11T10:00:00Z",
+      readTime: "7 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "job application strategy for freshers",
+        "how freshers should apply for jobs",
+        "fresher job search strategy",
+        "ATS friendly resume for freshers",
+        "job application tips fresh graduates"
+      ],
+      tags: [
+        "Job Search",
+        "Freshers",
+        "Resume",
+        "Career Advice",
+        "ATS"
+      ],
+      aiSummary: "Guide explaining an effective job application strategy for fresh graduates including resume optimization, keyword targeting, and applying to low competition job posts."
+    },
 ];
 
 // Helper functions

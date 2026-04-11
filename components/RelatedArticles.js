@@ -132,6 +132,20 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn why online job applications often get ignored including ATS filtering, high competition, and generic resumes. Discover how to improve your chances.",
     },
+    {
+      slug: "how-to-increase-interview-call-rate",
+      title: "How to Increase Your Interview Call Rate",
+      category: "Job Search Strategy",
+      readTime: "7 min read",
+      description: "Learn how to increase your interview call rate by improving ATS score, using job description keywords, applying early to low-competition jobs, and using outreach strategies.",
+    },
+    {
+      slug: "job-application-strategy-for-freshers",
+      title: "Job Application Strategy That Works for Freshers",
+      category: "Job Search Strategy",
+      readTime: "7 min read",
+      description: "Learn the best job application strategy for freshers including ATS-friendly resumes, keyword optimization, applying early, and improving interview chances.",
+    },
 
   ];  
 
