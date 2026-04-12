@@ -146,6 +146,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn the best job application strategy for freshers including ATS-friendly resumes, keyword optimization, applying early, and improving interview chances.",
     },
+    {
+      slug: "best-way-to-track-job-applications-free-system",
+      title: "Best Way to Track Job Applications (Free System)",
+      category: "Job Search Strategy",
+      readTime: "7 min read",
+      description: "Learn the best free system to track your job applications. Organize applications, follow-ups, and interview stages to improve your job search efficiency.",
+    },
 
   ];  
 
