@@ -579,6 +579,34 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining a simple free system to track job applications, manage follow-ups, and stay organized during a job search."
     },
+    {
+      slug: "what-recruiters-look-for-in-a-resume",
+      title: "What Recruiters Actually Look for in a Resume",
+      metaTitle: "What Recruiters Look for in a Resume | Resume Tips That Get Interviews",
+      metaDescription: "Learn what recruiters actually look for in a resume including relevant keywords, impactful projects, and important soft skills that increase interview chances.",
+      excerpt: "Recruiters often scan resumes quickly to decide whether a candidate should be shortlisted. Understanding what they look for can significantly increase your chances of getting interviews.",
+      content: "Guide explaining what recruiters look for in resumes including keyword matching with job descriptions, projects that demonstrate real skills, and important soft skills.",
+      author: "HireLift Career Experts",
+      publishDate: "April 13, 2026",
+      publishedAt: "2026-04-13T10:00:00Z",
+      readTime: "7 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "what recruiters look for in a resume",
+        "resume tips for interviews",
+        "how recruiters evaluate resumes",
+        "resume keywords for jobs",
+        "resume projects examples"
+      ],
+      tags: [
+        "Resume",
+        "Career Advice",
+        "Job Search",
+        "Recruiters"
+      ],
+      aiSummary: "Explanation of what recruiters evaluate in resumes including relevant keywords, practical projects, and soft skills that demonstrate workplace effectiveness."
+    },
 ];
 
 // Helper functions

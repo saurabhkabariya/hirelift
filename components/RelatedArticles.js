@@ -153,6 +153,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn the best free system to track your job applications. Organize applications, follow-ups, and interview stages to improve your job search efficiency.",
     },
+    {
+      slug: "what-recruiters-look-for-in-a-resume",
+      title: "What Recruiters Actually Look for in a Resume",
+      category: "Resume Optimization",
+      readTime: "7 min read",
+      description: "Learn what recruiters actually look for in a resume including relevant keywords, impactful projects, and important soft skills that increase interview chances.",
+    },
 
   ];  
 
