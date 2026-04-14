@@ -607,6 +607,34 @@ export const blogPosts = [
       ],
       aiSummary: "Explanation of what recruiters evaluate in resumes including relevant keywords, practical projects, and soft skills that demonstrate workplace effectiveness."
     },
+    {
+      slug: "how-to-stand-out-among-hundreds-of-applicants",
+      title: "How to Stand Out Among Hundreds of Applicants",
+      metaTitle: "How to Stand Out Among Hundreds of Job Applicants",
+      metaDescription: "Learn how to stand out among hundreds of job applicants by applying early, using relevant keywords, showcasing projects, highlighting soft skills, and optimizing your resume.",
+      excerpt: "Job postings often receive hundreds of applications. Learn practical strategies to stand out from other candidates and increase your chances of getting interview calls.",
+      content: "Guide explaining how candidates can stand out in job applications through early applications, targeted keywords, relevant projects, soft skills, and resume optimization tools.",
+      author: "HireLift Career Experts",
+      publishDate: "April 14, 2026",
+      publishedAt: "2026-04-14T10:00:00Z",
+      readTime: "7 min read",
+      category: "Job Search Strategy",
+      featured: ture,
+      keywords: [
+        "how to stand out among job applicants",
+        "how to get noticed by recruiters",
+        "stand out in job applications",
+        "increase interview chances",
+        "job application tips"
+      ],
+      tags: [
+        "Job Search",
+        "Career Advice",
+        "Resume",
+        "Interview Preparation"
+      ],
+      aiSummary: "Guide explaining practical strategies to stand out among hundreds of job applicants including early applications, keyword optimization, relevant projects, and strong soft skills."
+    },
 ];
 
 // Helper functions

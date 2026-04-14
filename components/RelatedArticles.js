@@ -160,6 +160,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn what recruiters actually look for in a resume including relevant keywords, impactful projects, and important soft skills that increase interview chances.",
     },
+    {
+      slug: "how-to-stand-out-among-hundreds-of-applicants",
+      title: "How to Stand Out Among Hundreds of Applicants",
+      category: "Job Search Strategy",
+      readTime: "7 min read",
+      description: "Learn how to stand out among hundreds of job applicants by applying early, using relevant keywords, showcasing projects, highlighting soft skills, and optimizing your resume.",
+    },
 
   ];  
 
