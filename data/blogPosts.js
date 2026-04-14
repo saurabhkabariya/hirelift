@@ -619,7 +619,7 @@ export const blogPosts = [
       publishedAt: "2026-04-14T10:00:00Z",
       readTime: "7 min read",
       category: "Job Search Strategy",
-      featured: ture,
+      featured: true,
       keywords: [
         "how to stand out among job applicants",
         "how to get noticed by recruiters",
