@@ -167,7 +167,6 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn how to stand out among hundreds of job applicants by applying early, using relevant keywords, showcasing projects, highlighting soft skills, and optimizing your resume.",
     },
-
   ];  
 
   // Filter out current article and show related articles
