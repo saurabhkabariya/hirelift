@@ -635,6 +635,146 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining practical strategies to stand out among hundreds of job applicants including early applications, keyword optimization, relevant projects, and strong soft skills."
     },
+    {
+      slug: "cold-email-template-to-hr-for-job-opportunities",
+      title: "Cold Email Template to HR for Job Opportunities",
+      metaTitle: "Cold Email Template to HR for Job Opportunities | Job Outreach Guide",
+      metaDescription: "Learn how to write a cold email to HR for job opportunities. Includes simple templates and tips to increase response rates from recruiters.",
+      excerpt: "Cold emailing recruiters can help your profile stand out from hundreds of applicants. Learn how to write an effective cold email and increase your chances of getting noticed.",
+      content: "Guide explaining how to write cold emails to HR for job opportunities including proven templates, best practices, and tools that can help automate outreach.",
+      author: "HireLift Career Experts",
+      publishDate: "April 15, 2026",
+      publishedAt: "2026-04-15T10:00:00Z",
+      readTime: "6 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "cold email to HR for job",
+        "cold email template job application",
+        "email recruiter for job opportunity",
+        "cold outreach job search",
+        "cold email job opportunity template"
+      ],
+      tags: [
+        "Job Search",
+        "Cold Outreach",
+        "Career Advice",
+        "Recruiters"
+      ],
+      aiSummary: "Guide explaining how job seekers can write effective cold emails to recruiters and HR managers to increase chances of getting interview opportunities."
+    },
+    {
+      slug: "how-to-email-hr-for-job-opportunities-examples",
+      title: "How to Email HR for Job Opportunities (Examples)",
+      metaTitle: "How to Email HR for Job Opportunities | Email Examples for Job Seekers",
+      metaDescription: "Learn how to email HR for job opportunities with practical examples and templates. Increase your chances of getting recruiter responses.",
+      excerpt: "Many candidates rely only on job portals. Sending a professional email to HR can help you stand out and increase the chances of getting interview opportunities.",
+      content: "Guide explaining how to email HR for job opportunities including examples, best practices, and tips for increasing recruiter responses.",
+      author: "HireLift Career Experts",
+      publishDate: "April 16, 2026",
+      publishedAt: "2026-04-16T10:00:00Z",
+      readTime: "6 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "how to email HR for job opportunities",
+        "email HR for job example",
+        "job inquiry email template",
+        "how to ask HR for job opening",
+        "email recruiter for job opportunity"
+      ],
+      tags: [
+        "Job Search",
+        "Career Advice",
+        "Cold Outreach",
+        "Recruiters"
+      ],
+      aiSummary: "Guide explaining how to write effective emails to HR for job opportunities including templates, examples, and outreach tips."
+    },
+    {
+      slug: "follow-up-email-after-job-application-templates",
+      title: "Follow-Up Email After Job Application (Templates)",
+      metaTitle: "Follow-Up Email After Job Application | Templates That Get Responses",
+      metaDescription: "Learn how to write a follow-up email after submitting a job application. Includes practical templates and tips to increase recruiter responses.",
+      excerpt: "Sending a professional follow-up email can increase your chances of getting a response from recruiters. Learn when and how to follow up effectively.",
+      content: "Guide explaining how job seekers can send effective follow-up emails after job applications including templates, best practices, and outreach strategies.",
+      author: "HireLift Career Experts",
+      publishDate: "April 17, 2026",
+      publishedAt: "2026-04-17T10:00:00Z",
+      readTime: "6 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "follow up email after job application",
+        "job application follow up email template",
+        "how to follow up after applying for a job",
+        "email recruiter follow up",
+        "follow up job application email example"
+      ],
+      tags: [
+        "Job Search",
+        "Career Advice",
+        "Cold Outreach",
+        "Recruiters"
+      ],
+      aiSummary: "Guide explaining how to send follow-up emails after job applications with templates and tips to increase recruiter responses."
+    },
+    {
+      slug: "linkedin-message-template-ask-recruiters-for-jobs",
+      title: "LinkedIn Message Template to Ask Recruiters for Jobs",
+      metaTitle: "LinkedIn Message Template to Ask Recruiters for Jobs",
+      metaDescription: "Learn how to message recruiters on LinkedIn for job opportunities. Includes simple LinkedIn message templates and tips to increase recruiter responses.",
+      excerpt: "Sending a well-written LinkedIn message to recruiters can increase your chances of getting interview opportunities. Learn practical templates and tips.",
+      content: "Guide explaining how to message recruiters on LinkedIn for job opportunities including message templates, personalization tips, and outreach strategies.",
+      author: "HireLift Career Experts",
+      publishDate: "April 18, 2026",
+      publishedAt: "2026-04-18T10:00:00Z",
+      readTime: "6 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "linkedin message recruiter for job",
+        "linkedin message template recruiter",
+        "how to ask recruiter for job linkedin",
+        "linkedin cold message job opportunity",
+        "linkedin recruiter outreach message"
+      ],
+      tags: [
+        "Job Search",
+        "LinkedIn",
+        "Cold Outreach",
+        "Recruiters"
+      ],
+      aiSummary: "Guide explaining how to message recruiters on LinkedIn with effective templates that increase chances of getting job opportunities."
+    },
+    {
+      slug: "how-to-contact-recruiters-directly-for-job-opportunities",
+      title: "How to Contact Recruiters Directly for Job Opportunities",
+      metaTitle: "How to Contact Recruiters Directly for Job Opportunities",
+      metaDescription: "Learn how to contact recruiters directly for job opportunities using LinkedIn, email, and HR directories. Includes outreach tips and templates.",
+      excerpt: "Many candidates rely only on job portals, but contacting recruiters directly can significantly increase your chances of getting interview opportunities.",
+      content: "Guide explaining how to contact recruiters directly using LinkedIn, email outreach, HR directories, and optimized outreach templates.",
+      author: "HireLift Career Experts",
+      publishDate: "April 18, 2026",
+      publishedAt: "2026-04-18T10:00:00Z",
+      readTime: "7 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "contact recruiters directly",
+        "how to reach out to recruiters for jobs",
+        "find recruiter contact information",
+        "email recruiters for job opportunities",
+        "how to contact HR for jobs"
+      ],
+      tags: [
+        "Job Search",
+        "Recruiters",
+        "Cold Outreach",
+        "Career Advice"
+      ],
+      aiSummary: "Guide explaining how job seekers can contact recruiters directly through LinkedIn, email, and HR directories to improve chances of getting interview opportunities."
+    },
 ];
 
 // Helper functions

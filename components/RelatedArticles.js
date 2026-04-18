@@ -167,6 +167,41 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn how to stand out among hundreds of job applicants by applying early, using relevant keywords, showcasing projects, highlighting soft skills, and optimizing your resume.",
     },
+    {
+      slug: "cold-email-template-to-hr-for-job-opportunities",
+      title: "Cold Email Template to HR for Job Opportunities",
+      category: "Job Search Strategy",
+      readTime: "6 min read",
+      description: "Learn how to write a cold email to HR for job opportunities. Includes simple templates and tips to increase response rates from recruiters.",
+    },
+    {
+      slug: "how-to-email-hr-for-job-opportunities-examples",
+      title: "How to Email HR for Job Opportunities (Examples)",
+      category: "Job Search Strategy",
+      readTime: "6 min read",
+      description: "Learn how to email HR for job opportunities with practical examples and templates. Increase your chances of getting recruiter responses.",
+    },
+    {
+      slug: "follow-up-email-after-job-application-templates",
+      title: "Follow-Up Email After Job Application (Templates)",
+      category: "Job Search Strategy",
+      readTime: "6 min read",
+      description: "Learn how to write a follow-up email after submitting a job application. Includes practical templates and tips to increase recruiter responses.",
+    },
+    {
+      slug: "linkedin-message-template-ask-recruiters-for-jobs",
+      title: "LinkedIn Message Template to Ask Recruiters for Jobs",
+      category: "Job Search Strategy",
+      readTime: "6 min read",
+      description: "Learn how to message recruiters on LinkedIn for job opportunities. Includes simple LinkedIn message templates and tips to increase recruiter responses.",
+    },
+    {
+      slug: "how-to-contact-recruiters-directly-for-job-opportunities",
+      title: "How to Contact Recruiters Directly for Job Opportunities",
+      category: "Job Search Strategy",
+      readTime: "7 min read",
+      description: "Learn how to contact recruiters directly for job opportunities using LinkedIn, email, and HR directories. Includes outreach tips and templates.",
+    },
   ];  
 
   // Filter out current article and show related articles
