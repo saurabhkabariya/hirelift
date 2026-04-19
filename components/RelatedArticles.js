@@ -202,6 +202,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn how to contact recruiters directly for job opportunities using LinkedIn, email, and HR directories. Includes outreach tips and templates.",
     },
+    {
+      slug: "how-freshers-can-get-their-first-job-faster",
+      title: "How Freshers Can Get Their First Job Faster",
+      category: "Career Advice",
+      readTime: "7 min read",
+      description: "Learn practical strategies for freshers to get their first job faster including resume optimization, projects, networking, and outreach strategies.",
+    },
   ];  
 
   // Filter out current article and show related articles
