@@ -209,6 +209,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn practical strategies for freshers to get their first job faster including resume optimization, projects, networking, and outreach strategies.",
     },
+    {
+      slug: "job-search-strategy-for-fresh-graduates",
+      title: "Job Search Strategy for Fresh Graduates",
+      category: "Job Search Strategy",
+      readTime: "7 min read",
+      description: "Learn the best job search strategy for fresh graduates including ATS resume optimization, job targeting, recruiter outreach, and tools to increase interview chances.",
+    },
   ];  
 
   // Filter out current article and show related articles

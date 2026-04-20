@@ -803,6 +803,34 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining practical strategies for fresh graduates to get their first job faster including resume optimization, relevant projects, and recruiter outreach."
     },
+    {
+      slug: "job-search-strategy-for-fresh-graduates",
+      title: "Job Search Strategy for Fresh Graduates",
+      metaTitle: "Best Job Search Strategy for Fresh Graduates | Get Interviews Faster",
+      metaDescription: "Learn the best job search strategy for fresh graduates including ATS resume optimization, job targeting, recruiter outreach, and tools to increase interview chances.",
+      excerpt: "Many fresh graduates struggle to get interview calls despite applying to multiple jobs. Learn a practical job search strategy that improves your chances.",
+      content: "Guide explaining the best job search strategy for fresh graduates including resume optimization, ATS keyword targeting, job filtering, and recruiter outreach.",
+      author: "HireLift Career Experts",
+      publishDate: "April 20, 2026",
+      publishedAt: "2026-04-20T10:00:00Z",
+      readTime: "7 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "job search strategy for fresh graduates",
+        "how freshers should apply for jobs",
+        "best job search strategy freshers",
+        "resume optimization for freshers",
+        "job search tips graduates"
+      ],
+      tags: [
+        "Job Search",
+        "Freshers",
+        "Career Advice",
+        "Resume"
+      ],
+      aiSummary: "Guide explaining an effective job search strategy for fresh graduates including resume optimization, keyword targeting, job filtering, and recruiter outreach."
+    },
 ];
 
 // Helper functions
