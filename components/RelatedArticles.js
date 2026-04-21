@@ -216,6 +216,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn the best job search strategy for fresh graduates including ATS resume optimization, job targeting, recruiter outreach, and tools to increase interview chances.",
     },
+    {
+      slug: "why-freshers-struggle-to-get-interviews",
+      title: "Why Freshers Struggle to Get Interviews",
+      category: "Career Advice",
+      readTime: "7 min read",
+      description: "Learn why fresh graduates struggle to get interview calls and how to improve resume optimization, ATS compatibility, and job search strategy.",
+    },
   ];  
 
   // Filter out current article and show related articles

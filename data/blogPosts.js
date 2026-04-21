@@ -831,6 +831,34 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining an effective job search strategy for fresh graduates including resume optimization, keyword targeting, job filtering, and recruiter outreach."
     },
+    {
+      slug: "why-freshers-struggle-to-get-interviews",
+      title: "Why Freshers Struggle to Get Interviews",
+      metaTitle: "Why Freshers Struggle to Get Interviews | Resume & Job Search Guide",
+      metaDescription: "Learn why fresh graduates struggle to get interview calls and how to improve resume optimization, ATS compatibility, and job search strategy.",
+      excerpt: "Many fresh graduates apply to dozens of jobs but rarely receive interview calls. Understanding the common mistakes can help improve your job search success.",
+      content: "Guide explaining the main reasons why freshers struggle to get interview calls including ATS formatting issues, lack of experience, and ineffective job search strategies.",
+      author: "HireLift Career Experts",
+      publishDate: "April 21, 2026",
+      publishedAt: "2026-04-21T10:00:00Z",
+      readTime: "7 min read",
+      category: "Career Advice",
+      featured: true,
+      keywords: [
+        "why freshers struggle to get interviews",
+        "why freshers don't get interview calls",
+        "resume mistakes fresh graduates",
+        "why resume gets rejected freshers",
+        "job search problems freshers"
+      ],
+      tags: [
+        "Freshers",
+        "Career Advice",
+        "Job Search",
+        "Resume"
+      ],
+      aiSummary: "Guide explaining the main reasons fresh graduates struggle to get interview calls and how to improve resume optimization and job search strategy."
+    },
 ];
 
 // Helper functions
