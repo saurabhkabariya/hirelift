@@ -223,6 +223,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Learn why fresh graduates struggle to get interview calls and how to improve resume optimization, ATS compatibility, and job search strategy.",
     },
+    {
+      slug: "best-websites-to-apply-for-jobs-2026",
+      title: "Best Websites to Apply for Jobs in 2026",
+      category: "Job Search Strategy",
+      readTime: "7 min read",
+      description: "Discover the best websites to apply for jobs in 2026 including top job portals, LinkedIn, and smart tools to increase your chances of getting hired.",
+    },
   ];  
 
   // Filter out current article and show related articles

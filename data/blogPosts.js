@@ -859,6 +859,34 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining the main reasons fresh graduates struggle to get interview calls and how to improve resume optimization and job search strategy."
     },
+    {
+      slug: "best-websites-to-apply-for-jobs-2026",
+      title: "Best Websites to Apply for Jobs in 2026",
+      metaTitle: "Best Websites to Apply for Jobs in 2026 | Top Job Portals Guide",
+      metaDescription: "Discover the best websites to apply for jobs in 2026 including top job portals, LinkedIn, and smart tools to increase your chances of getting hired.",
+      excerpt: "Applying on the right platforms can significantly improve your chances of getting interview calls. Learn the best websites to apply for jobs in 2026.",
+      content: "Guide explaining the best job websites in 2026 including LinkedIn, job portals, and tools to optimize resumes and improve job application success.",
+      author: "HireLift Career Experts",
+      publishDate: "April 22, 2026",
+      publishedAt: "2026-04-22T10:00:00Z",
+      readTime: "7 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "best websites to apply for jobs 2026",
+        "top job portals India",
+        "best job sites for freshers",
+        "where to apply for jobs online",
+        "job search websites 2026"
+      ],
+      tags: [
+        "Job Search",
+        "Career Advice",
+        "Freshers",
+        "Job Portals"
+      ],
+      aiSummary: "Guide explaining the best websites to apply for jobs in 2026 along with strategies to optimize resumes and increase interview chances."
+    },
 ];
 
 // Helper functions
