@@ -887,6 +887,34 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining the best websites to apply for jobs in 2026 along with strategies to optimize resumes and increase interview chances."
     },
+    {
+      slug: "how-to-prepare-for-your-first-technical-interview",
+      title: "How to Prepare for Your First Technical Interview",
+      metaTitle: "How to Prepare for Your First Technical Interview | Complete Guide",
+      metaDescription: "Learn how to prepare for your first technical interview with practical tips, coding strategies, project preparation, and resume optimization.",
+      excerpt: "Preparing for your first technical interview can feel overwhelming. Learn a structured approach to improve your chances of clearing interviews.",
+      content: "Guide explaining how freshers can prepare for technical interviews including coding practice, project explanation, resume optimization, and job search strategies.",
+      author: "HireLift Career Experts",
+      publishDate: "April 23, 2026",
+      publishedAt: "2026-04-23T10:00:00Z",
+      readTime: "8 min read",
+      category: "Interview Preparation",
+      featured: true,
+      keywords: [
+        "how to prepare for technical interview",
+        "technical interview preparation for freshers",
+        "first coding interview tips",
+        "software developer interview preparation",
+        "technical interview tips beginners"
+      ],
+      tags: [
+        "Interview",
+        "Freshers",
+        "Career Advice",
+        "Technical"
+      ],
+      aiSummary: "Guide explaining how fresh graduates can prepare for technical interviews including coding practice, project explanation, and resume optimization."
+    },
 ];
 
 // Helper functions

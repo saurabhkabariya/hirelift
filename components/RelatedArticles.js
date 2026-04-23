@@ -230,6 +230,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "7 min read",
       description: "Discover the best websites to apply for jobs in 2026 including top job portals, LinkedIn, and smart tools to increase your chances of getting hired.",
     },
+    {
+      slug: "how-to-prepare-for-your-first-technical-interview",
+      title: "How to Prepare for Your First Technical Interview",
+      category: "Interview Preparation",
+      readTime: "8 min read",
+      description: "Learn how to prepare for your first technical interview with practical tips, coding strategies, project preparation, and resume optimization.",
+    },
   ];  
 
   // Filter out current article and show related articles
