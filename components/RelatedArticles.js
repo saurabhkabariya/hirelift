@@ -237,6 +237,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "8 min read",
       description: "Learn how to prepare for your first technical interview with practical tips, coding strategies, project preparation, and resume optimization.",
     },
+    {
+      slug: "resume-keywords-for-react-developers",
+      title: "Resume Keywords for React Developers",
+      category: "Resume Optimization",
+      readTime: "8 min read",
+      description: "Discover the best resume keywords for React developers to pass ATS filters and get more interview calls. Includes frontend and MERN stack keywords.",
+    },
   ];  
 
   // Filter out current article and show related articles

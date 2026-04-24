@@ -915,6 +915,35 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining how fresh graduates can prepare for technical interviews including coding practice, project explanation, and resume optimization."
     },
+    {
+      slug: "resume-keywords-for-react-developers",
+      title: "Resume Keywords for React Developers",
+      metaTitle: "Resume Keywords for React Developers | ATS Optimization Guide",
+      metaDescription: "Discover the best resume keywords for React developers to pass ATS filters and get more interview calls. Includes frontend and MERN stack keywords.",
+      excerpt: "Using the right keywords in your resume can significantly increase your chances of getting shortlisted as a React developer.",
+      content: "Guide explaining the most important resume keywords for React developers including frontend, MERN stack, and project-based keywords for ATS optimization.",
+      author: "HireLift Career Experts",
+      publishDate: "April 24, 2026",
+      publishedAt: "2026-04-24T10:00:00Z",
+      readTime: "8 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "react developer resume keywords",
+        "frontend developer resume skills",
+        "react js resume keywords",
+        "mern stack resume keywords",
+        "resume keywords for developers"
+      ],
+      tags: [
+        "Resume",
+        "React",
+        "Frontend",
+        "ATS",
+        "Developers"
+      ],
+      aiSummary: "Guide explaining the most important resume keywords for React developers to improve ATS compatibility and increase interview chances."
+    },
 ];
 
 // Helper functions
