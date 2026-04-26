@@ -244,6 +244,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "8 min read",
       description: "Discover the best resume keywords for React developers to pass ATS filters and get more interview calls. Includes frontend and MERN stack keywords.",
     },
+    {
+      slug: "resume-keywords-for-nodejs-developers",
+      title: "Resume Keywords for Node.js Developers",
+      category: "Resume Optimization",
+      readTime: "8 min read",
+      description: "Discover the best resume keywords for Node.js developers to pass ATS filters and get more interviews. Includes backend, Express and API keywords.",
+    },
   ];  
 
   // Filter out current article and show related articles

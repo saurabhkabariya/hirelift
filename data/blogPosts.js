@@ -944,6 +944,35 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining the most important resume keywords for React developers to improve ATS compatibility and increase interview chances."
     },
+    {
+      slug: "resume-keywords-for-nodejs-developers",
+      title: "Resume Keywords for Node.js Developers",
+      metaTitle: "Resume Keywords for Node.js Developers | ATS Resume Guide",
+      metaDescription: "Discover the best resume keywords for Node.js developers to pass ATS filters and get more interviews. Includes backend, Express and API keywords.",
+      excerpt: "Using the right resume keywords can increase your chances of getting shortlisted for Node.js developer roles.",
+      content: "Guide covering important ATS resume keywords for Node.js developers including backend, APIs, databases, and project-focused keywords.",
+      author: "HireLift Career Experts",
+      publishDate: "April 25, 2026",
+      publishedAt: "2026-04-25T10:00:00Z",
+      readTime: "8 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "node js developer resume keywords",
+        "backend developer resume skills",
+        "node js ats keywords",
+        "express js resume keywords",
+        "backend resume keywords"
+      ],
+      tags: [
+        "Resume",
+        "Node.js",
+        "Backend",
+        "ATS",
+        "Developers"
+      ],
+      aiSummary: "Guide explaining important ATS resume keywords for Node.js developers including backend technologies, APIs, databases, and project keywords."
+    },
 ];
 
 // Helper functions
