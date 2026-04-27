@@ -251,6 +251,20 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "8 min read",
       description: "Discover the best resume keywords for Node.js developers to pass ATS filters and get more interviews. Includes backend, Express and API keywords.",
     },
+    {
+      slug: "resume-checklist-before-you-apply-software-jobs",
+      title: "Check This Resume Checklist Before You Apply to Any Software Job",
+      category: "Resume Optimization",
+      readTime: "9 min read",
+      description: "Use this resume checklist before applying to any software job. Avoid ATS rejection, keyword mistakes, weak projects and improve interview chances.",
+    },
+    {
+      slug: "check-these-things-before-applying-on-linkedin",
+      title: "Check These 7 Things Before Applying on LinkedIn or You May Waste the Opportunity",
+      category: "Job Search Strategy",
+      readTime: "9 min read",
+      description: "Before applying on LinkedIn, check these 7 important things to avoid wasting opportunities. Learn ATS, applicant count, fake jobs, and recruiter outreach tips.",
+    },
   ];  
 
   // Filter out current article and show related articles

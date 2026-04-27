@@ -973,6 +973,63 @@ export const blogPosts = [
       ],
       aiSummary: "Guide explaining important ATS resume keywords for Node.js developers including backend technologies, APIs, databases, and project keywords."
     },
+    {
+      slug: "resume-checklist-before-you-apply-software-jobs",
+      title: "Check This Resume Checklist Before You Apply to Any Software Job",
+      metaTitle: "Resume Checklist Before Applying to Any Software Job (Don’t Skip This)",
+      metaDescription: "Use this resume checklist before applying to any software job. Avoid ATS rejection, keyword mistakes, weak projects and improve interview chances.",
+      excerpt: "Before clicking apply, check these critical resume mistakes that may silently cost you interviews.",
+      content: "Complete resume checklist software developers should review before applying including ATS optimization, keyword targeting, project proof and job matching.",
+      author: "HireLift Career Experts",
+      publishDate: "April 26, 2026",
+      publishedAt: "2026-04-26T10:00:00Z",
+      readTime: "9 min read",
+      category: "Resume Optimization",
+      featured: true,
+      keywords: [
+        "resume checklist before applying",
+        "software developer resume checklist",
+        "things to check before submitting resume",
+        "resume checklist before job application",
+        "ats resume checklist"
+      ],
+      tags: [
+        "Resume",
+        "ATS",
+        "Job Search",
+        "Checklist",
+        "Software Jobs"
+      ],
+      aiSummary: "Checklist software job seekers should review before applying including ATS optimization, keyword targeting and project validation."
+    },
+    {
+      slug: "check-these-things-before-applying-on-linkedin",
+      title: "Check These 7 Things Before Applying on LinkedIn or You May Waste the Opportunity",
+      metaTitle: "Check These 7 Things Before Applying on LinkedIn (Avoid Wasting Opportunities)",
+      metaDescription: "Before applying on LinkedIn, check these 7 important things to avoid wasting opportunities. Learn ATS, applicant count, fake jobs, and recruiter outreach tips.",
+      excerpt: "Many candidates lose opportunities on LinkedIn because they apply without checking critical details first. Avoid these mistakes.",
+      content: "Guide covering seven important things to check before applying on LinkedIn including applicant volume, job freshness, ATS optimization and recruiter outreach.",
+      author: "HireLift Career Experts",
+      publishDate: "April 27, 2026",
+      publishedAt: "2026-04-27T10:00:00Z",
+      readTime: "9 min read",
+      category: "Job Search Strategy",
+      featured: true,
+      keywords: [
+        "before applying on linkedin check this",
+        "linkedin job application tips",
+        "things to check before applying linkedin jobs",
+        "linkedin job mistakes",
+        "how to apply on linkedin effectively"
+      ],
+      tags: [
+        "LinkedIn",
+        "Job Search",
+        "Checklist",
+        "Career Advice"
+      ],
+      aiSummary: "Guide explaining seven things job seekers should check before applying on LinkedIn to improve response rates and avoid wasting opportunities."
+    },
 ];
 
 // Helper functions
