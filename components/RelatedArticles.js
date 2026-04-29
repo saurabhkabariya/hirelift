@@ -265,6 +265,13 @@ export default function RelatedArticles({ currentSlug, category }) {
       readTime: "9 min read",
       description: "Before applying on LinkedIn, check these 7 important things to avoid wasting opportunities. Learn ATS, applicant count, fake jobs, and recruiter outreach tips.",
     },
+    {
+      slug: "how-to-get-job-as-web-developer",
+      title: "How to Get a Job as a Web Developer",
+      category: "Web Developer Careers",
+      readTime: "11 min read",
+      description: "Learn how to get a job as a web developer with portfolio tips, resume keywords, projects, outreach strategies and proven job search tactics.",
+    },
   ];  
 
   // Filter out current article and show related articles
