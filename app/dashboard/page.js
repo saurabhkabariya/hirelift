@@ -411,8 +411,7 @@ const DashboardContent = () => {
           </div>
         </motion.div>        
 
-                {/* Comprehensive Notifications Section */}
-        <motion.div
+        {/* <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.7 }}
@@ -423,7 +422,7 @@ const DashboardContent = () => {
             whileHover={{ y: -2 }}
             transition={{ duration: 0.2 }}
           >
-            {/* Section Header */}
+            
             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-4 sm:px-6 py-4 border-b border-gray-100">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="flex items-center space-x-3">
@@ -450,11 +449,9 @@ const DashboardContent = () => {
               </div>
             </div>
 
-            {/* Notification Content */}
             <div className="p-4 sm:p-6">
               <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 
-                {/* Pending Actions Card */}
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="bg-gradient-to-br from-orange-50 to-red-50 rounded-xl p-4 sm:p-5 border border-orange-200 relative overflow-hidden"
@@ -495,7 +492,6 @@ const DashboardContent = () => {
                   </motion.button>
                 </motion.div>
 
-                {/* Awaiting Updates Card */}
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-4 sm:p-5 border border-blue-200 relative overflow-hidden"
@@ -539,7 +535,6 @@ const DashboardContent = () => {
                   </motion.button>
                 </motion.div>
 
-                {/* Activity Summary Card */}
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 sm:p-5 border border-green-200 relative overflow-hidden sm:col-span-1 md:col-span-2 lg:col-span-1"
@@ -579,8 +574,6 @@ const DashboardContent = () => {
                 </motion.div>
 
               </div>
-
-              {/* Quick Action Buttons */}
               {(pendingActions > 0 || awaitingUpdates > 0) && (
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
@@ -613,7 +606,7 @@ const DashboardContent = () => {
               )}
             </div>
           </motion.div>
-        </motion.div>
+        </motion.div> */}
         
         {/* Feature Cards */}
         <motion.div
@@ -780,13 +773,12 @@ const DashboardContent = () => {
             <p className="text-gray-600">Design and customize email & LinkedIn templates</p>
           </motion.button>
 
-          <motion.button
+          {/* <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => navigateWithLoading('/referrals', 'Loading referrals...')}
             className="bg-white rounded-xl p-6 shadow-lg border border-indigo-100 hover:shadow-xl transition-all duration-200 text-left cursor-pointer relative overflow-hidden"
           >
-            {/* Popular Badge */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, x: 20 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -808,7 +800,7 @@ const DashboardContent = () => {
             </div>
             <h3 className="text-lg font-semibold text-gray-900 mb-2">Referrals Hub</h3>
             <p className="text-gray-600">Connect with professionals and earn rewards</p>
-          </motion.button>
+          </motion.button> */}
 
           
 
