@@ -137,6 +137,25 @@ export default function PricingPage() {
     }
   }, [shouldShowExpiryWarning, showTrialExpiryPopup]);
 
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const syncUserAfterPayment = async () => {
+    for (let attempt = 0; attempt < 8; attempt++) {
+      await refetchUser();
+      router.refresh();
+
+      // give the backend/webhook time to finish writing isPremium=true
+      await delay(800 + attempt * 250);
+
+      const updatedPlan = getUserPlanStatus();
+      if (updatedPlan.hasActivePlan) {
+        return updatedPlan;
+      }
+    }
+
+    return getUserPlanStatus();
+  };
+
   // Handle Basic plan one-time upgrade (30 days)
   const handleBasicUpgrade = async () => {
     if (!user) {
@@ -164,7 +183,9 @@ export default function PricingPage() {
         },
         onPaymentSuccess: async () => {
           setLoadingStage('verifying');
-          await refetchUser();
+
+          await syncUserAfterPayment();
+
           setPaymentLoading(false);
           toast.success('Successfully upgraded to Basic plan!');
           navigateWithLoading('/dashboard', 'Redirecting to dashboard...');
@@ -230,10 +251,13 @@ export default function PricingPage() {
         },
         onPaymentSuccess: async () => {
           setLoadingStage('verifying');
-          await refetchUser();
+
+          await syncUserAfterPayment();
+
           setOneTimePaymentLoading(false);
           toast.success(`Successfully upgraded to ${plan.name}!`);
           router.push('/dashboard');
+          router.refresh();
         },
         onPaymentError: (error) => {
           // Check for JWT expiration or auth errors
@@ -283,7 +307,7 @@ export default function PricingPage() {
       
       if (result && result.success) {
         toast.success('🎉 Trial activated! You now have 7 days of premium access.');
-        await refetchUser(); // Refresh user data immediately
+        await syncUserAfterPayment(); // Refresh user data immediately
         return result;
       } else {
         const errorMessage = result?.error || 'Failed to activate trial. Please try again.';
