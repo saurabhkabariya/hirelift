@@ -10,9 +10,11 @@ import {
 import { usePageLoading } from '@/hooks/usePageLoading';
 import { getAllBlogPosts } from '../../data/blogPosts';
 import { getDetailedBlogContent } from '../../data/blogContent';
+import { getSGEOptimizationData } from '../../data/blogSGEOptimization';
 import BlogAnalytics from './BlogAnalytics';
-import BlogSchema from './BlogSchema';
-import MarkdownRenderer from './MarkdownRenderer';
+import EnhancedBlogSchema from './EnhancedBlogSchema';
+import EnhancedMarkdownRenderer from './EnhancedMarkdownRenderer';
+import { QuickAnswer, FAQSection, KeyTakeaways, HowToSchema } from './SGEOptimizedBlog';
 import Header from '../Header';
 
 export default function BlogPostPage({ post }) {
@@ -28,6 +30,9 @@ export default function BlogPostPage({ post }) {
   
   const detailedContent = getDetailedBlogContent(post.slug);
   const contentToDisplay = detailedContent || post.content;
+  
+  // Get SGE optimization data for this blog post
+  const sgeData = getSGEOptimizationData(post.slug);
 
   const shareUrl = typeof window !== 'undefined' ? window.location.href : '';
   const shareText = `${post.title} - Expert career insights from HireLift`;
@@ -83,7 +88,11 @@ export default function BlogPostPage({ post }) {
 
       <Header variant="blog" />
       <BlogAnalytics slug={post.slug} title={post.title} category={post.category} />
-      <BlogSchema post={post} />
+      <EnhancedBlogSchema 
+        post={post} 
+        faqs={sgeData?.faqs || []}
+        howToSteps={sgeData?.howToSteps || []}
+      />
       
       {/* Enhanced Header */}
       <section className="py-16 px-6 bg-white border-b mt-20 relative overflow-hidden">
@@ -181,7 +190,16 @@ export default function BlogPostPage({ post }) {
 
       {/* Content */}
       <section className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-5xl mx-auto">
+          {/* SGE Quick Answer - appears at top for featured snippets */}
+          {sgeData?.quickAnswer && (
+            <QuickAnswer 
+              answer={sgeData.quickAnswer} 
+              keypoints={sgeData.keyTakeaways?.slice(0, 3) || []}
+            />
+          )}
+
+          {/* Main Content */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -189,7 +207,7 @@ export default function BlogPostPage({ post }) {
             className="bg-white rounded-2xl shadow-lg p-8 md:p-12 mb-12"
           >
             {detailedContent ? (
-              <MarkdownRenderer content={detailedContent} />
+              <EnhancedMarkdownRenderer content={detailedContent} />
             ) : (
               <div className="prose prose-lg max-w-none">
                 <div className="text-gray-700 leading-relaxed space-y-6">
@@ -201,21 +219,71 @@ export default function BlogPostPage({ post }) {
                       {contentToDisplay}
                     </p>
                   </div>
-                  <div className="mt-8 text-center">
-                    <p className="text-gray-600 mb-4">
-                      Want to read more comprehensive guides like this?
-                    </p>
-                    <Link
-                      href="/blog"
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Explore More Articles
-                    </Link>
-                  </div>
                 </div>
               </div>
             )}
           </motion.div>
+
+          {/* Key Takeaways Section - Easy for AI to parse */}
+          {sgeData?.keyTakeaways && sgeData.keyTakeaways.length > 0 && (
+            <KeyTakeaways takeaways={sgeData.keyTakeaways} />
+          )}
+
+          {/* FAQ Section - Optimized for SGE */}
+          {sgeData?.faqs && sgeData.faqs.length > 0 && (
+            <FAQSection faqs={sgeData.faqs} />
+          )}
+
+          {/* How To Steps Section - Great for AI understanding */}
+          {sgeData?.howToSteps && sgeData.howToSteps.length > 0 && (
+            <motion.section
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="my-12 bg-white rounded-xl border border-gray-200 p-8 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Step-by-Step Guide</h2>
+              <p className="text-gray-600 mb-8">Follow these actionable steps to implement the strategies in this article</p>
+              
+              <div className="space-y-6">
+                {sgeData.howToSteps.map((step, index) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.3 + index * 0.05 }}
+                    className="flex gap-6 p-6 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-100 hover:border-blue-300 transition-colors"
+                  >
+                    <div className="flex-shrink-0">
+                      <div className="flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-cyan-600 text-white font-bold text-lg">
+                        {index + 1}
+                      </div>
+                    </div>
+                    <div className="flex-1">
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h4>
+                      <p className="text-gray-700 leading-relaxed">{step.description}</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* HowTo Schema for AI parsing */}
+              <script type="application/ld+json" suppressHydrationWarning>
+                {JSON.stringify({
+                  "@context": "https://schema.org",
+                  "@type": "HowTo",
+                  "name": post.title,
+                  "description": post.excerpt,
+                  "step": sgeData.howToSteps.map((step, idx) => ({
+                    "@type": "HowToStep",
+                    "position": idx + 1,
+                    "name": step.title,
+                    "text": step.description
+                  }))
+                })}
+              </script>
+            </motion.section>
+          )}
 
           {/* CTA Section */}
           <motion.div
